@@ -14,6 +14,7 @@ Designed to work with Hermes's web_search/web_extract tools and AI-KOS's search/
 """
 
 import json
+import re
 import uuid
 import logging
 from datetime import date, datetime, timezone
@@ -242,7 +243,8 @@ def persist_research(result: ResearchResult, knowledge_dir: str = "knowledge") -
 
     gaps = result.knowledge_gaps if result.knowledge_gaps else ["No significant gaps identified"]
 
-    slug = result.question.lower().replace(" ", "-").replace("?", "")[:50]
+    slug = re.sub(r'[^a-z0-9\s-]', '', result.question.lower()).replace(" ", "-")[:50]
+    slug = re.sub(r'-+', '-', slug).strip('-')
     r = create_article("research-note", {
         "title": f"Research: {result.question[:80]}",
         "slug": f"research-{slug}",
@@ -280,7 +282,6 @@ def persist_research(result: ResearchResult, knowledge_dir: str = "knowledge") -
 
 def _extract_keywords(text: str) -> List[str]:
     """Extract likely keywords from text (simple heuristic)."""
-    import re
     words = re.findall(r'[a-zA-Z]{4,}', text.lower())
     stop = {'this','that','with','from','have','been','were','they','their','about','which','what','when','where','over','into','such','other','only','also','very','just','some','each','both','more','most','many','and','using','the','are','was','not','all','can','has','had','its','but'}
     return list(dict.fromkeys(w for w in words if w not in stop))[:8]

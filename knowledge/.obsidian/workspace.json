@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "bundles/general/session-writeback.md",
+                "file": "bundles/general/stanford-storm-framework.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "session-writeback"
+              "title": "stanford-storm-framework"
             }
           }
         ]
@@ -190,8 +190,19 @@
   },
   "active": "31e21735638b7b50",
   "lastOpenFiles": [
-    "bundles/general/session-2026-08-04-ai-kos-build.md",
+    "bundles/general/female-orgasm-neurophysiology-hormones-types-evolu.md",
+    "bundles/general/research-female-orgasm-neurophysiology-hormones-types-evolu.md",
+    "bundles/general/female-orgasm-research.md",
     "bundles/general/session-end-protocol.md",
+    "bundles/general/run-random-graph-suite.md",
+    "bundles/general/random-graph-simulation-suite.md",
+    "bundles/general/random-graph-models.md",
+    "bundles/general/random-graph-dissertation-notes.md",
+    "bundles/general/random-graph-model-comparison.md",
+    "bundles/general/durable-execution-research.md",
+    "bundles/general/auto-linker.md",
+    "bundles/general/session-writeback.md",
+    "bundles/general/session-2026-08-04-ai-kos-build.md",
     "bundles/general/deep-research-tool-mission.md",
     "bundles/general/deep-research-enterprise-implications.md",
     "bundles/general/stanford-storm-framework.md",
@@ -204,17 +215,6 @@
     "bundles/general/creation-protocol.md",
     "bundles/general/obsidian-graph-idea.md",
     "bundles/general/hybrid-search-research.md",
-    "bundles/general/random-graph-simulation-suite.md",
-    "bundles/general/session-writeback.md",
-    "bundles/general/female-sexual-anatomy.md",
-    "bundles/general/nba-advanced-metrics-comparison.md",
-    "bundles/general/nba-role-based-metric.md",
-    "bundles/general/harden-aws-ssm-jump-host.md",
-    "bundles/general/railway-crossing-cs313-mission.md",
-    "bundles/general/random-graph-dissertation-mission.md",
-    "bundles/general/random-graph-dissertation-notes.md",
-    "bundles/general/random-graph-model-comparison.md",
-    "bundles/general/random-graph-models.md",
-    "bundles/general/run-random-graph-suite.md"
+    "bundles/general/female-sexual-anatomy.md"
   ]
 }
