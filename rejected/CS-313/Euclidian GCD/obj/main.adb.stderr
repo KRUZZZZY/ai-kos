@@ -1,0 +1,19 @@
+main.adb:24:13: error: no candidate interpretations match the actuals:
+main.adb:24:13: error: missing argument for parameter "Item" in call to "Get" declared at spark-text_io-integer_io.ads:91, instance at line 10
+main.adb:24:13: error: missing argument for parameter "Item" in call to "Get" declared at spark-text_io-integer_io.ads:39, instance at line 10
+main.adb:24:19: error: expected type "Integer_Result" defined at spark-text_io-integer_io.ads:32, instance at line 10
+main.adb:24:19: error: found type "Standard.Integer"
+main.adb:24:19: error:   ==> in call to "Get" at spark-text_io-integer_io.ads:49, instance at line 10
+main.adb:27:13: error: no candidate interpretations match the actuals:
+main.adb:27:13: error: missing argument for parameter "Item" in call to "Get" declared at spark-text_io-integer_io.ads:91, instance at line 10
+main.adb:27:13: error: missing argument for parameter "Item" in call to "Get" declared at spark-text_io-integer_io.ads:39, instance at line 10
+main.adb:27:19: error: expected type "Integer_Result" defined at spark-text_io-integer_io.ads:32, instance at line 10
+main.adb:27:19: error: found type "Standard.Integer"
+main.adb:27:19: error:   ==> in call to "Get" at spark-text_io-integer_io.ads:49, instance at line 10
+main.adb:44:09: error: no candidate interpretations match the actuals:
+main.adb:44:09: error: missing argument for parameter "Item" in call to "Get" declared at spark-text_io.ads:650
+main.adb:44:09: error: missing argument for parameter "Item" in call to "Get" declared at spark-text_io.ads:544
+main.adb:44:15: error: expected type "Standard.String"
+main.adb:44:15: error: found type "Standard.Character"
+main.adb:44:15: error:   ==> in call to "Get" at spark-text_io.ads:661
+main.adb:44:15: error:   ==> in call to "Get" at spark-text_io.ads:552

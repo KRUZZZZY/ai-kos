@@ -1,0 +1,2 @@
+main.adb:43:33: medium: loop invariant might fail in first iteration[#0]
+main.adb:43:33: medium: loop invariant might not be preserved by an arbitrary iteration[#1]

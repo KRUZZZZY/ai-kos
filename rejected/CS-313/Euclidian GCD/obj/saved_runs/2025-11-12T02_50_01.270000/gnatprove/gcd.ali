@@ -1,0 +1,38 @@
+V "GNAT Lib v2021"
+A -x
+A ada
+A -gnatA
+A -gnatc
+P GP FX
+
+RN
+RV NO_DIRECT_BOOLEAN_OPERATORS
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_ELABORATION_CODE
+
+U gcd%b			gcd.adb			852bdfda OO PK IU
+
+U gcd%s			gcd.ads			06672e04 OO PK IU
+
+D gcd.ads		20251111221102 06672e04 gcd%s
+D gcd.adb		20251111221116 834cf1de gcd%b
+D system.ads		20210520051134 2ffa5114 system%s
+G a Z
+X 1 gcd.ads
+1K9*GCD 12l5 12e8 2|1b14 26l5 26t8
+4U14*Euclidean_GCD 5>7 5>10 6<7 2|3b14 24l8 24t21
+5i7 A{natural} 8r15 9r26 2|4b7 7r22
+5i10 B{natural} 8r25 9r44 2|4b10 8r22
+6i7 G{natural} 9r15 9r32 9r50 2|5b7 20m10 22m10
+X 2 gcd.adb
+7i7 R{natural} 11r14 12r13 13m13 13r18 15r24 19r10 22r15
+8i7 S{natural} 11r26 12r17 13r24 15m13 15r18 20r15
+
+QQ SPARKVERSION SPARK Community 2021 (20210519)
+GG EK_DIRECT_CALLS gcd__euclidean_gcd 0
+GG EK_GLOBALS gcd__euclidean_gcd local FALSE E_PROCEDURE FALSE ORIGIN_FLOW 1 gcd proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE TRUE TRUE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS gcd 0
+GG EK_GLOBALS gcd local FALSE E_PACKAGE TRUE ORIGIN_FLOW 0 proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 initializes 0 refined_initializes 0 calls_proof 0 calls 0 calls_conditional 0 local_var 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_FLOW_SCOPE gcd TRUE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE gcd__euclidean_gcd FALSE FALSE FALSE FALSE TRUE gcd VISIBLE_PART
+GG EK_END_MARKER

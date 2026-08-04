@@ -1,0 +1,230 @@
+{
+  "main": {
+    "id": "c3f94803616afc1c",
+    "type": "split",
+    "children": [
+      {
+        "id": "b179f59145b4bc6d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "816abb5df437c961",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "aa8e33eb35edcc76",
+    "type": "split",
+    "children": [
+      {
+        "id": "f29b3cf73b2a88fe",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c26a7b3f74fd1b94",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "79675effd35cf4e0",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "b6a6a6f4c6eef7f1",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "1998ee4b63b59bdd",
+    "type": "split",
+    "children": [
+      {
+        "id": "b45d6e7265fca0c7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3caffe863141c08e",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "c8d2d4ce931713c3",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "3630a139ec098206",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "a96b8ab5739669b9",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "6ba92335e5045b85",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "816abb5df437c961",
+  "lastOpenFiles": [
+    "knowledge/bundles/general/random-graph-model-comparison.md",
+    "knowledge/bundles/general/networkx-implementation-notes.md",
+    "knowledge/bundles/general/barabasi-albert-model.md",
+    "knowledge/bundles/general/watts-strogatz-model.md",
+    "knowledge/bundles/general/erdos-renyi-model.md",
+    "knowledge/bundles/general/network-metrics.md",
+    "knowledge/bundles/general/graph-theory-basics.md",
+    "inbox/Female Pleasure and Intimacy Guide.md",
+    "inbox/Building Role-Based NBA Metric.md",
+    "inbox/Tailscale vs Headscale Evaluation.md",
+    "knowledge/bundles/general/run-random-graph-suite.md",
+    "knowledge/bundles/general/random-graph-simulation-suite.md",
+    "knowledge/bundles/general/random-graph-models.md",
+    "knowledge/bundles/general/random-graph-dissertation-notes.md",
+    "rejected/MA-308/CW1/MA308_Python_Solutions.html",
+    "rejected/MA-308/CW1/Notebook.pdf",
+    "rejected/MA-308/CW1/MA308_Python_Solutions.ipynb",
+    "rejected/MA-308/CW1/23-02-2026, 10_26 Microsoft Lens.pdf",
+    "rejected/MA-308/CW1",
+    "rejected/MA-308",
+    "rejected/NSE_ELO/MA-308/CW1/Notebook.pdf",
+    "rejected/NSE_ELO/MA-308/CW1/MA308_Python_Solutions.ipynb",
+    "rejected/NSE_ELO/MA-308/CW1/MA308_Python_Solutions.html",
+    "rejected/NSE_ELO/MA-308/CW1/23-02-2026, 10_26 Microsoft Lens.pdf",
+    "rejected/CS-313/git/sparkAdaCodeLecture/sect6/example6-22-testintegerfirstlast/screenshots/why3screenshot.png",
+    "rejected/CS-313/git/sparkAdaCodeLecture/sect6/example6-22-testintegerfirstlast/screenshots/GPSscreenshot.png",
+    "rejected/CS-313/git/sparkAdaCodeLecture/sect6/example6-19b-IOWithMainfile/screenshots/why3screenshot.png",
+    "rejected/CS-313/git/sparkAdaCodeLecture/sect6/example6-19b-IOWithMainfile/screenshots/GPSscreenshot.png",
+    "rejected/CS-313/git/exampleCodeForTesting/screenshots/why3screenshot.png",
+    "rejected/CS-313/git/exampleCodeForTesting/screenshots/errorWhy3.png",
+    "rejected/CS-313/git/exampleCodeForTesting/screenshots/GPSscreenshot.png",
+    "rejected/CS-313/git/screenshots/why3screenshot.png",
+    "rejected/CS-313/git/screenshots/gnatStudioScreenshot.png",
+    "rejected/CS-313/git/screenshots/gitrepository2.png",
+    "rejected/CS-313/Train_Cross_Clean/src/README.md",
+    "rejected/CS-313/git/README.md",
+    "knowledge/bundles/general/ma308-coursework-mission.md",
+    "knowledge/bundles/general/railway-crossing-cs313-mission.md",
+    "knowledge/bundles/general/random-graph-dissertation-mission.md",
+    "projects/CS-313/Train_Cross_Clean/src/README.md",
+    "projects/CS-313/git/README.md",
+    "projects/Disertation/Writing/Material/README.md",
+    "projects/Disertation/All_In_One/repo_remote/README.md",
+    "projects/Disertation/Presentation/presentation_cheat_sheet.md",
+    "projects/Disertation/Watts_Strogatz/README.md",
+    "projects/Disertation/All_In_One/README.md"
+  ]
+}

@@ -1,0 +1,6 @@
+#!/bin/bash
+export PATH=/usr/gnat/bin/:$PATH
+DIR=$(dirname "$1")
+echo $PATH
+pwd
+cd $DIR; gps $1 

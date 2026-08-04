@@ -1,0 +1,1418 @@
+module Standard__integer
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  
+  type integer = <range -2147483648 2147483647>
+  
+  val function first : int
+    ensures { result = ((- 2147483648) : int) }
+  
+  val function last : int
+    ensures { result = (2147483647 : int) }
+  
+  predicate in_range (x: int) = ((first <= x) /\ (x <= last))
+  
+  val in_range (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = integer,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type integer__ref = { mutable integer__content : integer }
+  
+  function integer__ref_integer__content__projection (a: integer__ref) : integer =
+    a.integer__content
+  
+  meta "model_projection" function integer__ref_integer__content__projection
+  
+  meta "inline:no" function integer__ref_integer__content__projection
+  
+  val integer__havoc (x: integer__ref) : unit
+    writes { x }
+end
+
+module Standard__integer___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Standard__integer as Standard__integer
+  
+  predicate dynamic_invariant (temp___expr_18: int) (temp___is_init_14: bool) (temp___skip_constant_15: bool) (temp___do_toplevel_16: bool) (temp___do_typ_inv_17: bool) =
+    if ((temp___is_init_14 = True) \/
+          (Standard__integer.first <= Standard__integer.last)) then
+      (((Standard__integer.dynamic_property Standard__integer.first)
+          Standard__integer.last)
+         temp___expr_18)
+    else true
+  
+  val dynamic_invariant (temp___expr_18: int) (temp___is_init_14: bool) (temp___skip_constant_15: bool) (temp___do_toplevel_16: bool) (temp___do_typ_inv_17: bool) : 
+    bool
+    ensures { result
+                <->
+                (((((dynamic_invariant (temp___expr_18 : int))
+                      (temp___is_init_14 : bool))
+                     (temp___skip_constant_15 : bool))
+                    (temp___do_toplevel_16 : bool))
+                   (temp___do_typ_inv_17 : bool)) }
+  
+  predicate default_initial_assumption (temp___expr_19: int) (temp___skip_top_level_20: bool) =
+    true
+  
+  val default_initial_assumption (temp___expr_19: int) (temp___skip_top_level_20: bool) : 
+    bool
+    ensures { result
+                <->
+                ((default_initial_assumption (temp___expr_19 : int))
+                   (temp___skip_top_level_20 : bool)) }
+end
+
+module Standard__positive
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  
+  type positive = <range 1 2147483647>
+  
+  val function first : int
+    ensures { result = (1 : int) }
+  
+  val function last : int
+    ensures { result = (2147483647 : int) }
+  
+  predicate in_range (x: int) = ((first <= x) /\ (x <= last))
+  
+  val in_range (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = positive,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type positive__ref = { mutable positive__content : positive }
+  
+  function positive__ref_positive__content__projection (a: positive__ref) : positive =
+    a.positive__content
+  
+  meta "model_projection" function positive__ref_positive__content__projection
+  
+  meta "inline:no" function positive__ref_positive__content__projection
+  
+  val positive__havoc (x: positive__ref) : unit
+    writes { x }
+end
+
+module Standard__positive___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Standard__positive as Standard__positive
+  
+  predicate dynamic_invariant (temp___expr_53: int) (temp___is_init_49: bool) (temp___skip_constant_50: bool) (temp___do_toplevel_51: bool) (temp___do_typ_inv_52: bool) =
+    if ((temp___is_init_49 = True) \/
+          (Standard__positive.first <= Standard__positive.last)) then
+      (((Standard__positive.dynamic_property Standard__positive.first)
+          Standard__positive.last)
+         temp___expr_53)
+    else true
+  
+  val dynamic_invariant (temp___expr_53: int) (temp___is_init_49: bool) (temp___skip_constant_50: bool) (temp___do_toplevel_51: bool) (temp___do_typ_inv_52: bool) : 
+    bool
+    ensures { result
+                <->
+                (((((dynamic_invariant (temp___expr_53 : int))
+                      (temp___is_init_49 : bool))
+                     (temp___skip_constant_50 : bool))
+                    (temp___do_toplevel_51 : bool))
+                   (temp___do_typ_inv_52 : bool)) }
+  
+  predicate default_initial_assumption (temp___expr_54: int) (temp___skip_top_level_55: bool) =
+    true
+  
+  val default_initial_assumption (temp___expr_54: int) (temp___skip_top_level_55: bool) : 
+    bool
+    ensures { result
+                <->
+                ((default_initial_assumption (temp___expr_54 : int))
+                   (temp___skip_top_level_55 : bool)) }
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__a
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val function a : int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__b
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val function b : int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__g
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val g : int__ref
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__ga
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val ga : int__ref
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__gb
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val gb : int__ref
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__r
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val r : int__ref
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__s
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val s : int__ref
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__ra
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val ra : int__ref
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__sa
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val sa : int__ref
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__rb
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val rb : int__ref
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__sb
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val sb : int__ref
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__d
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val d : int__ref
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__r1
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val r1 : int__ref
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__L_1
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  exception L_1
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__r___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__s___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__ra___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__sa___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__rb___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__sb___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__d___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__r1___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__L_1___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__a___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__b___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__g___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__ga___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__gb___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Gcd_verified_contracts__euclid_gcd_verified__subprogram_def
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use _gnatprove_standard.Main as Main
+  use _gnatprove_standard.Int_Division as Int_Division
+  use _gnatprove_standard.Boolean as Boolean
+  use Standard__integer as Standard__integer
+  use Standard__integer___axiom as Standard__integer___axiom
+  use Standard__positive as Standard__positive
+  use Standard__positive___axiom as Standard__positive___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__a as Gcd_verified_contracts__euclid_gcd_verified__a
+  use Gcd_verified_contracts__euclid_gcd_verified__b as Gcd_verified_contracts__euclid_gcd_verified__b
+  use Gcd_verified_contracts__euclid_gcd_verified__g as Gcd_verified_contracts__euclid_gcd_verified__g
+  use Gcd_verified_contracts__euclid_gcd_verified__ga as Gcd_verified_contracts__euclid_gcd_verified__ga
+  use Gcd_verified_contracts__euclid_gcd_verified__gb as Gcd_verified_contracts__euclid_gcd_verified__gb
+  use Gcd_verified_contracts__euclid_gcd_verified__r as Gcd_verified_contracts__euclid_gcd_verified__r
+  use Gcd_verified_contracts__euclid_gcd_verified__s as Gcd_verified_contracts__euclid_gcd_verified__s
+  use Gcd_verified_contracts__euclid_gcd_verified__ra as Gcd_verified_contracts__euclid_gcd_verified__ra
+  use Gcd_verified_contracts__euclid_gcd_verified__sa as Gcd_verified_contracts__euclid_gcd_verified__sa
+  use Gcd_verified_contracts__euclid_gcd_verified__rb as Gcd_verified_contracts__euclid_gcd_verified__rb
+  use Gcd_verified_contracts__euclid_gcd_verified__sb as Gcd_verified_contracts__euclid_gcd_verified__sb
+  use Gcd_verified_contracts__euclid_gcd_verified__d as Gcd_verified_contracts__euclid_gcd_verified__d
+  use Gcd_verified_contracts__euclid_gcd_verified__r1 as Gcd_verified_contracts__euclid_gcd_verified__r1
+  use Gcd_verified_contracts__euclid_gcd_verified__L_1 as Gcd_verified_contracts__euclid_gcd_verified__L_1
+  use Standard__integer___axiom as Standard__integer___axiom
+  use Standard__positive___axiom as Standard__positive___axiom
+  use Standard__integer___axiom as Standard__integer___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__r___axiom as Gcd_verified_contracts__euclid_gcd_verified__r___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__s___axiom as Gcd_verified_contracts__euclid_gcd_verified__s___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__ra___axiom as Gcd_verified_contracts__euclid_gcd_verified__ra___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__sa___axiom as Gcd_verified_contracts__euclid_gcd_verified__sa___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__rb___axiom as Gcd_verified_contracts__euclid_gcd_verified__rb___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__sb___axiom as Gcd_verified_contracts__euclid_gcd_verified__sb___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__d___axiom as Gcd_verified_contracts__euclid_gcd_verified__d___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__r1___axiom as Gcd_verified_contracts__euclid_gcd_verified__r1___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__L_1___axiom as Gcd_verified_contracts__euclid_gcd_verified__L_1___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__a___axiom as Gcd_verified_contracts__euclid_gcd_verified__a___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__b___axiom as Gcd_verified_contracts__euclid_gcd_verified__b___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__g___axiom as Gcd_verified_contracts__euclid_gcd_verified__g___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__ga___axiom as Gcd_verified_contracts__euclid_gcd_verified__ga___axiom
+  use Gcd_verified_contracts__euclid_gcd_verified__gb___axiom as Gcd_verified_contracts__euclid_gcd_verified__gb___axiom
+  
+  let def (__void_param : unit)
+    requires { [#"gcd_verified_contracts.ads" 4 0 0] true }
+    ensures { [#"gcd_verified_contracts.ads" 4 0 0]
+              [#"gcd_verified_contracts.ads" 13 0 0]
+              [@GP_Reason:VC_POSTCONDITION]
+              [@GP_Id:40]
+              [@comment:       (Integer(A) = Integer(G) * GA        ^ gcd_verified_contracts.ads:13:8:VC_POSTCONDITION]
+              [@model_vc_post]
+              [@GP_Sloc:gcd_verified_contracts.ads:13:8]
+              [@GP_Shape:pragargs__and]
+              (([@GP_Sloc:gcd_verified_contracts.ads:13:9]
+                [@GP_Pretty_Ada:1166]
+                (Gcd_verified_contracts__euclid_gcd_verified__a.a
+                   = ((Gcd_verified_contracts__euclid_gcd_verified__g.g.int__content)
+                        * (Gcd_verified_contracts__euclid_gcd_verified__ga.ga.int__content)))) /\
+                 ([@GP_Sloc:gcd_verified_contracts.ads:14:13]
+                  [@GP_Pretty_Ada:1176]
+                  (Gcd_verified_contracts__euclid_gcd_verified__b.b
+                     = ((Gcd_verified_contracts__euclid_gcd_verified__g.g.int__content)
+                          * (Gcd_verified_contracts__euclid_gcd_verified__gb.gb.int__content))))) }
+  = [@vc:divergent]
+    (([@GNAT-comment:Assume dynamic invariants of inputs of the subprogram gcd_verified_contracts.ads:4]
+      ());
+     assume {
+       ((((Standard__positive___axiom.dynamic_invariant
+             Gcd_verified_contracts__euclid_gcd_verified__a.a)
+            True)
+           False)
+          True)
+         True };
+     assume {
+       ((((Standard__positive___axiom.dynamic_invariant
+             Gcd_verified_contracts__euclid_gcd_verified__b.b)
+            True)
+           False)
+          True)
+         True };
+     assume {
+       ((((Standard__positive___axiom.dynamic_invariant
+             (Gcd_verified_contracts__euclid_gcd_verified__g.g.int__content))
+            False)
+           False)
+          True)
+         True };
+     assume {
+       ((((Standard__integer___axiom.dynamic_invariant
+             (Gcd_verified_contracts__euclid_gcd_verified__ga.ga.int__content))
+            False)
+           False)
+          True)
+         True };
+     assume {
+       ((((Standard__integer___axiom.dynamic_invariant
+             (Gcd_verified_contracts__euclid_gcd_verified__gb.gb.int__content))
+            False)
+           False)
+          True)
+         True };
+     ([@GNAT-comment:Assume moved pointers in outputs of the subprogram gcd_verified_contracts.ads:4]
+      ());
+     ([@GNAT-comment:Check for RTE in the Pre of the subprogram gcd_verified_contracts.ads:4]
+      ());
+     ([@GNAT-comment:Assume Pre of the subprogram gcd_verified_contracts.ads:4]
+      ());
+     (try
+        ([#"gcd_verified_contracts.adb" 12 0 0]
+         (([#"gcd_verified_contracts.adb" 12 0 0]
+           (Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content <-
+              Gcd_verified_contracts__euclid_gcd_verified__a.a));
+          ([#"gcd_verified_contracts.adb" 12 0 0]
+           assume {
+             [#"gcd_verified_contracts.adb" 12 0 0]
+             (((((Standard__integer___axiom.dynamic_invariant
+                    (Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content))
+                   True)
+                  False)
+                 True)
+                True) })));
+        ([#"gcd_verified_contracts.adb" 13 0 0]
+         (([#"gcd_verified_contracts.adb" 13 0 0]
+           (Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content <-
+              Gcd_verified_contracts__euclid_gcd_verified__b.b));
+          ([#"gcd_verified_contracts.adb" 13 0 0]
+           assume {
+             [#"gcd_verified_contracts.adb" 13 0 0]
+             (((((Standard__integer___axiom.dynamic_invariant
+                    (Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content))
+                   True)
+                  False)
+                 True)
+                True) })));
+        ([#"gcd_verified_contracts.adb" 14 0 0]
+         (([#"gcd_verified_contracts.adb" 14 0 0]
+           (Gcd_verified_contracts__euclid_gcd_verified__ra.ra.int__content <-
+              (1 : int)));
+          ([#"gcd_verified_contracts.adb" 14 0 0]
+           assume {
+             [#"gcd_verified_contracts.adb" 14 0 0]
+             (((((Standard__integer___axiom.dynamic_invariant
+                    (Gcd_verified_contracts__euclid_gcd_verified__ra.ra.int__content))
+                   True)
+                  False)
+                 True)
+                True) })));
+        ([#"gcd_verified_contracts.adb" 15 0 0]
+         (([#"gcd_verified_contracts.adb" 15 0 0]
+           (Gcd_verified_contracts__euclid_gcd_verified__sa.sa.int__content <-
+              (0 : int)));
+          ([#"gcd_verified_contracts.adb" 15 0 0]
+           assume {
+             [#"gcd_verified_contracts.adb" 15 0 0]
+             (((((Standard__integer___axiom.dynamic_invariant
+                    (Gcd_verified_contracts__euclid_gcd_verified__sa.sa.int__content))
+                   True)
+                  False)
+                 True)
+                True) })));
+        ([#"gcd_verified_contracts.adb" 16 0 0]
+         (([#"gcd_verified_contracts.adb" 16 0 0]
+           (Gcd_verified_contracts__euclid_gcd_verified__rb.rb.int__content <-
+              (0 : int)));
+          ([#"gcd_verified_contracts.adb" 16 0 0]
+           assume {
+             [#"gcd_verified_contracts.adb" 16 0 0]
+             (((((Standard__integer___axiom.dynamic_invariant
+                    (Gcd_verified_contracts__euclid_gcd_verified__rb.rb.int__content))
+                   True)
+                  False)
+                 True)
+                True) })));
+        ([#"gcd_verified_contracts.adb" 17 0 0]
+         (([#"gcd_verified_contracts.adb" 17 0 0]
+           (Gcd_verified_contracts__euclid_gcd_verified__sb.sb.int__content <-
+              (1 : int)));
+          ([#"gcd_verified_contracts.adb" 17 0 0]
+           assume {
+             [#"gcd_verified_contracts.adb" 17 0 0]
+             (((((Standard__integer___axiom.dynamic_invariant
+                    (Gcd_verified_contracts__euclid_gcd_verified__sb.sb.int__content))
+                   True)
+                  False)
+                 True)
+                True) })));
+        ([#"gcd_verified_contracts.adb" 18 0 0]
+         (([#"gcd_verified_contracts.adb" 18 0 0]
+           (Gcd_verified_contracts__euclid_gcd_verified__d.d.int__content <-
+              (0 : int)));
+          ([#"gcd_verified_contracts.adb" 18 0 0]
+           assume {
+             [#"gcd_verified_contracts.adb" 18 0 0]
+             (((((Standard__integer___axiom.dynamic_invariant
+                    (Gcd_verified_contracts__euclid_gcd_verified__d.d.int__content))
+                   True)
+                  False)
+                 True)
+                True) })));
+        ([#"gcd_verified_contracts.adb" 19 0 0]
+         (([#"gcd_verified_contracts.adb" 19 0 0]
+           (Gcd_verified_contracts__euclid_gcd_verified__r1.r1.int__content <-
+              (0 : int)));
+          ([#"gcd_verified_contracts.adb" 19 0 0]
+           assume {
+             [#"gcd_verified_contracts.adb" 19 0 0]
+             (((((Standard__integer___axiom.dynamic_invariant
+                    (Gcd_verified_contracts__euclid_gcd_verified__r1.r1.int__content))
+                   True)
+                  False)
+                 True)
+                True) })));
+        ([#"gcd_verified_contracts.adb" 21 0 0] ());
+        ([@GP_Sloc:gcd_verified_contracts.adb:21:31]
+         [#"gcd_verified_contracts.adb" 21 0 0]
+         (([@GNAT-comment:Translation of an Ada loop from gcd_verified_contracts.adb:21]
+           ());
+          (if ((Boolean.andb
+                  ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                     <> (0 : int)))
+                 ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                    <> (0 : int))) then
+             ([#"gcd_verified_contracts.adb" 21 0 0]
+              (try
+                 ([@GNAT-comment:While loop translating the Ada loop from gcd_verified_contracts.adb:21]
+                  ());
+                 ([#"'@Loop 893@'gcd_verified_contracts.adb" 22 0 0]
+                  [#"'@Loop 893@'gcd_verified_contracts.adb" 22 0 0]
+                  ((([@GNAT-comment:Check for absence of RTE in the loop invariant and variant]
+                     ());
+                    (let temp___inv_171 =
+                       (Boolean.andb
+                          ((Boolean.andb
+                              (Gcd_verified_contracts__euclid_gcd_verified__a.a
+                                 = ([#"gcd_verified_contracts.adb" 23 0 0]
+                                    [@comment:           (Integer(A) = R * RA + S * SA                                 ^ gcd_verified_contracts.adb:23:33:VC_OVERFLOW_CHECK]
+                                    [@GP_Shape:L_1_while__pragargs__and__and__cmp__add]
+                                    [@vc:annotation]
+                                    [@GP_Reason:VC_OVERFLOW_CHECK]
+                                    [@GP_Sloc:gcd_verified_contracts.adb:23:33]
+                                    [@GP_Id:29]
+                                    (Standard__integer.range_check_
+                                       (([#"gcd_verified_contracts.adb" 23 0 0]
+                                         [@comment:           (Integer(A) = R * RA + S * SA                            ^ gcd_verified_contracts.adb:23:28:VC_OVERFLOW_CHECK]
+                                         [@GP_Shape:L_1_while__pragargs__and__and__cmp__add__mult]
+                                         [@GP_Sloc:gcd_verified_contracts.adb:23:28]
+                                         [@vc:annotation]
+                                         [@GP_Reason:VC_OVERFLOW_CHECK]
+                                         [@GP_Id:27]
+                                         (Standard__integer.range_check_
+                                            ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                               * (Gcd_verified_contracts__euclid_gcd_verified__ra.ra.int__content))))
+                                          + ([#"gcd_verified_contracts.adb" 23 0 0]
+                                             [@GP_Shape:L_1_while__pragargs__and__and__cmp__add__mult]
+                                             [@vc:annotation]
+                                             [@GP_Reason:VC_OVERFLOW_CHECK]
+                                             [@comment:           (Integer(A) = R * RA + S * SA                                     ^ gcd_verified_contracts.adb:23:37:VC_OVERFLOW_CHECK]
+                                             [@GP_Sloc:gcd_verified_contracts.adb:23:37]
+                                             [@GP_Id:28]
+                                             (Standard__integer.range_check_
+                                                ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                                   * (Gcd_verified_contracts__euclid_gcd_verified__sa.sa.int__content)))))))))
+                             (Gcd_verified_contracts__euclid_gcd_verified__b.b
+                                = ([#"gcd_verified_contracts.adb" 24 0 0]
+                                   [@GP_Shape:L_1_while__pragargs__and__and__cmp__add]
+                                   [@GP_Sloc:gcd_verified_contracts.adb:24:37]
+                                   [@vc:annotation]
+                                   [@GP_Reason:VC_OVERFLOW_CHECK]
+                                   [@GP_Id:32]
+                                   [@comment:            and Integer(B) = R * RB + S * SB                                     ^ gcd_verified_contracts.adb:24:37:VC_OVERFLOW_CHECK]
+                                   (Standard__integer.range_check_
+                                      (([#"gcd_verified_contracts.adb" 24 0 0]
+                                        [@GP_Shape:L_1_while__pragargs__and__and__cmp__add__mult]
+                                        [@GP_Sloc:gcd_verified_contracts.adb:24:32]
+                                        [@comment:            and Integer(B) = R * RB + S * SB                                ^ gcd_verified_contracts.adb:24:32:VC_OVERFLOW_CHECK]
+                                        [@vc:annotation]
+                                        [@GP_Reason:VC_OVERFLOW_CHECK]
+                                        [@GP_Id:30]
+                                        (Standard__integer.range_check_
+                                           ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                              * (Gcd_verified_contracts__euclid_gcd_verified__rb.rb.int__content))))
+                                         + ([#"gcd_verified_contracts.adb" 24 0 0]
+                                            [@GP_Shape:L_1_while__pragargs__and__and__cmp__add__mult]
+                                            [@vc:annotation]
+                                            [@GP_Reason:VC_OVERFLOW_CHECK]
+                                            [@comment:            and Integer(B) = R * RB + S * SB                                         ^ gcd_verified_contracts.adb:24:41:VC_OVERFLOW_CHECK]
+                                            [@GP_Id:31]
+                                            [@GP_Sloc:gcd_verified_contracts.adb:24:41]
+                                            (Standard__integer.range_check_
+                                               ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                                  * (Gcd_verified_contracts__euclid_gcd_verified__sb.sb.int__content))))))))))
+                         ((Boolean.orb
+                             ((Boolean.andb
+                                 ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                    > (0 : int)))
+                                ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                   >= (0 : int))))
+                            ((Boolean.andb
+                                ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                   > (0 : int)))
+                               ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                  >= (0 : int)))) in
+                     ()));
+                   while True do
+                     invariant LoopInvariant {
+                       [#"gcd_verified_contracts.adb" 23 0 0]
+                       [@GP_Reason:VC_LOOP_INVARIANT]
+                       [@GP_Shape:L_1_while__pragargs__and]
+                       [@GP_Sloc:gcd_verified_contracts.adb:23:13]
+                       [@vc:annotation]
+                       [@comment:           (Integer(A) = R * RA + S * SA             ^ gcd_verified_contracts.adb:23:13:VC_LOOP_INVARIANT]
+                       [@GP_Id:33]
+                       ((([@GP_Sloc:gcd_verified_contracts.adb:23:13]
+                          [@GP_Pretty_Ada:900]
+                          (Gcd_verified_contracts__euclid_gcd_verified__a.a
+                             = (((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                   * (Gcd_verified_contracts__euclid_gcd_verified__ra.ra.int__content))
+                                  + ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                       * (Gcd_verified_contracts__euclid_gcd_verified__sa.sa.int__content))))) /\
+                           ([@GP_Pretty_Ada:912]
+                            [@GP_Sloc:gcd_verified_contracts.adb:24:17]
+                            (Gcd_verified_contracts__euclid_gcd_verified__b.b
+                               = (((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                     * (Gcd_verified_contracts__euclid_gcd_verified__rb.rb.int__content))
+                                    + ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                         * (Gcd_verified_contracts__euclid_gcd_verified__sb.sb.int__content)))))) /\
+                          ([@GP_Sloc:gcd_verified_contracts.adb:25:17]
+                           [@GP_Pretty_Ada:927]
+                           ((((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                > (0 : int)) /\
+                               ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                  >= (0 : int))) \/
+                              (((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                  > (0 : int)) /\
+                                 ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                    >= (0 : int)))))) }
+                     ([@GNAT-comment:gnat_ast_to_ptree: code after the loop invariant]
+                      (([@GNAT-comment:Assume implicit invariants from the loop gcd_verified_contracts.adb:21]
+                        ());
+                       assume {
+                         (Boolean.andb
+                            ((((((((((((((((true /\
+                                              (((((Standard__integer___axiom.dynamic_invariant
+                                                     (Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content))
+                                                    True)
+                                                   True)
+                                                  True)
+                                                 True)) /\
+                                             (true /\ true)) /\
+                                            (((((Standard__integer___axiom.dynamic_invariant
+                                                   (Gcd_verified_contracts__euclid_gcd_verified__ra.ra.int__content))
+                                                  True)
+                                                 True)
+                                                True)
+                                               True)) /\
+                                           (true /\ true)) /\
+                                          (((((Standard__integer___axiom.dynamic_invariant
+                                                 (Gcd_verified_contracts__euclid_gcd_verified__sa.sa.int__content))
+                                                True)
+                                               True)
+                                              True)
+                                             True)) /\
+                                         (true /\ true)) /\
+                                        (((((Standard__integer___axiom.dynamic_invariant
+                                               (Gcd_verified_contracts__euclid_gcd_verified__rb.rb.int__content))
+                                              True)
+                                             True)
+                                            True)
+                                           True)) /\
+                                       (true /\ true)) /\
+                                      (((((Standard__integer___axiom.dynamic_invariant
+                                             (Gcd_verified_contracts__euclid_gcd_verified__sb.sb.int__content))
+                                            True)
+                                           True)
+                                          True)
+                                         True)) /\
+                                     (true /\ true)) /\
+                                    (((((Standard__integer___axiom.dynamic_invariant
+                                           (Gcd_verified_contracts__euclid_gcd_verified__d.d.int__content))
+                                          True)
+                                         True)
+                                        True)
+                                       True)) /\
+                                   (true /\ true)) /\
+                                  (((((Standard__integer___axiom.dynamic_invariant
+                                         (Gcd_verified_contracts__euclid_gcd_verified__r1.r1.int__content))
+                                        True)
+                                       True)
+                                      True)
+                                     True)) /\
+                                 (true /\ true)) /\
+                                (((((Standard__integer___axiom.dynamic_invariant
+                                       (Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content))
+                                      True)
+                                     True)
+                                    True)
+                                   True)) /\
+                               (true /\ true)))
+                           (((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                               <> (0 : int)) /\
+                              ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                 <> (0 : int))) };
+                       ([@GNAT-comment:Continuation of loop after loop invariant and variant]
+                        ());
+                       ([@GP_Sloc:gcd_verified_contracts.adb:27:13]
+                        [#"gcd_verified_contracts.adb" 27 0 0] ());
+                       ([@GP_Sloc:gcd_verified_contracts.adb:27:17]
+                        [#"gcd_verified_contracts.adb" 27 0 0] ());
+                       ([@GP_Sloc:gcd_verified_contracts.adb:27:10]
+                        [#"gcd_verified_contracts.adb" 27 0 0]
+                        (if (([#"gcd_verified_contracts.adb" 27 0 0]
+                              [#"gcd_verified_contracts.adb" 27 0 0]
+                              (([@branch_id=936] Main.spark__branch).bool__content <-
+                                 ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                    > (Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content))));
+                             (([@branch_id=936] Main.spark__branch).bool__content)) then
+                           (([@GP_Sloc:gcd_verified_contracts.adb:28:13]
+                             [#"gcd_verified_contracts.adb" 28 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:28:19]
+                             [#"gcd_verified_contracts.adb" 28 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:28:23]
+                             [#"gcd_verified_contracts.adb" 28 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:28:16]
+                             [#"gcd_verified_contracts.adb" 28 0 0]
+                             [#"gcd_verified_contracts.adb" 28 0 0]
+                             (Gcd_verified_contracts__euclid_gcd_verified__d.d.int__content <-
+                                ([#"gcd_verified_contracts.adb" 28 0 0]
+                                 [@GP_Shape:L_1_while__if__d_assign__div]
+                                 [@vc:annotation]
+                                 [@GP_Reason:VC_OVERFLOW_CHECK]
+                                 [@GP_Id:1]
+                                 [@comment:            D  := R / S;                     ^ gcd_verified_contracts.adb:28:21:VC_OVERFLOW_CHECK]
+                                 [@GP_Sloc:gcd_verified_contracts.adb:28:21]
+                                 (Standard__integer.range_check_
+                                    ([#"gcd_verified_contracts.adb" 28 0 0]
+                                     [@GP_Shape:L_1_while__if__d_assign__div]
+                                     [@vc:annotation]
+                                     [@GP_Reason:VC_DIVISION_CHECK]
+                                     [@GP_Id:0]
+                                     [@comment:            D  := R / S;                     ^ gcd_verified_contracts.adb:28:21:VC_DIVISION_CHECK]
+                                     [@GP_Sloc:gcd_verified_contracts.adb:28:21]
+                                     ((Int_Division.div_
+                                         (Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content))
+                                        (Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)))))));
+                            ([@GP_Sloc:gcd_verified_contracts.adb:29:13]
+                             [#"gcd_verified_contracts.adb" 29 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:29:19]
+                             [#"gcd_verified_contracts.adb" 29 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:29:25]
+                             [#"gcd_verified_contracts.adb" 29 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:29:16]
+                             [#"gcd_verified_contracts.adb" 29 0 0]
+                             [#"gcd_verified_contracts.adb" 29 0 0]
+                             (Gcd_verified_contracts__euclid_gcd_verified__r1.r1.int__content <-
+                                ([#"gcd_verified_contracts.adb" 29 0 0]
+                                 [@vc:annotation]
+                                 [@GP_Shape:L_1_while__if__r1_assign__mod]
+                                 [@GP_Sloc:gcd_verified_contracts.adb:29:21]
+                                 [@GP_Reason:VC_DIVISION_CHECK]
+                                 [@comment:            R1 := R mod S;                     ^ gcd_verified_contracts.adb:29:21:VC_DIVISION_CHECK]
+                                 [@GP_Id:2]
+                                 ((Int_Division.mod_
+                                     (Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content))
+                                    (Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)))));
+                            ([@GP_Sloc:gcd_verified_contracts.adb:30:13]
+                             [#"gcd_verified_contracts.adb" 30 0 0]
+                             (([#"gcd_verified_contracts.adb" 30 0 0]
+                               (begin
+                                  ensures { true }
+                                  let _ =
+                                    let _ =
+                                      ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                         = ([#"gcd_verified_contracts.adb" 30 0 0]
+                                            [@vc:annotation]
+                                            [@GP_Reason:VC_OVERFLOW_CHECK]
+                                            [@comment:            pragma Assert (R = D * S + R1);                                      ^ gcd_verified_contracts.adb:30:38:VC_OVERFLOW_CHECK]
+                                            [@GP_Sloc:gcd_verified_contracts.adb:30:38]
+                                            [@GP_Id:4]
+                                            [@GP_Shape:L_1_while__if__pragargs__cmp__add]
+                                            (Standard__integer.range_check_
+                                               (([#"gcd_verified_contracts.adb" 30 0 0]
+                                                 [@vc:annotation]
+                                                 [@GP_Shape:L_1_while__if__pragargs__cmp__add__mult]
+                                                 [@GP_Reason:VC_OVERFLOW_CHECK]
+                                                 [@GP_Sloc:gcd_verified_contracts.adb:30:34]
+                                                 [@comment:            pragma Assert (R = D * S + R1);                                  ^ gcd_verified_contracts.adb:30:34:VC_OVERFLOW_CHECK]
+                                                 [@GP_Id:3]
+                                                 (Standard__integer.range_check_
+                                                    ((Gcd_verified_contracts__euclid_gcd_verified__d.d.int__content)
+                                                       * (Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content))))
+                                                  + (Gcd_verified_contracts__euclid_gcd_verified__r1.r1.int__content))))) in
+                                    () in
+                                  ()
+                                end));
+                              assert {
+                                [#"gcd_verified_contracts.adb" 30 0 0]
+                                [@GP_Sloc:gcd_verified_contracts.adb:30:28]
+                                [@GP_Shape:L_1_while__if__pragargs__cmp]
+                                [@vc:annotation]
+                                [@GP_Reason:VC_ASSERT]
+                                [@comment:            pragma Assert (R = D * S + R1);                            ^ gcd_verified_contracts.adb:30:28:VC_ASSERT]
+                                [@GP_Id:5]
+                                [@GP_Sloc:gcd_verified_contracts.adb:30:28]
+                                [@GP_Pretty_Ada:956]
+                                ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                   = (((Gcd_verified_contracts__euclid_gcd_verified__d.d.int__content)
+                                         * (Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content))
+                                        + (Gcd_verified_contracts__euclid_gcd_verified__r1.r1.int__content))) }));
+                            ([@GP_Sloc:gcd_verified_contracts.adb:31:13]
+                             [#"gcd_verified_contracts.adb" 31 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:31:19]
+                             [#"gcd_verified_contracts.adb" 31 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:31:24]
+                             [#"gcd_verified_contracts.adb" 31 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:31:28]
+                             [#"gcd_verified_contracts.adb" 31 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:31:16]
+                             [#"gcd_verified_contracts.adb" 31 0 0]
+                             [#"gcd_verified_contracts.adb" 31 0 0]
+                             (Gcd_verified_contracts__euclid_gcd_verified__sa.sa.int__content <-
+                                ([#"gcd_verified_contracts.adb" 31 0 0]
+                                 [@comment:            SA := RA * D + SA;                          ^ gcd_verified_contracts.adb:31:26:VC_OVERFLOW_CHECK]
+                                 [@GP_Shape:L_1_while__if__sa_assign__add]
+                                 [@vc:annotation]
+                                 [@GP_Sloc:gcd_verified_contracts.adb:31:26]
+                                 [@GP_Reason:VC_OVERFLOW_CHECK]
+                                 [@GP_Id:7]
+                                 (Standard__integer.range_check_
+                                    (([#"gcd_verified_contracts.adb" 31 0 0]
+                                      [@GP_Sloc:gcd_verified_contracts.adb:31:22]
+                                      [@vc:annotation]
+                                      [@GP_Reason:VC_OVERFLOW_CHECK]
+                                      [@GP_Shape:L_1_while__if__sa_assign__add__mult]
+                                      [@comment:            SA := RA * D + SA;                      ^ gcd_verified_contracts.adb:31:22:VC_OVERFLOW_CHECK]
+                                      [@GP_Id:6]
+                                      (Standard__integer.range_check_
+                                         ((Gcd_verified_contracts__euclid_gcd_verified__ra.ra.int__content)
+                                            * (Gcd_verified_contracts__euclid_gcd_verified__d.d.int__content))))
+                                       + (Gcd_verified_contracts__euclid_gcd_verified__sa.sa.int__content))))));
+                            ([@GP_Sloc:gcd_verified_contracts.adb:32:13]
+                             [#"gcd_verified_contracts.adb" 32 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:32:19]
+                             [#"gcd_verified_contracts.adb" 32 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:32:24]
+                             [#"gcd_verified_contracts.adb" 32 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:32:28]
+                             [#"gcd_verified_contracts.adb" 32 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:32:16]
+                             [#"gcd_verified_contracts.adb" 32 0 0]
+                             [#"gcd_verified_contracts.adb" 32 0 0]
+                             (Gcd_verified_contracts__euclid_gcd_verified__sb.sb.int__content <-
+                                ([#"gcd_verified_contracts.adb" 32 0 0]
+                                 [@comment:            SB := RB * D + SB;                          ^ gcd_verified_contracts.adb:32:26:VC_OVERFLOW_CHECK]
+                                 [@GP_Shape:L_1_while__if__sb_assign__add]
+                                 [@vc:annotation]
+                                 [@GP_Reason:VC_OVERFLOW_CHECK]
+                                 [@GP_Sloc:gcd_verified_contracts.adb:32:26]
+                                 [@GP_Id:9]
+                                 (Standard__integer.range_check_
+                                    (([#"gcd_verified_contracts.adb" 32 0 0]
+                                      [@vc:annotation]
+                                      [@GP_Reason:VC_OVERFLOW_CHECK]
+                                      [@GP_Sloc:gcd_verified_contracts.adb:32:22]
+                                      [@GP_Shape:L_1_while__if__sb_assign__add__mult]
+                                      [@comment:            SB := RB * D + SB;                      ^ gcd_verified_contracts.adb:32:22:VC_OVERFLOW_CHECK]
+                                      [@GP_Id:8]
+                                      (Standard__integer.range_check_
+                                         ((Gcd_verified_contracts__euclid_gcd_verified__rb.rb.int__content)
+                                            * (Gcd_verified_contracts__euclid_gcd_verified__d.d.int__content))))
+                                       + (Gcd_verified_contracts__euclid_gcd_verified__sb.sb.int__content))))));
+                            ([@GP_Sloc:gcd_verified_contracts.adb:33:13]
+                             [#"gcd_verified_contracts.adb" 33 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:33:18]
+                             [#"gcd_verified_contracts.adb" 33 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:33:15]
+                             [#"gcd_verified_contracts.adb" 33 0 0]
+                             [#"gcd_verified_contracts.adb" 33 0 0]
+                             (Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content <-
+                                (Gcd_verified_contracts__euclid_gcd_verified__r1.r1.int__content))))
+                         else
+                           (([@GP_Sloc:gcd_verified_contracts.adb:35:13]
+                             [#"gcd_verified_contracts.adb" 35 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:35:19]
+                             [#"gcd_verified_contracts.adb" 35 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:35:23]
+                             [#"gcd_verified_contracts.adb" 35 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:35:16]
+                             [#"gcd_verified_contracts.adb" 35 0 0]
+                             [#"gcd_verified_contracts.adb" 35 0 0]
+                             (Gcd_verified_contracts__euclid_gcd_verified__d.d.int__content <-
+                                ([#"gcd_verified_contracts.adb" 35 0 0]
+                                 [@GP_Shape:L_1_while__if__d_assign__div]
+                                 [@GP_Id:11]
+                                 [@vc:annotation]
+                                 [@GP_Reason:VC_OVERFLOW_CHECK]
+                                 [@GP_Sloc:gcd_verified_contracts.adb:35:21]
+                                 [@comment:            D  := S / R;                     ^ gcd_verified_contracts.adb:35:21:VC_OVERFLOW_CHECK]
+                                 (Standard__integer.range_check_
+                                    ([#"gcd_verified_contracts.adb" 35 0 0]
+                                     [@GP_Id:10]
+                                     [@GP_Shape:L_1_while__if__d_assign__div]
+                                     [@vc:annotation]
+                                     [@GP_Reason:VC_DIVISION_CHECK]
+                                     [@GP_Sloc:gcd_verified_contracts.adb:35:21]
+                                     [@comment:            D  := S / R;                     ^ gcd_verified_contracts.adb:35:21:VC_DIVISION_CHECK]
+                                     ((Int_Division.div_
+                                         (Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content))
+                                        (Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)))))));
+                            ([@GP_Sloc:gcd_verified_contracts.adb:36:13]
+                             [#"gcd_verified_contracts.adb" 36 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:36:19]
+                             [#"gcd_verified_contracts.adb" 36 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:36:25]
+                             [#"gcd_verified_contracts.adb" 36 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:36:16]
+                             [#"gcd_verified_contracts.adb" 36 0 0]
+                             [#"gcd_verified_contracts.adb" 36 0 0]
+                             (Gcd_verified_contracts__euclid_gcd_verified__r1.r1.int__content <-
+                                ([#"gcd_verified_contracts.adb" 36 0 0]
+                                 [@GP_Id:12]
+                                 [@GP_Sloc:gcd_verified_contracts.adb:36:21]
+                                 [@comment:            R1 := S mod R;                     ^ gcd_verified_contracts.adb:36:21:VC_DIVISION_CHECK]
+                                 [@vc:annotation]
+                                 [@GP_Shape:L_1_while__if__r1_assign__mod]
+                                 [@GP_Reason:VC_DIVISION_CHECK]
+                                 ((Int_Division.mod_
+                                     (Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content))
+                                    (Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)))));
+                            ([@GP_Sloc:gcd_verified_contracts.adb:37:13]
+                             [#"gcd_verified_contracts.adb" 37 0 0]
+                             (([#"gcd_verified_contracts.adb" 37 0 0]
+                               (begin
+                                  ensures { true }
+                                  let _ =
+                                    let _ =
+                                      ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                         = ([#"gcd_verified_contracts.adb" 37 0 0]
+                                            [@GP_Id:14]
+                                            [@comment:            pragma Assert (S = D * R + R1);                                      ^ gcd_verified_contracts.adb:37:38:VC_OVERFLOW_CHECK]
+                                            [@vc:annotation]
+                                            [@GP_Reason:VC_OVERFLOW_CHECK]
+                                            [@GP_Sloc:gcd_verified_contracts.adb:37:38]
+                                            [@GP_Shape:L_1_while__if__pragargs__cmp__add]
+                                            (Standard__integer.range_check_
+                                               (([#"gcd_verified_contracts.adb" 37 0 0]
+                                                 [@comment:            pragma Assert (S = D * R + R1);                                  ^ gcd_verified_contracts.adb:37:34:VC_OVERFLOW_CHECK]
+                                                 [@GP_Id:13]
+                                                 [@vc:annotation]
+                                                 [@GP_Shape:L_1_while__if__pragargs__cmp__add__mult]
+                                                 [@GP_Sloc:gcd_verified_contracts.adb:37:34]
+                                                 [@GP_Reason:VC_OVERFLOW_CHECK]
+                                                 (Standard__integer.range_check_
+                                                    ((Gcd_verified_contracts__euclid_gcd_verified__d.d.int__content)
+                                                       * (Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content))))
+                                                  + (Gcd_verified_contracts__euclid_gcd_verified__r1.r1.int__content))))) in
+                                    () in
+                                  ()
+                                end));
+                              assert {
+                                [#"gcd_verified_contracts.adb" 37 0 0]
+                                [@GP_Id:15]
+                                [@GP_Shape:L_1_while__if__pragargs__cmp]
+                                [@vc:annotation]
+                                [@GP_Reason:VC_ASSERT]
+                                [@comment:            pragma Assert (S = D * R + R1);                            ^ gcd_verified_contracts.adb:37:28:VC_ASSERT]
+                                [@GP_Sloc:gcd_verified_contracts.adb:37:28]
+                                [@GP_Pretty_Ada:995]
+                                [@GP_Sloc:gcd_verified_contracts.adb:37:28]
+                                ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                   = (((Gcd_verified_contracts__euclid_gcd_verified__d.d.int__content)
+                                         * (Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content))
+                                        + (Gcd_verified_contracts__euclid_gcd_verified__r1.r1.int__content))) }));
+                            ([@GP_Sloc:gcd_verified_contracts.adb:38:13]
+                             [#"gcd_verified_contracts.adb" 38 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:38:19]
+                             [#"gcd_verified_contracts.adb" 38 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:38:24]
+                             [#"gcd_verified_contracts.adb" 38 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:38:29]
+                             [#"gcd_verified_contracts.adb" 38 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:38:16]
+                             [#"gcd_verified_contracts.adb" 38 0 0]
+                             [#"gcd_verified_contracts.adb" 38 0 0]
+                             (Gcd_verified_contracts__euclid_gcd_verified__ra.ra.int__content <-
+                                ([#"gcd_verified_contracts.adb" 38 0 0]
+                                 [@GP_Sloc:gcd_verified_contracts.adb:38:22]
+                                 [@GP_Id:17]
+                                 [@GP_Shape:L_1_while__if__ra_assign__add]
+                                 [@comment:            RA := RA + SA * D;                      ^ gcd_verified_contracts.adb:38:22:VC_OVERFLOW_CHECK]
+                                 [@vc:annotation]
+                                 [@GP_Reason:VC_OVERFLOW_CHECK]
+                                 (Standard__integer.range_check_
+                                    ((Gcd_verified_contracts__euclid_gcd_verified__ra.ra.int__content)
+                                       + ([#"gcd_verified_contracts.adb" 38 0 0]
+                                          [@GP_Sloc:gcd_verified_contracts.adb:38:27]
+                                          [@GP_Id:16]
+                                          [@GP_Shape:L_1_while__if__ra_assign__add__mult]
+                                          [@vc:annotation]
+                                          [@GP_Reason:VC_OVERFLOW_CHECK]
+                                          [@comment:            RA := RA + SA * D;                           ^ gcd_verified_contracts.adb:38:27:VC_OVERFLOW_CHECK]
+                                          (Standard__integer.range_check_
+                                             ((Gcd_verified_contracts__euclid_gcd_verified__sa.sa.int__content)
+                                                * (Gcd_verified_contracts__euclid_gcd_verified__d.d.int__content)))))))));
+                            ([@GP_Sloc:gcd_verified_contracts.adb:39:13]
+                             [#"gcd_verified_contracts.adb" 39 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:39:19]
+                             [#"gcd_verified_contracts.adb" 39 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:39:24]
+                             [#"gcd_verified_contracts.adb" 39 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:39:29]
+                             [#"gcd_verified_contracts.adb" 39 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:39:16]
+                             [#"gcd_verified_contracts.adb" 39 0 0]
+                             [#"gcd_verified_contracts.adb" 39 0 0]
+                             (Gcd_verified_contracts__euclid_gcd_verified__rb.rb.int__content <-
+                                ([#"gcd_verified_contracts.adb" 39 0 0]
+                                 [@GP_Shape:L_1_while__if__rb_assign__add]
+                                 [@GP_Id:19]
+                                 [@vc:annotation]
+                                 [@GP_Sloc:gcd_verified_contracts.adb:39:22]
+                                 [@GP_Reason:VC_OVERFLOW_CHECK]
+                                 [@comment:            RB := RB + SB * D;                      ^ gcd_verified_contracts.adb:39:22:VC_OVERFLOW_CHECK]
+                                 (Standard__integer.range_check_
+                                    ((Gcd_verified_contracts__euclid_gcd_verified__rb.rb.int__content)
+                                       + ([#"gcd_verified_contracts.adb" 39 0 0]
+                                          [@GP_Id:18]
+                                          [@comment:            RB := RB + SB * D;                           ^ gcd_verified_contracts.adb:39:27:VC_OVERFLOW_CHECK]
+                                          [@vc:annotation]
+                                          [@GP_Reason:VC_OVERFLOW_CHECK]
+                                          [@GP_Sloc:gcd_verified_contracts.adb:39:27]
+                                          [@GP_Shape:L_1_while__if__rb_assign__add__mult]
+                                          (Standard__integer.range_check_
+                                             ((Gcd_verified_contracts__euclid_gcd_verified__sb.sb.int__content)
+                                                * (Gcd_verified_contracts__euclid_gcd_verified__d.d.int__content)))))))));
+                            ([@GP_Sloc:gcd_verified_contracts.adb:40:13]
+                             [#"gcd_verified_contracts.adb" 40 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:40:18]
+                             [#"gcd_verified_contracts.adb" 40 0 0] ());
+                            ([@GP_Sloc:gcd_verified_contracts.adb:40:15]
+                             [#"gcd_verified_contracts.adb" 40 0 0]
+                             [#"gcd_verified_contracts.adb" 40 0 0]
+                             (Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content <-
+                                (Gcd_verified_contracts__euclid_gcd_verified__r1.r1.int__content))))));
+                       ([@GP_Sloc:gcd_verified_contracts.adb:43:10]
+                        [#"gcd_verified_contracts.adb" 43 0 0]
+                        (([#"gcd_verified_contracts.adb" 43 0 0]
+                          (begin
+                             ensures { true }
+                             let _ =
+                               let _ =
+                                 (Boolean.andb
+                                    ((Boolean.andb
+                                        (Gcd_verified_contracts__euclid_gcd_verified__a.a
+                                           = ([#"gcd_verified_contracts.adb" 44 0 0]
+                                              [@GP_Shape:L_1_while__pragargs__and__and__cmp__add]
+                                              [@GP_Sloc:gcd_verified_contracts.adb:44:33]
+                                              [@vc:annotation]
+                                              [@GP_Reason:VC_OVERFLOW_CHECK]
+                                              [@comment:           (Integer(A) = R * RA + S * SA                                 ^ gcd_verified_contracts.adb:44:33:VC_OVERFLOW_CHECK]
+                                              [@GP_Id:22]
+                                              (Standard__integer.range_check_
+                                                 (([#"gcd_verified_contracts.adb" 44 0 0]
+                                                   [@GP_Shape:L_1_while__pragargs__and__and__cmp__add__mult]
+                                                   [@vc:annotation]
+                                                   [@GP_Reason:VC_OVERFLOW_CHECK]
+                                                   [@GP_Sloc:gcd_verified_contracts.adb:44:28]
+                                                   [@GP_Id:20]
+                                                   [@comment:           (Integer(A) = R * RA + S * SA                            ^ gcd_verified_contracts.adb:44:28:VC_OVERFLOW_CHECK]
+                                                   (Standard__integer.range_check_
+                                                      ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                                         * (Gcd_verified_contracts__euclid_gcd_verified__ra.ra.int__content))))
+                                                    + ([#"gcd_verified_contracts.adb" 44 0 0]
+                                                       [@comment:           (Integer(A) = R * RA + S * SA                                     ^ gcd_verified_contracts.adb:44:37:VC_OVERFLOW_CHECK]
+                                                       [@GP_Shape:L_1_while__pragargs__and__and__cmp__add__mult]
+                                                       [@vc:annotation]
+                                                       [@GP_Sloc:gcd_verified_contracts.adb:44:37]
+                                                       [@GP_Reason:VC_OVERFLOW_CHECK]
+                                                       [@GP_Id:21]
+                                                       (Standard__integer.range_check_
+                                                          ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                                             * (Gcd_verified_contracts__euclid_gcd_verified__sa.sa.int__content)))))))))
+                                       (Gcd_verified_contracts__euclid_gcd_verified__b.b
+                                          = ([#"gcd_verified_contracts.adb" 45 0 0]
+                                             [@GP_Shape:L_1_while__pragargs__and__and__cmp__add]
+                                             [@comment:            and Integer(B) = R * RB + S * SB                                     ^ gcd_verified_contracts.adb:45:37:VC_OVERFLOW_CHECK]
+                                             [@vc:annotation]
+                                             [@GP_Reason:VC_OVERFLOW_CHECK]
+                                             [@GP_Sloc:gcd_verified_contracts.adb:45:37]
+                                             [@GP_Id:25]
+                                             (Standard__integer.range_check_
+                                                (([#"gcd_verified_contracts.adb" 45 0 0]
+                                                  [@GP_Shape:L_1_while__pragargs__and__and__cmp__add__mult]
+                                                  [@vc:annotation]
+                                                  [@GP_Reason:VC_OVERFLOW_CHECK]
+                                                  [@GP_Sloc:gcd_verified_contracts.adb:45:32]
+                                                  [@comment:            and Integer(B) = R * RB + S * SB                                ^ gcd_verified_contracts.adb:45:32:VC_OVERFLOW_CHECK]
+                                                  [@GP_Id:23]
+                                                  (Standard__integer.range_check_
+                                                     ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                                        * (Gcd_verified_contracts__euclid_gcd_verified__rb.rb.int__content))))
+                                                   + ([#"gcd_verified_contracts.adb" 45 0 0]
+                                                      [@comment:            and Integer(B) = R * RB + S * SB                                         ^ gcd_verified_contracts.adb:45:41:VC_OVERFLOW_CHECK]
+                                                      [@GP_Shape:L_1_while__pragargs__and__and__cmp__add__mult]
+                                                      [@vc:annotation]
+                                                      [@GP_Sloc:gcd_verified_contracts.adb:45:41]
+                                                      [@GP_Reason:VC_OVERFLOW_CHECK]
+                                                      [@GP_Id:24]
+                                                      (Standard__integer.range_check_
+                                                         ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                                            * (Gcd_verified_contracts__euclid_gcd_verified__sb.sb.int__content))))))))))
+                                   ((Boolean.orb
+                                       ((Boolean.andb
+                                           ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                              > (0 : int)))
+                                          ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                             >= (0 : int))))
+                                      ((Boolean.andb
+                                          ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                             > (0 : int)))
+                                         ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                            >= (0 : int)))) in
+                               () in
+                             ()
+                           end));
+                         assert {
+                           [#"gcd_verified_contracts.adb" 44 0 0]
+                           [@GP_Shape:L_1_while__pragargs__and]
+                           [@vc:annotation]
+                           [@GP_Reason:VC_ASSERT]
+                           [@comment:           (Integer(A) = R * RA + S * SA             ^ gcd_verified_contracts.adb:44:13:VC_ASSERT]
+                           [@GP_Id:26]
+                           [@GP_Sloc:gcd_verified_contracts.adb:44:13]
+                           ((([@GP_Pretty_Ada:1025]
+                              [@GP_Sloc:gcd_verified_contracts.adb:44:13]
+                              (Gcd_verified_contracts__euclid_gcd_verified__a.a
+                                 = (((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                       * (Gcd_verified_contracts__euclid_gcd_verified__ra.ra.int__content))
+                                      + ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                           * (Gcd_verified_contracts__euclid_gcd_verified__sa.sa.int__content))))) /\
+                               ([@GP_Sloc:gcd_verified_contracts.adb:45:17]
+                                [@GP_Pretty_Ada:1037]
+                                (Gcd_verified_contracts__euclid_gcd_verified__b.b
+                                   = (((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                         * (Gcd_verified_contracts__euclid_gcd_verified__rb.rb.int__content))
+                                        + ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                             * (Gcd_verified_contracts__euclid_gcd_verified__sb.sb.int__content)))))) /\
+                              ([@GP_Sloc:gcd_verified_contracts.adb:46:17]
+                               [@GP_Pretty_Ada:1052]
+                               ((((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                    > (0 : int)) /\
+                                   ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                      >= (0 : int))) \/
+                                  (((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                      > (0 : int)) /\
+                                     ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                        >= (0 : int)))))) }));
+                       ([@GNAT-comment:Check for the exit condition and loop statements appearing before the loop invariant of loop gcd_verified_contracts.adb:21]
+                        ());
+                       (if (not ((Boolean.andb
+                                    ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                       <> (0 : int)))
+                                   ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                      <> (0 : int)))) then
+                          (raise Gcd_verified_contracts__euclid_gcd_verified__L_1.L_1)
+                        else ())));
+                     ([@GNAT-comment:gnat_ast_to_ptree: code before the loop invariant]
+                      (([@GNAT-comment:Check for absence of RTE in the loop invariant and variant]
+                        ());
+                       (let temp___inv_171 =
+                          (Boolean.andb
+                             ((Boolean.andb
+                                 (Gcd_verified_contracts__euclid_gcd_verified__a.a
+                                    = ([#"gcd_verified_contracts.adb" 23 0 0]
+                                       [@comment:           (Integer(A) = R * RA + S * SA                                 ^ gcd_verified_contracts.adb:23:33:VC_OVERFLOW_CHECK]
+                                       [@GP_Shape:L_1_while__pragargs__and__and__cmp__add]
+                                       [@vc:annotation]
+                                       [@GP_Reason:VC_OVERFLOW_CHECK]
+                                       [@GP_Sloc:gcd_verified_contracts.adb:23:33]
+                                       [@GP_Id:29]
+                                       (Standard__integer.range_check_
+                                          (([#"gcd_verified_contracts.adb" 23 0 0]
+                                            [@comment:           (Integer(A) = R * RA + S * SA                            ^ gcd_verified_contracts.adb:23:28:VC_OVERFLOW_CHECK]
+                                            [@GP_Shape:L_1_while__pragargs__and__and__cmp__add__mult]
+                                            [@GP_Sloc:gcd_verified_contracts.adb:23:28]
+                                            [@vc:annotation]
+                                            [@GP_Reason:VC_OVERFLOW_CHECK]
+                                            [@GP_Id:27]
+                                            (Standard__integer.range_check_
+                                               ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                                  * (Gcd_verified_contracts__euclid_gcd_verified__ra.ra.int__content))))
+                                             + ([#"gcd_verified_contracts.adb" 23 0 0]
+                                                [@GP_Shape:L_1_while__pragargs__and__and__cmp__add__mult]
+                                                [@vc:annotation]
+                                                [@GP_Reason:VC_OVERFLOW_CHECK]
+                                                [@comment:           (Integer(A) = R * RA + S * SA                                     ^ gcd_verified_contracts.adb:23:37:VC_OVERFLOW_CHECK]
+                                                [@GP_Sloc:gcd_verified_contracts.adb:23:37]
+                                                [@GP_Id:28]
+                                                (Standard__integer.range_check_
+                                                   ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                                      * (Gcd_verified_contracts__euclid_gcd_verified__sa.sa.int__content)))))))))
+                                (Gcd_verified_contracts__euclid_gcd_verified__b.b
+                                   = ([#"gcd_verified_contracts.adb" 24 0 0]
+                                      [@GP_Shape:L_1_while__pragargs__and__and__cmp__add]
+                                      [@GP_Sloc:gcd_verified_contracts.adb:24:37]
+                                      [@vc:annotation]
+                                      [@GP_Reason:VC_OVERFLOW_CHECK]
+                                      [@GP_Id:32]
+                                      [@comment:            and Integer(B) = R * RB + S * SB                                     ^ gcd_verified_contracts.adb:24:37:VC_OVERFLOW_CHECK]
+                                      (Standard__integer.range_check_
+                                         (([#"gcd_verified_contracts.adb" 24 0 0]
+                                           [@GP_Shape:L_1_while__pragargs__and__and__cmp__add__mult]
+                                           [@GP_Sloc:gcd_verified_contracts.adb:24:32]
+                                           [@comment:            and Integer(B) = R * RB + S * SB                                ^ gcd_verified_contracts.adb:24:32:VC_OVERFLOW_CHECK]
+                                           [@vc:annotation]
+                                           [@GP_Reason:VC_OVERFLOW_CHECK]
+                                           [@GP_Id:30]
+                                           (Standard__integer.range_check_
+                                              ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                                 * (Gcd_verified_contracts__euclid_gcd_verified__rb.rb.int__content))))
+                                            + ([#"gcd_verified_contracts.adb" 24 0 0]
+                                               [@GP_Shape:L_1_while__pragargs__and__and__cmp__add__mult]
+                                               [@vc:annotation]
+                                               [@GP_Reason:VC_OVERFLOW_CHECK]
+                                               [@comment:            and Integer(B) = R * RB + S * SB                                         ^ gcd_verified_contracts.adb:24:41:VC_OVERFLOW_CHECK]
+                                               [@GP_Id:31]
+                                               [@GP_Sloc:gcd_verified_contracts.adb:24:41]
+                                               (Standard__integer.range_check_
+                                                  ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                                     * (Gcd_verified_contracts__euclid_gcd_verified__sb.sb.int__content))))))))))
+                            ((Boolean.orb
+                                ((Boolean.andb
+                                    ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                       > (0 : int)))
+                                   ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                      >= (0 : int))))
+                               ((Boolean.andb
+                                   ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                                      > (0 : int)))
+                                  ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                                     >= (0 : int)))) in
+                        ())));
+                     ([@GNAT-comment:gnat_ast_to_ptree: code checking the variants]
+                      ())
+                   done))
+               with
+                 Gcd_verified_contracts__euclid_gcd_verified__L_1.L_1 ->
+                 ()
+               end))
+           else ())));
+        ([@GP_Sloc:gcd_verified_contracts.adb:49:10]
+         [#"gcd_verified_contracts.adb" 49 0 0] ());
+        ([@GP_Sloc:gcd_verified_contracts.adb:49:7]
+         [#"gcd_verified_contracts.adb" 49 0 0]
+         (if (([#"gcd_verified_contracts.adb" 49 0 0]
+               [#"gcd_verified_contracts.adb" 49 0 0]
+               (([@branch_id=1062] Main.spark__branch).bool__content <-
+                  ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                     = (0 : int))));
+              (([@branch_id=1062] Main.spark__branch).bool__content)) then
+            (([@GP_Sloc:gcd_verified_contracts.adb:50:10]
+              [#"gcd_verified_contracts.adb" 50 0 0]
+              (([#"gcd_verified_contracts.adb" 50 0 0]
+                (begin
+                   ensures { true }
+                   let _ =
+                     let _ =
+                       ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                          > (0 : int)) in
+                     () in
+                   ()
+                 end));
+               ([#"gcd_verified_contracts.adb" 50 0 0]
+                assert {
+                  [#"gcd_verified_contracts.adb" 50 0 0]
+                  [#"gcd_verified_contracts.adb" 50 0 0]
+                  [@GP_Shape:if__pragargs__cmp]
+                  [@comment:         pragma Assert (S > 0);                         ^ gcd_verified_contracts.adb:50:25:VC_ASSERT]
+                  [@vc:annotation]
+                  [@GP_Reason:VC_ASSERT]
+                  [@GP_Id:34]
+                  [@GP_Sloc:gcd_verified_contracts.adb:50:25]
+                  [@GP_Pretty_Ada:1072]
+                  [@GP_Sloc:gcd_verified_contracts.adb:50:25]
+                  ((Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)
+                     > (0 : int)) })));
+             ([@GP_Sloc:gcd_verified_contracts.adb:51:25]
+              [#"gcd_verified_contracts.adb" 51 0 0] ());
+             ([@GP_Sloc:gcd_verified_contracts.adb:51:13]
+              [#"gcd_verified_contracts.adb" 51 0 0]
+              [#"gcd_verified_contracts.adb" 51 0 0]
+              (Gcd_verified_contracts__euclid_gcd_verified__g.g.int__content <-
+                 ([#"gcd_verified_contracts.adb" 51 0 0]
+                  [@GP_Shape:if__g_assign__typeconv]
+                  [@vc:annotation]
+                  [@GP_Sloc:gcd_verified_contracts.adb:51:25]
+                  [@GP_Id:35]
+                  [@GP_Reason:VC_RANGE_CHECK]
+                  [@comment:         G  := Positive(S);                         ^ gcd_verified_contracts.adb:51:25:VC_RANGE_CHECK]
+                  (Standard__positive.range_check_
+                     (Gcd_verified_contracts__euclid_gcd_verified__s.s.int__content)))));
+             ([@GP_Sloc:gcd_verified_contracts.adb:52:16]
+              [#"gcd_verified_contracts.adb" 52 0 0] ());
+             ([@GP_Sloc:gcd_verified_contracts.adb:52:13]
+              [#"gcd_verified_contracts.adb" 52 0 0]
+              [#"gcd_verified_contracts.adb" 52 0 0]
+              (Gcd_verified_contracts__euclid_gcd_verified__ga.ga.int__content <-
+                 (Gcd_verified_contracts__euclid_gcd_verified__sa.sa.int__content)));
+             ([@GP_Sloc:gcd_verified_contracts.adb:53:16]
+              [#"gcd_verified_contracts.adb" 53 0 0] ());
+             ([@GP_Sloc:gcd_verified_contracts.adb:53:13]
+              [#"gcd_verified_contracts.adb" 53 0 0]
+              [#"gcd_verified_contracts.adb" 53 0 0]
+              (Gcd_verified_contracts__euclid_gcd_verified__gb.gb.int__content <-
+                 (Gcd_verified_contracts__euclid_gcd_verified__sb.sb.int__content))))
+          else
+            (([@GP_Sloc:gcd_verified_contracts.adb:55:10]
+              [#"gcd_verified_contracts.adb" 55 0 0]
+              (([#"gcd_verified_contracts.adb" 55 0 0]
+                (begin
+                   ensures { true }
+                   let _ =
+                     let _ =
+                       ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                          > (0 : int)) in
+                     () in
+                   ()
+                 end));
+               ([#"gcd_verified_contracts.adb" 55 0 0]
+                assert {
+                  [#"gcd_verified_contracts.adb" 55 0 0]
+                  [#"gcd_verified_contracts.adb" 55 0 0]
+                  [@GP_Shape:if__pragargs__cmp]
+                  [@vc:annotation]
+                  [@GP_Reason:VC_ASSERT]
+                  [@GP_Id:36]
+                  [@comment:         pragma Assert (R > 0);                         ^ gcd_verified_contracts.adb:55:25:VC_ASSERT]
+                  [@GP_Sloc:gcd_verified_contracts.adb:55:25]
+                  [@GP_Pretty_Ada:1090]
+                  [@GP_Sloc:gcd_verified_contracts.adb:55:25]
+                  ((Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)
+                     > (0 : int)) })));
+             ([@GP_Sloc:gcd_verified_contracts.adb:56:25]
+              [#"gcd_verified_contracts.adb" 56 0 0] ());
+             ([@GP_Sloc:gcd_verified_contracts.adb:56:13]
+              [#"gcd_verified_contracts.adb" 56 0 0]
+              [#"gcd_verified_contracts.adb" 56 0 0]
+              (Gcd_verified_contracts__euclid_gcd_verified__g.g.int__content <-
+                 ([#"gcd_verified_contracts.adb" 56 0 0]
+                  [@GP_Shape:if__g_assign__typeconv]
+                  [@vc:annotation]
+                  [@GP_Sloc:gcd_verified_contracts.adb:56:25]
+                  [@GP_Id:37]
+                  [@GP_Reason:VC_RANGE_CHECK]
+                  [@comment:         G  := Positive(R);                         ^ gcd_verified_contracts.adb:56:25:VC_RANGE_CHECK]
+                  (Standard__positive.range_check_
+                     (Gcd_verified_contracts__euclid_gcd_verified__r.r.int__content)))));
+             ([@GP_Sloc:gcd_verified_contracts.adb:57:16]
+              [#"gcd_verified_contracts.adb" 57 0 0] ());
+             ([@GP_Sloc:gcd_verified_contracts.adb:57:13]
+              [#"gcd_verified_contracts.adb" 57 0 0]
+              [#"gcd_verified_contracts.adb" 57 0 0]
+              (Gcd_verified_contracts__euclid_gcd_verified__ga.ga.int__content <-
+                 (Gcd_verified_contracts__euclid_gcd_verified__ra.ra.int__content)));
+             ([@GP_Sloc:gcd_verified_contracts.adb:58:16]
+              [#"gcd_verified_contracts.adb" 58 0 0] ());
+             ([@GP_Sloc:gcd_verified_contracts.adb:58:13]
+              [#"gcd_verified_contracts.adb" 58 0 0]
+              [#"gcd_verified_contracts.adb" 58 0 0]
+              (Gcd_verified_contracts__euclid_gcd_verified__gb.gb.int__content <-
+                 (Gcd_verified_contracts__euclid_gcd_verified__rb.rb.int__content))))));
+        (raise Return__exc)
+      with Return__exc -> ()
+      end);
+     (begin
+        ensures { true }
+        let _ =
+          let _ =
+            (Boolean.andb
+               (Gcd_verified_contracts__euclid_gcd_verified__a.a
+                  = ([#"gcd_verified_contracts.ads" 13 0 0]
+                     [@GP_Shape:pragargs__and__cmp__mult]
+                     [@comment:       (Integer(A) = Integer(G) * GA                                 ^ gcd_verified_contracts.ads:13:33:VC_OVERFLOW_CHECK]
+                     [@vc:annotation]
+                     [@GP_Reason:VC_OVERFLOW_CHECK]
+                     [@GP_Sloc:gcd_verified_contracts.ads:13:33]
+                     [@GP_Id:38]
+                     (Standard__integer.range_check_
+                        ((Gcd_verified_contracts__euclid_gcd_verified__g.g.int__content)
+                           * (Gcd_verified_contracts__euclid_gcd_verified__ga.ga.int__content))))))
+              (Gcd_verified_contracts__euclid_gcd_verified__b.b
+                 = ([#"gcd_verified_contracts.ads" 14 0 0]
+                    [@comment:        and Integer(B) = Integer(G) * GB);                                     ^ gcd_verified_contracts.ads:14:37:VC_OVERFLOW_CHECK]
+                    [@GP_Shape:pragargs__and__cmp__mult]
+                    [@vc:annotation]
+                    [@GP_Reason:VC_OVERFLOW_CHECK]
+                    [@GP_Id:39]
+                    [@GP_Sloc:gcd_verified_contracts.ads:14:37]
+                    (Standard__integer.range_check_
+                       ((Gcd_verified_contracts__euclid_gcd_verified__g.g.int__content)
+                          * (Gcd_verified_contracts__euclid_gcd_verified__gb.gb.int__content))))) in
+          () in
+        ()
+      end))
+end

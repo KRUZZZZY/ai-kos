@@ -1,0 +1,7 @@
+\babel@toc {english}{}\relax 
+\beamer@sectionintoc {1}{Motivation}{2}{0}{1}
+\beamer@sectionintoc {2}{Erd\H {o}s--R\'{e}nyi Model}{3}{0}{2}
+\beamer@sectionintoc {3}{Watts--Strogatz Model}{5}{0}{3}
+\beamer@sectionintoc {4}{Barab\'{a}si--Albert Model}{7}{0}{4}
+\beamer@sectionintoc {5}{Comparison}{9}{0}{5}
+\beamer@sectionintoc {6}{Conclusion}{10}{0}{6}

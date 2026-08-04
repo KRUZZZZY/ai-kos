@@ -1,0 +1,129 @@
+name: base
+version: 1.0.0
+description: Factoid / Wikipedia-style concept article. ~5 paragraphs. For definitions, technology concepts, architecture
+  overviews, how-to explanations, and general knowledge.
+use_when:
+- You learned a new concept or technology
+- You need to document how something works
+- You want a concise reference article
+- A research-note has matured into solid knowledge
+ai_prompt: Write a concise, factual article (~5 paragraphs maximum). Start with a 1-sentence definition. Then explain the
+  key details. End with why it matters or how it connects to other concepts. Remove all fluff, introductions, and conversational
+  filler. Use concrete values, not vague descriptors.
+fields:
+  id:
+    type: uuid
+    required: true
+    desc: Auto-generated UUID
+    example: 550e8400-e29b-41d4-a716-446655440000
+  title:
+    type: string
+    required: true
+    desc: Article title, 1-200 chars
+    constraint: max 200 chars
+    example: How to Configure Qdrant for Hybrid Search
+  slug:
+    type: kebab-case
+    required: true
+    desc: URL-safe identifier, lowercase alphanumeric + hyphens
+    constraint: 'pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$'
+    example: qdrant-hybrid-search-config
+  created_at:
+    type: date
+    required: true
+    desc: Creation date (ISO 8601)
+    example: '2026-08-04'
+  updated_at:
+    type: date
+    required: true
+    desc: Last modification date
+    example: '2026-08-04'
+  reviewed_at:
+    type: date
+    required: true
+    desc: Last review date
+    example: '2026-08-04'
+  next_review_at:
+    type: date
+    required: true
+    desc: Next scheduled review
+    constraint: must be >= updated_at
+    example: '2026-11-04'
+  stability:
+    type: enum
+    required: true
+    desc: How stable this knowledge is
+    values:
+    - stable
+    - moderate
+    - volatile
+    default: moderate
+  sensitivity_label:
+    type: enum
+    required: true
+    desc: Access control label
+    values:
+    - public
+    - internal
+    - confidential
+    - restricted
+    default: internal
+  keywords:
+    type: list[string]
+    required: true
+    desc: 3-8 lowercase keywords for auto-linking. Choose words other related articles would also use.
+    constraint: 3-8 items, all lowercase, no duplicates
+    example:
+    - qdrant
+    - hybrid-search
+    - configuration
+    - vectors
+    - retrieval
+  summary:
+    type: string
+    required: true
+    desc: 1-2 sentence description, shown in search results
+    constraint: max 300 chars
+    example: Step-by-step guide to configuring Qdrant for hybrid dense+sparse vector search with RRF fusion.
+  related:
+    type: list[string]
+    required: false
+    desc: Slugs of related articles — auto-managed by linker. Do not set manually.
+    constraint: managed by linker, >=3 shared keywords triggers auto-link
+  provenance:
+    type: list[string]
+    required: true
+    desc: Original source file paths or URLs
+    constraint: at least 1 entry
+    example:
+    - docs.qdrant.tech/hybrid-search
+    - session-2026-08-04-research
+  ai_notes:
+    type: string
+    required: false
+    desc: Private agent workspace, not shown to humans. Use for uncertainty, TODOs, merge notes.
+  retrieval_count:
+    type: integer
+    required: false
+    desc: Times this article was retrieved. Auto-incremented.
+    default: 0
+  type:
+    type: enum
+    required: true
+    desc: Article type
+    value: base
+  content:
+    type: string
+    required: true
+    desc: The article body — ~5 concise paragraphs. No section headers needed (they're auto-generated).
+    constraint: roughly 5 paragraphs, each 2-4 sentences. No fluff.
+    example: Qdrant is an open-source vector database. It stores dense and sparse vectors for hybrid search. Dense vectors
+      capture semantic meaning using embedding models like nomic-embed-text. Sparse vectors capture exact keyword matches
+      using BM25 or SPLADE encoding. Reciprocal Rank Fusion (RRF) combines both result sets, boosting documents that rank
+      highly in both paths. This hybrid approach outperforms pure dense or pure sparse search, especially on datasets with
+      mixed text and structured content.
+stress_points:
+- content over 2000 words → should be split into multiple base articles
+- content with no paragraph breaks → auto-formatted but harder to read
+- keywords with fewer than 3 entries → won't auto-link to anything
+- slug already exists → creation will fail, check with ai_kos_search first

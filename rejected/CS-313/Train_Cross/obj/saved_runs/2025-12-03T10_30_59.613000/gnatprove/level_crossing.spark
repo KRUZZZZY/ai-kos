@@ -1,0 +1,4169 @@
+{
+  "spark": [
+    {
+      "name": "Level_Crossing",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 27
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "Level_Crossing.Calculate_Danger_Distance",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 103
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "Level_Crossing.Any_Train_In_Danger_Zone",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 111
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "Level_Crossing.Safety_Margin",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 119
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "Level_Crossing.Time_To_Crossing",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 125
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "Level_Crossing.All_Distances_Valid",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 131
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "Level_Crossing.All_Speeds_Valid",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 136
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "Level_Crossing.Is_Safe",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 150
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "Level_Crossing.Init",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 169
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "Level_Crossing.Read_Sensor_Status",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 185
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "Level_Crossing.Read_Train_Data",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 198
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "Level_Crossing.Monitor_Level_Crossing",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 217
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "Level_Crossing.Print_Status",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 239
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "Level_Crossing.Barrier_State_To_String",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 249
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "Level_Crossing.Boolean_To_String",
+      "sloc": [
+        {
+          "file": "level_crossing.ads",
+          "line": 253
+        }
+      ],
+      "spark": "all"
+    }
+  ],
+  "flow": [
+    {
+      "file": "level_crossing.ads",
+      "line": 240,
+      "col": 6,
+      "rule": "GLOBAL_WRONG",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Print_Status",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 239
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 242,
+      "col": 6,
+      "rule": "DEPENDS_WRONG",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Print_Status",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 239
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 71,
+      "col": 7,
+      "rule": "UNINITIALIZED",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 72,
+      "col": 7,
+      "rule": "UNINITIALIZED",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 73,
+      "col": 7,
+      "rule": "UNINITIALIZED",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 199,
+      "col": 6,
+      "rule": "GLOBAL_WRONG",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 200,
+      "col": 6,
+      "rule": "DEPENDS_WRONG",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 170,
+      "col": 62,
+      "rule": "UNINITIALIZED",
+      "severity": "medium",
+      "entity": {
+        "name": "Level_Crossing.Init",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 169
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "msg_id": 0,
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 172,
+      "col": 25,
+      "rule": "UNINITIALIZED",
+      "severity": "medium",
+      "entity": {
+        "name": "Level_Crossing.Init",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 169
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "msg_id": 1,
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 170,
+      "col": 29,
+      "rule": "UNINITIALIZED",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Init",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 169
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 170,
+      "col": 46,
+      "rule": "UNINITIALIZED",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Init",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 169
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 170,
+      "col": 6,
+      "rule": "GLOBAL_WRONG",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Init",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 169
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 171,
+      "col": 6,
+      "rule": "DEPENDS_WRONG",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Init",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 169
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 218,
+      "col": 6,
+      "rule": "GLOBAL_WRONG",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Monitor_Level_Crossing",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 217
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 219,
+      "col": 6,
+      "rule": "DEPENDS_WRONG",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Monitor_Level_Crossing",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 217
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 49,
+      "col": 7,
+      "rule": "UNINITIALIZED",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Sensor_Status",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 185
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 186,
+      "col": 6,
+      "rule": "GLOBAL_WRONG",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Sensor_Status",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 185
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 187,
+      "col": 6,
+      "rule": "DEPENDS_WRONG",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Sensor_Status",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 185
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    }
+  ],
+  "session_map": {
+    " 1": "C:\\Users\\zacha\\Documents\\Year 3 Swansea\\CS-313\\Train_Cross\\obj\\gnatprove\\level_crossing__calculate_danger_distance",
+    " 2": "C:\\Users\\zacha\\Documents\\Year 3 Swansea\\CS-313\\Train_Cross\\obj\\gnatprove\\level_crossing__time_to_crossing",
+    " 3": "C:\\Users\\zacha\\Documents\\Year 3 Swansea\\CS-313\\Train_Cross\\obj\\gnatprove\\level_crossing__is_safe",
+    " 4": "C:\\Users\\zacha\\Documents\\Year 3 Swansea\\CS-313\\Train_Cross\\obj\\gnatprove\\level_crossing__read_sensor_status",
+    " 5": "C:\\Users\\zacha\\Documents\\Year 3 Swansea\\CS-313\\Train_Cross\\obj\\gnatprove\\level_crossing__init",
+    " 6": "C:\\Users\\zacha\\Documents\\Year 3 Swansea\\CS-313\\Train_Cross\\obj\\gnatprove\\level_crossing__monitor_level_crossing",
+    " 7": "C:\\Users\\zacha\\Documents\\Year 3 Swansea\\CS-313\\Train_Cross\\obj\\gnatprove\\level_crossing__read_train_data"
+  },
+  "proof": [
+    {
+      "file": "level_crossing.ads",
+      "line": 104,
+      "col": 64,
+      "rule": "VC_DIVISION_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Calculate_Danger_Distance",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 103
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.ads",
+      "check_line": 104,
+      "check_col": 64,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 105,
+      "col": 17,
+      "rule": "VC_POSTCONDITION",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Calculate_Danger_Distance",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 103
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.ads",
+      "check_line": 105,
+      "check_col": 17,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 2,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 127,
+      "col": 36,
+      "rule": "VC_DIVISION_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Time_To_Crossing",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 125
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.ads",
+      "check_line": 127,
+      "check_col": 36,
+      "session_dir": 2,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 156,
+      "col": 17,
+      "rule": "VC_POSTCONDITION",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Is_Safe",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 150
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.ads",
+      "check_line": 156,
+      "check_col": 17,
+      "session_dir": 3,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 4,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 190,
+      "col": 17,
+      "rule": "VC_POSTCONDITION",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Sensor_Status",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 185
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.ads",
+      "check_line": 190,
+      "check_col": 17,
+      "session_dir": 4,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 4,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 35,
+      "col": 33,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Init",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 169
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 35,
+      "check_col": 33,
+      "session_dir": 5,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 35,
+      "col": 67,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Init",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 169
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 35,
+      "check_col": 67,
+      "session_dir": 5,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 36,
+      "col": 44,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Init",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 169
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 36,
+      "check_col": 44,
+      "session_dir": 5,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 37,
+      "col": 55,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Init",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 169
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 37,
+      "check_col": 55,
+      "session_dir": 5,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 39,
+      "col": 39,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Init",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 169
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 39,
+      "check_col": 39,
+      "session_dir": 5,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 39,
+      "col": 72,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Init",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 169
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 39,
+      "check_col": 72,
+      "session_dir": 5,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 172,
+      "col": 17,
+      "rule": "VC_POSTCONDITION",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Init",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 169
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.ads",
+      "check_line": 172,
+      "check_col": 17,
+      "session_dir": 5,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 8,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 220,
+      "col": 17,
+      "rule": "VC_POSTCONDITION",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Monitor_Level_Crossing",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 217
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+          },
+          "transformations": {
+            "trivial_true": [
+            ]
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+          },
+          "transformations": {
+            "trivial_true": [
+            ]
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+          },
+          "transformations": {
+            "trivial_true": [
+            ]
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.ads",
+      "check_line": 220,
+      "check_col": 17,
+      "session_dir": 6,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 9,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        },
+        "Trivial": {
+          "count": 3,
+          "max_steps": 0,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 76,
+      "col": 32,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 76,
+      "check_col": 32,
+      "session_dir": 7,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 76,
+      "col": 63,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 76,
+      "check_col": 63,
+      "session_dir": 7,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 79,
+      "col": 26,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 79,
+      "check_col": 26,
+      "session_dir": 7,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 79,
+      "col": 57,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 79,
+      "check_col": 57,
+      "session_dir": 7,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 91,
+      "col": 46,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 91,
+      "check_col": 46,
+      "session_dir": 7,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 92,
+      "col": 58,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 92,
+      "check_col": 58,
+      "session_dir": 7,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 101,
+      "col": 72,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 101,
+      "check_col": 72,
+      "session_dir": 7,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 104,
+      "col": 35,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 104,
+      "check_col": 35,
+      "session_dir": 7,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 104,
+      "col": 68,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 104,
+      "check_col": 68,
+      "session_dir": 7,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.adb",
+      "line": 113,
+      "col": 66,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.adb",
+      "check_line": 113,
+      "check_col": 66,
+      "session_dir": 7,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "level_crossing.ads",
+      "line": 203,
+      "col": 17,
+      "rule": "VC_POSTCONDITION",
+      "severity": "info",
+      "entity": {
+        "name": "Level_Crossing.Read_Train_Data",
+        "sloc": [
+          {
+            "file": "level_crossing.ads",
+            "line": 198
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+          },
+          "transformations": {
+            "trivial_true": [
+            ]
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "level_crossing.ads",
+      "check_line": 203,
+      "check_col": 17,
+      "session_dir": 7,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 8,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        },
+        "Trivial": {
+          "count": 1,
+          "max_steps": 0,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    }
+  ],
+  "assumptions": [
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Level_Crossing.All_Distances_Valid",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 131
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing.All_Distances_Valid",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 131
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 27
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 65
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 127
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Barrier_State_To_String",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 249
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Level_Crossing.Print_Status",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 239
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_POST",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 65
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 127
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Barrier_State_To_String",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 249
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 65
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 127
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Barrier_State_To_String",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 249
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing.Print_Status",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 239
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_POST",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 150
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Init_Standard_Input",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 26
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Init_Standard_Output",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 33
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 150
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Init_Standard_Input",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 26
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Init_Standard_Output",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 33
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 150
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_POST",
+        "arg": {
+          "name": "Level_Crossing.Init",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 169
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_POST",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 150
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Init_Standard_Input",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 26
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Init_Standard_Output",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 33
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 150
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Init_Standard_Input",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 26
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Init_Standard_Output",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 33
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 150
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing.Init",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 169
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Any_Train_In_Danger_Zone",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 111
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Any_Train_In_Danger_Zone",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 111
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_POST",
+        "arg": {
+          "name": "Level_Crossing.Is_Safe",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 150
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Any_Train_In_Danger_Zone",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 111
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Level_Crossing.Is_Safe",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 150
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Any_Train_In_Danger_Zone",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 111
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Any_Train_In_Danger_Zone",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 111
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing.Is_Safe",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 150
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_POST",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_POST",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 150
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Any_Train_In_Danger_Zone",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 111
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 150
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Any_Train_In_Danger_Zone",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 111
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 150
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_POST",
+        "arg": {
+          "name": "Level_Crossing.Monitor_Level_Crossing",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 217
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Level_Crossing.Boolean_To_String",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 253
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing.Boolean_To_String",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 253
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Any_Train_In_Danger_Zone",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 111
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 150
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Level_Crossing.Monitor_Level_Crossing",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 217
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_POST",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_POST",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 150
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Any_Train_In_Danger_Zone",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 111
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 150
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Any_Train_In_Danger_Zone",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 111
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 150
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing.Monitor_Level_Crossing",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 217
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Level_Crossing.Any_Train_In_Danger_Zone",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 111
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_POST",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing.Any_Train_In_Danger_Zone",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 111
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_POST",
+        "arg": {
+          "name": "Level_Crossing.Calculate_Danger_Distance",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 103
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Level_Crossing.Calculate_Danger_Distance",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 103
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing.Calculate_Danger_Distance",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 103
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Level_Crossing.Time_To_Crossing",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 125
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Level_Crossing.All_Speeds_Valid",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 136
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing.Time_To_Crossing",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 125
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing.All_Speeds_Valid",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 136
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Get",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 116
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 65
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Get",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 116
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 65
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_POST",
+        "arg": {
+          "name": "Level_Crossing.Read_Sensor_Status",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 185
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Get",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 116
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 65
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Level_Crossing.Read_Sensor_Status",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 185
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Get",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 116
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 65
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Get",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 116
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 65
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing.Read_Sensor_Status",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 185
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_POST",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Get",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 116
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 65
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 127
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Get",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 116
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 65
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 127
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_POST",
+        "arg": {
+          "name": "Level_Crossing.Read_Train_Data",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 198
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Get",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 116
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 65
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 127
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Level_Crossing.Read_Train_Data",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 198
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_POST",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Get",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 116
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 65
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 127
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Get",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 116
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 65
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 127
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "AS_Io_Wrapper.AS_Put_Line",
+            "sloc": [
+              {
+                "file": "as_io_wrapper.ads",
+                "line": 91
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Distances_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 131
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.All_Speeds_Valid",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 136
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing.Read_Train_Data",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 198
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Level_Crossing.Safety_Margin",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 119
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_POST",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_AORTE",
+          "arg": {
+            "name": "Level_Crossing.Calculate_Danger_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 103
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing.Safety_Margin",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 119
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Level_Crossing.Barrier_State_To_String",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 249
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "Level_Crossing.Barrier_State_To_String",
+          "sloc": [
+            {
+              "file": "level_crossing.ads",
+              "line": 249
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "timings": {
+    "codepeer results": 5.58100000489503E-04,
+    "init_why_sections": 3.93499998608604E-04,
+    "gnatwhy3.run_vcs": 0.00000000000000E+00,
+    "globals (advanced)": 1.61805003881454E-02,
+    "flow analysis": 1.47917997092009E-02,
+    "marking": 2.29900004342198E-04,
+    "translation of standard": 1.76979997195303E-03,
+    "properties (advanced)": 4.37000016972888E-05,
+    "gnatwhy3.register_vcs": 1.56250000000000E-02,
+    "globals (basic)": 1.39883002266288E-02,
+    "gnatwhy3.schedule_vcs": 0.00000000000000E+00,
+    "gnatwhy3.save_session": 3.12500000000000E-02,
+    "gnatwhy3.init": 1.10937500000000E+00
+  }
+}

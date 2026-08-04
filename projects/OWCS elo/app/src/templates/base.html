@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Global Overwatch Elo{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/">OW Elo</a>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/queue">Match Queue</a>
+      <a href="/matches">Match History</a>
+      <a href="/matches/new">Manual Entry</a>
+      <a href="/ratings">Ratings</a>
+      <a href="/aliases">Aliases</a>
+      <a href="/rebuild">Rebuilds</a>
+      <a href="/liquipedia">Liquipedia</a>
+      <a href="/errors">Errors</a>
+      <a href="/health">Health</a>
+    </nav>
+  </aside>
+  <main class="content">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

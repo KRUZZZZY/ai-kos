@@ -1,0 +1,3349 @@
+module Standard__integer
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  
+  type integer = <range -2147483648 2147483647>
+  
+  val function first : int
+    ensures { result = ((- 2147483648) : int) }
+  
+  val function last : int
+    ensures { result = (2147483647 : int) }
+  
+  predicate in_range (x: int) = ((first <= x) /\ (x <= last))
+  
+  val in_range (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = integer,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type integer__ref = { mutable integer__content : integer }
+  
+  function integer__ref_integer__content__projection (a: integer__ref) : integer =
+    a.integer__content
+  
+  meta "model_projection" function integer__ref_integer__content__projection
+  
+  meta "inline:no" function integer__ref_integer__content__projection
+  
+  val integer__havoc (x: integer__ref) : unit
+    writes { x }
+end
+
+module Standard__integer___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Standard__integer as Standard__integer
+  
+  predicate dynamic_invariant (temp___expr_18: int) (temp___is_init_14: bool) (temp___skip_constant_15: bool) (temp___do_toplevel_16: bool) (temp___do_typ_inv_17: bool) =
+    if ((temp___is_init_14 = True) \/
+          (Standard__integer.first <= Standard__integer.last)) then
+      (((Standard__integer.dynamic_property Standard__integer.first)
+          Standard__integer.last)
+         temp___expr_18)
+    else true
+  
+  val dynamic_invariant (temp___expr_18: int) (temp___is_init_14: bool) (temp___skip_constant_15: bool) (temp___do_toplevel_16: bool) (temp___do_typ_inv_17: bool) : 
+    bool
+    ensures { result
+                <->
+                (((((dynamic_invariant (temp___expr_18 : int))
+                      (temp___is_init_14 : bool))
+                     (temp___skip_constant_15 : bool))
+                    (temp___do_toplevel_16 : bool))
+                   (temp___do_typ_inv_17 : bool)) }
+  
+  predicate default_initial_assumption (temp___expr_19: int) (temp___skip_top_level_20: bool) =
+    true
+  
+  val default_initial_assumption (temp___expr_19: int) (temp___skip_top_level_20: bool) : 
+    bool
+    ensures { result
+                <->
+                ((default_initial_assumption (temp___expr_19 : int))
+                   (temp___skip_top_level_20 : bool)) }
+end
+
+module Standard__positive
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  
+  type positive = <range 1 2147483647>
+  
+  val function first : int
+    ensures { result = (1 : int) }
+  
+  val function last : int
+    ensures { result = (2147483647 : int) }
+  
+  predicate in_range (x: int) = ((first <= x) /\ (x <= last))
+  
+  val in_range (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = positive,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type positive__ref = { mutable positive__content : positive }
+  
+  function positive__ref_positive__content__projection (a: positive__ref) : positive =
+    a.positive__content
+  
+  meta "model_projection" function positive__ref_positive__content__projection
+  
+  meta "inline:no" function positive__ref_positive__content__projection
+  
+  val positive__havoc (x: positive__ref) : unit
+    writes { x }
+end
+
+module Standard__character
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  
+  type character
+  
+  val function first : int
+    ensures { result = (0 : int) }
+  
+  val function last : int
+    ensures { result = (255 : int) }
+  
+  predicate in_range (x: int) = ((first <= x) /\ (x <= last))
+  
+  val in_range (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = character,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type character__ref = { mutable character__content : character }
+  
+  function character__ref_character__content__projection (a: character__ref) : character =
+    a.character__content
+  
+  meta "model_projection" function character__ref_character__content__projection
+  
+  meta "inline:no" function character__ref_character__content__projection
+  
+  val character__havoc (x: character__ref) : unit
+    writes { x }
+end
+
+module Standard__character__rep
+  use Standard__character as Standard__character
+  use _gnatprove_standard.Main
+  use int.Int
+  clone export ada__model.Rep_Proj_Int with
+    axiom .,
+    type t = Standard__character.character,
+    predicate in_range = Standard__character.in_range
+  
+  meta "model_projection" function to_rep
+  
+  meta "inline:no" function to_rep
+end
+
+module Array__Int__Standard__character
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Standard__character as Standard__character
+  use Standard__character__rep as Standard__character__rep
+  
+  function index_I1_one : int = 1 : int
+  
+  type component_type = Standard__character.character
+  
+  clone export _gnatprove_standard.Array__1 with
+    axiom .,
+    type I1.t = int,
+    predicate I1.le = Int.( <= ),
+    predicate I1.lt = Int.( < ),
+    predicate I1.gt = Int.( > ),
+    function I1.add = Int.( + ),
+    function I1.sub = Int.( - ),
+    function I1.one = index_I1_one,
+    type component_type = component_type
+  
+  function bool_eq (a: map) (a__first: int) (a__last: int) (b: map) (b__first: int) (b__last: int) : bool =
+    ((if (a__first <= a__last) then
+        ((b__first <= b__last) /\
+           ((a__last - a__first) = (b__last - b__first)))
+      else (b__first > b__last)) /\
+       (forall temp___idx_98 : int.
+          if ((a__first <= temp___idx_98) /\ (temp___idx_98 <= a__last)) then
+            ((Standard__character__rep.to_rep ((get a) temp___idx_98))
+               = (Standard__character__rep.to_rep
+                    ((get b) ((b__first - a__first) + temp___idx_98))))
+          else true))
+  
+  val bool_eq (a: map) (a__first: int) (a__last: int) (b: map) (b__first: int) (b__last: int) : 
+    bool
+    ensures { result
+      =
+      ((((((bool_eq (a : map)) (a__first : int)) (a__last : int)) (b : map))
+          (b__first : int))
+         (b__last : int)) }
+  
+  axiom bool_eq_rev:
+    forall a : map, b : map.
+      forall a__first : int, a__last : int, b__first : int, b__last : int.
+        ((((((((bool_eq b) b__first) b__last) a) a__first) a__last) = True) ->
+           ((if (a__first <= a__last) then
+               ((b__first <= b__last) /\
+                  ((a__last - a__first) = (b__last - b__first)))
+             else (b__first > b__last)) /\
+              (forall temp___idx_98 : int.
+                 if ((a__first <= temp___idx_98) /\
+                       (temp___idx_98 <= a__last)) then
+                   ((Standard__character__rep.to_rep ((get a) temp___idx_98))
+                      = (Standard__character__rep.to_rep
+                           ((get b) ((b__first - a__first) + temp___idx_98))))
+                 else true)))
+end
+
+module Standard__integer__rep
+  use Standard__integer as Standard__integer
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  function to_rep (x: Standard__integer.integer) : int =
+    Standard__integer.integer'int x
+  
+  clone export ada__model.Rep_Proj_Int with
+    axiom .,
+    type t = Standard__integer.integer,
+    predicate in_range = Standard__integer.in_range,
+    function to_rep = to_rep
+  
+  meta "model_projection" function to_rep
+  
+  meta "inline:no" function to_rep
+end
+
+module Standard__string
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Standard__integer as Standard__integer
+  use Standard__positive as Standard__positive
+  use Standard__character as Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Standard__integer__rep as Standard__integer__rep
+  
+  type component_type = Standard__character.character
+  
+  function index_1_id (x: int) : int = x
+  
+  clone export ada__model.Unconstr_Array with
+    axiom .,
+    type map = Array__Int__Standard__character.map,
+    function array_bool_eq = Array__Int__Standard__character.bool_eq,
+    type index_base_type = Standard__integer.integer,
+    type index_rep_type = int,
+    function to_rep = Standard__integer__rep.to_rep,
+    function rep_to_int = index_1_id,
+    predicate in_range_base = Standard__integer.in_range,
+    predicate index_dynamic_property = Standard__positive.dynamic_property,
+    predicate index_rep_le = Int.( <= )
+  
+  type string__ = __t
+  
+  meta "model_projection" function to_array
+  
+  meta "inline:no" function to_array
+  
+  meta "model_projection" function first
+  
+  meta "inline:no" function first
+  
+  meta "model_projection" function last
+  
+  meta "inline:no" function last
+  
+  type string____ref = { mutable string____content : string__ }
+  
+  function string____ref_string____content__projection (a: string____ref) : string__ =
+    a.string____content
+  
+  meta "model_projection" function string____ref_string____content__projection
+  
+  meta "inline:no" function string____ref_string____content__projection
+  
+  val string____havoc (x: string____ref) : unit
+    writes { x }
+end
+
+module Level_crossing__barrier_state_type
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  
+  type barrier_state_type
+  
+  val function first : int
+    ensures { result = (0 : int) }
+  
+  val function last : int
+    ensures { result = (1 : int) }
+  
+  predicate in_range (x: int) = ((first <= x) /\ (x <= last))
+  
+  val in_range (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = barrier_state_type,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type barrier_state_type__ref = {
+                                mutable barrier_state_type__content :
+                                  barrier_state_type
+                                }
+  
+  function barrier_state_type__ref_barrier_state_type__content__projection (a: barrier_state_type__ref) : barrier_state_type =
+    a.barrier_state_type__content
+  
+  meta "model_projection" function barrier_state_type__ref_barrier_state_type__content__projection
+  
+  meta "inline:no" function barrier_state_type__ref_barrier_state_type__content__projection
+  
+  val barrier_state_type__havoc (x: barrier_state_type__ref) : unit
+    writes { x }
+end
+
+module Level_crossing__barrier_state_type__rep
+  use Level_crossing__barrier_state_type as Level_crossing__barrier_state_type
+  use _gnatprove_standard.Main
+  use int.Int
+  clone export ada__model.Rep_Proj_Int with
+    axiom .,
+    type t = Level_crossing__barrier_state_type.barrier_state_type,
+    predicate in_range = Level_crossing__barrier_state_type.in_range
+  
+  meta "model_projection" function to_rep
+  
+  meta "inline:no" function to_rep
+end
+
+module Level_crossing__distance_range
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  
+  type distance_range = <range 0 10000>
+  
+  val function first : int
+    ensures { result = (0 : int) }
+  
+  val function last : int
+    ensures { result = (10000 : int) }
+  
+  predicate in_range (x: int) = ((first <= x) /\ (x <= last))
+  
+  val in_range (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = distance_range,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type distance_range__ref = {
+                            mutable distance_range__content : distance_range
+                            }
+  
+  function distance_range__ref_distance_range__content__projection (a: distance_range__ref) : distance_range =
+    a.distance_range__content
+  
+  meta "model_projection" function distance_range__ref_distance_range__content__projection
+  
+  meta "inline:no" function distance_range__ref_distance_range__content__projection
+  
+  val distance_range__havoc (x: distance_range__ref) : unit
+    writes { x }
+end
+
+module Level_crossing__distance_range__rep
+  use Level_crossing__distance_range as Level_crossing__distance_range
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  function to_rep (x: Level_crossing__distance_range.distance_range) : int =
+    Level_crossing__distance_range.distance_range'int x
+  
+  clone export ada__model.Rep_Proj_Int with
+    axiom .,
+    type t = Level_crossing__distance_range.distance_range,
+    predicate in_range = Level_crossing__distance_range.in_range,
+    function to_rep = to_rep
+  
+  meta "model_projection" function to_rep
+  
+  meta "inline:no" function to_rep
+end
+
+module Level_crossing__speed_range
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  
+  type speed_range = <range 0 56>
+  
+  val function first : int
+    ensures { result = (0 : int) }
+  
+  val function last : int
+    ensures { result = (56 : int) }
+  
+  predicate in_range (x: int) = ((first <= x) /\ (x <= last))
+  
+  val in_range (x: int) : bool
+    ensures { result <-> (in_range (x : int)) }
+  
+  clone export ada__model.Static_Discrete with
+    axiom .,
+    type t = speed_range,
+    function first = first,
+    function last = last,
+    predicate in_range = in_range
+  
+  type speed_range__ref = { mutable speed_range__content : speed_range }
+  
+  function speed_range__ref_speed_range__content__projection (a: speed_range__ref) : speed_range =
+    a.speed_range__content
+  
+  meta "model_projection" function speed_range__ref_speed_range__content__projection
+  
+  meta "inline:no" function speed_range__ref_speed_range__content__projection
+  
+  val speed_range__havoc (x: speed_range__ref) : unit
+    writes { x }
+end
+
+module Level_crossing__speed_range__rep
+  use Level_crossing__speed_range as Level_crossing__speed_range
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  function to_rep (x: Level_crossing__speed_range.speed_range) : int =
+    Level_crossing__speed_range.speed_range'int x
+  
+  clone export ada__model.Rep_Proj_Int with
+    axiom .,
+    type t = Level_crossing__speed_range.speed_range,
+    predicate in_range = Level_crossing__speed_range.in_range,
+    function to_rep = to_rep
+  
+  meta "model_projection" function to_rep
+  
+  meta "inline:no" function to_rep
+end
+
+module Level_crossing__train_info__rep
+  use _gnatprove_standard.Main
+  use int.Int
+  use _gnatprove_standard.Boolean as Boolean
+  use Level_crossing__distance_range as Level_crossing__distance_range
+  use Level_crossing__distance_range__rep as Level_crossing__distance_range__rep
+  use Level_crossing__speed_range as Level_crossing__speed_range
+  use Level_crossing__speed_range__rep as Level_crossing__speed_range__rep
+  
+  type __split_fields = {
+                       rec__level_crossing__train_info__distance :
+                         Level_crossing__distance_range.distance_range;
+                       rec__level_crossing__train_info__speed :
+                         Level_crossing__speed_range.speed_range;
+                       rec__level_crossing__train_info__is_present : bool
+                       }
+  
+  function __split_fields_rec__level_crossing__train_info__distance__projection (a: __split_fields) : 
+    Level_crossing__distance_range.distance_range =
+    a.rec__level_crossing__train_info__distance
+  
+  meta "model_projection" function __split_fields_rec__level_crossing__train_info__distance__projection
+  
+  meta "inline:no" function __split_fields_rec__level_crossing__train_info__distance__projection
+  
+  function __split_fields_rec__level_crossing__train_info__speed__projection (a: __split_fields) : 
+    Level_crossing__speed_range.speed_range =
+    a.rec__level_crossing__train_info__speed
+  
+  meta "model_projection" function __split_fields_rec__level_crossing__train_info__speed__projection
+  
+  meta "inline:no" function __split_fields_rec__level_crossing__train_info__speed__projection
+  
+  function __split_fields_rec__level_crossing__train_info__is_present__projection (a: __split_fields) : bool =
+    a.rec__level_crossing__train_info__is_present
+  
+  meta "model_projection" function __split_fields_rec__level_crossing__train_info__is_present__projection
+  
+  meta "inline:no" function __split_fields_rec__level_crossing__train_info__is_present__projection
+  
+  type __split_fields__ref = {
+                            mutable __split_fields__content : __split_fields
+                            }
+  
+  function __split_fields__ref___split_fields__content__projection (a: __split_fields__ref) : __split_fields =
+    __split_fields__content a
+  
+  meta "model_projection" function __split_fields__ref___split_fields__content__projection
+  
+  meta "inline:no" function __split_fields__ref___split_fields__content__projection
+  
+  val __split_fields__havoc (x: __split_fields__ref) : unit
+    writes { x }
+  
+  type __rep = { __split_fields : __split_fields }
+  
+  function __rep___split_fields__projection (a: __rep) : __split_fields =
+    __split_fields a
+  
+  meta "model_projection" function __rep___split_fields__projection
+  
+  meta "inline:no" function __rep___split_fields__projection
+  
+  function to_base (a: __rep) : __rep = a
+  
+  val to_base (a: __rep) : __rep
+    ensures { result = (to_base (a : __rep)) }
+  
+  function of_base (a: __rep) : __rep = a
+  
+  val of_base (a: __rep) : __rep
+    ensures { result = (of_base (a : __rep)) }
+  
+  predicate level_crossing__train_info__distance__pred (a: __rep) = true
+  
+  val level_crossing__train_info__distance__pred (a: __rep) : bool
+    ensures { result
+                <->
+                (level_crossing__train_info__distance__pred (a : __rep)) }
+  
+  val rec__level_crossing__train_info__distance_ (a: __rep) : Level_crossing__distance_range.distance_range
+    requires { level_crossing__train_info__distance__pred a }
+    ensures { (result
+                 = ((__split_fields a).rec__level_crossing__train_info__distance)) }
+  
+  predicate level_crossing__train_info__speed__pred (a: __rep) = true
+  
+  val level_crossing__train_info__speed__pred (a: __rep) : bool
+    ensures { result
+                <->
+                (level_crossing__train_info__speed__pred (a : __rep)) }
+  
+  val rec__level_crossing__train_info__speed_ (a: __rep) : Level_crossing__speed_range.speed_range
+    requires { level_crossing__train_info__speed__pred a }
+    ensures { (result
+                 = ((__split_fields a).rec__level_crossing__train_info__speed)) }
+  
+  predicate level_crossing__train_info__is_present__pred (a: __rep) = true
+  
+  val level_crossing__train_info__is_present__pred (a: __rep) : bool
+    ensures { result
+                <->
+                (level_crossing__train_info__is_present__pred (a : __rep)) }
+  
+  val rec__level_crossing__train_info__is_present_ (a: __rep) : bool
+    requires { level_crossing__train_info__is_present__pred a }
+    ensures { (result
+                 = ((__split_fields a).rec__level_crossing__train_info__is_present)) }
+  
+  function bool_eq (a: __rep) (b: __rep) : bool =
+    if ((((Level_crossing__distance_range__rep.to_rep
+             ((__split_fields a).rec__level_crossing__train_info__distance))
+            = (Level_crossing__distance_range__rep.to_rep
+                 ((__split_fields b).rec__level_crossing__train_info__distance))) /\
+           ((Level_crossing__speed_range__rep.to_rep
+               ((__split_fields a).rec__level_crossing__train_info__speed))
+              = (Level_crossing__speed_range__rep.to_rep
+                   ((__split_fields b).rec__level_crossing__train_info__speed)))) /\
+          ((Boolean.to_int
+              ((__split_fields a).rec__level_crossing__train_info__is_present))
+             = (Boolean.to_int
+                  ((__split_fields b).rec__level_crossing__train_info__is_present)))) then
+      True
+    else False
+  
+  val bool_eq (a: __rep) (b: __rep) : bool
+    ensures { result = ((bool_eq (a : __rep)) (b : __rep)) }
+end
+
+module Level_crossing__train_info
+  use export Level_crossing__train_info__rep
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  
+  type train_info = __rep
+  
+  val function value__size : int
+  
+  val function object__size : int
+  
+  val function alignment : int
+  
+  axiom value__size_axiom: (value__size >= (0 : int))
+  
+  axiom object__size_axiom: (object__size >= (0 : int))
+  
+  axiom alignment_axiom: (alignment >= (0 : int))
+  
+  val function level_crossing__train_info__distance__first__bit : int
+  
+  val function level_crossing__train_info__distance__last__bit : int
+  
+  val function level_crossing__train_info__distance__position : int
+  
+  axiom level_crossing__train_info__distance__first__bit_axiom:
+    (level_crossing__train_info__distance__first__bit >= (0 : int))
+  
+  axiom level_crossing__train_info__distance__last__bit_axiom:
+    (level_crossing__train_info__distance__last__bit
+       > level_crossing__train_info__distance__first__bit)
+  
+  axiom level_crossing__train_info__distance__position_axiom:
+    (level_crossing__train_info__distance__position >= (0 : int))
+  
+  val function level_crossing__train_info__speed__first__bit : int
+  
+  val function level_crossing__train_info__speed__last__bit : int
+  
+  val function level_crossing__train_info__speed__position : int
+  
+  axiom level_crossing__train_info__speed__first__bit_axiom:
+    (level_crossing__train_info__speed__first__bit >= (0 : int))
+  
+  axiom level_crossing__train_info__speed__last__bit_axiom:
+    (level_crossing__train_info__speed__last__bit
+       > level_crossing__train_info__speed__first__bit)
+  
+  axiom level_crossing__train_info__speed__position_axiom:
+    (level_crossing__train_info__speed__position >= (0 : int))
+  
+  val function level_crossing__train_info__is_present__first__bit : int
+  
+  val function level_crossing__train_info__is_present__last__bit : int
+  
+  val function level_crossing__train_info__is_present__position : int
+  
+  axiom level_crossing__train_info__is_present__first__bit_axiom:
+    (level_crossing__train_info__is_present__first__bit >= (0 : int))
+  
+  axiom level_crossing__train_info__is_present__last__bit_axiom:
+    (level_crossing__train_info__is_present__last__bit
+       > level_crossing__train_info__is_present__first__bit)
+  
+  axiom level_crossing__train_info__is_present__position_axiom:
+    (level_crossing__train_info__is_present__position >= (0 : int))
+  
+  val function user_eq (a: train_info) (b: train_info) : bool
+  
+  val function dummy : train_info
+  
+  type train_info__ref = { mutable train_info__content : train_info }
+  
+  function train_info__ref_train_info__content__projection (a: train_info__ref) : train_info =
+    a.train_info__content
+  
+  meta "model_projection" function train_info__ref_train_info__content__projection
+  
+  meta "inline:no" function train_info__ref_train_info__content__projection
+  
+  val train_info__havoc (x: train_info__ref) : unit
+    writes { x }
+end
+
+module Array__Int__Level_crossing__train_info
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Level_crossing__train_info as Level_crossing__train_info
+  
+  function index_I1_one : int = 1 : int
+  
+  type component_type = Level_crossing__train_info.train_info
+  
+  clone export _gnatprove_standard.Array__1 with
+    axiom .,
+    type I1.t = int,
+    predicate I1.le = Int.( <= ),
+    predicate I1.lt = Int.( < ),
+    predicate I1.gt = Int.( > ),
+    function I1.add = Int.( + ),
+    function I1.sub = Int.( - ),
+    function I1.one = index_I1_one,
+    type component_type = component_type
+  
+  function bool_eq (a: map) (a__first: int) (a__last: int) (b: map) (b__first: int) (b__last: int) : bool =
+    ((if (a__first <= a__last) then
+        ((b__first <= b__last) /\
+           ((a__last - a__first) = (b__last - b__first)))
+      else (b__first > b__last)) /\
+       (forall temp___idx_161 : int.
+          if ((a__first <= temp___idx_161) /\ (temp___idx_161 <= a__last)) then
+            ((Level_crossing__train_info.bool_eq ((get a) temp___idx_161))
+               ((get b) ((b__first - a__first) + temp___idx_161)))
+          else true))
+  
+  val bool_eq (a: map) (a__first: int) (a__last: int) (b: map) (b__first: int) (b__last: int) : 
+    bool
+    ensures { result
+      =
+      ((((((bool_eq (a : map)) (a__first : int)) (a__last : int)) (b : map))
+          (b__first : int))
+         (b__last : int)) }
+  
+  axiom bool_eq_rev:
+    forall a : map, b : map.
+      forall a__first : int, a__last : int, b__first : int, b__last : int.
+        ((((((((bool_eq b) b__first) b__last) a) a__first) a__last) = True) ->
+           ((if (a__first <= a__last) then
+               ((b__first <= b__last) /\
+                  ((a__last - a__first) = (b__last - b__first)))
+             else (b__first > b__last)) /\
+              (forall temp___idx_161 : int.
+                 if ((a__first <= temp___idx_161) /\
+                       (temp___idx_161 <= a__last)) then
+                   ((Level_crossing__train_info.bool_eq
+                       ((get a) temp___idx_161))
+                      ((get b) ((b__first - a__first) + temp___idx_161)))
+                 else true)))
+end
+
+module Level_crossing__train_array
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Level_crossing__train_info as Level_crossing__train_info
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  
+  type component_type = Level_crossing__train_info.train_info
+  
+  val function first : int
+    ensures { result = (1 : int) }
+  
+  val function last : int
+    ensures { result = (3 : int) }
+  
+  clone export ada__model.Constr_Array with
+    axiom .,
+    type map = Array__Int__Level_crossing__train_info.map,
+    function array_bool_eq = Array__Int__Level_crossing__train_info.bool_eq,
+    function first = first,
+    function last = last,
+    type index_rep_type = int
+end
+
+module Level_crossing__status_system_type__rep
+  use _gnatprove_standard.Main
+  use int.Int
+  use _gnatprove_standard.Boolean as Boolean
+  use Level_crossing__barrier_state_type as Level_crossing__barrier_state_type
+  use Level_crossing__barrier_state_type__rep as Level_crossing__barrier_state_type__rep
+  use Level_crossing__train_array as Level_crossing__train_array
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  
+  type __split_fields = {
+                       rec__level_crossing__status_system_type__trains :
+                         Array__Int__Level_crossing__train_info.map;
+                       rec__level_crossing__status_system_type__barrier_state :
+                         Level_crossing__barrier_state_type.barrier_state_type;
+                       rec__level_crossing__status_system_type__sensor_fault :
+                         bool
+                       }
+  
+  function __split_fields_rec__level_crossing__status_system_type__trains__projection (a: __split_fields) : 
+    Array__Int__Level_crossing__train_info.map =
+    a.rec__level_crossing__status_system_type__trains
+  
+  meta "model_projection" function __split_fields_rec__level_crossing__status_system_type__trains__projection
+  
+  meta "inline:no" function __split_fields_rec__level_crossing__status_system_type__trains__projection
+  
+  function __split_fields_rec__level_crossing__status_system_type__barrier_state__projection (a: __split_fields) : 
+    Level_crossing__barrier_state_type.barrier_state_type =
+    a.rec__level_crossing__status_system_type__barrier_state
+  
+  meta "model_projection" function __split_fields_rec__level_crossing__status_system_type__barrier_state__projection
+  
+  meta "inline:no" function __split_fields_rec__level_crossing__status_system_type__barrier_state__projection
+  
+  function __split_fields_rec__level_crossing__status_system_type__sensor_fault__projection (a: __split_fields) : bool =
+    a.rec__level_crossing__status_system_type__sensor_fault
+  
+  meta "model_projection" function __split_fields_rec__level_crossing__status_system_type__sensor_fault__projection
+  
+  meta "inline:no" function __split_fields_rec__level_crossing__status_system_type__sensor_fault__projection
+  
+  type __split_fields__ref = {
+                            mutable __split_fields__content : __split_fields
+                            }
+  
+  function __split_fields__ref___split_fields__content__2__projection (a: __split_fields__ref) : __split_fields =
+    __split_fields__content a
+  
+  meta "model_projection" function __split_fields__ref___split_fields__content__2__projection
+  
+  meta "inline:no" function __split_fields__ref___split_fields__content__2__projection
+  
+  val __split_fields__havoc (x: __split_fields__ref) : unit
+    writes { x }
+  
+  type __rep = { __split_fields : __split_fields }
+  
+  function __rep___split_fields__2__projection (a: __rep) : __split_fields =
+    __split_fields a
+  
+  meta "model_projection" function __rep___split_fields__2__projection
+  
+  meta "inline:no" function __rep___split_fields__2__projection
+  
+  function to_base (a: __rep) : __rep = a
+  
+  val to_base (a: __rep) : __rep
+    ensures { result = (to_base (a : __rep)) }
+  
+  function of_base (a: __rep) : __rep = a
+  
+  val of_base (a: __rep) : __rep
+    ensures { result = (of_base (a : __rep)) }
+  
+  predicate level_crossing__status_system_type__trains__pred (a: __rep) =
+    true
+  
+  val level_crossing__status_system_type__trains__pred (a: __rep) : bool
+    ensures { result
+                <->
+                (level_crossing__status_system_type__trains__pred (a : __rep)) }
+  
+  val rec__level_crossing__status_system_type__trains_ (a: __rep) : Array__Int__Level_crossing__train_info.map
+    requires { level_crossing__status_system_type__trains__pred a }
+    ensures { (result
+                 = ((__split_fields a).rec__level_crossing__status_system_type__trains)) }
+  
+  predicate level_crossing__status_system_type__barrier_state__pred (a: __rep) =
+    true
+  
+  val level_crossing__status_system_type__barrier_state__pred (a: __rep) : 
+    bool
+    ensures { result
+                <->
+                (level_crossing__status_system_type__barrier_state__pred
+                   (a : __rep)) }
+  
+  val rec__level_crossing__status_system_type__barrier_state_ (a: __rep) : 
+    Level_crossing__barrier_state_type.barrier_state_type
+    requires { level_crossing__status_system_type__barrier_state__pred a }
+    ensures { (result
+                 = ((__split_fields a).rec__level_crossing__status_system_type__barrier_state)) }
+  
+  predicate level_crossing__status_system_type__sensor_fault__pred (a: __rep) =
+    true
+  
+  val level_crossing__status_system_type__sensor_fault__pred (a: __rep) : 
+    bool
+    ensures { result
+                <->
+                (level_crossing__status_system_type__sensor_fault__pred
+                   (a : __rep)) }
+  
+  val rec__level_crossing__status_system_type__sensor_fault_ (a: __rep) : 
+    bool
+    requires { level_crossing__status_system_type__sensor_fault__pred a }
+    ensures { (result
+                 = ((__split_fields a).rec__level_crossing__status_system_type__sensor_fault)) }
+  
+  function bool_eq (a: __rep) (b: __rep) : bool =
+    if ((((Level_crossing__train_array.bool_eq
+             ((__split_fields a).rec__level_crossing__status_system_type__trains))
+            ((__split_fields b).rec__level_crossing__status_system_type__trains)) /\
+           ((Level_crossing__barrier_state_type__rep.to_rep
+               ((__split_fields a).rec__level_crossing__status_system_type__barrier_state))
+              = (Level_crossing__barrier_state_type__rep.to_rep
+                   ((__split_fields b).rec__level_crossing__status_system_type__barrier_state)))) /\
+          ((Boolean.to_int
+              ((__split_fields a).rec__level_crossing__status_system_type__sensor_fault))
+             = (Boolean.to_int
+                  ((__split_fields b).rec__level_crossing__status_system_type__sensor_fault)))) then
+      True
+    else False
+  
+  val bool_eq (a: __rep) (b: __rep) : bool
+    ensures { result = ((bool_eq (a : __rep)) (b : __rep)) }
+end
+
+module Level_crossing__status_system_type
+  use export Level_crossing__status_system_type__rep
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  
+  type status_system_type = __rep
+  
+  val function value__size : int
+  
+  val function object__size : int
+  
+  val function alignment : int
+  
+  axiom value__size_axiom: (value__size >= (0 : int))
+  
+  axiom object__size_axiom: (object__size >= (0 : int))
+  
+  axiom alignment_axiom: (alignment >= (0 : int))
+  
+  val function level_crossing__status_system_type__trains__first__bit : 
+    int
+  
+  val function level_crossing__status_system_type__trains__last__bit : 
+    int
+  
+  val function level_crossing__status_system_type__trains__position : 
+    int
+  
+  axiom level_crossing__status_system_type__trains__first__bit_axiom:
+    (level_crossing__status_system_type__trains__first__bit >= (0 : int))
+  
+  axiom level_crossing__status_system_type__trains__last__bit_axiom:
+    (level_crossing__status_system_type__trains__last__bit
+       > level_crossing__status_system_type__trains__first__bit)
+  
+  axiom level_crossing__status_system_type__trains__position_axiom:
+    (level_crossing__status_system_type__trains__position >= (0 : int))
+  
+  val function level_crossing__status_system_type__barrier_state__first__bit : 
+    int
+  
+  val function level_crossing__status_system_type__barrier_state__last__bit : 
+    int
+  
+  val function level_crossing__status_system_type__barrier_state__position : 
+    int
+  
+  axiom level_crossing__status_system_type__barrier_state__first__bit_axiom:
+    (level_crossing__status_system_type__barrier_state__first__bit
+       >= (0 : int))
+  
+  axiom level_crossing__status_system_type__barrier_state__last__bit_axiom:
+    (level_crossing__status_system_type__barrier_state__last__bit
+       > level_crossing__status_system_type__barrier_state__first__bit)
+  
+  axiom level_crossing__status_system_type__barrier_state__position_axiom:
+    (level_crossing__status_system_type__barrier_state__position
+       >= (0 : int))
+  
+  val function level_crossing__status_system_type__sensor_fault__first__bit : 
+    int
+  
+  val function level_crossing__status_system_type__sensor_fault__last__bit : 
+    int
+  
+  val function level_crossing__status_system_type__sensor_fault__position : 
+    int
+  
+  axiom level_crossing__status_system_type__sensor_fault__first__bit_axiom:
+    (level_crossing__status_system_type__sensor_fault__first__bit
+       >= (0 : int))
+  
+  axiom level_crossing__status_system_type__sensor_fault__last__bit_axiom:
+    (level_crossing__status_system_type__sensor_fault__last__bit
+       > level_crossing__status_system_type__sensor_fault__first__bit)
+  
+  axiom level_crossing__status_system_type__sensor_fault__position_axiom:
+    (level_crossing__status_system_type__sensor_fault__position >= (0 : int))
+  
+  val function user_eq (a: status_system_type) (b: status_system_type) : 
+    bool
+  
+  val function dummy : status_system_type
+  
+  type status_system_type__ref = {
+                                mutable status_system_type__content :
+                                  status_system_type
+                                }
+  
+  function status_system_type__ref_status_system_type__content__projection (a: status_system_type__ref) : status_system_type =
+    a.status_system_type__content
+  
+  meta "model_projection" function status_system_type__ref_status_system_type__content__projection
+  
+  meta "inline:no" function status_system_type__ref_status_system_type__content__projection
+  
+  val status_system_type__havoc (x: status_system_type__ref) : unit
+    writes { x }
+end
+
+module Level_crossing__status_system
+  use _gnatprove_standard.Main
+  use int.Int
+  use Level_crossing__status_system_type as Level_crossing__status_system_type
+  
+  val status_system__split_fields : Level_crossing__status_system_type.__split_fields__ref
+end
+
+module Level_crossing__status_system_type___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use Level_crossing__status_system_type as Level_crossing__status_system_type
+  
+  predicate dynamic_invariant (temp___expr_228: Level_crossing__status_system_type.status_system_type) (temp___is_init_224: bool) (temp___skip_constant_225: bool) (temp___do_toplevel_226: bool) (temp___do_typ_inv_227: bool) =
+    true
+  
+  val dynamic_invariant (temp___expr_228: Level_crossing__status_system_type.status_system_type) (temp___is_init_224: bool) (temp___skip_constant_225: bool) (temp___do_toplevel_226: bool) (temp___do_typ_inv_227: bool) : 
+    bool
+    ensures { result
+                <->
+                (((((dynamic_invariant
+                       (temp___expr_228 :
+                          Level_crossing__status_system_type.status_system_type))
+                      (temp___is_init_224 : bool))
+                     (temp___skip_constant_225 : bool))
+                    (temp___do_toplevel_226 : bool))
+                   (temp___do_typ_inv_227 : bool)) }
+  
+  predicate default_initial_assumption (temp___expr_230: Level_crossing__status_system_type.status_system_type) (temp___skip_top_level_231: bool) =
+    true
+  
+  val default_initial_assumption (temp___expr_230: Level_crossing__status_system_type.status_system_type) (temp___skip_top_level_231: bool) : 
+    bool
+    ensures { result
+                <->
+                ((default_initial_assumption
+                    (temp___expr_230 :
+                       Level_crossing__status_system_type.status_system_type))
+                   (temp___skip_top_level_231 : bool)) }
+end
+
+module Level_crossing__all_distances_valid
+  use _gnatprove_standard.Main
+  use int.Int
+  use Level_crossing__status_system_type as Level_crossing__status_system_type
+  
+  val function all_distances_valid (status: Level_crossing__status_system_type.status_system_type) : 
+    bool
+  
+  val predicate all_distances_valid__function_guard (temp___result_166: bool) (status: 
+    Level_crossing__status_system_type.status_system_type)
+end
+
+module Level_crossing__all_distances_valid___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Level_crossing__status_system_type as Level_crossing__status_system_type
+  use Level_crossing__status_system_type___axiom as Level_crossing__status_system_type___axiom
+  use Level_crossing__train_info as Level_crossing__train_info
+  use Level_crossing__all_distances_valid as Level_crossing__all_distances_valid
+  use Level_crossing__distance_range as Level_crossing__distance_range
+  use Level_crossing__distance_range__rep as Level_crossing__distance_range__rep
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  
+  val all_distances_valid (status: Level_crossing__status_system_type.status_system_type) : 
+    bool
+    requires { true }
+    ensures { (((result
+                   = (Level_crossing__all_distances_valid.all_distances_valid
+                        status)) /\
+                  ((Level_crossing__all_distances_valid.all_distances_valid__function_guard
+                      result)
+                     status)) /\
+                 (result
+                    = (forall t : int.
+                         ((((1 : int) <= t) /\ (t <= (3 : int))) ->
+                            ((Level_crossing__distance_range__rep.to_rep
+                                ((Level_crossing__train_info.__split_fields
+                                     (let temp___246 =
+                                        (Level_crossing__status_system_type.__split_fields
+                                            status).Level_crossing__status_system_type.rec__level_crossing__status_system_type__trains in
+                                      (Array__Int__Level_crossing__train_info.get
+                                         temp___246)
+                                        t)).Level_crossing__train_info.rec__level_crossing__train_info__distance))
+                               <= (10000 : int)))))) }
+  
+  axiom all_distances_valid__post_axiom:
+    forall status : Level_crossing__status_system_type.status_system_type
+          [Level_crossing__all_distances_valid.all_distances_valid status].
+      ((((((Level_crossing__status_system_type___axiom.dynamic_invariant
+              status)
+             True)
+            True)
+           True)
+          True) ->
+         (let result =
+            Level_crossing__all_distances_valid.all_distances_valid status in
+          if ((Level_crossing__all_distances_valid.all_distances_valid__function_guard
+                 result)
+                status) then
+            ((true /\ true) /\ true)
+          else true))
+  
+  axiom all_distances_valid__def_axiom:
+    forall status : Level_crossing__status_system_type.status_system_type
+          [Level_crossing__all_distances_valid.all_distances_valid status].
+      ((Level_crossing__all_distances_valid.all_distances_valid status)
+         = (forall t : int.
+              ((((1 : int) <= t) /\ (t <= (3 : int))) ->
+                 ((Level_crossing__distance_range__rep.to_rep
+                     ((Level_crossing__train_info.__split_fields
+                          (let temp___249 =
+                             (Level_crossing__status_system_type.__split_fields
+                                 status).Level_crossing__status_system_type.rec__level_crossing__status_system_type__trains in
+                           (Array__Int__Level_crossing__train_info.get
+                              temp___249)
+                             t)).Level_crossing__train_info.rec__level_crossing__train_info__distance))
+                    <= (10000 : int)))))
+end
+
+module Level_crossing__all_speeds_valid
+  use _gnatprove_standard.Main
+  use int.Int
+  use Level_crossing__status_system_type as Level_crossing__status_system_type
+  
+  val function all_speeds_valid (status: Level_crossing__status_system_type.status_system_type) : 
+    bool
+  
+  val predicate all_speeds_valid__function_guard (temp___result_167: bool) (status: 
+    Level_crossing__status_system_type.status_system_type)
+end
+
+module Level_crossing__all_speeds_valid___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Level_crossing__status_system_type as Level_crossing__status_system_type
+  use Level_crossing__status_system_type___axiom as Level_crossing__status_system_type___axiom
+  use Level_crossing__train_info as Level_crossing__train_info
+  use Level_crossing__all_speeds_valid as Level_crossing__all_speeds_valid
+  use Level_crossing__speed_range as Level_crossing__speed_range
+  use Level_crossing__speed_range__rep as Level_crossing__speed_range__rep
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  
+  val all_speeds_valid (status: Level_crossing__status_system_type.status_system_type) : 
+    bool
+    requires { true }
+    ensures { (((result
+                   = (Level_crossing__all_speeds_valid.all_speeds_valid
+                        status)) /\
+                  ((Level_crossing__all_speeds_valid.all_speeds_valid__function_guard
+                      result)
+                     status)) /\
+                 (result
+                    = (forall t : int.
+                         ((((1 : int) <= t) /\ (t <= (3 : int))) ->
+                            ((Level_crossing__speed_range__rep.to_rep
+                                ((Level_crossing__train_info.__split_fields
+                                     (let temp___250 =
+                                        (Level_crossing__status_system_type.__split_fields
+                                            status).Level_crossing__status_system_type.rec__level_crossing__status_system_type__trains in
+                                      (Array__Int__Level_crossing__train_info.get
+                                         temp___250)
+                                        t)).Level_crossing__train_info.rec__level_crossing__train_info__speed))
+                               <= (56 : int)))))) }
+  
+  axiom all_speeds_valid__post_axiom:
+    forall status : Level_crossing__status_system_type.status_system_type
+          [Level_crossing__all_speeds_valid.all_speeds_valid status].
+      ((((((Level_crossing__status_system_type___axiom.dynamic_invariant
+              status)
+             True)
+            True)
+           True)
+          True) ->
+         (let result =
+            Level_crossing__all_speeds_valid.all_speeds_valid status in
+          if ((Level_crossing__all_speeds_valid.all_speeds_valid__function_guard
+                 result)
+                status) then
+            ((true /\ true) /\ true)
+          else true))
+  
+  axiom all_speeds_valid__def_axiom:
+    forall status : Level_crossing__status_system_type.status_system_type
+          [Level_crossing__all_speeds_valid.all_speeds_valid status].
+      ((Level_crossing__all_speeds_valid.all_speeds_valid status)
+         = (forall t : int.
+              ((((1 : int) <= t) /\ (t <= (3 : int))) ->
+                 ((Level_crossing__speed_range__rep.to_rep
+                     ((Level_crossing__train_info.__split_fields
+                          (let temp___253 =
+                             (Level_crossing__status_system_type.__split_fields
+                                 status).Level_crossing__status_system_type.rec__level_crossing__status_system_type__trains in
+                           (Array__Int__Level_crossing__train_info.get
+                              temp___253)
+                             t)).Level_crossing__train_info.rec__level_crossing__train_info__speed))
+                    <= (56 : int)))))
+end
+
+module Ada___spark__text_io__standard_output
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val standard_output : Main.__private__ref
+end
+
+module As_io_wrapper__as_put_line___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use Standard__string as Standard__string
+  use Ada___spark__text_io__standard_output as Ada___spark__text_io__standard_output
+  use Ada___spark__text_io__standard_output as Ada___spark__text_io__standard_output
+  
+  val as_put_line (item: Standard__string.string__) : unit
+    reads { Ada___spark__text_io__standard_output.standard_output }
+    requires { true }
+    writes { Ada___spark__text_io__standard_output.standard_output }
+    ensures { true }
+end
+
+module Level_crossing__read_sensor_status__fault_input
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val fault_input : int__ref
+end
+
+module As_io_wrapper__as_put__2___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use Standard__string as Standard__string
+  use Ada___spark__text_io__standard_output as Ada___spark__text_io__standard_output
+  use Ada___spark__text_io__standard_output as Ada___spark__text_io__standard_output
+  
+  val as_put (item: Standard__string.string__) : unit
+    reads { Ada___spark__text_io__standard_output.standard_output }
+    requires { true }
+    writes { Ada___spark__text_io__standard_output.standard_output }
+    ensures { true }
+end
+
+module Ada___spark__text_io__standard_input
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  val standard_input : Main.__private__ref
+end
+
+module As_io_wrapper__as_get__2___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use Standard__integer___axiom as Standard__integer___axiom
+  use Standard__string as Standard__string
+  use Ada___spark__text_io__standard_output as Ada___spark__text_io__standard_output
+  use Ada___spark__text_io__standard_input as Ada___spark__text_io__standard_input
+  use Ada___spark__text_io__standard_output as Ada___spark__text_io__standard_output
+  use Ada___spark__text_io__standard_input as Ada___spark__text_io__standard_input
+  
+  val as_get (item: int__ref) (prompt_try_again_when_not_integer: Standard__string.string__) : 
+    unit
+    reads { Ada___spark__text_io__standard_output.standard_output,
+      Ada___spark__text_io__standard_input.standard_input }
+    requires { true }
+    writes { Ada___spark__text_io__standard_output.standard_output, Ada___spark__text_io__standard_input.standard_input, item }
+    ensures { ((((Standard__integer___axiom.dynamic_invariant
+                    (item.int__content))
+                   True)
+                  True)
+                 True)
+                True }
+end
+
+module Level_crossing__read_sensor_status__L_2
+  use _gnatprove_standard.Main
+  use int.Int
+  
+  exception L_2
+end
+
+module Temp___String_Literal_398
+  use _gnatprove_standard.Main
+  use int.Int
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  
+  val function temp___String_Literal_398 (__void_param: unit) : Array__Int__Standard__character.map
+  
+  axiom temp___String_Literal_398__def_axiom:
+    forall __void_param : unit [temp___String_Literal_398 __void_param]. true
+end
+
+module Temp___String_Literal_400
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Standard__character as Standard__character
+  use Standard__character__rep as Standard__character__rep
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  
+  val function temp___String_Literal_400 (__void_param: unit) : Array__Int__Standard__character.map
+  
+  axiom temp___String_Literal_400__def_axiom:
+    forall __void_param : unit [temp___String_Literal_400 __void_param].
+      ((((Standard__character__rep.to_rep
+            ((Array__Int__Standard__character.get
+                (temp___String_Literal_400 __void_param))
+               (1 : int)))
+           = (45 : int)) /\
+          ((Standard__character__rep.to_rep
+              ((Array__Int__Standard__character.get
+                  (temp___String_Literal_400 __void_param))
+                 (2 : int)))
+             = (45 : int))) /\
+         (((((((Standard__character__rep.to_rep
+                  ((Array__Int__Standard__character.get
+                      (temp___String_Literal_400 __void_param))
+                     (3 : int)))
+                 = (45 : int)) /\
+                ((Standard__character__rep.to_rep
+                    ((Array__Int__Standard__character.get
+                        (temp___String_Literal_400 __void_param))
+                       (4 : int)))
+                   = (32 : int))) /\
+               (((Standard__character__rep.to_rep
+                    ((Array__Int__Standard__character.get
+                        (temp___String_Literal_400 __void_param))
+                       (5 : int)))
+                   = (83 : int)) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_400 __void_param))
+                         (6 : int)))
+                     = (69 : int)))) /\
+              ((((Standard__character__rep.to_rep
+                    ((Array__Int__Standard__character.get
+                        (temp___String_Literal_400 __void_param))
+                       (7 : int)))
+                   = (78 : int)) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_400 __void_param))
+                         (8 : int)))
+                     = (83 : int))) /\
+                 ((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_400 __void_param))
+                        (9 : int)))
+                    = (79 : int)))) /\
+             (((((Standard__character__rep.to_rep
+                    ((Array__Int__Standard__character.get
+                        (temp___String_Literal_400 __void_param))
+                       (10 : int)))
+                   = (82 : int)) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_400 __void_param))
+                         (11 : int)))
+                     = (32 : int))) /\
+                 ((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_400 __void_param))
+                        (12 : int)))
+                    = (83 : int))) /\
+                ((((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_400 __void_param))
+                         (13 : int)))
+                     = (84 : int)) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_400 __void_param))
+                           (14 : int)))
+                       = (65 : int))) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_400 __void_param))
+                          (15 : int)))
+                      = (84 : int))))) /\
+            ((((((Standard__character__rep.to_rep
+                    ((Array__Int__Standard__character.get
+                        (temp___String_Literal_400 __void_param))
+                       (16 : int)))
+                   = (85 : int)) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_400 __void_param))
+                         (17 : int)))
+                     = (83 : int))) /\
+                 ((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_400 __void_param))
+                        (18 : int)))
+                    = (32 : int))) /\
+                ((((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_400 __void_param))
+                         (19 : int)))
+                     = (67 : int)) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_400 __void_param))
+                           (20 : int)))
+                       = (72 : int))) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_400 __void_param))
+                          (21 : int)))
+                      = (69 : int)))) /\
+               (((((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_400 __void_param))
+                         (22 : int)))
+                     = (67 : int)) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_400 __void_param))
+                           (23 : int)))
+                       = (75 : int))) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_400 __void_param))
+                          (24 : int)))
+                      = (32 : int))) /\
+                  ((((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_400 __void_param))
+                           (25 : int)))
+                       = (45 : int)) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_400 __void_param))
+                             (26 : int)))
+                         = (45 : int))) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_400 __void_param))
+                            (27 : int)))
+                        = (45 : int)))))))
+end
+
+module Temp___String_Literal_402
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Standard__character as Standard__character
+  use Standard__character__rep as Standard__character__rep
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  
+  val function temp___String_Literal_402 (__void_param: unit) : Array__Int__Standard__character.map
+  
+  axiom temp___String_Literal_402__def_axiom:
+    forall __void_param : unit [temp___String_Literal_402 __void_param].
+      ((((Standard__character__rep.to_rep
+            ((Array__Int__Standard__character.get
+                (temp___String_Literal_402 __void_param))
+               (1 : int)))
+           = (65 : int)) /\
+          ((Standard__character__rep.to_rep
+              ((Array__Int__Standard__character.get
+                  (temp___String_Literal_402 __void_param))
+                 (2 : int)))
+             = (114 : int))) /\
+         ((((((((Standard__character__rep.to_rep
+                   ((Array__Int__Standard__character.get
+                       (temp___String_Literal_402 __void_param))
+                      (3 : int)))
+                  = (101 : int)) /\
+                 ((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_402 __void_param))
+                        (4 : int)))
+                    = (32 : int))) /\
+                (((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_402 __void_param))
+                        (5 : int)))
+                    = (115 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_402 __void_param))
+                          (6 : int)))
+                      = (101 : int)))) /\
+               ((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_402 __void_param))
+                        (7 : int)))
+                    = (110 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_402 __void_param))
+                          (8 : int)))
+                      = (115 : int))) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_402 __void_param))
+                         (9 : int)))
+                     = (111 : int)))) /\
+              (((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_402 __void_param))
+                        (10 : int)))
+                    = (114 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_402 __void_param))
+                          (11 : int)))
+                      = (115 : int))) /\
+                  (((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_402 __void_param))
+                          (12 : int)))
+                      = (32 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (13 : int)))
+                        = (102 : int)))) /\
+                 ((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_402 __void_param))
+                          (14 : int)))
+                      = (117 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (15 : int)))
+                        = (110 : int))) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_402 __void_param))
+                           (16 : int)))
+                       = (99 : int))))) /\
+             ((((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_402 __void_param))
+                        (17 : int)))
+                    = (116 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_402 __void_param))
+                          (18 : int)))
+                      = (105 : int))) /\
+                  (((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_402 __void_param))
+                          (19 : int)))
+                      = (111 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (20 : int)))
+                        = (110 : int)))) /\
+                 ((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_402 __void_param))
+                          (21 : int)))
+                      = (105 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (22 : int)))
+                        = (110 : int))) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_402 __void_param))
+                           (23 : int)))
+                       = (103 : int)))) /\
+                (((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_402 __void_param))
+                          (24 : int)))
+                      = (32 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (25 : int)))
+                        = (99 : int))) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_402 __void_param))
+                           (26 : int)))
+                       = (111 : int))) /\
+                   ((((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (27 : int)))
+                        = (114 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_402 __void_param))
+                              (28 : int)))
+                          = (114 : int))) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_402 __void_param))
+                             (29 : int)))
+                         = (101 : int)))))) /\
+            (((((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_402 __void_param))
+                        (30 : int)))
+                    = (99 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_402 __void_param))
+                          (31 : int)))
+                      = (116 : int))) /\
+                  (((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_402 __void_param))
+                          (32 : int)))
+                      = (108 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (33 : int)))
+                        = (121 : int)))) /\
+                 ((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_402 __void_param))
+                          (34 : int)))
+                      = (63 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (35 : int)))
+                        = (32 : int))) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_402 __void_param))
+                           (36 : int)))
+                       = (40 : int)))) /\
+                (((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_402 __void_param))
+                          (37 : int)))
+                      = (49 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (38 : int)))
+                        = (61 : int))) /\
+                    (((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (39 : int)))
+                        = (89 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_402 __void_param))
+                              (40 : int)))
+                          = (101 : int)))) /\
+                   ((((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (41 : int)))
+                        = (115 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_402 __void_param))
+                              (42 : int)))
+                          = (44 : int))) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_402 __void_param))
+                             (43 : int)))
+                         = (32 : int))))) /\
+               ((((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_402 __void_param))
+                          (44 : int)))
+                      = (48 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (45 : int)))
+                        = (61 : int))) /\
+                    (((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (46 : int)))
+                        = (78 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_402 __void_param))
+                              (47 : int)))
+                          = (111 : int)))) /\
+                   ((((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (48 : int)))
+                        = (47 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_402 __void_param))
+                              (49 : int)))
+                          = (70 : int))) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_402 __void_param))
+                             (50 : int)))
+                         = (97 : int)))) /\
+                  (((((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_402 __void_param))
+                            (51 : int)))
+                        = (117 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_402 __void_param))
+                              (52 : int)))
+                          = (108 : int))) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_402 __void_param))
+                             (53 : int)))
+                         = (116 : int))) /\
+                     ((((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_402 __void_param))
+                              (54 : int)))
+                          = (41 : int)) /\
+                         ((Standard__character__rep.to_rep
+                             ((Array__Int__Standard__character.get
+                                 (temp___String_Literal_402 __void_param))
+                                (55 : int)))
+                            = (58 : int))) /\
+                        ((Standard__character__rep.to_rep
+                            ((Array__Int__Standard__character.get
+                                (temp___String_Literal_402 __void_param))
+                               (56 : int)))
+                           = (32 : int))))))))
+end
+
+module Temp___String_Literal_405
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Standard__character as Standard__character
+  use Standard__character__rep as Standard__character__rep
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  
+  val function temp___String_Literal_405 (__void_param: unit) : Array__Int__Standard__character.map
+  
+  axiom temp___String_Literal_405__def_axiom:
+    forall __void_param : unit [temp___String_Literal_405 __void_param].
+      ((((Standard__character__rep.to_rep
+            ((Array__Int__Standard__character.get
+                (temp___String_Literal_405 __void_param))
+               (1 : int)))
+           = (80 : int)) /\
+          ((Standard__character__rep.to_rep
+              ((Array__Int__Standard__character.get
+                  (temp___String_Literal_405 __void_param))
+                 (2 : int)))
+             = (108 : int))) /\
+         ((((((((Standard__character__rep.to_rep
+                   ((Array__Int__Standard__character.get
+                       (temp___String_Literal_405 __void_param))
+                      (3 : int)))
+                  = (101 : int)) /\
+                 ((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_405 __void_param))
+                        (4 : int)))
+                    = (97 : int))) /\
+                ((Standard__character__rep.to_rep
+                    ((Array__Int__Standard__character.get
+                        (temp___String_Literal_405 __void_param))
+                       (5 : int)))
+                   = (115 : int))) /\
+               (((Standard__character__rep.to_rep
+                    ((Array__Int__Standard__character.get
+                        (temp___String_Literal_405 __void_param))
+                       (6 : int)))
+                   = (101 : int)) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_405 __void_param))
+                         (7 : int)))
+                     = (32 : int)))) /\
+              ((((Standard__character__rep.to_rep
+                    ((Array__Int__Standard__character.get
+                        (temp___String_Literal_405 __void_param))
+                       (8 : int)))
+                   = (101 : int)) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_405 __void_param))
+                         (9 : int)))
+                     = (110 : int))) /\
+                 (((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_405 __void_param))
+                         (10 : int)))
+                     = (116 : int)) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_405 __void_param))
+                           (11 : int)))
+                       = (101 : int))))) /\
+             ((((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_405 __void_param))
+                        (12 : int)))
+                    = (114 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_405 __void_param))
+                          (13 : int)))
+                      = (32 : int))) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_405 __void_param))
+                         (14 : int)))
+                     = (49 : int))) /\
+                 (((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_405 __void_param))
+                         (15 : int)))
+                     = (32 : int)) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_405 __void_param))
+                           (16 : int)))
+                       = (102 : int)))) /\
+                ((((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_405 __void_param))
+                         (17 : int)))
+                     = (111 : int)) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_405 __void_param))
+                           (18 : int)))
+                       = (114 : int))) /\
+                   (((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_405 __void_param))
+                           (19 : int)))
+                       = (32 : int)) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_405 __void_param))
+                             (20 : int)))
+                         = (89 : int)))))) /\
+            (((((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_405 __void_param))
+                        (21 : int)))
+                    = (101 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_405 __void_param))
+                          (22 : int)))
+                      = (115 : int))) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_405 __void_param))
+                         (23 : int)))
+                     = (32 : int))) /\
+                 (((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_405 __void_param))
+                         (24 : int)))
+                     = (111 : int)) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_405 __void_param))
+                           (25 : int)))
+                       = (114 : int)))) /\
+                ((((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_405 __void_param))
+                         (26 : int)))
+                     = (32 : int)) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_405 __void_param))
+                           (27 : int)))
+                       = (48 : int))) /\
+                   (((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_405 __void_param))
+                           (28 : int)))
+                       = (32 : int)) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_405 __void_param))
+                             (29 : int)))
+                         = (102 : int))))) /\
+               (((((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_405 __void_param))
+                         (30 : int)))
+                     = (111 : int)) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_405 __void_param))
+                           (31 : int)))
+                       = (114 : int))) /\
+                   (((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_405 __void_param))
+                           (32 : int)))
+                       = (32 : int)) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_405 __void_param))
+                             (33 : int)))
+                         = (70 : int)))) /\
+                  ((((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_405 __void_param))
+                           (34 : int)))
+                       = (97 : int)) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_405 __void_param))
+                             (35 : int)))
+                         = (117 : int))) /\
+                     (((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_405 __void_param))
+                             (36 : int)))
+                         = (108 : int)) /\
+                        ((Standard__character__rep.to_rep
+                            ((Array__Int__Standard__character.get
+                                (temp___String_Literal_405 __void_param))
+                               (37 : int)))
+                           = (116 : int))))))))
+end
+
+module Temp___String_Literal_407
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Standard__character as Standard__character
+  use Standard__character__rep as Standard__character__rep
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  
+  val function temp___String_Literal_407 (__void_param: unit) : Array__Int__Standard__character.map
+  
+  axiom temp___String_Literal_407__def_axiom:
+    forall __void_param : unit [temp___String_Literal_407 __void_param].
+      ((((Standard__character__rep.to_rep
+            ((Array__Int__Standard__character.get
+                (temp___String_Literal_407 __void_param))
+               (1 : int)))
+           = (73 : int)) /\
+          ((Standard__character__rep.to_rep
+              ((Array__Int__Standard__character.get
+                  (temp___String_Literal_407 __void_param))
+                 (2 : int)))
+             = (110 : int))) /\
+         ((((((((Standard__character__rep.to_rep
+                   ((Array__Int__Standard__character.get
+                       (temp___String_Literal_407 __void_param))
+                      (3 : int)))
+                  = (118 : int)) /\
+                 ((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_407 __void_param))
+                        (4 : int)))
+                    = (97 : int))) /\
+                (((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_407 __void_param))
+                        (5 : int)))
+                    = (108 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_407 __void_param))
+                          (6 : int)))
+                      = (105 : int)))) /\
+               ((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_407 __void_param))
+                        (7 : int)))
+                    = (100 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_407 __void_param))
+                          (8 : int)))
+                      = (32 : int))) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_407 __void_param))
+                         (9 : int)))
+                     = (105 : int)))) /\
+              (((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_407 __void_param))
+                        (10 : int)))
+                    = (110 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_407 __void_param))
+                          (11 : int)))
+                      = (112 : int))) /\
+                  (((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_407 __void_param))
+                          (12 : int)))
+                      = (117 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (13 : int)))
+                        = (116 : int)))) /\
+                 ((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_407 __void_param))
+                          (14 : int)))
+                      = (46 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (15 : int)))
+                        = (32 : int))) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_407 __void_param))
+                           (16 : int)))
+                       = (69 : int))))) /\
+             ((((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_407 __void_param))
+                        (17 : int)))
+                    = (110 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_407 __void_param))
+                          (18 : int)))
+                      = (116 : int))) /\
+                  (((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_407 __void_param))
+                          (19 : int)))
+                      = (101 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (20 : int)))
+                        = (114 : int)))) /\
+                 ((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_407 __void_param))
+                          (21 : int)))
+                      = (32 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (22 : int)))
+                        = (49 : int))) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_407 __void_param))
+                           (23 : int)))
+                       = (32 : int)))) /\
+                (((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_407 __void_param))
+                          (24 : int)))
+                      = (40 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (25 : int)))
+                        = (115 : int))) /\
+                    (((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (26 : int)))
+                        = (101 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_407 __void_param))
+                              (27 : int)))
+                          = (110 : int)))) /\
+                   ((((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (28 : int)))
+                        = (115 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_407 __void_param))
+                              (29 : int)))
+                          = (111 : int))) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_407 __void_param))
+                             (30 : int)))
+                         = (114 : int)))))) /\
+            (((((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_407 __void_param))
+                        (31 : int)))
+                    = (115 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_407 __void_param))
+                          (32 : int)))
+                      = (32 : int))) /\
+                  (((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_407 __void_param))
+                          (33 : int)))
+                      = (79 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (34 : int)))
+                        = (75 : int)))) /\
+                 ((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_407 __void_param))
+                          (35 : int)))
+                      = (41 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (36 : int)))
+                        = (32 : int))) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_407 __void_param))
+                           (37 : int)))
+                       = (111 : int)))) /\
+                (((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_407 __void_param))
+                          (38 : int)))
+                      = (114 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (39 : int)))
+                        = (32 : int))) /\
+                    (((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (40 : int)))
+                        = (48 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_407 __void_param))
+                              (41 : int)))
+                          = (32 : int)))) /\
+                   ((((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (42 : int)))
+                        = (40 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_407 __void_param))
+                              (43 : int)))
+                          = (102 : int))) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_407 __void_param))
+                             (44 : int)))
+                         = (97 : int))))) /\
+               ((((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_407 __void_param))
+                          (45 : int)))
+                      = (117 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (46 : int)))
+                        = (108 : int))) /\
+                    (((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (47 : int)))
+                        = (116 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_407 __void_param))
+                              (48 : int)))
+                          = (32 : int)))) /\
+                   ((((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (49 : int)))
+                        = (100 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_407 __void_param))
+                              (50 : int)))
+                          = (101 : int))) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_407 __void_param))
+                             (51 : int)))
+                         = (116 : int)))) /\
+                  (((((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_407 __void_param))
+                            (52 : int)))
+                        = (101 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_407 __void_param))
+                              (53 : int)))
+                          = (99 : int))) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_407 __void_param))
+                             (54 : int)))
+                         = (116 : int))) /\
+                     ((((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_407 __void_param))
+                              (55 : int)))
+                          = (101 : int)) /\
+                         ((Standard__character__rep.to_rep
+                             ((Array__Int__Standard__character.get
+                                 (temp___String_Literal_407 __void_param))
+                                (56 : int)))
+                            = (100 : int))) /\
+                        ((Standard__character__rep.to_rep
+                            ((Array__Int__Standard__character.get
+                                (temp___String_Literal_407 __void_param))
+                               (57 : int)))
+                           = (41 : int))))))))
+end
+
+module Temp___String_Literal_412
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Standard__character as Standard__character
+  use Standard__character__rep as Standard__character__rep
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  
+  val function temp___String_Literal_412 (__void_param: unit) : Array__Int__Standard__character.map
+  
+  axiom temp___String_Literal_412__def_axiom:
+    forall __void_param : unit [temp___String_Literal_412 __void_param].
+      ((((Standard__character__rep.to_rep
+            ((Array__Int__Standard__character.get
+                (temp___String_Literal_412 __void_param))
+               (1 : int)))
+           = (42 : int)) /\
+          ((Standard__character__rep.to_rep
+              ((Array__Int__Standard__character.get
+                  (temp___String_Literal_412 __void_param))
+                 (2 : int)))
+             = (42 : int))) /\
+         ((((((((Standard__character__rep.to_rep
+                   ((Array__Int__Standard__character.get
+                       (temp___String_Literal_412 __void_param))
+                      (3 : int)))
+                  = (42 : int)) /\
+                 ((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_412 __void_param))
+                        (4 : int)))
+                    = (32 : int))) /\
+                ((Standard__character__rep.to_rep
+                    ((Array__Int__Standard__character.get
+                        (temp___String_Literal_412 __void_param))
+                       (5 : int)))
+                   = (83 : int))) /\
+               ((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_412 __void_param))
+                        (6 : int)))
+                    = (69 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_412 __void_param))
+                          (7 : int)))
+                      = (78 : int))) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_412 __void_param))
+                         (8 : int)))
+                     = (83 : int)))) /\
+              (((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_412 __void_param))
+                        (9 : int)))
+                    = (79 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_412 __void_param))
+                          (10 : int)))
+                      = (82 : int))) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_412 __void_param))
+                         (11 : int)))
+                     = (32 : int))) /\
+                 (((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_412 __void_param))
+                         (12 : int)))
+                     = (70 : int)) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_412 __void_param))
+                           (13 : int)))
+                       = (65 : int))))) /\
+             ((((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_412 __void_param))
+                        (14 : int)))
+                    = (85 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_412 __void_param))
+                          (15 : int)))
+                      = (76 : int))) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_412 __void_param))
+                         (16 : int)))
+                     = (84 : int))) /\
+                 ((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_412 __void_param))
+                          (17 : int)))
+                      = (32 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_412 __void_param))
+                            (18 : int)))
+                        = (68 : int))) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_412 __void_param))
+                           (19 : int)))
+                       = (69 : int)))) /\
+                (((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_412 __void_param))
+                          (20 : int)))
+                      = (84 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_412 __void_param))
+                            (21 : int)))
+                        = (69 : int))) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_412 __void_param))
+                           (22 : int)))
+                       = (67 : int))) /\
+                   (((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_412 __void_param))
+                           (23 : int)))
+                       = (84 : int)) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_412 __void_param))
+                             (24 : int)))
+                         = (69 : int)))))) /\
+            (((((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_412 __void_param))
+                        (25 : int)))
+                    = (68 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_412 __void_param))
+                          (26 : int)))
+                      = (32 : int))) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_412 __void_param))
+                         (27 : int)))
+                     = (45 : int))) /\
+                 ((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_412 __void_param))
+                          (28 : int)))
+                      = (32 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_412 __void_param))
+                            (29 : int)))
+                        = (70 : int))) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_412 __void_param))
+                           (30 : int)))
+                       = (65 : int)))) /\
+                (((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_412 __void_param))
+                          (31 : int)))
+                      = (73 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_412 __void_param))
+                            (32 : int)))
+                        = (76 : int))) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_412 __void_param))
+                           (33 : int)))
+                       = (45 : int))) /\
+                   (((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_412 __void_param))
+                           (34 : int)))
+                       = (83 : int)) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_412 __void_param))
+                             (35 : int)))
+                         = (65 : int))))) /\
+               ((((((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_412 __void_param))
+                          (36 : int)))
+                      = (70 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_412 __void_param))
+                            (37 : int)))
+                        = (69 : int))) /\
+                    ((Standard__character__rep.to_rep
+                        ((Array__Int__Standard__character.get
+                            (temp___String_Literal_412 __void_param))
+                           (38 : int)))
+                       = (32 : int))) /\
+                   ((((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_412 __void_param))
+                            (39 : int)))
+                        = (77 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_412 __void_param))
+                              (40 : int)))
+                          = (79 : int))) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_412 __void_param))
+                             (41 : int)))
+                         = (68 : int)))) /\
+                  (((((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_412 __void_param))
+                            (42 : int)))
+                        = (69 : int)) /\
+                       ((Standard__character__rep.to_rep
+                           ((Array__Int__Standard__character.get
+                               (temp___String_Literal_412 __void_param))
+                              (43 : int)))
+                          = (32 : int))) /\
+                      ((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_412 __void_param))
+                             (44 : int)))
+                         = (42 : int))) /\
+                     (((Standard__character__rep.to_rep
+                          ((Array__Int__Standard__character.get
+                              (temp___String_Literal_412 __void_param))
+                             (45 : int)))
+                         = (42 : int)) /\
+                        ((Standard__character__rep.to_rep
+                            ((Array__Int__Standard__character.get
+                                (temp___String_Literal_412 __void_param))
+                               (46 : int)))
+                           = (42 : int))))))))
+end
+
+module Temp___String_Literal_414
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Standard__character as Standard__character
+  use Standard__character__rep as Standard__character__rep
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  
+  val function temp___String_Literal_414 (__void_param: unit) : Array__Int__Standard__character.map
+  
+  axiom temp___String_Literal_414__def_axiom:
+    forall __void_param : unit [temp___String_Literal_414 __void_param].
+      ((((Standard__character__rep.to_rep
+            ((Array__Int__Standard__character.get
+                (temp___String_Literal_414 __void_param))
+               (1 : int)))
+           = (83 : int)) /\
+          ((Standard__character__rep.to_rep
+              ((Array__Int__Standard__character.get
+                  (temp___String_Literal_414 __void_param))
+                 (2 : int)))
+             = (101 : int))) /\
+         (((((((Standard__character__rep.to_rep
+                  ((Array__Int__Standard__character.get
+                      (temp___String_Literal_414 __void_param))
+                     (3 : int)))
+                 = (110 : int)) /\
+                ((Standard__character__rep.to_rep
+                    ((Array__Int__Standard__character.get
+                        (temp___String_Literal_414 __void_param))
+                       (4 : int)))
+                   = (115 : int))) /\
+               ((Standard__character__rep.to_rep
+                   ((Array__Int__Standard__character.get
+                       (temp___String_Literal_414 __void_param))
+                      (5 : int)))
+                  = (111 : int))) /\
+              (((Standard__character__rep.to_rep
+                   ((Array__Int__Standard__character.get
+                       (temp___String_Literal_414 __void_param))
+                      (6 : int)))
+                  = (114 : int)) /\
+                 ((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_414 __void_param))
+                        (7 : int)))
+                    = (115 : int)))) /\
+             ((((Standard__character__rep.to_rep
+                   ((Array__Int__Standard__character.get
+                       (temp___String_Literal_414 __void_param))
+                      (8 : int)))
+                  = (32 : int)) /\
+                 ((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_414 __void_param))
+                        (9 : int)))
+                    = (111 : int))) /\
+                (((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_414 __void_param))
+                        (10 : int)))
+                    = (112 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_414 __void_param))
+                          (11 : int)))
+                      = (101 : int))))) /\
+            ((((((Standard__character__rep.to_rep
+                    ((Array__Int__Standard__character.get
+                        (temp___String_Literal_414 __void_param))
+                       (12 : int)))
+                   = (114 : int)) /\
+                  ((Standard__character__rep.to_rep
+                      ((Array__Int__Standard__character.get
+                          (temp___String_Literal_414 __void_param))
+                         (13 : int)))
+                     = (97 : int))) /\
+                 ((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_414 __void_param))
+                        (14 : int)))
+                    = (116 : int))) /\
+                (((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_414 __void_param))
+                        (15 : int)))
+                    = (105 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_414 __void_param))
+                          (16 : int)))
+                      = (111 : int)))) /\
+               ((((Standard__character__rep.to_rep
+                     ((Array__Int__Standard__character.get
+                         (temp___String_Literal_414 __void_param))
+                        (17 : int)))
+                    = (110 : int)) /\
+                   ((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_414 __void_param))
+                          (18 : int)))
+                      = (97 : int))) /\
+                  (((Standard__character__rep.to_rep
+                       ((Array__Int__Standard__character.get
+                           (temp___String_Literal_414 __void_param))
+                          (19 : int)))
+                      = (108 : int)) /\
+                     ((Standard__character__rep.to_rep
+                         ((Array__Int__Standard__character.get
+                             (temp___String_Literal_414 __void_param))
+                            (20 : int)))
+                        = (46 : int)))))))
+end
+
+module Standard__positive___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Standard__positive as Standard__positive
+  
+  predicate dynamic_invariant (temp___expr_53: int) (temp___is_init_49: bool) (temp___skip_constant_50: bool) (temp___do_toplevel_51: bool) (temp___do_typ_inv_52: bool) =
+    if ((temp___is_init_49 = True) \/
+          (Standard__positive.first <= Standard__positive.last)) then
+      (((Standard__positive.dynamic_property Standard__positive.first)
+          Standard__positive.last)
+         temp___expr_53)
+    else true
+  
+  val dynamic_invariant (temp___expr_53: int) (temp___is_init_49: bool) (temp___skip_constant_50: bool) (temp___do_toplevel_51: bool) (temp___do_typ_inv_52: bool) : 
+    bool
+    ensures { result
+                <->
+                (((((dynamic_invariant (temp___expr_53 : int))
+                      (temp___is_init_49 : bool))
+                     (temp___skip_constant_50 : bool))
+                    (temp___do_toplevel_51 : bool))
+                   (temp___do_typ_inv_52 : bool)) }
+  
+  predicate default_initial_assumption (temp___expr_54: int) (temp___skip_top_level_55: bool) =
+    true
+  
+  val default_initial_assumption (temp___expr_54: int) (temp___skip_top_level_55: bool) : 
+    bool
+    ensures { result
+                <->
+                ((default_initial_assumption (temp___expr_54 : int))
+                   (temp___skip_top_level_55 : bool)) }
+end
+
+module Standard__character___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Standard__character as Standard__character
+  
+  predicate dynamic_invariant (temp___expr_81: int) (temp___is_init_77: bool) (temp___skip_constant_78: bool) (temp___do_toplevel_79: bool) (temp___do_typ_inv_80: bool) =
+    if ((temp___is_init_77 = True) \/
+          (Standard__character.first <= Standard__character.last)) then
+      (((Standard__character.dynamic_property Standard__character.first)
+          Standard__character.last)
+         temp___expr_81)
+    else true
+  
+  val dynamic_invariant (temp___expr_81: int) (temp___is_init_77: bool) (temp___skip_constant_78: bool) (temp___do_toplevel_79: bool) (temp___do_typ_inv_80: bool) : 
+    bool
+    ensures { result
+                <->
+                (((((dynamic_invariant (temp___expr_81 : int))
+                      (temp___is_init_77 : bool))
+                     (temp___skip_constant_78 : bool))
+                    (temp___do_toplevel_79 : bool))
+                   (temp___do_typ_inv_80 : bool)) }
+  
+  predicate default_initial_assumption (temp___expr_82: int) (temp___skip_top_level_83: bool) =
+    true
+  
+  val default_initial_assumption (temp___expr_82: int) (temp___skip_top_level_83: bool) : 
+    bool
+    ensures { result
+                <->
+                ((default_initial_assumption (temp___expr_82 : int))
+                   (temp___skip_top_level_83 : bool)) }
+end
+
+module Standard__string___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use Standard__positive as Standard__positive
+  use Standard__string as Standard__string
+  
+  predicate dynamic_invariant (temp___expr_103: Standard__string.string__) (temp___is_init_99: bool) (temp___skip_constant_100: bool) (temp___do_toplevel_101: bool) (temp___do_typ_inv_102: bool) =
+    if temp___skip_constant_100 then true
+    else
+      ((((Standard__string.dynamic_property Standard__positive.first)
+           Standard__positive.last)
+          (Standard__string.first temp___expr_103))
+         (Standard__string.last temp___expr_103))
+  
+  val dynamic_invariant (temp___expr_103: Standard__string.string__) (temp___is_init_99: bool) (temp___skip_constant_100: bool) (temp___do_toplevel_101: bool) (temp___do_typ_inv_102: bool) : 
+    bool
+    ensures { result
+                <->
+                (((((dynamic_invariant
+                       (temp___expr_103 : Standard__string.string__))
+                      (temp___is_init_99 : bool))
+                     (temp___skip_constant_100 : bool))
+                    (temp___do_toplevel_101 : bool))
+                   (temp___do_typ_inv_102 : bool)) }
+end
+
+module Level_crossing__read_sensor_status__fault_input___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Level_crossing__read_sensor_status__L_2___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Level_crossing__distance_range___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Level_crossing__distance_range as Level_crossing__distance_range
+  
+  predicate dynamic_invariant (temp___expr_177: int) (temp___is_init_173: bool) (temp___skip_constant_174: bool) (temp___do_toplevel_175: bool) (temp___do_typ_inv_176: bool) =
+    if ((temp___is_init_173 = True) \/
+          (Level_crossing__distance_range.first
+             <= Level_crossing__distance_range.last)) then
+      (((Level_crossing__distance_range.dynamic_property
+           Level_crossing__distance_range.first)
+          Level_crossing__distance_range.last)
+         temp___expr_177)
+    else true
+  
+  val dynamic_invariant (temp___expr_177: int) (temp___is_init_173: bool) (temp___skip_constant_174: bool) (temp___do_toplevel_175: bool) (temp___do_typ_inv_176: bool) : 
+    bool
+    ensures { result
+                <->
+                (((((dynamic_invariant (temp___expr_177 : int))
+                      (temp___is_init_173 : bool))
+                     (temp___skip_constant_174 : bool))
+                    (temp___do_toplevel_175 : bool))
+                   (temp___do_typ_inv_176 : bool)) }
+  
+  predicate default_initial_assumption (temp___expr_178: int) (temp___skip_top_level_179: bool) =
+    true
+  
+  val default_initial_assumption (temp___expr_178: int) (temp___skip_top_level_179: bool) : 
+    bool
+    ensures { result
+                <->
+                ((default_initial_assumption (temp___expr_178 : int))
+                   (temp___skip_top_level_179 : bool)) }
+end
+
+module Level_crossing__speed_range___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Level_crossing__speed_range as Level_crossing__speed_range
+  
+  predicate dynamic_invariant (temp___expr_184: int) (temp___is_init_180: bool) (temp___skip_constant_181: bool) (temp___do_toplevel_182: bool) (temp___do_typ_inv_183: bool) =
+    if ((temp___is_init_180 = True) \/
+          (Level_crossing__speed_range.first
+             <= Level_crossing__speed_range.last)) then
+      (((Level_crossing__speed_range.dynamic_property
+           Level_crossing__speed_range.first)
+          Level_crossing__speed_range.last)
+         temp___expr_184)
+    else true
+  
+  val dynamic_invariant (temp___expr_184: int) (temp___is_init_180: bool) (temp___skip_constant_181: bool) (temp___do_toplevel_182: bool) (temp___do_typ_inv_183: bool) : 
+    bool
+    ensures { result
+                <->
+                (((((dynamic_invariant (temp___expr_184 : int))
+                      (temp___is_init_180 : bool))
+                     (temp___skip_constant_181 : bool))
+                    (temp___do_toplevel_182 : bool))
+                   (temp___do_typ_inv_183 : bool)) }
+  
+  predicate default_initial_assumption (temp___expr_185: int) (temp___skip_top_level_186: bool) =
+    true
+  
+  val default_initial_assumption (temp___expr_185: int) (temp___skip_top_level_186: bool) : 
+    bool
+    ensures { result
+                <->
+                ((default_initial_assumption (temp___expr_185 : int))
+                   (temp___skip_top_level_186 : bool)) }
+end
+
+module Level_crossing__barrier_state_type___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use Level_crossing__barrier_state_type as Level_crossing__barrier_state_type
+  
+  predicate dynamic_invariant (temp___expr_191: int) (temp___is_init_187: bool) (temp___skip_constant_188: bool) (temp___do_toplevel_189: bool) (temp___do_typ_inv_190: bool) =
+    if ((temp___is_init_187 = True) \/
+          (Level_crossing__barrier_state_type.first
+             <= Level_crossing__barrier_state_type.last)) then
+      (((Level_crossing__barrier_state_type.dynamic_property
+           Level_crossing__barrier_state_type.first)
+          Level_crossing__barrier_state_type.last)
+         temp___expr_191)
+    else true
+  
+  val dynamic_invariant (temp___expr_191: int) (temp___is_init_187: bool) (temp___skip_constant_188: bool) (temp___do_toplevel_189: bool) (temp___do_typ_inv_190: bool) : 
+    bool
+    ensures { result
+                <->
+                (((((dynamic_invariant (temp___expr_191 : int))
+                      (temp___is_init_187 : bool))
+                     (temp___skip_constant_188 : bool))
+                    (temp___do_toplevel_189 : bool))
+                   (temp___do_typ_inv_190 : bool)) }
+  
+  predicate default_initial_assumption (temp___expr_192: int) (temp___skip_top_level_193: bool) =
+    true
+  
+  val default_initial_assumption (temp___expr_192: int) (temp___skip_top_level_193: bool) : 
+    bool
+    ensures { result
+                <->
+                ((default_initial_assumption (temp___expr_192 : int))
+                   (temp___skip_top_level_193 : bool)) }
+end
+
+module Level_crossing__train_info___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use Level_crossing__train_info as Level_crossing__train_info
+  
+  predicate dynamic_invariant (temp___expr_205: Level_crossing__train_info.train_info) (temp___is_init_201: bool) (temp___skip_constant_202: bool) (temp___do_toplevel_203: bool) (temp___do_typ_inv_204: bool) =
+    true
+  
+  val dynamic_invariant (temp___expr_205: Level_crossing__train_info.train_info) (temp___is_init_201: bool) (temp___skip_constant_202: bool) (temp___do_toplevel_203: bool) (temp___do_typ_inv_204: bool) : 
+    bool
+    ensures { result
+                <->
+                (((((dynamic_invariant
+                       (temp___expr_205 :
+                          Level_crossing__train_info.train_info))
+                      (temp___is_init_201 : bool))
+                     (temp___skip_constant_202 : bool))
+                    (temp___do_toplevel_203 : bool))
+                   (temp___do_typ_inv_204 : bool)) }
+  
+  predicate default_initial_assumption (temp___expr_206: Level_crossing__train_info.train_info) (temp___skip_top_level_207: bool) =
+    true
+  
+  val default_initial_assumption (temp___expr_206: Level_crossing__train_info.train_info) (temp___skip_top_level_207: bool) : 
+    bool
+    ensures { result
+                <->
+                ((default_initial_assumption
+                    (temp___expr_206 : Level_crossing__train_info.train_info))
+                   (temp___skip_top_level_207 : bool)) }
+end
+
+module Level_crossing__train_array___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  
+  predicate dynamic_invariant (temp___expr_215: Array__Int__Level_crossing__train_info.map) (temp___is_init_211: bool) (temp___skip_constant_212: bool) (temp___do_toplevel_213: bool) (temp___do_typ_inv_214: bool) =
+    true
+  
+  val dynamic_invariant (temp___expr_215: Array__Int__Level_crossing__train_info.map) (temp___is_init_211: bool) (temp___skip_constant_212: bool) (temp___do_toplevel_213: bool) (temp___do_typ_inv_214: bool) : 
+    bool
+    ensures { result
+                <->
+                (((((dynamic_invariant
+                       (temp___expr_215 :
+                          Array__Int__Level_crossing__train_info.map))
+                      (temp___is_init_211 : bool))
+                     (temp___skip_constant_212 : bool))
+                    (temp___do_toplevel_213 : bool))
+                   (temp___do_typ_inv_214 : bool)) }
+  
+  predicate default_initial_assumption (temp___expr_217: Array__Int__Level_crossing__train_info.map) (temp___skip_top_level_218: bool) =
+    true
+  
+  val default_initial_assumption (temp___expr_217: Array__Int__Level_crossing__train_info.map) (temp___skip_top_level_218: bool) : 
+    bool
+    ensures { result
+                <->
+                ((default_initial_assumption
+                    (temp___expr_217 :
+                       Array__Int__Level_crossing__train_info.map))
+                   (temp___skip_top_level_218 : bool)) }
+end
+
+module Level_crossing__status_system___axiom
+  use _gnatprove_standard.Main
+  use int.Int
+end
+
+module Level_crossing__read_sensor_status__subprogram_def
+  use _gnatprove_standard.Main
+  use int.Int
+  use int.Int
+  use _gnatprove_standard.Main as Main
+  use _gnatprove_standard.Boolean as Boolean
+  use Standard__integer___axiom as Standard__integer___axiom
+  use Standard__string as Standard__string
+  use Level_crossing__status_system as Level_crossing__status_system
+  use Level_crossing__status_system_type as Level_crossing__status_system_type
+  use Level_crossing__status_system_type___axiom as Level_crossing__status_system_type___axiom
+  use Level_crossing__train_info as Level_crossing__train_info
+  use Level_crossing__all_distances_valid as Level_crossing__all_distances_valid
+  use Level_crossing__all_distances_valid___axiom as Level_crossing__all_distances_valid___axiom
+  use Level_crossing__all_speeds_valid as Level_crossing__all_speeds_valid
+  use Level_crossing__all_speeds_valid___axiom as Level_crossing__all_speeds_valid___axiom
+  use As_io_wrapper__as_put_line___axiom as As_io_wrapper__as_put_line___axiom
+  use Level_crossing__read_sensor_status__fault_input as Level_crossing__read_sensor_status__fault_input
+  use As_io_wrapper__as_put__2___axiom as As_io_wrapper__as_put__2___axiom
+  use As_io_wrapper__as_get__2___axiom as As_io_wrapper__as_get__2___axiom
+  use Level_crossing__barrier_state_type as Level_crossing__barrier_state_type
+  use Level_crossing__barrier_state_type__rep as Level_crossing__barrier_state_type__rep
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  use Level_crossing__read_sensor_status__L_2 as Level_crossing__read_sensor_status__L_2
+  use Temp___String_Literal_398 as Temp___String_Literal_398
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Temp___String_Literal_400 as Temp___String_Literal_400
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Temp___String_Literal_402 as Temp___String_Literal_402
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Temp___String_Literal_405 as Temp___String_Literal_405
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Temp___String_Literal_407 as Temp___String_Literal_407
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Temp___String_Literal_412 as Temp___String_Literal_412
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Temp___String_Literal_414 as Temp___String_Literal_414
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Array__Int__Standard__character as Array__Int__Standard__character
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  use Array__Int__Level_crossing__train_info as Array__Int__Level_crossing__train_info
+  use Standard__integer___axiom as Standard__integer___axiom
+  use Standard__positive___axiom as Standard__positive___axiom
+  use Standard__character___axiom as Standard__character___axiom
+  use Standard__string___axiom as Standard__string___axiom
+  use Standard__integer___axiom as Standard__integer___axiom
+  use Level_crossing__read_sensor_status__fault_input___axiom as Level_crossing__read_sensor_status__fault_input___axiom
+  use Level_crossing__read_sensor_status__L_2___axiom as Level_crossing__read_sensor_status__L_2___axiom
+  use Level_crossing__distance_range___axiom as Level_crossing__distance_range___axiom
+  use Level_crossing__speed_range___axiom as Level_crossing__speed_range___axiom
+  use Level_crossing__barrier_state_type___axiom as Level_crossing__barrier_state_type___axiom
+  use Level_crossing__train_info___axiom as Level_crossing__train_info___axiom
+  use Level_crossing__train_array___axiom as Level_crossing__train_array___axiom
+  use Level_crossing__status_system_type___axiom as Level_crossing__status_system_type___axiom
+  use Level_crossing__status_system___axiom as Level_crossing__status_system___axiom
+  use Level_crossing__all_distances_valid___axiom as Level_crossing__all_distances_valid___axiom
+  use Level_crossing__all_speeds_valid___axiom as Level_crossing__all_speeds_valid___axiom
+  use As_io_wrapper__as_put__2___axiom as As_io_wrapper__as_put__2___axiom
+  use As_io_wrapper__as_put_line___axiom as As_io_wrapper__as_put_line___axiom
+  use As_io_wrapper__as_get__2___axiom as As_io_wrapper__as_get__2___axiom
+  
+  let def (__void_param : unit)
+    requires { [#"level_crossing.ads" 185 0 0] true }
+    ensures { [#"level_crossing.ads" 185 0 0]
+              [#"level_crossing.ads" 190 0 0]
+              [@GP_Id:11]
+              [@GP_Reason:VC_POSTCONDITION]
+              [@GP_Sloc:level_crossing.ads:190:17]
+              [@model_vc_post]
+              [@comment:     Post    => (for all T in Train_ID =>                 ^ level_crossing.ads:190:17:VC_POSTCONDITION]
+              [@GP_Shape:pragargs__and]
+              ((((forall t : int.
+                    ((((1 : int) <= t) /\ (t <= (3 : int))) ->
+                       ([@GP_Pretty_Ada:2053]
+                        [@GP_Sloc:level_crossing.ads:191:19]
+                        (((Level_crossing__train_info.bool_eq
+                             (let temp___426 =
+                                (Level_crossing__status_system_type.__split_fields
+                                    { Level_crossing__status_system_type.__split_fields =
+                                        (Level_crossing__status_system_type.__split_fields__content
+                                            Level_crossing__status_system.status_system__split_fields) }).
+                                  Level_crossing__status_system_type.rec__level_crossing__status_system_type__trains in
+                              (Array__Int__Level_crossing__train_info.get
+                                 temp___426)
+                                t))
+                            (let temp___427 =
+                               old ((Level_crossing__status_system_type.__split_fields
+                                        { Level_crossing__status_system_type.__split_fields =
+                                            (Level_crossing__status_system_type.__split_fields__content
+                                                Level_crossing__status_system.status_system__split_fields) }).
+                                      Level_crossing__status_system_type.rec__level_crossing__status_system_type__trains) in
+                             (Array__Int__Level_crossing__train_info.get
+                                temp___427)
+                               t))
+                           = True)))) /\
+                   ([@GP_Sloc:level_crossing.ads:192:17]
+                    [@GP_Pretty_Ada:2065]
+                    ((Level_crossing__barrier_state_type__rep.to_rep
+                        ((Level_crossing__status_system_type.__split_fields
+                             { Level_crossing__status_system_type.__split_fields =
+                                 (Level_crossing__status_system_type.__split_fields__content
+                                     Level_crossing__status_system.status_system__split_fields) }).
+                           Level_crossing__status_system_type.rec__level_crossing__status_system_type__barrier_state))
+                       = (Level_crossing__barrier_state_type__rep.to_rep
+                            (old ((Level_crossing__status_system_type.__split_fields
+                                      { Level_crossing__status_system_type.__split_fields =
+                                          (Level_crossing__status_system_type.__split_fields__content
+                                              Level_crossing__status_system.status_system__split_fields) }).
+                                    Level_crossing__status_system_type.rec__level_crossing__status_system_type__barrier_state)))))) /\
+                  ([@GP_Sloc:level_crossing.ads:193:17]
+                   [@GP_Pretty_Ada:2073]
+                   ((epsilon temp___result_430: bool.
+                       ((temp___result_430
+                           = (Level_crossing__all_distances_valid.all_distances_valid
+                                { Level_crossing__status_system_type.__split_fields =
+                                    (Level_crossing__status_system_type.__split_fields__content
+                                        Level_crossing__status_system.status_system__split_fields) })) /\
+                          ((Level_crossing__all_distances_valid.all_distances_valid__function_guard
+                              temp___result_430)
+                             { Level_crossing__status_system_type.__split_fields =
+                                 (Level_crossing__status_system_type.__split_fields__content
+                                     Level_crossing__status_system.status_system__split_fields) })))
+                      = True))) /\
+                 ([@GP_Pretty_Ada:2077]
+                  [@GP_Sloc:level_crossing.ads:194:17]
+                  ((epsilon temp___result_431: bool.
+                      ((temp___result_431
+                          = (Level_crossing__all_speeds_valid.all_speeds_valid
+                               { Level_crossing__status_system_type.__split_fields =
+                                   (Level_crossing__status_system_type.__split_fields__content
+                                       Level_crossing__status_system.status_system__split_fields) })) /\
+                         ((Level_crossing__all_speeds_valid.all_speeds_valid__function_guard
+                             temp___result_431)
+                            { Level_crossing__status_system_type.__split_fields =
+                                (Level_crossing__status_system_type.__split_fields__content
+                                    Level_crossing__status_system.status_system__split_fields) })))
+                     = True))) }
+  = [@vc:divergent]
+    (([@GNAT-comment:Assume dynamic invariants of inputs of the subprogram level_crossing.ads:185]
+      ());
+     assume {
+       ((((Level_crossing__status_system_type___axiom.dynamic_invariant
+             { Level_crossing__status_system_type.__split_fields =
+                 (Level_crossing__status_system_type.__split_fields__content
+                     Level_crossing__status_system.status_system__split_fields) })
+            True)
+           False)
+          True)
+         True };
+     ([@GNAT-comment:Assume moved pointers in outputs of the subprogram level_crossing.ads:185]
+      ());
+     ([@GNAT-comment:Check for RTE in the Pre of the subprogram level_crossing.ads:185]
+      ());
+     ([@GNAT-comment:Assume Pre of the subprogram level_crossing.ads:185] ());
+     (let temp___old_424 =
+        Level_crossing__barrier_state_type__rep.to_rep
+          ((Level_crossing__status_system_type.__split_fields
+               { Level_crossing__status_system_type.__split_fields =
+                   (Level_crossing__status_system_type.__split_fields__content
+                       Level_crossing__status_system.status_system__split_fields) }).
+             Level_crossing__status_system_type.rec__level_crossing__status_system_type__barrier_state) in
+      let temp___old_418 =
+        (Level_crossing__status_system_type.__split_fields
+            { Level_crossing__status_system_type.__split_fields =
+                (Level_crossing__status_system_type.__split_fields__content
+                    Level_crossing__status_system.status_system__split_fields) }).
+          Level_crossing__status_system_type.rec__level_crossing__status_system_type__trains in
+      (try
+         ([#"level_crossing.adb" 49 0 0]
+          (([#"level_crossing.adb" 49 0 0]
+            assume {
+              [#"level_crossing.adb" 49 0 0]
+              ((Standard__integer___axiom.default_initial_assumption
+                  (Level_crossing__read_sensor_status__fault_input.fault_input.int__content))
+                 False) });
+           ([#"level_crossing.adb" 49 0 0]
+            assume {
+              [#"level_crossing.adb" 49 0 0]
+              (((((Standard__integer___axiom.dynamic_invariant
+                     (Level_crossing__read_sensor_status__fault_input.fault_input.int__content))
+                    False)
+                   False)
+                  True)
+                 True) })));
+         ([#"level_crossing.adb" 55 0 0] ());
+         ([@GP_Sloc:level_crossing.adb:51:7]
+          [#"level_crossing.adb" 51 0 0] ());
+         ([@GP_Sloc:level_crossing.adb:51:7]
+          [#"level_crossing.adb" 51 0 0]
+          (([#"level_crossing.adb" 51 0 0] (val _f : unit in
+                                            _f));
+           (As_io_wrapper__as_put_line___axiom.as_put_line
+              (let temp___399 =
+                 Temp___String_Literal_398.temp___String_Literal_398 () in
+               ((Standard__string.of_array temp___399) (1 : int)) (0 : int)))));
+         ([@GP_Sloc:level_crossing.adb:52:7]
+          [#"level_crossing.adb" 52 0 0] ());
+         ([@GP_Sloc:level_crossing.adb:52:7]
+          [#"level_crossing.adb" 52 0 0]
+          (([#"level_crossing.adb" 52 0 0] (val _f : unit in
+                                            _f));
+           (As_io_wrapper__as_put_line___axiom.as_put_line
+              (let temp___401 =
+                 Temp___String_Literal_400.temp___String_Literal_400 () in
+               ((Standard__string.of_array temp___401) (1 : int)) (27 : int)))));
+         ([@GP_Sloc:level_crossing.adb:53:7]
+          [#"level_crossing.adb" 53 0 0] ());
+         ([@GP_Sloc:level_crossing.adb:53:7]
+          [#"level_crossing.adb" 53 0 0]
+          (([#"level_crossing.adb" 53 0 0] (val _f : unit in
+                                            _f));
+           (As_io_wrapper__as_put__2___axiom.as_put
+              (let temp___403 =
+                 Temp___String_Literal_402.temp___String_Literal_402 () in
+               ((Standard__string.of_array temp___403) (1 : int)) (56 : int)))));
+         ([@GP_Sloc:level_crossing.adb:55:7]
+          [#"level_crossing.adb" 55 0 0]
+          (([@GNAT-comment:Translation of an Ada loop from level_crossing.adb:55]
+            ());
+           (if True then
+              ([#"level_crossing.adb" 55 0 0]
+               (try
+                  ([@GNAT-comment:While loop translating the Ada loop from level_crossing.adb:55]
+                   ());
+                  ([#"level_crossing.adb" 55 0 0]
+                   [#"level_crossing.adb" 55 0 0]
+                   (([@GNAT-comment:Check for absence of RTE in the loop invariant and variant]
+                     ());
+                    while True do
+                      ([@GNAT-comment:gnat_ast_to_ptree: code after the loop invariant]
+                       (([@GNAT-comment:Assume implicit invariants from the loop level_crossing.adb:55]
+                         ());
+                        ([#"level_crossing.adb" 55 0 0]
+                         assume {
+                           [#"level_crossing.adb" 55 0 0]
+                           ((true /\
+                               (((((Standard__integer___axiom.dynamic_invariant
+                                      (Level_crossing__read_sensor_status__fault_input.fault_input.int__content))
+                                     False)
+                                    True)
+                                   True)
+                                  True)) /\
+                              (true /\ true)) });
+                        ([@GNAT-comment:Continuation of loop after loop invariant and variant]
+                         ());
+                        ([@GP_Sloc:level_crossing.adb:56:17]
+                         [#"level_crossing.adb" 56 0 0] ());
+                        ([@GP_Sloc:level_crossing.adb:56:10]
+                         [#"level_crossing.adb" 56 0 0] ());
+                        ([@GP_Sloc:level_crossing.adb:56:10]
+                         [#"level_crossing.adb" 56 0 0]
+                         (let temp___compl_404 =
+                            Level_crossing__read_sensor_status__fault_input.fault_input.int__content in
+                          ([#"level_crossing.adb" 56 0 0]
+                           (val _f : unit in
+                            _f));
+                          ((As_io_wrapper__as_get__2___axiom.as_get
+                              Level_crossing__read_sensor_status__fault_input.fault_input)
+                             (let temp___406 =
+                                Temp___String_Literal_405.temp___String_Literal_405
+                                  () in
+                              ((Standard__string.of_array temp___406)
+                                 (1 : int))
+                                (37 : int)))));
+                        ([@GP_Sloc:level_crossing.adb:57:21]
+                         [#"level_crossing.adb" 57 0 0] ());
+                        ([@GP_Sloc:level_crossing.adb:57:42]
+                         [#"level_crossing.adb" 57 0 0] ());
+                        ([@GP_Sloc:level_crossing.adb:57:10]
+                         [#"level_crossing.adb" 57 0 0]
+                         (if ((Boolean.orb
+                                 ((Level_crossing__read_sensor_status__fault_input.fault_input.int__content)
+                                    = (0 : int)))
+                                ((Level_crossing__read_sensor_status__fault_input.fault_input.int__content)
+                                   = (1 : int))) then
+                            ([#"level_crossing.adb" 57 0 0]
+                             (raise Level_crossing__read_sensor_status__L_2.L_2))
+                          else ()));
+                        ([@GP_Sloc:level_crossing.adb:58:10]
+                         [#"level_crossing.adb" 58 0 0] ());
+                        ([@GP_Sloc:level_crossing.adb:58:10]
+                         [#"level_crossing.adb" 58 0 0]
+                         (([#"level_crossing.adb" 58 0 0]
+                           (val _f : unit in
+                            _f));
+                          (As_io_wrapper__as_put_line___axiom.as_put_line
+                             (let temp___408 =
+                                Temp___String_Literal_407.temp___String_Literal_407
+                                  () in
+                              ((Standard__string.of_array temp___408)
+                                 (1 : int))
+                                (57 : int)))));
+                        ([@GNAT-comment:Check for the exit condition and loop statements appearing before the loop invariant of loop level_crossing.adb:55]
+                         ());
+                        (if False then
+                           (raise Level_crossing__read_sensor_status__L_2.L_2)
+                         else ())));
+                      ([@GNAT-comment:gnat_ast_to_ptree: code before the loop invariant]
+                       [@GNAT-comment:Check for absence of RTE in the loop invariant and variant]
+                       ());
+                      ([@GNAT-comment:gnat_ast_to_ptree: code checking the variants]
+                       ())
+                    done))
+                with Level_crossing__read_sensor_status__L_2.L_2 -> ()
+                end))
+            else ())));
+         ([@GP_Sloc:level_crossing.adb:61:7]
+          [#"level_crossing.adb" 61 0 0] ());
+         ([@GP_Sloc:level_crossing.adb:61:38]
+          [#"level_crossing.adb" 61 0 0] ());
+         ([@GP_Sloc:level_crossing.adb:61:34]
+          [#"level_crossing.adb" 61 0 0]
+          (let temp___411 =
+             let temp___410 =
+               { Level_crossing__status_system_type.__split_fields =
+                   (Level_crossing__status_system_type.__split_fields__content
+                       Level_crossing__status_system.status_system__split_fields) } in
+             ([#"level_crossing.adb" 61 0 0]
+              (begin
+                 ensures { true }
+                 let _ =
+                   let _ =
+                     (Level_crossing__status_system_type.__split_fields
+                         temp___410).Level_crossing__status_system_type.rec__level_crossing__status_system_type__sensor_fault in
+                   () in
+                 ()
+               end));
+             ({ temp___410 with
+                Level_crossing__status_system_type.__split_fields =
+                  ({ (Level_crossing__status_system_type.__split_fields
+                         temp___410) with
+                     Level_crossing__status_system_type.rec__level_crossing__status_system_type__sensor_fault =
+                       ((Level_crossing__read_sensor_status__fault_input.fault_input.int__content)
+                          = (0 : int)) }) }) in
+           [#"level_crossing.adb" 61 0 0]
+           (Level_crossing__status_system.status_system__split_fields.
+              Level_crossing__status_system_type.__split_fields__content <-
+              (Level_crossing__status_system_type.__split_fields temp___411))));
+         ([@GP_Sloc:level_crossing.adb:63:10]
+          [#"level_crossing.adb" 63 0 0] ());
+         ([@GP_Sloc:level_crossing.adb:63:7]
+          [#"level_crossing.adb" 63 0 0]
+          (if (([#"level_crossing.adb" 63 0 0]
+                [#"level_crossing.adb" 63 0 0]
+                (([@branch_id=976] Main.spark__branch).bool__content <-
+                   ((Level_crossing__status_system_type.__split_fields
+                        { Level_crossing__status_system_type.__split_fields =
+                            (Level_crossing__status_system_type.__split_fields__content
+                                Level_crossing__status_system.status_system__split_fields) }).
+                      Level_crossing__status_system_type.rec__level_crossing__status_system_type__sensor_fault)));
+               (([@branch_id=976] Main.spark__branch).bool__content)) then
+             (([@GP_Sloc:level_crossing.adb:64:10]
+               [#"level_crossing.adb" 64 0 0] ());
+              ([@GP_Sloc:level_crossing.adb:64:10]
+               [#"level_crossing.adb" 64 0 0]
+               (([#"level_crossing.adb" 64 0 0] (val _f : unit in
+                                                 _f));
+                (As_io_wrapper__as_put_line___axiom.as_put_line
+                   (let temp___413 =
+                      Temp___String_Literal_412.temp___String_Literal_412 () in
+                    ((Standard__string.of_array temp___413) (1 : int))
+                      (46 : int))))))
+           else
+             (([@GP_Sloc:level_crossing.adb:66:10]
+               [#"level_crossing.adb" 66 0 0] ());
+              ([@GP_Sloc:level_crossing.adb:66:10]
+               [#"level_crossing.adb" 66 0 0]
+               (([#"level_crossing.adb" 66 0 0] (val _f : unit in
+                                                 _f));
+                (As_io_wrapper__as_put_line___axiom.as_put_line
+                   (let temp___415 =
+                      Temp___String_Literal_414.temp___String_Literal_414 () in
+                    ((Standard__string.of_array temp___415) (1 : int))
+                      (20 : int))))))));
+         (raise Return__exc)
+       with Return__exc -> ()
+       end);
+      (begin
+         ensures { true }
+         let _ =
+           let _ =
+             (Boolean.andb
+                ((Boolean.andb
+                    ((Boolean.andb
+                        ((let t = val _f : int in
+                                  _f in
+                          if ((Boolean.andb ((1 : int) <= t))
+                                (t <= (3 : int))) then
+                            (begin
+                               ensures { true }
+                               let _ =
+                                 let _ =
+                                   (Level_crossing__train_info.bool_eq
+                                      (let temp___417 =
+                                         (Level_crossing__status_system_type.__split_fields
+                                             { Level_crossing__status_system_type.__split_fields =
+                                                 (Level_crossing__status_system_type.__split_fields__content
+                                                     Level_crossing__status_system.status_system__split_fields) }).
+                                           Level_crossing__status_system_type.rec__level_crossing__status_system_type__trains in
+                                       (Array__Int__Level_crossing__train_info.get
+                                          temp___417)
+                                         t))
+                                     ((Array__Int__Level_crossing__train_info.get
+                                         temp___old_418)
+                                        t) in
+                                 () in
+                               ()
+                             end)
+                          else ());
+                         (val _f : bool
+                            ensures { ((result = True) <->
+                                         (forall t : int.
+                                            ((((1 : int) <= t) /\
+                                                (t <= (3 : int))) ->
+                                               ([@GP_Pretty_Ada:2053]
+                                                (((Level_crossing__train_info.bool_eq
+                                                     (let temp___421 =
+                                                        (Level_crossing__status_system_type.__split_fields
+                                                            { Level_crossing__status_system_type.__split_fields =
+                                                                (Level_crossing__status_system_type.__split_fields__content
+                                                                    Level_crossing__status_system.status_system__split_fields) }).
+                                                          Level_crossing__status_system_type.rec__level_crossing__status_system_type__trains in
+                                                      (Array__Int__Level_crossing__train_info.get
+                                                         temp___421)
+                                                        t))
+                                                    ((Array__Int__Level_crossing__train_info.get
+                                                        temp___old_418)
+                                                       t))
+                                                   = True))))) } in
+                          _f)))
+                       ((Level_crossing__barrier_state_type__rep.to_rep
+                           ((Level_crossing__status_system_type.__split_fields
+                                { Level_crossing__status_system_type.__split_fields =
+                                    (Level_crossing__status_system_type.__split_fields__content
+                                        Level_crossing__status_system.status_system__split_fields) }).
+                              Level_crossing__status_system_type.rec__level_crossing__status_system_type__barrier_state))
+                          = temp___old_424)))
+                   (Level_crossing__all_distances_valid___axiom.all_distances_valid
+                      { Level_crossing__status_system_type.__split_fields =
+                          (Level_crossing__status_system_type.__split_fields__content
+                              Level_crossing__status_system.status_system__split_fields) })))
+               (Level_crossing__all_speeds_valid___axiom.all_speeds_valid
+                  { Level_crossing__status_system_type.__split_fields =
+                      (Level_crossing__status_system_type.__split_fields__content
+                          Level_crossing__status_system.status_system__split_fields) }) in
+           () in
+         ()
+       end)))
+end

@@ -1,0 +1,31 @@
+Summary of SPARK analysis
+=========================
+
+---------------------------------------------------------------------------------------------
+SPARK Analysis results        Total      Flow   CodePeer      Provers   Justified    Unproved
+---------------------------------------------------------------------------------------------
+Data Dependencies                 .         .          .            .           .           .
+Flow Dependencies                 1         1          .            .           .           .
+Initialization                    3         3          .            .           .           .
+Non-Aliasing                      .         .          .            .           .           .
+Run-time Checks                  34         .          .    19 (CVC4)           .          15
+Assertions                        7         .          .     4 (CVC4)           .           3
+Functional Contracts              1         .          .     1 (CVC4)           .           .
+LSP Verification                  .         .          .            .           .           .
+Termination                       .         .          .            .           .           .
+Concurrency                       .         .          .            .           .           .
+---------------------------------------------------------------------------------------------
+Total                            46    4 (9%)          .     24 (52%)           .    18 (39%)
+
+
+max steps used for successful proof: 1
+
+Analyzed 3 units
+in unit gcd_verified_contracts, 2 subprograms and packages out of 2 analyzed
+  GCD_Verified_Contracts at gcd_verified_contracts.ads:3 flow analyzed (0 errors, 0 checks and 0 warnings) and proved (0 checks)
+  GCD_Verified_Contracts.Euclid_GCD_Verified at gcd_verified_contracts.ads:4 flow analyzed (0 errors, 0 checks and 0 warnings) and not proved, 24 checks out of 42 proved
+in unit main, 0 subprograms and packages out of 1 analyzed
+  Main at main.adb:5 skipped
+in unit spark, 1 subprograms and packages out of 2 analyzed
+  SPARK at spark.ads:29 flow analyzed (0 errors, 0 checks and 0 warnings) and proved (0 checks)
+  SPARK.Text_IO_File_Type at spark.ads:53 skipped

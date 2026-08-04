@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · Global Overwatch Elo{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div>
+    <h1>Operations Dashboard</h1>
+    <p>Local match ingestion, player identity, and Elo rebuild status.</p>
+  </div>
+  <form method="post" action="/imports/owcs">
+    <button type="submit">Import OWCS Workbook</button>
+  </form>
+</header>
+
+{% if notice %}<div class="notice">{{ notice }}</div>{% endif %}
+
+<section class="metrics">
+  <div><span>{{ stats.players }}</span><label>Players</label></div>
+  <div><span>{{ stats.approved_matches }}</span><label>Approved Matches</label></div>
+  <div><span>{{ stats.pending_matches }}</span><label>Pending Imports</label></div>
+  <div><span>{{ stats.issues }}</span><label>Open Issues</label></div>
+</section>
+
+<section class="split">
+  <div>
+    <h2>Rating Leaders</h2>
+    <table>
+      <thead><tr><th>Player</th><th>Rating</th><th>Matches</th></tr></thead>
+      <tbody>
+      {% for player in leaders %}
+        <tr><td>{{ player.canonical_name }}</td><td>{{ "%.1f"|format(player.current_rating) }}</td><td>{{ player.match_count }}</td></tr>
+      {% else %}
+        <tr><td colspan="3" class="empty">No players yet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <h2>Latest Matches</h2>
+    <table>
+      <thead><tr><th>Date</th><th>Event</th><th>Score</th><th>Status</th></tr></thead>
+      <tbody>
+      {% for match in latest %}
+        <tr><td>{{ match.match_datetime }}</td><td>{{ match.competition_name }}</td><td>{{ match.side_a_score }}-{{ match.side_b_score }}</td><td><span class="pill">{{ match.status }}</span></td></tr>
+      {% else %}
+        <tr><td colspan="4" class="empty">No matches yet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+# AI-KOS v1.5 — Knowledge Database Configuration
+
+qdrant:
+  host: localhost
+  port: 6333
+  collection: ai_kos
+
+embedding:
+  dense_model: nomic-embed-text
+  dense_dim: 768
+
+paths:
+  knowledge_dir: knowledge
+  inbox_dir: inbox
+  archive_dir: archive
+  rejected_dir: rejected
+  projects_dir: projects
+  templates_dir: templates
+
+linking:
+  min_keyword_overlap: 3
+  merge_threshold: 0.80
+
+article:
+  max_paragraphs: 5
+  min_keywords: 3
+  max_keywords: 8
+  summary_max_chars: 300
+
+logging:
+  level: INFO
+  file: logs/ai-kos.log

@@ -1,0 +1,19 @@
+[GENERATED OBJECT FILE]
+b__hello.o
+[PROJECT FILES]
+C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Hello Ada\hello.gpr
+20251111224640 675a27b806c552fffbfc94139187b388
+[BOUND OBJECT FILES]
+C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Hello Ada\obj\hello.o
+[GENERATED SOURCE FILES]
+b__hello.ads
+b__hello.adb
+b__hello.ali
+[RESULTING OPTIONS]
+-LC:\Users\zacha\Documents\Year 3 Swansea\CS-313\Hello Ada\obj\
+-LC:\Users\zacha\Documents\Year 3 Swansea\CS-313\Hello Ada\obj\
+-LC:/gnat/2021/lib/gcc/x86_64-w64-mingw32/10.3.1/adalib/
+-static
+-static-libgcc
+C:/gnat/2021/lib/gcc/x86_64-w64-mingw32/10.3.1/adalib/libgnat.a
+-Wl,--stack=0x2000000

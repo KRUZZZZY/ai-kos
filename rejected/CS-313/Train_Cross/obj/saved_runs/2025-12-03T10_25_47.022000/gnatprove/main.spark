@@ -1,0 +1,113 @@
+{
+  "spark": [
+    {
+      "name": "Main",
+      "sloc": [
+        {
+          "file": "main.ads",
+          "line": 3
+        }
+      ],
+      "spark": "all"
+    }
+  ],
+  "flow": [
+  ],
+  "assumptions": [
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Init",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 164
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 145
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Monitor_Level_Crossing",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 212
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Print_Status",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 234
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Read_Sensor_Status",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 180
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Read_Train_Data",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 193
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Main",
+          "sloc": [
+            {
+              "file": "main.ads",
+              "line": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "timings": {
+    "globals (advanced)": 1.64154991507530E-02,
+    "flow analysis": 1.99749995954335E-03,
+    "marking": 1.74899992998689E-04,
+    "properties (advanced)": 1.22600002214313E-04,
+    "globals (basic)": 1.33309997618198E-02
+  }
+}

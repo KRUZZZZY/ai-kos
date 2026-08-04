@@ -1,0 +1,46 @@
+constant x : integer
+  
+  axiom H : to_int x = 0
+  
+  goal WP_parameter_def :
+    ((let o = to_int x + 1 in
+      in_range o &&
+       (forall o1:integer.
+         to_int o1 = o -> (forall x1:integer. x1 = o1 -> to_int x1 = 1))) /\
+      (forall x1:integer.
+        to_int x1 = 1 -> (let o = to_int x1 + 1 in
+         in_range o &&
+          (forall o1:integer.
+            to_int o1 = o -> (forall x2:integer. x2 = o1 -> to_int x2 = 2))))) /\
+     (forall x1:integer.
+       to_int x1 = 2 -> (let o = to_int x1 + 1 in
+        in_range o &&
+         (forall o1:integer.
+           to_int o1 = o -> (forall x2:integer. x2 = o1 -> to_int x2 = 3))))
+end
+
+
+simplification omitting to_int, in_range
+
+C1 : x = 0
+C2 : o = x + 1
+C3 : o1 = o
+C4 : x1 = o1
+-> 
+H1 : x1 = 1
+
+C1 : x1 = 1
+C2 : o = x1 + 1
+C3 : o1 = o
+C4 : x2 = o1
+-> 
+H2 : x2 = 2
+
+
+C1 : x1 = 2
+C2 : o = x1 + 1
+C3 : o1 = o
+C4 : x2 = o1
+-> 
+H2 : x2 = 3
+

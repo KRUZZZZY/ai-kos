@@ -1,0 +1,159 @@
+name: mission
+version: 1.0.0
+description: Project building block — defines what a project is, why it exists, how it will be built, and what success looks
+  like. The highest-level planning article. Each project should have exactly one mission article.
+use_when:
+- Starting a new project
+- Defining the scope and purpose of an existing project
+- Creating a project charter or design document
+- Deciding whether to pursue a project idea
+ai_prompt: Describe a project mission. State its purpose in one clear sentence. Explain the architecture — how it will be
+  built, what technologies, what the data flow looks like (~5 paragraphs). List all dependencies (other projects, tools, services).
+  Define success criteria — concrete, measurable outcomes that mean the project is done. Be ambitious but realistic.
+fields:
+  id:
+    type: uuid
+    required: true
+    desc: Auto-generated UUID
+    example: 550e8400-e29b-41d4-a716-446655440000
+  title:
+    type: string
+    required: true
+    desc: Article title, 1-200 chars
+    constraint: max 200 chars
+    example: How to Configure Qdrant for Hybrid Search
+  slug:
+    type: kebab-case
+    required: true
+    desc: URL-safe identifier, lowercase alphanumeric + hyphens
+    constraint: 'pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$'
+    example: qdrant-hybrid-search-config
+  created_at:
+    type: date
+    required: true
+    desc: Creation date (ISO 8601)
+    example: '2026-08-04'
+  updated_at:
+    type: date
+    required: true
+    desc: Last modification date
+    example: '2026-08-04'
+  reviewed_at:
+    type: date
+    required: true
+    desc: Last review date
+    example: '2026-08-04'
+  next_review_at:
+    type: date
+    required: true
+    desc: Next scheduled review
+    constraint: must be >= updated_at
+    example: '2026-11-04'
+  stability:
+    type: enum
+    required: true
+    desc: How stable this knowledge is
+    values:
+    - stable
+    - moderate
+    - volatile
+    default: moderate
+  sensitivity_label:
+    type: enum
+    required: true
+    desc: Access control label
+    values:
+    - public
+    - internal
+    - confidential
+    - restricted
+    default: internal
+  keywords:
+    type: list[string]
+    required: true
+    desc: 3-8 lowercase keywords for auto-linking. Choose words other related articles would also use.
+    constraint: 3-8 items, all lowercase, no duplicates
+    example:
+    - qdrant
+    - hybrid-search
+    - configuration
+    - vectors
+    - retrieval
+  summary:
+    type: string
+    required: true
+    desc: 1-2 sentence description, shown in search results
+    constraint: max 300 chars
+    example: Step-by-step guide to configuring Qdrant for hybrid dense+sparse vector search with RRF fusion.
+  related:
+    type: list[string]
+    required: false
+    desc: Slugs of related articles — auto-managed by linker. Do not set manually.
+    constraint: managed by linker, >=3 shared keywords triggers auto-link
+  provenance:
+    type: list[string]
+    required: true
+    desc: Original source file paths or URLs
+    constraint: at least 1 entry
+    example:
+    - docs.qdrant.tech/hybrid-search
+    - session-2026-08-04-research
+  ai_notes:
+    type: string
+    required: false
+    desc: Private agent workspace, not shown to humans. Use for uncertainty, TODOs, merge notes.
+  retrieval_count:
+    type: integer
+    required: false
+    desc: Times this article was retrieved. Auto-incremented.
+    default: 0
+  type:
+    type: enum
+    required: true
+    desc: Article type
+    value: mission
+  project:
+    type: string
+    required: true
+    desc: The project name. One mission article per project.
+    example: AI-KOS
+  purpose:
+    type: string
+    required: true
+    desc: Why this project exists, in one sentence.
+    example: Build a self-building knowledge database where any file can be dropped in, automatically simplified into concise
+      linked articles, and queried via full-text search and TF-IDF similarity comparison.
+  architecture:
+    type: string
+    required: true
+    desc: How the project will be built. ~5 paragraphs covering layers, data flow, tech stack.
+    example: 'AI-KOS has four layers: (1) Ingestion — parses any file format (PDF, DOCX, MD, TXT, code) and extracts raw text
+      using Docling or built-in readers. (2) Knowledge Store — articles stored as .md files with YAML frontmatter in a structured
+      directory. Each article follows one of 7 typed templates. (3) Auto-Linker — scans all articles, creates [[wikilinks]]
+      between pairs sharing >=3 keywords. Detects merge candidates at >80% keyword overlap. (4) Search — in-memory TF-IDF
+      index with full-text search, snippet extraction, type filtering, and similarity comparison. Exposed as MCP tools for
+      Hermes integration. Obsidian-compatible vault for graph visualization.'
+  dependencies:
+    type: list[string]
+    required: false
+    desc: Other missions, tools, or services this project depends on.
+    example:
+    - Hermes agent (MCP server host)
+    - Python 3.11+ with pydantic, pyyaml
+    - 'Optional: Qdrant for vector search, Docling for PDF parsing'
+    - 'Optional: Obsidian for graph visualization'
+  success_criteria:
+    type: list[string]
+    required: false
+    desc: Concrete, measurable outcomes that mean the project succeeded.
+    example:
+    - Drop a PDF in inbox/ → Hermes creates a linked .md article within 30 seconds
+    - Auto-linker connects articles with >=3 shared keywords without manual intervention
+    - Search returns relevant results with snippets for natural language queries
+    - Compare finds the most similar articles to prevent duplicate creation
+    - Knowledge graph is viewable in Obsidian with colored nodes by type
+stress_points:
+- purpose is vague or aspirational → make it concrete and measurable
+- architecture is one sentence → expand to ~5 paragraphs covering all layers
+- dependencies list is empty → valid but incomplete
+- two mission articles for the same project → merge them or delete one

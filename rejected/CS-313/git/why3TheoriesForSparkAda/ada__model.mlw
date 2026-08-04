@@ -1,0 +1,1640 @@
+module Discrete_Base
+  (* The module that is used as basis for all discrete types. It contains the
+    whole discrete theory, except the coerce_axiom which differs between
+    modular and non-modular types, and range-related functions and axioms which
+    differ between "static" and "dynamic" discrete types. *)
+
+  use import "_gnatprove_standard".Main
+  use        "_gnatprove_standard".Integer
+
+  type rep_type
+
+  type __split = rep_type
+
+  function bool_eq (x : rep_type) (y : rep_type) : bool =
+    if x = y then True else False
+
+  type t
+
+  function attr__ATTRIBUTE_IMAGE rep_type : __image
+
+  predicate attr__ATTRIBUTE_VALUE__pre_check (x : __image)
+
+  function attr__ATTRIBUTE_VALUE __image : rep_type
+
+  val attr__ATTRIBUTE_VALUE_ (x : __image) : rep_type
+    requires { attr__ATTRIBUTE_VALUE__pre_check x }
+    ensures { true }
+
+  function to_rep t : rep_type
+
+  function of_rep rep_type : t
+
+  val of_rep (x : rep_type) : t
+    requires { true }
+    ensures { to_rep(result) = x }
+
+  function user_eq (x : t) (y : t) : bool
+
+  function dummy : t
+end
+
+module Static_Discrete_Base
+  (* The module that is used as basis for all "static" discrete types.
+     It contains the whole discrete theory, except the coerce_axiom which
+     differs between modular and non-modular types. "Static" here means that
+     Why only sees a static version of the type, with constants for the bounds,
+     even though this might correspond to dynamic types in Ada. *)
+
+  clone export Discrete_Base
+
+  function first : rep_type
+
+  function last  : rep_type
+
+  axiom inversion_axiom  :
+    forall x : t [to_rep x].
+    of_rep (to_rep (x)) = x
+
+  val check_not_last (n : rep_type) : rep_type
+    requires { n <> last }
+    ensures { result = n /\ n <> last}
+
+  val check_not_first (n : rep_type) : rep_type
+    requires { n <> first }
+    ensures { result = n /\ n <> first}
+
+  predicate in_range (x : rep_type)
+
+  val range_check_ (n : rep_type) : rep_type
+    requires { in_range n }
+    ensures { result = n /\ in_range n}
+
+  axiom range_axiom :
+    forall x : t. in_range (to_rep x)
+
+  predicate dynamic_property "inline" (f l x : rep_type) = in_range x
+end
+
+module Static_Discrete
+  use import int.Int
+
+  clone export Static_Discrete_Base with
+    type rep_type = int
+
+  axiom coerce_axiom :
+    forall x  : int [to_rep (of_rep x)].
+      in_range x -> to_rep (of_rep x) = x
+end
+
+module Static_Modular_Base
+  use import int.Int
+
+  clone export Static_Discrete_Base
+
+  (* for conversions from int to bitvectors, we need to be able to do
+     the range check directly in int. *)
+  predicate in_range_int int
+
+  function rep_to_int rep_type : int
+
+  function to_int (x : t) : int = rep_to_int (to_rep x) (* used for modular indexed arrays cloning *)
+
+  val range_check_int_ (n : int) : int
+    requires { in_range_int n }
+    ensures { result = n /\ in_range_int n }
+
+  axiom range_int_axiom :
+    forall x : t. in_range_int (to_int x)
+
+  predicate dynamic_property_int "inline" (f l x : int) = in_range_int x
+end
+
+module Static_Modular_lt64
+  use _gnatprove_standard.BV64
+  type rep_type = BV64.t
+
+  function rep_to_int "inline" (x : rep_type) : int = BV64.to_uint x
+
+  clone export Static_Modular_Base with
+    type rep_type = rep_type,
+    function rep_to_int = rep_to_int
+
+  function attr__ATTRIBUTE_MODULUS : rep_type
+
+  axiom coerce_axiom :
+    forall x : rep_type [to_rep (of_rep x)].
+      let y = BV64.urem x attr__ATTRIBUTE_MODULUS in
+        in_range y -> to_rep (of_rep x) = y
+end
+
+module Static_Modular_64
+  use _gnatprove_standard.BV64
+  type rep_type = BV64.t
+
+  function rep_to_int "inline" (x : rep_type) : int = BV64.to_uint x
+
+  clone export Static_Modular_Base with
+    type rep_type = rep_type,
+    function rep_to_int = rep_to_int
+
+  axiom coerce_axiom :
+    forall x : rep_type [to_rep (of_rep x)].
+      to_rep (of_rep x) = x
+end
+
+module Static_Modular_lt32
+  use _gnatprove_standard.BV32
+  type rep_type = BV32.t
+
+  function rep_to_int "inline" (x : rep_type) : int = BV32.to_uint x
+
+  clone export Static_Modular_Base with
+    type rep_type = rep_type,
+    function rep_to_int = rep_to_int
+
+  function attr__ATTRIBUTE_MODULUS : rep_type
+
+  axiom coerce_axiom :
+    forall x : rep_type [to_rep (of_rep x)].
+      let y = BV32.urem x attr__ATTRIBUTE_MODULUS in
+        in_range y -> to_rep (of_rep x) = y
+end
+
+module Static_Modular_32
+  use _gnatprove_standard.BV32
+  type rep_type = BV32.t
+
+  function rep_to_int "inline" (x : rep_type) : int = BV32.to_uint x
+
+  clone export Static_Modular_Base with
+    type rep_type = rep_type,
+    function rep_to_int = rep_to_int
+
+  axiom coerce_axiom :
+    forall x : rep_type [to_rep (of_rep x)].
+      to_rep (of_rep x) = x
+end
+
+module Static_Modular_lt16
+  use _gnatprove_standard.BV16
+  type rep_type = BV16.t
+
+  function rep_to_int "inline" (x : rep_type) : int = BV16.to_uint x
+
+  clone export Static_Modular_Base with
+    type rep_type = rep_type,
+    function rep_to_int = rep_to_int
+
+  function attr__ATTRIBUTE_MODULUS : rep_type
+
+  axiom coerce_axiom :
+    forall x : rep_type [to_rep (of_rep x)].
+      let y = BV16.urem x attr__ATTRIBUTE_MODULUS in
+        in_range y -> to_rep (of_rep x) = y
+end
+
+module Static_Modular_16
+  use _gnatprove_standard.BV16
+  type rep_type = BV16.t
+
+  function rep_to_int "inline" (x : rep_type) : int = BV16.to_uint x
+
+  clone export Static_Modular_Base with
+    type rep_type = rep_type,
+    function rep_to_int = rep_to_int
+
+  axiom coerce_axiom :
+    forall x : rep_type [to_rep (of_rep x)].
+      to_rep (of_rep x) = x
+end
+
+module Static_Modular_lt8
+  use _gnatprove_standard.BV8
+  type rep_type = BV8.t
+
+  function rep_to_int "inline" (x : rep_type) : int = BV8.to_uint x
+
+  clone export Static_Modular_Base with
+    type rep_type = rep_type,
+    function rep_to_int = rep_to_int
+
+  function attr__ATTRIBUTE_MODULUS : rep_type
+
+  axiom coerce_axiom :
+    forall x : rep_type [to_rep (of_rep x)].
+      let y = BV8.urem x attr__ATTRIBUTE_MODULUS in
+        in_range y -> to_rep (of_rep x) = y
+end
+
+module Static_Modular_8
+  use _gnatprove_standard.BV8
+  type rep_type = BV8.t
+
+  function rep_to_int "inline" (x : rep_type) : int = BV8.to_uint x
+
+  clone export Static_Modular_Base with
+    type rep_type = rep_type,
+    function rep_to_int = rep_to_int
+
+  axiom coerce_axiom :
+    forall x  : rep_type [to_rep (of_rep x)].
+      to_rep (of_rep x) = x
+end
+
+module Dynamic_Discrete
+  type rep_type
+  type t
+
+  (* To be instantiated with functions from the Ada base type *)
+  function base_to_rep t : rep_type
+  function base_of_rep rep_type : t
+
+  function to_rep "inline" (x : t) : rep_type = base_to_rep x
+  function of_rep "inline" (x : rep_type) : t = base_of_rep x
+
+  clone export Discrete_Base
+      with type t = t,
+      type rep_type = rep_type,
+      function of_rep = of_rep,
+      function to_rep = to_rep
+
+  predicate dynamic_property (first last n : rep_type)
+
+  val check_not_last (first last n : rep_type) : rep_type
+    requires { n <> last }
+    ensures { result = n /\ n <> last }
+
+  val check_not_first (first last n : rep_type) : rep_type
+    requires { n <> first }
+    ensures { result = n /\ n <> first }
+
+  val range_check_ (first last n : rep_type) : rep_type
+    requires { dynamic_property first last n }
+    ensures { result = n /\ dynamic_property first last n }
+end
+
+module Dynamic_Modular
+  use import int.Int
+
+  clone export Dynamic_Discrete
+
+  (* for conversions from int to bitvectors, we need to be able to
+     check the dynamic property directly in int. *)
+  predicate dynamic_property_int (first last n : int)
+
+  val range_check_int_ (first last n : int) : int
+    requires { dynamic_property_int first last n }
+    ensures { result = n /\ dynamic_property_int first last n}
+end
+
+module Fixed_Point_Base
+  (* The module that is used as basis for all fixed-point types.
+     We only support currently a subset of all Ada fixed-point types and
+     fixed-point operations:
+     1. fixed-point types must have a small that is a negative power of 2 or 10
+     2. multiplication and division between different fixed-point types and
+        universal real are rejected
+
+    (restriction 1 allows to have a simple axiomatization of mult/div of fixed
+    point types, using the integral inverse of the small. restriction 2 avoids
+    introducing a new uninterpreted operation for every triple of argument and
+    result type)
+
+    These restrictions enforce in particular that the result of all
+    multiplication and division operations on fixed-pints (with both fixed-point
+    arguments, or an integer argument) is in the "perfect result set" as defined
+    in Ada RM G.2.3: the result is either exact, or one of the two representable
+    values that are closest to the exact result. This property is axiomatized
+    below.
+
+    We use a type "__fixed" that is an alias of "int", to avoid confusion, for
+    the internal integer representation of a fixed-point value. This type is
+    used for performing all operations. In particular, addition, subtraction,
+    comparisons, Succ and Pred are directly operating on this type. Literals
+    are also expressed in this type. Multiplication and division are axiomatized
+    to reflect the constraints of Ada RM G.2.3.
+  *)
+
+  use import int.Int
+  use import real.RealInfix
+  use import "_gnatprove_standard".Main
+  use import "_gnatprove_standard".Int_Division
+
+  type t
+
+  function dummy : t
+
+  function attr__ATTRIBUTE_IMAGE __fixed : __image
+
+  predicate attr__ATTRIBUTE_VALUE__pre_check (x : __image)
+
+  function attr__ATTRIBUTE_VALUE __image : __fixed
+
+  val attr__ATTRIBUTE_VALUE_ (x : __image) : __fixed
+    requires { attr__ATTRIBUTE_VALUE__pre_check x }
+    ensures { true }
+
+  (* A fixed-point type is represented internally as an integer. *)
+
+  function to_fixed t : __fixed
+
+  function of_fixed __fixed : t
+
+  val of_fixed (x : __fixed) : t
+    requires { true }
+    ensures { to_fixed(result) = x }
+
+  (* Inverse of the "small" value of the corresponding fixed-point type.
+     This is guaranteed to be a positive whole number, because we restrict
+     gnatprove analysis to fixed-point types with a "small" that is a negative
+     power of 2 or 10.
+
+     The real value of a fixed-point number can be obtained by dividing its
+     integer representation by inv_small.
+   *)
+  function inv_small : __fixed
+
+  function user_eq (x : t) (y : t) : bool
+
+  (* Helper predicate to define the result of operations on fixed-points.
+     It is used with non-negative values for [num] and positive values for [den].
+     It expresses that [res] is either the result of the integer division
+     num/den when exact, or one of the two closest integers.
+  *)
+
+  predicate pos_div_relation (res : int) (num : int) (den : int) =
+    let exact = div num den in
+    (* case 1: special case for zero *)
+    if num = 0 then
+      res = 0
+    (* case 2: RM G.2.3(9,13) if the result is exact, that's it *)
+    else if num = exact * den then
+      res = exact
+    (* case 3: RM G.2.3(10,14/3) if the result is not exact, that's one of
+       the closest integers. *)
+    else
+      exact <= res <= exact + 1
+
+  (* multiplication between two fixed-point values
+     case 1:
+         If any argument is zero, the result is zero
+     case 2:
+         If both arguments are of the same sign, then the mathematical
+         result is either exact, or between exact and exact+1, which are the
+         possible results.
+
+         for example, with inv_small = 4:
+              x =  5, y =  3, exact = 3, math = 3.75, result in { 3, 4 }
+              x = -5, y = -3, exact = 3, math = 3.75, result in { 3, 4 }
+     case 3:
+         If arguments are of opposite signs, then the mathematical
+         result is either exact, or between exact-1 and exact, which are the
+         possible results.
+
+         for example, with inv_small = 4:
+              x =  5, y = -3, exact = -3, math = -3.75, result in { -4, -3 }
+              x = -5, y =  3, exact = -3, math = -3.75, result in { -4, -3 }
+  *)
+
+  function fxp_mult (x : __fixed) (y : __fixed) : __fixed
+
+  axiom fxp_mult_def :
+    forall x : __fixed. forall y : __fixed [fxp_mult x y].
+      if x = 0 \/ y = 0 then
+        fxp_mult x y = 0
+      else if (x > 0 /\ y > 0) \/ (x < 0 /\ y < 0) then
+        pos_div_relation (fxp_mult x y) (x * y) inv_small
+      else (* (x < 0 /\ y > 0) \/ (x > 0 /\ y < 0) *)
+        pos_div_relation (- (fxp_mult x y)) (- (x * y)) inv_small
+
+  (* division between two fixed-point values
+     case 1:
+         If the dividand is zero, then the result is zero.
+     case 2:
+         If both arguments are of the same sign, then the mathematical
+         result is either exact, or between exact and exact+1, which are the
+         possible results.
+
+         for example, with inv_small = 4:
+              x =  5, y =  3, exact = 6, math = 6.666.., result in { 6, 7 }
+              x = -5, y = -3, exact = 6, math = 6.666.., result in { 6, 7 }
+     case 3:
+         If arguments are of opposite signs, then the mathematical
+         result is either exact, or between exact-1 and exact, which are the
+         possible results.
+
+         for example, with inv_small = 4:
+              x = -5, y =  3, exact = -6, math = -6.666.., result in { -7, -6 }
+              x =  5, y = -3, exact = -6, math = -6.666.., result in { -7, -6 }
+  *)
+
+  function fxp_div (x : __fixed) (y : __fixed) : __fixed
+
+  val fxp_div_ (x : __fixed) (y : __fixed) : __fixed
+     requires { y<>0 }
+     ensures { result = fxp_div x y }
+
+  axiom fxp_div_def :
+    forall x : __fixed. forall y : __fixed [fxp_div x y].
+      if x = 0 then
+        fxp_div x y = 0
+      else if x > 0 /\ y > 0 then
+        pos_div_relation (fxp_div x y) (x * inv_small) y
+      else if x < 0 /\ y < 0 then
+        pos_div_relation (fxp_div x y) (-x * inv_small) (-y)
+      else if x < 0 /\ y > 0 then
+        pos_div_relation (- (fxp_div x y)) (-x * inv_small) y
+      else if x > 0 /\ y < 0 then
+        pos_div_relation (- (fxp_div x y)) (x * inv_small) (-y)
+      else (* y = 0 *)
+        true
+
+  (* multiplication between a fixed-point value and an integer *)
+
+  function fxp_mult_int (x : __fixed) (y : int) : __fixed = x * y
+
+  (* division between a fixed-point value and an integer
+     case 1:
+         If the dividant is zero, then the result is zero.
+     case 2:
+         If both arguments are of the same sign, then the mathematical
+         result is either exact, or between exact and exact+1, which are the
+         possible results.
+
+         for example:
+              x =  5, y =  3, exact = 1, math = 1.666.., result in { 1, 2 }
+              x = -5, y = -3, exact = 1, math = 1.666.., result in { 1, 2 }
+     case 3:
+         If arguments are of opposite signs, then the mathematical
+         result is either exact, or between exact-1 and exact, which are the
+         possible results.
+
+         for example:
+              x = -5, y =  3, exact = -1, math = -1.666.., result in { -2, -1 }
+              x =  5, y = -3, exact = -1, math = -1.666.., result in { -2, -1 }
+  *)
+
+  function fxp_div_int (x : __fixed) (y : int) : __fixed
+
+  val fxp_div_int_ (x : __fixed) (y : int) : __fixed
+     requires { y<>0 }
+     ensures { result = fxp_div_int x y }
+
+  axiom fxp_div_int_def :
+    forall x : __fixed. forall y : int [fxp_div_int x y].
+      if x = 0 then
+        fxp_div_int x y = 0
+      else if x > 0 /\ y > 0 then
+        pos_div_relation (fxp_div_int x y) x y
+      else if x < 0 /\ y < 0 then
+        pos_div_relation (fxp_div_int x y) (-x) (-y)
+      else if x < 0 /\ y > 0 then
+        pos_div_relation (- (fxp_div_int x y)) (-x) y
+      else if x > 0 /\ y < 0 then
+        pos_div_relation (- (fxp_div_int x y)) x (-y)
+      else (* y = 0 *)
+        true
+
+  (* conversion functions to/from int. 3 cases for the conversion to int:
+     case 1:
+         If the argument is zero, then the result is zero.
+     case 2:
+         If the argument is positive, then the mathematical result is either
+         exact, or between exact and exact+1, which are the possible results.
+
+         for example, with inv_small = 4:
+              x = 5, exact = 1, math = 1.25, result in { 1, 2 }
+     case 3:
+         If the argument is negative, then the mathematical result is either
+         exact, or between exact-1 and exact, which are the possible results.
+
+         for example, with inv_small = 4:
+              x = -5, exact = -1, math = -1.25, result in { -2, -1 }
+  *)
+
+  function to_int (x : __fixed) : int
+
+  function of_int (x : int) : __fixed = x * inv_small
+
+  axiom to_int_def :
+    forall x : __fixed [to_int x].
+      if x = 0 then
+        to_int x = 0
+      else if x > 0 then
+        pos_div_relation (to_int x) x inv_small
+      else (* x < 0 *)
+        pos_div_relation (- (to_int x)) (-x) inv_small
+
+  (* conversion functions from/to real *)
+
+  function to_real __fixed : real
+
+  function of_real real : __fixed
+end
+
+module Static_Fixed_Point
+  (* The module that is used as basis for all "static" fixed-point types.
+     "Static" here means that Why only sees a static version of the type,
+     with constants for the bounds, even though this might correspond to
+     dynamic types in Ada. *)
+
+  use import "_gnatprove_standard".Main
+  use import int.Int
+
+  clone export Fixed_Point_Base
+
+  axiom inversion_axiom :
+    forall x : t [to_fixed x].
+    of_fixed (to_fixed (x)) = x
+
+  function first : __fixed
+
+  function last  : __fixed
+
+  val check_not_last (n : __fixed) : __fixed
+    requires { n <> last }
+    ensures { result = n }
+
+  val check_not_first (n : __fixed) : __fixed
+    requires { n <> first }
+    ensures { result = n }
+
+  predicate in_range (x : __fixed)
+
+  val range_check_ (n : __fixed) : __fixed
+    requires { in_range n }
+    ensures { result = n }
+
+  axiom range_axiom :
+    forall x : t. in_range (to_fixed x)
+end
+
+module Dynamic_Fixed_Point
+  (* The module that is used as basis for all "dynamic" fixed-point types.
+     "Dynamic" here means that Why sees a dynamic version of the type, with
+     references for the bounds, which correspond to some cases of dynamic
+     types in Ada. *)
+
+  use import "_gnatprove_standard".Main
+  use import int.Int
+
+  type t
+
+  function base_to_rep t : __fixed
+  function base_of_rep __fixed : t
+
+  function to_fixed "inline" (x : t) : __fixed = base_to_rep x
+  function of_fixed "inline" (x : __fixed) : t = base_of_rep x
+
+  clone export Fixed_Point_Base
+      with type t = t, function of_fixed = of_fixed, function to_fixed = to_fixed
+
+  predicate dynamic_property (first last n : __fixed)
+
+  val check_not_last (first last n : __fixed) : __fixed
+    requires { n <> last }
+    ensures { result = n }
+
+  val check_not_first (first last n : __fixed) : __fixed
+    requires { n <> first }
+    ensures { result = n }
+
+  val range_check_ (first last n : __fixed) : __fixed
+    requires { dynamic_property first last n }
+    ensures { result = n /\ dynamic_property first last n}
+end
+
+module Floating_Point_Base
+  (* The module that is used as basis for all floating-point types. *)
+
+  use import "_gnatprove_standard".Main
+  use        "_gnatprove_standard".Floating
+  use import real.RealInfix
+  use export "ada__model_th".Floating_Point_Theory
+
+  type t
+
+  (* This module will be cloned and round_real_tmp possibly replaced.
+     We keep round_real to denote the resulting rounding function. *)
+
+  function round_real_tmp real : real
+  function round_real (x : real) : real = round_real_tmp (x)
+
+  function to_real t : real
+
+  function of_real real : t
+
+  val of_real (x : real) : t
+    requires { true }
+    ensures  { to_real (result) = x }
+
+  function user_eq (x : t) (y : t) : bool
+
+  (* Next and previous representable reals. The functions return respectively
+     the representable real greater than or lower than the argument x, which
+     may or not be representable. *)
+
+  function next_representable (x : real) : real
+  function prev_representable (x : real) : real
+
+  axiom next_representable_def :
+    forall x : real [next_representable x]. next_representable x >. x
+
+  axiom prev_representable_def :
+    forall x : real [prev_representable x]. prev_representable x <. x
+
+  function attr__ATTRIBUTE_IMAGE real : __image
+
+  predicate attr__ATTRIBUTE_VALUE__pre_check (x : __image)
+
+  function attr__ATTRIBUTE_VALUE __image : real
+
+  val attr__ATTRIBUTE_VALUE_ (x : __image) : real
+    requires { attr__ATTRIBUTE_VALUE__pre_check x }
+    ensures { true }
+
+  function dummy : t
+end
+
+module Static_Floating_Point
+  (* The module that is used as basis for all "static" floating-point types. *)
+
+  use import real.RealInfix
+  clone export Floating_Point_Base
+
+  axiom inversion_axiom :
+    forall x : t [to_real x].
+      of_real (to_real(x)) = x
+
+  function first : real
+
+  function last  : real
+
+  (* The first and last value of the floating-point type are exactly
+     represented. So round_real is the identity on such values. *)
+
+  axiom representable_first :
+    round_real first = first
+
+  axiom representable_last :
+    round_real last = last
+
+  val check_not_last (n : real) : real
+    requires { n <> last }
+    ensures { result = n }
+
+  val check_not_first (n : real) : real
+    requires { n <> first }
+    ensures { result = n }
+
+  predicate in_range (x : real)
+
+  val range_check_ (n : real) : real
+    requires { in_range n }
+    ensures { result = n }
+
+  axiom range_axiom :
+    forall x : t. in_range (to_real x)
+end
+
+module Dynamic_Floating_Point
+  (* The module that is used as basis for all "dynamic" floating-point types. *)
+
+  use import real.RealInfix
+
+ type t
+
+ function base_to_rep t : real
+ function base_of_rep real : t
+
+ function to_real "inline" (x : t) : real = base_to_rep x
+ function of_real "inline" (x : real) : t = base_of_rep x
+
+  clone export Floating_Point_Base
+      with type t = t, function of_real = of_real, function to_real = to_real
+
+  predicate dynamic_property (first last n : real)
+
+  val check_not_last (first last n : real) : real
+    requires { n <> last }
+    ensures { result = n }
+
+  val check_not_first (first last n : real) : real
+    requires { n <> first }
+    ensures { result = n }
+
+  val range_check_ (first last n : real) : real
+    requires { dynamic_property first last n }
+    ensures { result = n /\ dynamic_property first last n }
+end
+
+module Unconstrained_Private_Type
+  (* The module that is used as basis for unconstrained subtypes or derived types
+ of  a private type from a module with External_Axiomatization. *)
+
+   type t
+
+   function to_base "inline" (x : t) : t = x
+   function of_base "inline" (x : t) : t = x
+end
+
+module Constrained_Private_Type
+  (* The module that is used as basis for constrained subtypes or derived types
+ of  a private type from a module with External_Axiomatization. *)
+
+   type t
+   type base_type
+
+   function to_base t : base_type
+   function of_base base_type : t
+
+   axiom inversion_axiom :
+      forall x : t [of_base (to_base x)]. of_base (to_base x) = x
+end
+
+(* The following modules are templates for unconstrained and constrained array
+types. Only the one for one dimension is commented, the others are very similar *)
+
+(* ??? TBD Index types of arrays are treated in a special way, but there is no
+reason for that: something similar could be the basis for all
+scalar types. To be done. *)
+
+module Index_Type
+  (* This is the module for an index type of an unconstrained array. first
+  and last are always in the base type, but when first <= last, then they are
+  actually in the index subtype. *)
+
+  (* These are filled in for every instance of an index type *)
+  type base
+  type rep
+
+  function  to_rep base : rep
+  predicate in_range_base rep
+  predicate index_dynamic_property rep rep rep
+  predicate index_le rep rep
+
+  (* the bound type *)
+  type t
+
+  (* first and last of an index *)
+  function first t : base
+
+  function last t : base
+
+  (* constructing and deconstructing the index *)
+  function mk rep rep : t
+
+  axiom mk_def :
+    forall f l : rep [mk f l].
+      in_range_base f ->
+      in_range_base l ->
+      (to_rep (first (mk f l)) = f /\
+        to_rep (last (mk f l)) = l)
+
+  (* The range check that is required by conversion to an unconstrained array.
+     See RM 3.6.2(4-6) and 4.6(38) *)
+  predicate dynamic_property (range_first : rep) (range_last : rep) (low : rep) (high : rep) =
+    in_range_base low /\ in_range_base high /\
+       (index_le low high -> (index_dynamic_property range_first range_last low /\ index_dynamic_property range_first range_last high))
+end
+
+module Array_Comparison_Axiom
+  use import int.Int
+
+  (* These declarations have to be filled in by gnat2why for each
+  discrete 1 dimension array type *)
+  type component_type
+  type rep_type
+  type map
+
+  clone _gnatprove_standard.Array__Index as Index
+
+  function get map Index.t : component_type
+  function compare map Index.t Index.t map Index.t Index.t : int
+  function bool_eq map Index.t Index.t map Index.t Index.t : bool
+
+  predicate rep_lt rep_type rep_type
+  predicate rep_gt rep_type rep_type
+
+  function to_rep component_type : rep_type
+
+  axiom compare_def :
+    forall a b : map.
+    forall a_first a_last b_first b_last : Index.t [compare a a_first a_last b b_first b_last].
+      (compare a a_first a_last b b_first b_last = 0 <->
+          bool_eq a a_first a_last b b_first b_last = True) /\
+      (compare a a_first a_last b b_first b_last < 0 <->
+         exists i j : Index.t. Index.le i a_last /\ Index.lt j b_last /\
+             (bool_eq a a_first i b b_first j = True /\
+             (i = a_last \/
+                   Index.lt i a_last /\
+                       rep_lt (to_rep (get a (Index.add i Index.one))) (to_rep (get b (Index.add j Index.one)))))) /\
+      (compare a a_first a_last b b_first b_last > 0 <->
+         exists i j : Index.t. Index.le i b_last /\ Index.lt j a_last /\
+             (bool_eq a a_first j b b_first i = True /\
+             (i = b_last \/ Index.lt i b_last /\
+                       rep_gt (to_rep (get a (Index.add j Index.one))) (to_rep (get b (Index.add i Index.one))))))
+end
+
+module Array_Int_Rep_Comparison_Axiom
+  use import int.Int
+
+  clone export Array_Comparison_Axiom with
+  type rep_type = int,
+  predicate rep_lt = (<),
+  predicate rep_gt = (>)
+end
+
+module Array_BV8_Rep_Comparison_Axiom
+  use import bv.BV8
+
+  clone export Array_Comparison_Axiom with
+  type rep_type = t,
+  predicate rep_lt = ult,
+  predicate rep_gt = ugt
+end
+
+module Array_BV16_Rep_Comparison_Axiom
+  use import bv.BV16
+
+  clone export Array_Comparison_Axiom with
+  type rep_type = t,
+  predicate rep_lt = ult,
+  predicate rep_gt = ugt
+end
+
+module Array_BV32_Rep_Comparison_Axiom
+  use import bv.BV32
+
+  clone export Array_Comparison_Axiom with
+  type rep_type = t,
+  predicate rep_lt = ult,
+  predicate rep_gt = ugt
+end
+
+module Array_BV64_Rep_Comparison_Axiom
+  use import bv.BV64
+
+  clone export Array_Comparison_Axiom with
+  type rep_type = t,
+  predicate rep_lt = ult,
+  predicate rep_gt = ugt
+end
+
+module Array_Generic_Op_Axiom
+  type component_type
+  type map
+
+  clone _gnatprove_standard.Array__Index as Index
+
+  function get map Index.t : component_type
+
+  function to_bool component_type : bool
+  function array_op map Index.t Index.t map Index.t Index.t : map
+  function base_op bool bool : bool
+
+  axiom op_def:
+   forall a b : map.
+   forall a_first a_last b_first b_last : Index.t.
+   forall i : Index.t [get (array_op a a_first a_last b b_first b_last) i].
+     (Index.le a_first i /\ Index.le i a_last) ->
+     to_bool (get (array_op a a_first a_last b b_first b_last) i) =
+            base_op (to_bool (get a i)) (to_bool (get b (Index.add (Index.sub i a_first) b_first)))
+end
+
+module Array_Logical_Op_Generic_Axioms
+  use bool.Bool
+
+  (* These declarations have to be filled in by gnat2why for each
+       boolean 1 dimension array type *)
+   type component_type
+   function to_bool component_type : bool
+
+   type map
+
+   clone _gnatprove_standard.Array__Index as Index
+
+   function get map Index.t : component_type
+   function xorb map Index.t Index.t map Index.t Index.t : map
+   function andb map Index.t Index.t map Index.t Index.t : map
+   function orb  map Index.t Index.t map Index.t Index.t : map
+   function notb map Index.t Index.t : map
+
+   clone Array_Generic_Op_Axiom as Or_Axiom with
+     type component_type = component_type,
+     type map = map,
+     type Index.t = Index.t,
+     predicate Index.le = Index.le,
+     predicate Index.lt = Index.lt,
+     predicate Index.gt = Index.gt,
+     function Index.add = Index.add,
+     function Index.sub = Index.sub,
+     function Index.one = Index.one,
+     function get = get,
+     function to_bool = to_bool,
+     function array_op = orb,
+     function base_op = Bool.orb
+
+   clone Array_Generic_Op_Axiom as And_Axiom with
+     type component_type = component_type,
+     type map = map,
+     type Index.t = Index.t,
+     predicate Index.le = Index.le,
+     predicate Index.lt = Index.lt,
+     predicate Index.gt = Index.gt,
+     function Index.add = Index.add,
+     function Index.sub = Index.sub,
+     function Index.one = Index.one,
+     function get = get,
+     function to_bool = to_bool,
+     function array_op = andb,
+     function base_op = Bool.andb
+
+   clone Array_Generic_Op_Axiom as Xor_Axiom with
+     type component_type = component_type,
+     type map = map,
+     type Index.t = Index.t,
+     predicate Index.le = Index.le,
+     predicate Index.lt = Index.lt,
+     predicate Index.gt = Index.gt,
+     function Index.add = Index.add,
+     function Index.sub = Index.sub,
+     function Index.one = Index.one,
+     function get = get,
+     function to_bool = to_bool,
+     function array_op = xorb,
+     function base_op = Bool.xorb
+
+   axiom notb_def:
+    forall a : map.
+    forall a_first a_last : Index.t.
+    forall i : Index.t [get (notb a a_first a_last) i].
+      (Index.le a_first i /\ Index.le i a_last) ->
+      to_bool (get (notb a a_first a_last) i) =
+             Bool.notb (to_bool (get a i))
+end
+
+module Standard_Array_Logical_Op_Axioms
+  use import bool.Bool
+
+  function bool_id "inline" (b : bool) : bool = b
+
+  clone export Array_Logical_Op_Generic_Axioms with
+     type component_type = bool,
+     function to_bool = bool_id
+end
+
+module Subtype_Array_Logical_Op_Axioms
+  use import int.Int
+  use "_gnatprove_standard".Boolean
+
+   type component_type
+   function to_int component_type : int
+
+  function to_bool "inline" (x : component_type) : bool = Boolean.of_int (to_int (x))
+
+  clone export Array_Logical_Op_Generic_Axioms with
+     type component_type = component_type,
+     function to_bool = to_bool
+end
+
+module Unconstr_Array
+  (* The module to be cloned for an unconstrained array of dimension 1 *)
+
+  (* These declarations have to be filled in by gnat2why for each
+  unconstrained array type *)
+  type map
+
+  type index_base_type
+  type index_rep_type
+
+  function to_rep index_base_type : index_rep_type
+  function rep_to_int "inline" index_rep_type : int
+
+  predicate in_range_base index_rep_type
+  predicate index_dynamic_property index_rep_type index_rep_type index_rep_type
+  predicate index_rep_le index_rep_type index_rep_type
+
+  function array_bool_eq map index_rep_type index_rep_type map index_rep_type index_rep_type : bool
+
+  clone Index_Type as I1 with
+    type      base          = index_base_type,
+    type      rep           = index_rep_type,
+    function  to_rep        = to_rep,
+    predicate index_le      = index_rep_le,
+    predicate in_range_base = in_range_base,
+    predicate index_dynamic_property = index_dynamic_property
+
+  type __split = map
+
+  (* An unconstrained array comes with its bounds *)
+  type __t =
+    { elts : __split; rt : I1.t }
+
+  function to_array (a : __t) : __split = a.elts
+
+  function of_array (a : __split) (f l : index_rep_type) : __t =
+    { elts = a; rt = I1.mk f l }
+
+  use import int.Int
+
+  function first (a : __t) : index_rep_type = to_rep (I1.first a.rt)
+  function last (a : __t) : index_rep_type = to_rep (I1.last a.rt)
+  function length (a : __t) : int =
+    if index_rep_le (first a) (last a) then
+      rep_to_int (last a) - rep_to_int (first a) + 1 else 0
+
+  predicate dynamic_property (range_first range_last f1 l1 : index_rep_type) =
+    I1.dynamic_property range_first range_last f1 l1
+
+  function value__size : int
+
+  function object__size (a : __split) : int
+
+  axiom value__size_axiom :
+    value__size >= 0
+
+  axiom object__size_axiom :
+    forall a : __split.
+    object__size (a) >= 0
+
+  function bool_eq (x : __t) (y : __t) : bool =
+    array_bool_eq
+      x.elts (to_rep (I1.first x.rt)) (to_rep (I1.last x.rt))
+      y.elts (to_rep (I1.first y.rt)) (to_rep (I1.last y.rt))
+
+  function user_eq (x : __t) (y : __t) : bool
+
+  function dummy : __t
+end
+
+module Unconstr_Array_2
+  (* The module to be cloned for an unconstrained array of dimension 1 *)
+
+  type map
+
+  type index_base_type
+  type index_rep_type
+
+  function to_rep index_base_type : index_rep_type
+  function rep_to_int "inline" index_rep_type : int
+
+  predicate in_range_base index_rep_type
+  predicate index_dynamic_property index_rep_type index_rep_type index_rep_type
+  predicate index_rep_le index_rep_type index_rep_type
+
+  type index_base_type_2
+  type index_rep_type_2
+
+  function to_rep_2 index_base_type_2 : index_rep_type_2
+  function rep_to_int_2 "inline" index_rep_type_2 : int
+
+  predicate in_range_base_2 index_rep_type_2
+  predicate index_dynamic_property_2 index_rep_type_2 index_rep_type_2 index_rep_type_2
+  predicate index_rep_le_2 index_rep_type_2 index_rep_type_2
+
+  function array_bool_eq map index_rep_type index_rep_type index_rep_type_2 index_rep_type_2 map index_rep_type index_rep_type index_rep_type_2 index_rep_type_2 : bool
+
+  clone Index_Type as I1 with
+    type      base          = index_base_type,
+    type      rep           = index_rep_type,
+    function  to_rep        = to_rep,
+    predicate index_le      = index_rep_le,
+    predicate in_range_base = in_range_base,
+    predicate index_dynamic_property = index_dynamic_property
+
+  clone Index_Type as I2 with
+    type      base          = index_base_type_2,
+    type      rep           = index_rep_type_2,
+    function  to_rep        = to_rep_2,
+    predicate index_le      = index_rep_le_2,
+    predicate in_range_base = in_range_base_2,
+    predicate index_dynamic_property = index_dynamic_property_2
+
+  type __split = map
+  type __t =
+    { elts : __split;
+      rt   : I1.t;
+      rt_2 : I2.t
+    }
+
+  function to_array (a : __t) : __split =
+    a.elts
+
+  function of_array (a : __split)
+    (f l : index_rep_type) (f2 l2 : index_rep_type_2) : __t =
+    { elts = a;
+      rt = I1.mk f l;
+      rt_2 = I2.mk f2 l2 }
+
+  use import int.Int
+
+  function first (a : __t) : index_rep_type = to_rep (I1.first a.rt)
+  function last (a : __t) : index_rep_type = to_rep (I1.last a.rt)
+  function length (a : __t) : int =
+    if index_rep_le (first a) (last a) then
+      rep_to_int (last a) - rep_to_int (first a) + 1 else 0
+
+  function first_2 (a : __t) : index_rep_type_2 = to_rep_2 (I2.first a.rt_2)
+  function last_2 (a : __t) : index_rep_type_2 = to_rep_2 (I2.last a.rt_2)
+  function length_2 (a : __t) : int =
+    if index_rep_le_2 (first_2 a) (last_2 a) then
+      rep_to_int_2 (last_2 a) - rep_to_int_2 (first_2 a) + 1 else 0
+
+  predicate dynamic_property (range_first1 range_last1 f1 l1 : index_rep_type)
+                             (range_first2 range_last2 f2 l2 : index_rep_type_2) =
+    I1.dynamic_property range_first1 range_last1 f1 l1 /\ I2.dynamic_property range_first2 range_last2 f2 l2
+
+  function value__size : int
+
+  function object__size (a : __split) : int
+
+  axiom value__size_axiom :
+    value__size >= 0
+
+  axiom object__size_axiom :
+    forall a : __split.
+    object__size (a) >= 0
+
+  function bool_eq (x : __t) (y : __t) : bool =
+    array_bool_eq
+      x.elts (to_rep (I1.first x.rt)) (to_rep (I1.last x.rt))
+             (to_rep_2 (I2.first x.rt_2)) (to_rep_2 (I2.last x.rt_2))
+      y.elts (to_rep (I1.first y.rt)) (to_rep (I1.last y.rt))
+             (to_rep_2 (I2.first y.rt_2)) (to_rep_2 (I2.last y.rt_2))
+
+  function user_eq (x : __t) (y : __t) : bool
+
+  function dummy : __t
+end
+
+module Unconstr_Array_3
+  (* The module to be cloned for an unconstrained array of dimension 1 *)
+
+  type map
+
+  type index_base_type
+  type index_rep_type
+
+  function to_rep index_base_type : index_rep_type
+  function rep_to_int "inline" index_rep_type : int
+
+  predicate in_range_base index_rep_type
+  predicate index_dynamic_property index_rep_type index_rep_type index_rep_type
+  predicate index_rep_le index_rep_type index_rep_type
+
+  type index_base_type_2
+  type index_rep_type_2
+
+  function to_rep_2 index_base_type_2 : index_rep_type_2
+  function rep_to_int_2 "inline" index_rep_type_2 : int
+
+  predicate in_range_base_2 index_rep_type_2
+  predicate index_dynamic_property_2 index_rep_type_2 index_rep_type_2 index_rep_type_2
+  predicate index_rep_le_2 index_rep_type_2 index_rep_type_2
+
+  type index_base_type_3
+  type index_rep_type_3
+
+  function to_rep_3 index_base_type_3 : index_rep_type_3
+  function rep_to_int_3 "inline" index_rep_type_3 : int
+
+  predicate in_range_base_3 index_rep_type_3
+  predicate index_dynamic_property_3 index_rep_type_3 index_rep_type_3 index_rep_type_3
+  predicate index_rep_le_3 index_rep_type_3 index_rep_type_3
+
+  function array_bool_eq map index_rep_type index_rep_type index_rep_type_2 index_rep_type_2 index_rep_type_3 index_rep_type_3 map index_rep_type index_rep_type index_rep_type_2 index_rep_type_2 index_rep_type_3 index_rep_type_3 : bool
+
+  clone Index_Type as I1 with
+    type      base          = index_base_type,
+    type      rep           = index_rep_type,
+    function  to_rep        = to_rep,
+    predicate index_le      = index_rep_le,
+    predicate in_range_base = in_range_base,
+    predicate index_dynamic_property = index_dynamic_property
+
+  clone Index_Type as I2 with
+    type      base          = index_base_type_2,
+    type      rep           = index_rep_type_2,
+    function  to_rep        = to_rep_2,
+    predicate index_le      = index_rep_le_2,
+    predicate in_range_base = in_range_base_2,
+    predicate index_dynamic_property = index_dynamic_property_2
+
+  clone Index_Type as I3 with
+    type      base          = index_base_type_3,
+    type      rep           = index_rep_type_3,
+    function  to_rep        = to_rep_3,
+    predicate index_le      = index_rep_le_3,
+    predicate in_range_base = in_range_base_3,
+    predicate index_dynamic_property = index_dynamic_property_3
+
+  type __split = map
+  type __t =
+    { elts : __split;
+      rt   : I1.t;
+      rt_2 : I2.t;
+      rt_3 : I3.t
+    }
+
+  function to_array (a : __t) : __split =
+    a.elts
+
+  function of_array (a : __split)
+    (f l : index_rep_type) (f2 l2 : index_rep_type_2) (f3 l3 : index_rep_type_3) : __t =
+    { elts = a;
+      rt = I1.mk f l;
+      rt_2 = I2.mk f2 l2;
+      rt_3 = I3.mk f3 l3
+    }
+
+  use import int.Int
+
+  function first (a : __t) : index_rep_type = to_rep (I1.first a.rt)
+  function last (a : __t) : index_rep_type = to_rep (I1.last a.rt)
+  function length (a : __t) : int =
+    if index_rep_le (first a) (last a) then
+      rep_to_int (last a) - rep_to_int (first a) + 1 else 0
+
+  function first_2 (a : __t) : index_rep_type_2 = to_rep_2 (I2.first a.rt_2)
+  function last_2 (a : __t) : index_rep_type_2 = to_rep_2 (I2.last a.rt_2)
+  function length_2 (a : __t) : int =
+    if index_rep_le_2 (first_2 a) (last_2 a) then
+      rep_to_int_2 (last_2 a) - rep_to_int_2 (first_2 a) + 1 else 0
+
+  function first_3 (a : __t) : index_rep_type_3 = to_rep_3 (I3.first a.rt_3)
+  function last_3 (a : __t) : index_rep_type_3 = to_rep_3 (I3.last a.rt_3)
+  function length_3 (a : __t) : int =
+    if index_rep_le_3 (first_3 a) (last_3 a) then
+      rep_to_int_3 (last_3 a) - rep_to_int_3 (first_3 a) + 1 else 0
+
+  predicate dynamic_property (range_first1 range_last1 f1 l1 : index_rep_type)
+                             (range_first2 range_last2 f2 l2 : index_rep_type_2)
+                             (range_first3 range_last3 f3 l3 : index_rep_type_3) =
+    I1.dynamic_property range_first1 range_last1 f1 l1 /\
+    I2.dynamic_property range_first2 range_last2 f2 l2 /\
+    I3.dynamic_property range_first3 range_last3 f3 l3
+
+  function value__size : int
+
+  function object__size (a : __split) : int
+
+  axiom value__size_axiom :
+    value__size >= 0
+
+  axiom object__size_axiom :
+    forall a : __split.
+    object__size (a) >= 0
+
+  function bool_eq (x : __t) (y : __t) : bool =
+    array_bool_eq
+      x.elts (to_rep (I1.first x.rt))   (to_rep (I1.last x.rt))
+             (to_rep_2 (I2.first x.rt_2)) (to_rep_2 (I2.last x.rt_2))
+             (to_rep_3 (I3.first x.rt_3)) (to_rep_3 (I3.last x.rt_3))
+      y.elts (to_rep (I1.first y.rt))   (to_rep (I1.last y.rt))
+             (to_rep_2 (I2.first y.rt_2)) (to_rep_2 (I2.last y.rt_2))
+             (to_rep_3 (I3.first y.rt_3)) (to_rep_3 (I3.last y.rt_3))
+
+  function user_eq (x : __t) (y : __t) : bool
+
+  function dummy : __t
+end
+
+module Unconstr_Array_4
+  (* The module to be cloned for an unconstrained array of dimension 1 *)
+
+  type map
+
+  type index_base_type
+  type index_rep_type
+
+  function to_rep index_base_type : index_rep_type
+  function rep_to_int "inline" index_rep_type : int
+
+  predicate in_range_base index_rep_type
+  predicate index_dynamic_property index_rep_type index_rep_type index_rep_type
+  predicate index_rep_le index_rep_type index_rep_type
+
+  type index_base_type_2
+  type index_rep_type_2
+
+  function to_rep_2 index_base_type_2 : index_rep_type_2
+  function rep_to_int_2 "inline" index_rep_type_2 : int
+
+  predicate in_range_base_2 index_rep_type_2
+  predicate index_dynamic_property_2 index_rep_type_2 index_rep_type_2 index_rep_type_2
+  predicate index_rep_le_2 index_rep_type_2 index_rep_type_2
+
+  type index_base_type_3
+  type index_rep_type_3
+
+  function to_rep_3 index_base_type_3 : index_rep_type_3
+  function rep_to_int_3 "inline" index_rep_type_3 : int
+
+  predicate in_range_base_3 index_rep_type_3
+  predicate index_dynamic_property_3 index_rep_type_3 index_rep_type_3 index_rep_type_3
+  predicate index_rep_le_3 index_rep_type_3 index_rep_type_3
+
+  type index_base_type_4
+  type index_rep_type_4
+
+  function to_rep_4 index_base_type_4 : index_rep_type_4
+  function rep_to_int_4 "inline" index_rep_type_4 : int
+
+  predicate in_range_base_4 index_rep_type_4
+  predicate index_dynamic_property_4 index_rep_type_4 index_rep_type_4 index_rep_type_4
+  predicate index_rep_le_4 index_rep_type_4 index_rep_type_4
+
+  function array_bool_eq map index_rep_type index_rep_type index_rep_type_2 index_rep_type_2 index_rep_type_3 index_rep_type_3 index_rep_type_4 index_rep_type_4 map index_rep_type index_rep_type index_rep_type_2 index_rep_type_2 index_rep_type_3 index_rep_type_3 index_rep_type_4 index_rep_type_4 : bool
+
+  clone Index_Type as I1 with
+    type      base          = index_base_type,
+    type      rep           = index_rep_type,
+    function  to_rep        = to_rep,
+    predicate index_le      = index_rep_le,
+    predicate in_range_base = in_range_base,
+    predicate index_dynamic_property = index_dynamic_property
+
+  clone Index_Type as I2 with
+    type      base          = index_base_type_2,
+    type      rep           = index_rep_type_2,
+    function  to_rep        = to_rep_2,
+    predicate index_le      = index_rep_le_2,
+    predicate in_range_base = in_range_base_2,
+    predicate index_dynamic_property = index_dynamic_property_2
+
+  clone Index_Type as I3 with
+    type      base          = index_base_type_3,
+    type      rep           = index_rep_type_3,
+    function  to_rep        = to_rep_3,
+    predicate index_le      = index_rep_le_3,
+    predicate in_range_base = in_range_base_3,
+    predicate index_dynamic_property = index_dynamic_property_3
+
+  clone Index_Type as I4 with
+    type      base          = index_base_type_4,
+    type      rep           = index_rep_type_4,
+    function  to_rep        = to_rep_4,
+    predicate index_le      = index_rep_le_4,
+    predicate in_range_base = in_range_base_4,
+    predicate index_dynamic_property = index_dynamic_property_4
+
+  type __split = map
+
+  type __t =
+    { elts : __split;
+      rt   : I1.t;
+      rt_2 : I2.t;
+      rt_3 : I3.t;
+      rt_4 : I4.t
+    }
+
+  function to_array (a : __t) : __split =
+    a.elts
+
+  function of_array (a : __split)
+    (f l : index_rep_type)
+    (f2 l2 : index_rep_type_2)
+    (f3 l3 : index_rep_type_3)
+    (f4 l4 : index_rep_type_4) : __t =
+    { elts = a;
+      rt = I1.mk f l;
+      rt_2 = I2.mk f2 l2;
+      rt_3 = I3.mk f3 l3;
+      rt_4 = I4.mk f4 l4
+    }
+
+  use import int.Int
+
+  function first (a : __t) : index_rep_type = to_rep (I1.first a.rt)
+  function last (a : __t) : index_rep_type = to_rep (I1.last a.rt)
+  function length (a : __t) : int =
+    if index_rep_le (first a) (last a) then
+      rep_to_int (last a) - rep_to_int (first a) + 1 else 0
+
+  function first_2 (a : __t) : index_rep_type_2 = to_rep_2 (I2.first a.rt_2)
+  function last_2 (a : __t) : index_rep_type_2 = to_rep_2 (I2.last a.rt_2)
+  function length_2 (a : __t) : int =
+    if index_rep_le_2 (first_2 a) (last_2 a) then
+      rep_to_int_2 (last_2 a) - rep_to_int_2 (first_2 a) + 1 else 0
+
+  function first_3 (a : __t) : index_rep_type_3 = to_rep_3 (I3.first a.rt_3)
+  function last_3 (a : __t) : index_rep_type_3 = to_rep_3 (I3.last a.rt_3)
+  function length_3 (a : __t) : int =
+    if index_rep_le_3 (first_3 a) (last_3 a) then
+      rep_to_int_3 (last_3 a) - rep_to_int_3 (first_3 a) + 1 else 0
+
+  function first_4 (a : __t) : index_rep_type_4 = to_rep_4 (I4.first a.rt_4)
+  function last_4 (a : __t) : index_rep_type_4 = to_rep_4 (I4.last a.rt_4)
+  function length_4 (a : __t) : int =
+    if index_rep_le_4 (first_4 a) (last_4 a) then
+      rep_to_int_4 (last_4 a) - rep_to_int_4 (first_4 a) + 1 else 0
+
+  predicate dynamic_property (range_first1 range_last1 f1 l1 : index_rep_type)
+                             (range_first2 range_last2 f2 l2 : index_rep_type_2)
+                             (range_first3 range_last3 f3 l3 : index_rep_type_3)
+                             (range_first4 range_last4 f4 l4 : index_rep_type_4) =
+    I1.dynamic_property range_first1 range_last1 f1 l1 /\
+    I2.dynamic_property range_first2 range_last2 f2 l2 /\
+    I3.dynamic_property range_first3 range_last3 f3 l3 /\
+    I4.dynamic_property range_first4 range_last4 f4 l4
+
+  function value__size : int
+
+  function object__size (a : __split) : int
+
+  axiom value__size_axiom :
+    value__size >= 0
+
+  axiom object__size_axiom :
+    forall a : __split.
+    object__size (a) >= 0
+
+  function bool_eq (x : __t) (y : __t) : bool =
+    array_bool_eq
+      x.elts (to_rep (I1.first x.rt))   (to_rep (I1.last x.rt))
+             (to_rep_2 (I2.first x.rt_2)) (to_rep_2 (I2.last x.rt_2))
+             (to_rep_3 (I3.first x.rt_3)) (to_rep_3 (I3.last x.rt_3))
+             (to_rep_4 (I4.first x.rt_4)) (to_rep_4 (I4.last x.rt_4))
+      y.elts (to_rep (I1.first y.rt))   (to_rep (I1.last y.rt))
+             (to_rep_2 (I2.first y.rt_2)) (to_rep_2 (I2.last y.rt_2))
+             (to_rep_3 (I3.first y.rt_3)) (to_rep_3 (I3.last y.rt_3))
+             (to_rep_4 (I4.first y.rt_4)) (to_rep_4 (I4.last y.rt_4))
+
+  function user_eq (x : __t) (y : __t) : bool
+
+  function dummy : __t
+end
+
+module Constr_Array
+  type index_rep_type
+  type map
+
+  function first : index_rep_type
+  function last  : index_rep_type
+
+  function array_bool_eq map index_rep_type index_rep_type map index_rep_type index_rep_type : bool
+
+  type __t = map
+
+  function to_array (a : __t) : map = a
+
+  function of_array (a : map) : __t = a
+
+  function dummy : __t
+
+  function value__size : int
+
+  function object__size (a : __t) : int
+
+  use import int.Int
+
+  axiom value__size_axiom :
+    value__size >= 0
+
+  axiom object__size_axiom :
+    forall a : __t.
+    object__size (a) >= 0
+
+  function bool_eq (x : __t) (y : __t) : bool =
+    array_bool_eq x first last
+                  y first last
+
+  function user_eq (x : __t) (y : __t) : bool
+end
+
+module Constr_Array_2
+  type index_rep_type
+  type index_rep_type_2
+  type map
+
+  function first : index_rep_type
+  function last  : index_rep_type
+
+  function first_2 : index_rep_type_2
+  function last_2  : index_rep_type_2
+
+  function array_bool_eq map index_rep_type index_rep_type index_rep_type_2 index_rep_type_2 map index_rep_type index_rep_type index_rep_type_2 index_rep_type_2 : bool
+
+  type __t = map
+
+  function to_array (a : __t) : map = a
+
+  function of_array (a : map) : __t = a
+
+  function dummy : __t
+
+  function value__size : int
+
+  function object__size (a : __t) : int
+
+  use import int.Int
+
+  axiom value__size_axiom :
+    value__size >= 0
+
+  axiom object__size_axiom :
+    forall a : __t.
+    object__size (a) >= 0
+
+  function bool_eq (x : __t) (y : __t) : bool =
+    array_bool_eq x first last first_2 last_2
+                  y first last first_2 last_2
+
+  function user_eq (x : __t) (y : __t) : bool
+end
+
+module Constr_Array_3
+  type index_rep_type
+  type index_rep_type_2
+  type index_rep_type_3
+  type map
+
+  function first : index_rep_type
+  function last  : index_rep_type
+
+  function first_2 : index_rep_type_2
+  function last_2  : index_rep_type_2
+
+  function first_3 : index_rep_type_3
+  function last_3  : index_rep_type_3
+
+  function array_bool_eq map index_rep_type index_rep_type index_rep_type_2 index_rep_type_2 index_rep_type_3 index_rep_type_3 map index_rep_type index_rep_type index_rep_type_2 index_rep_type_2 index_rep_type_3 index_rep_type_3 : bool
+
+  type __t = map
+
+  function to_array (a : __t) : map = a
+
+  function of_array (a : map) : __t = a
+
+  function dummy : __t
+
+  function value__size : int
+
+  function object__size (a : __t) : int
+
+  use import int.Int
+
+  axiom value__size_axiom :
+    value__size >= 0
+
+  axiom object__size_axiom :
+    forall a : __t.
+    object__size (a) >= 0
+
+  function bool_eq (x : __t) (y : __t) : bool =
+    array_bool_eq x first last first_2 last_2 first_3 last_3
+                  y first last first_2 last_2 first_3 last_3
+
+  function user_eq (x : __t) (y : __t) : bool
+end
+
+module Constr_Array_4
+  type index_rep_type
+  type index_rep_type_2
+  type index_rep_type_3
+  type index_rep_type_4
+  type map
+
+  function first : index_rep_type
+  function last  : index_rep_type
+
+  function first_2 : index_rep_type_2
+  function last_2  : index_rep_type_2
+
+  function first_3 : index_rep_type_3
+  function last_3  : index_rep_type_3
+
+  function first_4 : index_rep_type_4
+  function last_4  : index_rep_type_4
+
+  function array_bool_eq map index_rep_type index_rep_type index_rep_type_2 index_rep_type_2 index_rep_type_3 index_rep_type_3 index_rep_type_4 index_rep_type_4 map index_rep_type index_rep_type index_rep_type_2 index_rep_type_2 index_rep_type_3 index_rep_type_3 index_rep_type_4 index_rep_type_4 : bool
+
+  type __t = map
+
+  function to_array (a : __t) : map = a
+
+  function of_array (a : map) : __t = a
+
+  function dummy : __t
+
+  function value__size : int
+
+  function object__size (a : __t) : int
+
+  use import int.Int
+
+  axiom value__size_axiom :
+    value__size >= 0
+
+  axiom object__size_axiom :
+    forall a : __t.
+    object__size (a) >= 0
+
+  function bool_eq (x : __t) (y : __t) : bool =
+    array_bool_eq x first last first_2 last_2 first_3 last_3 first_4 last_4
+                  y first last first_2 last_2 first_3 last_3 first_4 last_4
+
+  function user_eq (x : __t) (y : __t) : bool
+end

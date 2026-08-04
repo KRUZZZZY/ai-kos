@@ -1,0 +1,3 @@
+Xold = X'old /\ U = X'Old -> U+1 = Xold + 1 
+
+Xold = X'old /\ U = Xold + 1 -> U  + 1 = X'Old + 2

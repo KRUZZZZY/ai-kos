@@ -1,0 +1,220 @@
+V "GNAT Lib v2021"
+A -gnatA
+A -gnatwa
+A -mtune=generic
+A -march=x86-64
+P ZX
+
+RN
+RV NO_DIRECT_BOOLEAN_OPERATORS
+RV NO_EXCEPTION_HANDLERS
+RV NO_EXCEPTIONS
+RV NO_IMPLICIT_CONDITIONALS
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_DEFAULT_INITIALIZATION
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_ASPECT_SPECIFICATIONS
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U as_io_wrapper%b	as_io_wrapper.adb	2cc296e2 NE OO PK
+W ada%s			ada.ads			ada.ali
+Z ada.exceptions%s	a-except.adb		a-except.ali
+Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+Z ada.text_io.generic_aux%s  a-tigeau.adb	a-tigeau.ali
+Z ada.text_io.integer_aux%s
+Z ada.text_io.integer_io%s
+W spark%s		spark.ads		spark.ali
+W spark.text_io%s	spark-text_io.adb	spark-text_io.ali
+W spark.text_io.integer_io%s  spark-text_io-integer_io.adb  spark-text_io-integer_io.ali  ED
+W system%s		system.ads		system.ali
+Z system.img_biu%s	s-imgbiu.ads		s-imgbiu.ali
+Z system.img_int%s	s-imgint.ads		s-imgint.ali
+Z system.img_llb%s	s-imgllb.ads		s-imgllb.ali
+Z system.img_lli%s	s-imglli.ads		s-imglli.ali
+Z system.img_lllb%s	s-imglllb.ads		s-imglllb.ali
+Z system.img_llli%s	s-imgllli.ads		s-imgllli.ali
+Z system.img_lllw%s	s-imglllw.ads		s-imglllw.ali
+Z system.img_llw%s	s-imgllw.ads		s-imgllw.ali
+Z system.img_wiu%s	s-imgwiu.ads		s-imgwiu.ali
+Z system.val_int%s	s-valint.ads		s-valint.ali
+Z system.val_lli%s	s-vallli.ads		s-vallli.ali
+Z system.val_llli%s	s-valllli.ads		s-valllli.ali
+
+U as_io_wrapper%s	as_io_wrapper.ads	2503c2be EE NE OO PK
+Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
+W spark%s		spark.ads		spark.ali
+W spark.text_io%s	spark-text_io.adb	spark-text_io.ali
+
+D ada.ads		20210520051132 76789da1 ada%s
+D a-except.ads		20210520051128 946f3014 ada.exceptions%s
+D a-ioexce.ads		20210520051128 e4a01f64 ada.io_exceptions%s
+D a-stream.ads		20210520051130 119b8fb3 ada.streams%s
+D a-string.ads		20210520051130 90ac6797 ada.strings%s
+D a-sttebu.ads		20210520051130 18209c64 ada.strings.text_buffers%s
+D a-stuten.ads		20210520051130 808c40ad ada.strings.utf_encoding%s
+D a-tags.ads		20210520051130 9eaa38c6 ada.tags%s
+D a-textio.ads		20210520051130 aef4d56d ada.text_io%s
+D a-tigeau.ads		20210520051130 e643cdf3 ada.text_io.generic_aux%s
+D a-tiinau.ads		20210520051130 1c79f78d ada.text_io.integer_aux%s
+D a-tiinau.adb		20210520051130 89004916 ada.text_io.integer_aux%b
+D a-tiinio.ads		20210520051130 390edddb ada.text_io.integer_io%s
+D a-tiinio.adb		20210520051130 b79731f4 ada.text_io.integer_io%b
+D a-unccon.ads		20210520051130 0e9b276f ada.unchecked_conversion%s
+D as_io_wrapper.ads	20251203085854 496083d0 as_io_wrapper%s
+D as_io_wrapper.adb	20251203085854 a19d6c12 as_io_wrapper%b
+D interfac.ads		20210520051132 edec285f interfaces%s
+D i-cstrea.ads		20210520051132 e53d8b8e interfaces.c_streams%s
+D spark.ads		20251203085854 16439e1d spark%s
+D spark-text_io.ads	20251203085854 6c63416e spark.text_io%s
+D spark-text_io-integer_io.ads  20251203085854 c43f7920 spark.text_io.integer_io%s
+D spark-text_io-integer_io.adb  20251203085854 d329bb1c spark.text_io.integer_io%b
+D system.ads		20210520051136 2ffa5114 system%s
+D s-crtl.ads		20210520051132 0ebbdb71 system.crtl%s
+D s-exctab.ads		20210520051132 54135002 system.exception_table%s
+D s-ficobl.ads		20210520051132 078245e4 system.file_control_block%s
+D s-imageb.ads		20210520051134 3953e0e6 system.image_b%s
+D s-imagei.ads		20210520051134 0d3f86a7 system.image_i%s
+D s-imagew.ads		20210520051134 9d2dd267 system.image_w%s
+D s-imgbiu.ads		20210520051134 0a8e1c41 system.img_biu%s
+D s-imgint.ads		20210520051134 bdb6f5ec system.img_int%s
+D s-imgllb.ads		20210520051134 47d0db9f system.img_llb%s
+D s-imglli.ads		20210520051134 3723d9ff system.img_lli%s
+D s-imglllb.ads		20210520051134 30212eed system.img_lllb%s
+D s-imgllli.ads		20210520051134 5cf3dc07 system.img_llli%s
+D s-imglllw.ads		20210520051134 9e2b0560 system.img_lllw%s
+D s-imgllw.ads		20210520051134 bf9c9c15 system.img_llw%s
+D s-imgwiu.ads		20210520051134 912a95f2 system.img_wiu%s
+D s-parame.ads		20210520051134 4752c4cb system.parameters%s
+D s-putima.ads		20210520051134 4e095881 system.put_images%s
+D s-secsta.ads		20210520051134 9b3ab94b system.secondary_stack%s
+D s-soflin.ads		20210520051134 a7318a92 system.soft_links%s
+D s-stache.ads		20210520051134 a37c21ec system.stack_checking%s
+D s-stalib.ads		20210520051134 472fbca8 system.standard_library%s
+D s-stoele.ads		20210520051134 2dc34a04 system.storage_elements%s
+D s-stoele.adb		20210520051134 ed88f8fb system.storage_elements%b
+D s-traent.ads		20210520051134 26a8d361 system.traceback_entries%s
+D s-unstyp.ads		20210520051134 2b077493 system.unsigned_types%s
+D s-valint.ads		20210520051134 e7fcadb7 system.val_int%s
+D s-vallli.ads		20210520051134 0767e6f3 system.val_lli%s
+D s-valllli.ads		20210520051134 f758e795 system.val_llli%s
+D s-vallllu.ads		20210520051134 87566fa4 system.val_lllu%s
+D s-valllu.ads		20210520051134 660d930f system.val_llu%s
+D s-valuns.ads		20210520051134 dac7b45d system.val_uns%s
+D s-valuei.ads		20210520051134 978dd0a6 system.value_i%s
+D s-valueu.ads		20210520051134 7b8fccf5 system.value_u%s
+D s-wchcon.ads		20210520051136 1b7d22d2 system.wch_con%s
+D unchconv.ads		20210520051136 ca2f9e18 unchecked_conversion%s
+G a e
+G c b b b [b as_io_wrapper 9 1 none]
+G c Z s b [as_init_standard_input as_io_wrapper 26 14 none]
+G c Z s b [as_init_standard_output as_io_wrapper 33 14 none]
+G c Z s b [as_put as_io_wrapper 47 14 none]
+G c Z s b [as_get as_io_wrapper 56 14 none]
+G c Z s b [as_clear_buffer as_io_wrapper 62 14 none]
+G c Z s b [as_put as_io_wrapper 65 14 none]
+G c Z s b [as_get_line as_io_wrapper 83 14 none]
+G c Z s b [as_put_line as_io_wrapper 91 14 none]
+G c Z s b [as_put_line as_io_wrapper 97 14 none]
+G c Z s b [as_get as_io_wrapper 116 14 none]
+G c Z s b [as_put as_io_wrapper 127 14 none]
+G c Z s b [as_put_line as_io_wrapper 133 14 none]
+G c Z b b [get as_io_wrapper__integer_io 39 14 11_4]
+G c Z b b [get as_io_wrapper__integer_io 49 14 11_4]
+G c Z b b [put as_io_wrapper__integer_io 59 14 11_4]
+G c Z b b [put as_io_wrapper__integer_io 74 14 11_4]
+G c Z b b [get as_io_wrapper__integer_io 91 14 11_4]
+G c Z b b [put as_io_wrapper__integer_io 96 14 11_4]
+G c Z b b [integer_resultIP as_io_wrapper__integer_io 32 9 11_4]
+G c Z b b [get as_io_wrapper__integer_io__ada_integer_io 51 14 28_4_11_4]
+G c Z b b [get as_io_wrapper__integer_io__ada_integer_io 59 14 28_4_11_4]
+G c Z b b [put as_io_wrapper__integer_io__ada_integer_io 68 14 28_4_11_4]
+G c Z b b [put as_io_wrapper__integer_io__ada_integer_io 80 14 28_4_11_4]
+G c Z b b [get as_io_wrapper__integer_io__ada_integer_io 90 14 28_4_11_4]
+G c Z b b [put as_io_wrapper__integer_io__ada_integer_io 97 14 28_4_11_4]
+G c Z b b [get as_io_wrapper__integer_io__ada_integer_io__aux_int 52 14 48_4_28_4_11_4]
+G c Z b b [gets as_io_wrapper__integer_io__ada_integer_io__aux_int 57 14 48_4_28_4_11_4]
+G c Z b b [put as_io_wrapper__integer_io__ada_integer_io__aux_int 62 14 48_4_28_4_11_4]
+G c Z b b [puts as_io_wrapper__integer_io__ada_integer_io__aux_int 68 14 48_4_28_4_11_4]
+G c Z b b [get as_io_wrapper__integer_io__ada_integer_io__aux_lli 52 14 56_4_28_4_11_4]
+G c Z b b [gets as_io_wrapper__integer_io__ada_integer_io__aux_lli 57 14 56_4_28_4_11_4]
+G c Z b b [put as_io_wrapper__integer_io__ada_integer_io__aux_lli 62 14 56_4_28_4_11_4]
+G c Z b b [puts as_io_wrapper__integer_io__ada_integer_io__aux_lli 68 14 56_4_28_4_11_4]
+G c Z b b [get as_io_wrapper__integer_io__ada_integer_io__aux_llli 52 14 64_4_28_4_11_4]
+G c Z b b [gets as_io_wrapper__integer_io__ada_integer_io__aux_llli 57 14 64_4_28_4_11_4]
+G c Z b b [put as_io_wrapper__integer_io__ada_integer_io__aux_llli 62 14 64_4_28_4_11_4]
+G c Z b b [puts as_io_wrapper__integer_io__ada_integer_io__aux_llli 68 14 64_4_28_4_11_4]
+G r i none [b as_io_wrapper 9 1 none] [integer_io spark__text_io 27 23 none]
+G r c none [as_init_standard_input as_io_wrapper 26 14 none] [init_standard_input spark__text_io 100 14 none]
+G r c none [as_init_standard_output as_io_wrapper 33 14 none] [init_standard_output spark__text_io 107 14 none]
+G r c none [as_put as_io_wrapper 47 14 none] [put spark__text_io 577 14 none]
+G r c none [as_get as_io_wrapper 56 14 none] [get spark__text_io 661 14 none]
+G r c none [as_clear_buffer as_io_wrapper 62 14 none] [get spark__text_io 661 14 none]
+G r c none [as_put as_io_wrapper 65 14 none] [put spark__text_io 683 14 none]
+G r c none [as_get_line as_io_wrapper 83 14 none] [get_line spark__text_io 716 14 none]
+G r c none [as_put_line as_io_wrapper 91 14 none] [put_line spark__text_io 740 14 none]
+G r c none [as_put_line as_io_wrapper 97 14 none] [put_line spark__text_io 740 14 none]
+G r c none [as_get as_io_wrapper 116 14 none] [get_line spark__text_io 716 14 none]
+G r c none [as_get as_io_wrapper 116 14 none] [put_line spark__text_io 740 14 none]
+G r c none [as_put_line as_io_wrapper 133 14 none] [put_line spark__text_io 740 14 none]
+X 16 as_io_wrapper.ads
+22K9*AS_Io_Wrapper 139l5 139e18 17|9b14 126l5 126t18
+26U14*AS_Init_Standard_Input 17|15b14 18l8 18t30
+33U14*AS_Init_Standard_Output 17|20b14 23l8 23t31
+47U14*AS_Put 47>22 17|26b14 34l8 34t14
+47e22 Item{character} 50r39 17|26b22 28r26
+56U14*AS_Get 56<22 17|45b14 48l8 48t14
+56a22 Item{string} 60r19 17|45b22 47m26
+62U14*AS_Clear_Buffer 17|50b14 63l8 63t23
+65U14*AS_Put 65>22 17|67b14 70l8 70t14
+65a22 Item{string} 68r39 17|67b22 69r26
+83U14*AS_Get_Line 83<27 83<46 17|73b14 76l8 76t19
+83a27 Item{string} 87r20 17|73b27 75m31
+83i46 Last{natural} 87r25 17|73b46 75m36
+91U14*AS_Put_Line 91>27 17|83b14 86l8 86t19 90s7
+91a27 Item{string} 94r39 17|83b27 85r31
+97U14*AS_Put_Line 17|88b14 91l8 91t19 123s7
+116U14*AS_Get 116<22 117>22 17|93b14 111l8 111t14
+116i22 Item{integer} 122r19 17|93b22 110m7
+117a22 Prompt_Try_Again_When_Not_Integer{string} 121r69 17|93b43 108r33
+127U14*AS_Put 127>22 17|114b14 117l8 117t14
+127i22 Item{integer} 130r39 17|114b23 116r11
+133U14*AS_Put_Line 133>27 17|120b14 124l8 124t19
+133i27 Item{integer} 136r39 17|120b28 122r22
+X 17 as_io_wrapper.adb
+11K12 Integer_IO[22|27] 12r9 122r7
+54a7 Item{string} 56m26 59r10
+98i7 Length_String{integer} 99r35
+99a7 Input_By_User{string} 105m33 106r15
+100r7 Converted_Result{22|32R9[11]} 106m49 107r20 110r15
+101i7 Length_Input{natural} 105m47 106r34 107r78
+102i7 Length_Input_Used{positive} 106m66 107r58
+X 20 spark.ads
+29K9*SPARK 16|18r6 19r5 17|6r6 11r30 17r7 22r7 28r7 47r7 56r7 69r7 75r7 85r7
+. 105r10 108r10 20|66e10
+42n25*Success{41E9} 17|107r46
+X 21 spark-text_io.ads
+35K15*Text_IO 16|18w12 19r11 17|6r12 11r36 17r13 22r13 28r13 47r13 56r13
+. 69r13 75r13 85r13 105r16 108r16 21|755e18
+44R9*File_Type<20|53R9>
+45E9*File_Status<20|41E9>
+88r4*Standard_Input{44R9} 16|27r32 28r18 58r30 59r19 59r37 60r27 85r30 86r19
+. 86r37 87r34 119r30 120r19 120r37 121r38 122r27
+89r4*Standard_Output{44R9} 16|35r29 36r20 49r29 50r19 50r45 67r29 68r19 68r45
+. 93r29 94r19 94r45 99r29 100r19 100r39 119r45 121r19 121r53 129r29 130r19
+. 130r45 135r29 136r19 136r45
+100U14*Init_Standard_Input 17|17s21
+107U14*Init_Standard_Output 17|22s21
+577U14*Put 17|28s21
+661U14*Get 17|47s21 56s21
+683U14*Put 17|69s21
+716U14*Get_Line 17|75s21 105s24
+740U14*Put_Line 17|85s21 108s24
+X 22 spark-text_io-integer_io.ads
+27k23*Integer_IO 17|6w20 11r44 22|102e29
+32R9*Integer_Result 17|100r27[11]
+32e25*Status{21|45E9} 17|107r37[11]
+34i26*Item{integer} 17|110r32[11]
+74U14 Put 17|116s7[11] 122s18[11]
+91U14 Get 17|106s10[11]
+

@@ -1,0 +1,135 @@
+name: note
+version: 1.0.0
+description: Temporary note — an idea, brainstorm, or observation that may relate to future work. Lightweight. Can be converted
+  to another type later or deleted when no longer relevant.
+use_when:
+- You had an idea during a session that might be useful later
+- You noticed something worth remembering but not yet actionable
+- You want to flag something for future investigation
+- Quick brainstorm dump
+ai_prompt: Write a brief note (~5 paragraphs max). Keep it simple — this is temporary. Flag if it's actionable (needs follow-up).
+  Note any related project. Don't overthink it. If it grows into something bigger, it can be converted to a base article or
+  research-note later.
+fields:
+  id:
+    type: uuid
+    required: true
+    desc: Auto-generated UUID
+    example: 550e8400-e29b-41d4-a716-446655440000
+  title:
+    type: string
+    required: true
+    desc: Article title, 1-200 chars
+    constraint: max 200 chars
+    example: How to Configure Qdrant for Hybrid Search
+  slug:
+    type: kebab-case
+    required: true
+    desc: URL-safe identifier, lowercase alphanumeric + hyphens
+    constraint: 'pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$'
+    example: qdrant-hybrid-search-config
+  created_at:
+    type: date
+    required: true
+    desc: Creation date (ISO 8601)
+    example: '2026-08-04'
+  updated_at:
+    type: date
+    required: true
+    desc: Last modification date
+    example: '2026-08-04'
+  reviewed_at:
+    type: date
+    required: true
+    desc: Last review date
+    example: '2026-08-04'
+  next_review_at:
+    type: date
+    required: true
+    desc: Next scheduled review
+    constraint: must be >= updated_at
+    example: '2026-11-04'
+  stability:
+    type: enum
+    required: true
+    desc: How stable this knowledge is
+    values:
+    - stable
+    - moderate
+    - volatile
+    default: moderate
+  sensitivity_label:
+    type: enum
+    required: true
+    desc: Access control label
+    values:
+    - public
+    - internal
+    - confidential
+    - restricted
+    default: internal
+  keywords:
+    type: list[string]
+    required: true
+    desc: 3-8 lowercase keywords for auto-linking. Choose words other related articles would also use.
+    constraint: 3-8 items, all lowercase, no duplicates
+    example:
+    - qdrant
+    - hybrid-search
+    - configuration
+    - vectors
+    - retrieval
+  summary:
+    type: string
+    required: true
+    desc: 1-2 sentence description, shown in search results
+    constraint: max 300 chars
+    example: Step-by-step guide to configuring Qdrant for hybrid dense+sparse vector search with RRF fusion.
+  related:
+    type: list[string]
+    required: false
+    desc: Slugs of related articles — auto-managed by linker. Do not set manually.
+    constraint: managed by linker, >=3 shared keywords triggers auto-link
+  provenance:
+    type: list[string]
+    required: true
+    desc: Original source file paths or URLs
+    constraint: at least 1 entry
+    example:
+    - docs.qdrant.tech/hybrid-search
+    - session-2026-08-04-research
+  ai_notes:
+    type: string
+    required: false
+    desc: Private agent workspace, not shown to humans. Use for uncertainty, TODOs, merge notes.
+  retrieval_count:
+    type: integer
+    required: false
+    desc: Times this article was retrieved. Auto-incremented.
+    default: 0
+  type:
+    type: enum
+    required: true
+    desc: Article type
+    value: note
+  content:
+    type: string
+    required: true
+    desc: The note content. ~5 paragraphs max.
+    example: Consider adding a web UI for the AI-KOS knowledge graph. Currently we have Obsidian (desktop only) and a D3.js
+      HTML visualizer (requires HTTP server). A simple Flask/FastAPI app serving the graph from graph-data.json would work
+      anywhere. Could also add a search bar directly in the graph UI. Might be overkill for v1.5 — revisit in v1.6.
+  related_project:
+    type: string
+    required: false
+    desc: Project this note might relate to.
+    example: AI-KOS
+  actionable:
+    type: boolean
+    required: false
+    desc: Whether this needs follow-up action.
+    default: false
+stress_points:
+- content is empty → validation fails
+- actionable=True but no related_project → valid but harder to find later
+- notes can be deleted freely, no merge protocol needed

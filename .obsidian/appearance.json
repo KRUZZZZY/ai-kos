@@ -1,0 +1,13 @@
+{
+  "accentColor": "#7f6df2",
+  "cssTheme": "",
+  "baseFontSize": 15,
+  "theme": "obsidian",
+  "textFontFamily": "Inter, -apple-system, sans-serif",
+  "interfaceFontFamily": "Inter, -apple-system, sans-serif",
+  "monospaceFontFamily": "JetBrains Mono, monospace",
+  "enabledCssSnippets": [],
+  "showViewHeader": true,
+  "nativeMenus": false,
+  "translucency": false
+}

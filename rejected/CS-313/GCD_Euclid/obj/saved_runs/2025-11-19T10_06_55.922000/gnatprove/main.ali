@@ -1,0 +1,905 @@
+V "GNAT Lib v2021"
+M P W=b
+A -x
+A ada
+A -gnatA
+A -gnatwe
+A -gnata
+A -gnat12
+A -gnatc
+P GP FX
+
+RN
+RV NO_DIRECT_BOOLEAN_OPERATORS
+RV NO_EXCEPTION_HANDLERS
+RV NO_EXCEPTIONS
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_ASPECT_SPECIFICATIONS
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_ELABORATION_CODE
+
+U main%b		main.adb		1b95f394 OO SU
+W ada%s			ada.ads			ada.ali
+Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+Z ada.text_io.generic_aux%s  a-tigeau.adb	a-tigeau.ali
+Z ada.text_io.integer_aux%s  a-tiinau.adb	a-tiinau.ali
+Z ada.text_io.integer_io%s  a-tiinio.adb	a-tiinio.ali
+W gcd_verified_contracts%s  gcd_verified_contracts.adb  gcd_verified_contracts.ali
+W spark%s		spark.ads		spark.ali
+W spark.text_io%s	spark-text_io.adb	spark-text_io.ali
+W spark.text_io.integer_io%s  spark-text_io-integer_io.adb  spark-text_io-integer_io.ali
+Z system%s		system.ads		system.ali
+Z system.img_biu%s	s-imgbiu.ads		s-imgbiu.ali
+Z system.img_int%s	s-imgint.ads		s-imgint.ali
+Z system.img_llb%s	s-imgllb.ads		s-imgllb.ali
+Z system.img_lli%s	s-imglli.ads		s-imglli.ali
+Z system.img_lllb%s	s-imglllb.ads		s-imglllb.ali
+Z system.img_llli%s	s-imgllli.ads		s-imgllli.ali
+Z system.img_lllw%s	s-imglllw.ads		s-imglllw.ali
+Z system.img_llw%s	s-imgllw.ads		s-imgllw.ali
+Z system.img_wiu%s	s-imgwiu.ads		s-imgwiu.ali
+Z system.val_int%s	s-valint.ads		s-valint.ali
+Z system.val_lli%s	s-vallli.ads		s-vallli.ali
+Z system.val_llli%s	s-valllli.ads		s-valllli.ali
+
+D ada.ads		20210520051130 76789da1 ada%s
+D a-ioexce.ads		20210520051128 e4a01f64 ada.io_exceptions%s
+D a-stream.ads		20210520051128 119b8fb3 ada.streams%s
+D a-string.ads		20210520051128 90ac6797 ada.strings%s
+D a-sttebu.ads		20210520051128 18209c64 ada.strings.text_buffers%s
+D a-stuten.ads		20210520051128 808c40ad ada.strings.utf_encoding%s
+D a-textio.ads		20210520051130 aef4d56d ada.text_io%s
+D a-tigeau.ads		20210520051130 e643cdf3 ada.text_io.generic_aux%s
+D a-tiinau.ads		20210520051130 1c79f78d ada.text_io.integer_aux%s
+D a-tiinau.adb		20210520051130 89004916 ada.text_io.integer_aux%b
+D a-tiinio.ads		20210520051130 390edddb ada.text_io.integer_io%s
+D a-tiinio.adb		20210520051130 b79731f4 ada.text_io.integer_io%b
+D gcd_verified_contracts.ads  20251119095026 17b22dfe gcd_verified_contracts%s
+D interfac.ads		20210520051132 edec285f interfaces%s
+D i-cstrea.ads		20210520051132 e53d8b8e interfaces.c_streams%s
+D main.adb		20251119092624 a47be624 main%b
+D spark.ads		20251119065138 16439e1d spark%s
+D spark-text_io.ads	20251119065138 6c63416e spark.text_io%s
+D spark-text_io-integer_io.ads  20251119065138 c43f7920 spark.text_io.integer_io%s
+D spark-text_io-integer_io.adb  20251119065138 d329bb1c spark.text_io.integer_io%b
+D system.ads		20210520051134 2ffa5114 system%s
+D s-crtl.ads		20210520051132 0ebbdb71 system.crtl%s
+D s-ficobl.ads		20210520051132 078245e4 system.file_control_block%s
+D s-imageb.ads		20210520051132 3953e0e6 system.image_b%s
+D s-imagei.ads		20210520051132 0d3f86a7 system.image_i%s
+D s-imagew.ads		20210520051132 9d2dd267 system.image_w%s
+D s-imgbiu.ads		20210520051132 0a8e1c41 system.img_biu%s
+D s-imgint.ads		20210520051132 bdb6f5ec system.img_int%s
+D s-imgllb.ads		20210520051132 47d0db9f system.img_llb%s
+D s-imglli.ads		20210520051132 3723d9ff system.img_lli%s
+D s-imglllb.ads		20210520051132 30212eed system.img_lllb%s
+D s-imgllli.ads		20210520051132 5cf3dc07 system.img_llli%s
+D s-imglllw.ads		20210520051132 9e2b0560 system.img_lllw%s
+D s-imgllw.ads		20210520051132 bf9c9c15 system.img_llw%s
+D s-imgwiu.ads		20210520051132 912a95f2 system.img_wiu%s
+D s-parame.ads		20210520051134 4752c4cb system.parameters%s
+D s-unstyp.ads		20210520051134 2b077493 system.unsigned_types%s
+D s-valint.ads		20210520051134 e7fcadb7 system.val_int%s
+D s-vallli.ads		20210520051134 0767e6f3 system.val_lli%s
+D s-valllli.ads		20210520051134 f758e795 system.val_llli%s
+D s-vallllu.ads		20210520051134 87566fa4 system.val_lllu%s
+D s-valllu.ads		20210520051134 660d930f system.val_llu%s
+D s-valuns.ads		20210520051134 dac7b45d system.val_uns%s
+D s-valuei.ads		20210520051134 978dd0a6 system.value_i%s
+D s-valueu.ads		20210520051134 7b8fccf5 system.value_u%s
+D s-wchcon.ads		20210520051134 1b7d22d2 system.wch_con%s
+D unchconv.ads		20210520051134 ca2f9e18 unchecked_conversion%s
+G a Z
+X 7 a-textio.ads
+65P9*File_Type
+78I9*Count<integer>
+87I12*Field{integer}
+89I12*Number_Base{integer}
+154V13*Mode{67E9} 16|56s40 74s40
+164V13*Is_Open{boolean} 16|56s16 74s16
+175V13*Standard_Input{65P9} 16|40s45 70s39
+176V13*Standard_Output{65P9} 16|100s45 122s39
+177V13*Standard_Error{65P9} 16|104s45
+240V13*Line_Length{78I9} 16|76s8 76s33
+243V13*Line_Length{78I9} 16|64s8 64s26 86s8 86s26
+246V13*Page_Length{78I9} 16|77s12 77s37
+249V13*Page_Length{78I9} 16|65s12 65s30 87s12 87s30
+706p4 Current_In{65P9} 16|112r12
+708p4 Current_Out{65P9} 16|164r12
+X 8 a-tigeau.ads
+44U14*Check_End_Of_Field 16|58s7 58s7 58s7
+79U14*Load_Width 16|51s10 51s10 51s10
+153U14*Load_Integer 16|54s10 54s10 54s10
+169U14*Put_Item 16|104s7 104s7 104s7
+188U14*String_Skip 16|52s10 73s7 52s10 73s7 52s10 73s7
+X 13 gcd_verified_contracts.ads
+3K9*GCD_Verified_Contracts 15e27 16|3w6 72r10
+4U14*Euclid_GCD_Verified 16|72s33
+X 16 main.adb
+5U11*Main 5b11 109l5 109t9
+6K12 Int_IO[19|27] 13r14 27r10 50r10 75r40 76r40 77r40
+8i4 A{integer} 31m19 70r10 73r22
+8i7 B{integer} 54m19 70r20 73r35
+9i4 G{integer} 73m39 75r52
+10i4 GA{integer} 73m42 76r52
+11i4 GB{integer} 73m46 77r52
+13r4 Res{19|32R9[6]} 27m22 28r15 30r19 31r24 50m22 51r15 53r19 54r24
+14r4 CharRes{18|62R9} 85m29 86r15 88r23
+15e4 Ans{character} 88m16 89r19 89r37 89r55 89r73 106r17 106r35
+26I8 Num{integer} 29r38[6] 34r33[6] 60r30[6] 74r30[6] 97r31[6] 100r35[6]
+. 28r58[6] 33r13[6] 68r13[6] 92r30[6] 118r30[6] 136r13[6] 147r31[6]
+29i4 Default_Width{18|50I12} 61r39[6] 75r39[6] 93r39[6] 119r39[6]
+30i4 Default_Base{18|51I12} 62r45[6] 76r45[6] 98r46[6] 94r45[6] 120r45[6]
+. 148r46[6]
+32R9 Integer_Result 13r21[6] 37e14[6] 40r34[6] 49r31[6] 92r32[6] 31r31[6]
+. 66r31[6] 134r32[6]
+32e25 Status{18|45E9} 28r19[6] 51r19[6] 33r12[6]
+34i26 Item{integer} 30r23[6] 31r28[6] 53r23[6] 54r28[6] 41m41[6] 45m41[6]
+. 71m35[6] 139m35[6]
+39r19 File{18|44R9} 43r32[6] 44r32[6] 45r25[6] 45r39[6] 46r25[6] 46r39[6]
+. 47r37[6] 47r63[6] 35r12[6] 38m13[6] 42m13[6] 44r33[6] 46m13[6] 51m10[6]
+. 54m10[6] 57m10[6] 60m10[6] 63m10[6]
+40r19 Item{19|32R9[6]} 37m13[6] 41m13[6] 45m13[6] 50m10[6] 53m10[6] 56m10[6]
+. 59m10[6] 62m10[6]
+41i19 Width{18|50I12} 40r66[6] 44r49[6]
+49U14 Get 27s17[6] 50s17[6]
+49r19 Item{19|32R9[6]} 71m7[6] 75m10[6] 78m10[6] 81m10[6] 84m10[6] 87m10[6]
+50i19 Width{18|50I12} 70r60[6]
+59r19 File{18|44R9} 64r32[6] 64r55[6] 65r32[6] 66r28[6] 67r25[6] 67r39[6]
+. 68r25[6] 68r39[6] 69r25[6] 69r39[6] 70r32[6] 70r53[6] 71r32[6] 71r53[6]
+. 72r37[6] 72r63[6] 96r12[6] 98m13[6] 102m13[6] 106m13[6] 108r33[6] 109m13[6]
+. 112m40[6] 113m40[6] 114m40[6]
+60i19 Item{integer} 101r33[6] 105r33[6] 108r44[6]
+61i19 Width{18|50I12} 101r39[6] 105r39[6] 108r50[6]
+62i19 Base{18|51I12} 101r46[6] 105r46[6] 108r57[6]
+74U14 Put 75s47[6] 76s47[6] 77s47[6]
+74i19 Item{integer} 122r56[6]
+75i19 Width{18|50I12} 122r62[6]
+76i19 Base{18|51I12} 122r69[6]
+91a19 From{string} 138r27[6]
+92r19 Item{19|32R9[6]} 139m7[6] 142m10[6]
+93i19 Last{positive} 138m38[6] 143m10[6]
+96a19 To{string} 100r22[6]
+97i19 Item{integer} 100r46[6]
+44I9 Num{integer} 48r29[20|28[16|6]] 53r19[20|28[16|6]] 60r19[20|28[16|6]]
+. 70r15[20|28[16|6]] 81r15[20|28[16|6]] 92r18[20|28[16|6]] 99r14[20|28[16|6]]
+. 72r36[20|28[16|6]] 73r36[20|28[16|6]] 86r19[20|28[16|6]] 108r19[20|28[16|6]]
+. 117r18[20|28[16|6]] 144r15[20|28[16|6]] 159r15[20|28[16|6]] 169r14[20|28[16|6]]
+48i4 Default_Width{7|87I12} 71r24[20|28[16|6]] 82r24[20|28[16|6]] 145r24[20|28[16|6]]
+. 160r24[20|28[16|6]]
+49i4 Default_Base{7|89I12} 72r30[20|28[16|6]] 83r30[20|28[16|6]] 100r29[20|28[16|6]]
+. 146r30[20|28[16|6]] 161r30[20|28[16|6]] 170r29[20|28[16|6]]
+51U14 Get 40s28[20|28[16|6]] 44s28[20|28[16|6]] 70s22[20|28[16|6]] 112s7[20|28[16|6]]
+52p7 File{7|65P9} 56r25[20|28[16|6]] 56r46[20|28[16|6]] 96r24[20|28[16|6]]
+. 98r23[20|28[16|6]] 100r23[20|28[16|6]]
+53i7 Item{integer} 96m54[20|28[16|6]] 96r54[20|28[16|6]] 98m48[20|28[16|6]]
+. 98r48[20|28[16|6]] 100m38[20|28[16|6]] 100r38[20|28[16|6]]
+54i7 Width{7|87I12} 96r61[20|28[16|6]] 98r55[20|28[16|6]] 100r45[20|28[16|6]]
+60i7 Item{integer} 112m24[20|28[16|6]]
+61i7 Width{7|87I12} 112r30[20|28[16|6]]
+68U14 Put 100s28[20|28[16|6]] 104s28[20|28[16|6]] 108s28[20|28[16|6]] 122s22[20|28[16|6]]
+. 164s7[20|28[16|6]]
+69p7 File{7|65P9} 74r25[20|28[16|6]] 74r46[20|28[16|6]] 76r21[20|28[16|6]]
+. 76r46[20|28[16|6]] 77r25[20|28[16|6]] 77r50[20|28[16|6]] 150r24[20|28[16|6]]
+. 152r23[20|28[16|6]] 154r23[20|28[16|6]]
+70i7 Item{integer} 150r54[20|28[16|6]] 152r48[20|28[16|6]] 154r38[20|28[16|6]]
+71i7 Width{7|87I12} 150r61[20|28[16|6]] 152r55[20|28[16|6]] 154r45[20|28[16|6]]
+72i7 Base{7|89I12} 150r68[20|28[16|6]] 152r62[20|28[16|6]] 154r52[20|28[16|6]]
+81i7 Item{integer} 164r25[20|28[16|6]]
+82i7 Width{7|87I12} 164r31[20|28[16|6]]
+83i7 Base{7|89I12} 164r38[20|28[16|6]]
+90U14 Get 138s22[20|28[16|6]]
+91a7 From{string} 127r25[20|28[16|6]] 129r24[20|28[16|6]] 131r24[20|28[16|6]]
+92i7 Item{integer} 127m55[20|28[16|6]] 127r55[20|28[16|6]] 129m49[20|28[16|6]]
+. 129r49[20|28[16|6]] 131m39[20|28[16|6]] 131r39[20|28[16|6]]
+93i7 Last{positive} 127m62[20|28[16|6]] 129m56[20|28[16|6]] 131m46[20|28[16|6]]
+97U14 Put 149r21[20|28[16|6]]
+98a7 To{string} 174m25[20|28[16|6]] 176m24[20|28[16|6]] 178m24[20|28[16|6]]
+99i7 Item{integer} 174r53[20|28[16|6]] 176r47[20|28[16|6]] 178r37[20|28[16|6]]
+100i7 Base{7|89I12} 174r60[20|28[16|6]] 176r54[20|28[16|6]] 178r44[20|28[16|6]]
+28K12 Ada_Integer_IO[11|46] 28b12[6] 40r13[6] 44r13[6] 70r7[6] 100r13[6]
+. 104r13[6] 108r13[6] 122r7[6] 138r7[6] 149r6[6]
+33i7 Int{integer} 40m61[6] 41r49[6] 44m44[6] 45r49[6]
+68i7 Int{integer} 70m55[6] 71r43[6]
+136i7 Int{integer} 138m33[6] 139r43[6]
+48K12 Aux_Int[9|50] 48b12[20|28[16|6]] 100r10[20|28[16|6]] 131r10[20|28[16|6]]
+. 154r10[20|28[16|6]] 178r10[20|28[16|6]]
+56K12 Aux_LLI[9|50] 56b12[20|28[16|6]] 98r10[20|28[16|6]] 129r10[20|28[16|6]]
+. 152r10[20|28[16|6]] 176r10[20|28[16|6]]
+64K12 Aux_LLLI[9|50] 64b12[20|28[16|6]] 96r10[20|28[16|6]] 127r10[20|28[16|6]]
+. 150r10[20|28[16|6]] 174r10[20|28[16|6]]
+72b4 Need_LLI{boolean} 97r13[20|28[16|6]] 128r13[20|28[16|6]] 151r13[20|28[16|6]]
+. 175r13[20|28[16|6]]
+73b4 Need_LLLI{boolean} 95r10[20|28[16|6]] 126r10[20|28[16|6]] 149r10[20|28[16|6]]
+. 173r10[20|28[16|6]]
+39I9 Num{integer} 42r74[12|48[20|28[16|6]]] 44r11[12|48[20|28[16|6]]] 46r11[12|48[20|28[16|6]]]
+. 48r11[12|48[20|28[16|6]]] 54r19[12|48[20|28[16|6]]] 59r18[12|48[20|28[16|6]]]
+. 64r15[12|48[20|28[16|6]]] 70r14[12|48[20|28[16|6]]] 42r74[12|56[20|28[16|6]]]
+. 44r11[12|56[20|28[16|6]]] 46r11[12|56[20|28[16|6]]] 48r11[12|56[20|28[16|6]]]
+. 54r19[12|56[20|28[16|6]]] 59r18[12|56[20|28[16|6]]] 64r15[12|56[20|28[16|6]]]
+. 70r14[12|56[20|28[16|6]]] 42r74[12|64[20|28[16|6]]] 44r11[12|64[20|28[16|6]]]
+. 46r11[12|64[20|28[16|6]]] 48r11[12|64[20|28[16|6]]] 54r19[12|64[20|28[16|6]]]
+. 59r18[12|64[20|28[16|6]]] 64r15[12|64[20|28[16|6]]] 70r14[12|64[20|28[16|6]]]
+. 42r19[12|48[20|28[16|6]]] 67r18[12|48[20|28[16|6]]] 88r15[12|48[20|28[16|6]]]
+. 113r14[12|48[20|28[16|6]]] 42r19[12|56[20|28[16|6]]] 67r18[12|56[20|28[16|6]]]
+. 88r15[12|56[20|28[16|6]]] 113r14[12|56[20|28[16|6]]] 42r19[12|64[20|28[16|6]]]
+. 67r18[12|64[20|28[16|6]]] 88r15[12|64[20|28[16|6]]] 113r14[12|64[20|28[16|6]]]
+52U14 Get 96s19[12|64[20|28[16|6]]] 98s18[12|56[20|28[16|6]]] 100s18[12|48[20|28[16|6]]]
+53p7 File{7|65P9} 51r22[12|48[20|28[16|6]]] 54r24[12|48[20|28[16|6]]] 51r22[12|56[20|28[16|6]]]
+. 54r24[12|56[20|28[16|6]]] 51r22[12|64[20|28[16|6]]] 54r24[12|64[20|28[16|6]]]
+54i7 Item{integer} 57m7[12|48[20|28[16|6]]] 57m7[12|56[20|28[16|6]]] 57m7[12|64[20|28[16|6]]]
+55i7 Width{7|87I12} 50r10[12|48[20|28[16|6]]] 51r28[12|48[20|28[16|6]]] 58r43[12|48[20|28[16|6]]]
+. 50r10[12|56[20|28[16|6]]] 51r28[12|56[20|28[16|6]]] 58r43[12|56[20|28[16|6]]]
+. 50r10[12|64[20|28[16|6]]] 51r28[12|64[20|28[16|6]]] 58r43[12|64[20|28[16|6]]]
+57U14 Gets 127s19[12|64[20|28[16|6]]] 129s18[12|56[20|28[16|6]]] 131s18[12|48[20|28[16|6]]]
+58a7 From{string} 73r20[12|48[20|28[16|6]]] 74r21[12|48[20|28[16|6]]] 74r39[12|48[20|28[16|6]]]
+. 73r20[12|56[20|28[16|6]]] 74r21[12|56[20|28[16|6]]] 74r39[12|56[20|28[16|6]]]
+. 73r20[12|64[20|28[16|6]]] 74r21[12|64[20|28[16|6]]] 74r39[12|64[20|28[16|6]]]
+59i7 Item{integer} 74m7[12|48[20|28[16|6]]] 74m7[12|56[20|28[16|6]]] 74m7[12|64[20|28[16|6]]]
+60i7 Last{positive} 75m7[12|48[20|28[16|6]]] 75m7[12|56[20|28[16|6]]] 75m7[12|64[20|28[16|6]]]
+62U14 Put 150s19[12|64[20|28[16|6]]] 152s18[12|56[20|28[16|6]]] 154s18[12|48[20|28[16|6]]]
+63p7 File{7|65P9} 104r17[12|48[20|28[16|6]]] 104r17[12|56[20|28[16|6]]] 104r17[12|64[20|28[16|6]]]
+64i7 Item{integer} 97r21[12|48[20|28[16|6]]] 99r27[12|48[20|28[16|6]]] 101r27[12|48[20|28[16|6]]]
+. 97r21[12|56[20|28[16|6]]] 99r27[12|56[20|28[16|6]]] 101r27[12|56[20|28[16|6]]]
+. 97r21[12|64[20|28[16|6]]] 99r27[12|64[20|28[16|6]]] 101r27[12|64[20|28[16|6]]]
+65i7 Width{7|87I12} 92r51[12|48[20|28[16|6]]] 96r29[12|48[20|28[16|6]]] 99r33[12|48[20|28[16|6]]]
+. 101r39[12|48[20|28[16|6]]] 92r51[12|56[20|28[16|6]]] 96r29[12|56[20|28[16|6]]]
+. 99r33[12|56[20|28[16|6]]] 101r39[12|56[20|28[16|6]]] 92r51[12|64[20|28[16|6]]]
+. 96r29[12|64[20|28[16|6]]] 99r33[12|64[20|28[16|6]]] 101r39[12|64[20|28[16|6]]]
+66i7 Base{7|89I12} 96r10[12|48[20|28[16|6]]] 98r13[12|48[20|28[16|6]]] 101r33[12|48[20|28[16|6]]]
+. 96r10[12|56[20|28[16|6]]] 98r13[12|56[20|28[16|6]]] 101r33[12|56[20|28[16|6]]]
+. 96r10[12|64[20|28[16|6]]] 98r13[12|64[20|28[16|6]]] 101r33[12|64[20|28[16|6]]]
+68U14 Puts 174s19[12|64[20|28[16|6]]] 176s18[12|56[20|28[16|6]]] 178s18[12|48[20|28[16|6]]]
+69a7 To{string} 116r51[12|48[20|28[16|6]]] 121r33[12|48[20|28[16|6]]] 123r39[12|48[20|28[16|6]]]
+. 126r16[12|48[20|28[16|6]]] 129m10[12|48[20|28[16|6]]] 129r14[12|48[20|28[16|6]]]
+. 129r26[12|48[20|28[16|6]]] 116r51[12|56[20|28[16|6]]] 121r33[12|56[20|28[16|6]]]
+. 123r39[12|56[20|28[16|6]]] 126r16[12|56[20|28[16|6]]] 129m10[12|56[20|28[16|6]]]
+. 129r14[12|56[20|28[16|6]]] 129r26[12|56[20|28[16|6]]] 116r51[12|64[20|28[16|6]]]
+. 121r33[12|64[20|28[16|6]]] 123r39[12|64[20|28[16|6]]] 126r16[12|64[20|28[16|6]]]
+. 129m10[12|64[20|28[16|6]]] 129r14[12|64[20|28[16|6]]] 129r26[12|64[20|28[16|6]]]
+70i7 Item{integer} 121r27[12|48[20|28[16|6]]] 123r27[12|48[20|28[16|6]]]
+. 121r27[12|56[20|28[16|6]]] 123r27[12|56[20|28[16|6]]] 121r27[12|64[20|28[16|6]]]
+. 123r27[12|64[20|28[16|6]]]
+71i7 Base{7|89I12} 120r10[12|48[20|28[16|6]]] 123r33[12|48[20|28[16|6]]]
+. 120r10[12|56[20|28[16|6]]] 123r33[12|56[20|28[16|6]]] 120r10[12|64[20|28[16|6]]]
+. 123r33[12|64[20|28[16|6]]]
+45a7 Buf{string} 51m35[12|48[20|28[16|6]]] 52r23[12|48[20|28[16|6]]] 54m30[12|48[20|28[16|6]]]
+. 57r21[12|48[20|28[16|6]]] 58r27[12|48[20|28[16|6]]] 51m35[12|56[20|28[16|6]]]
+. 52r23[12|56[20|28[16|6]]] 54m30[12|56[20|28[16|6]]] 57r21[12|56[20|28[16|6]]]
+. 58r27[12|56[20|28[16|6]]] 51m35[12|64[20|28[16|6]]] 52r23[12|64[20|28[16|6]]]
+. 54m30[12|64[20|28[16|6]]] 57r21[12|64[20|28[16|6]]] 58r27[12|64[20|28[16|6]]]
+46i7 Ptr{integer} 52m28[12|48[20|28[16|6]]] 57m26[12|48[20|28[16|6]]] 57r26[12|48[20|28[16|6]]]
+. 58r38[12|48[20|28[16|6]]] 52m28[12|56[20|28[16|6]]] 57m26[12|56[20|28[16|6]]]
+. 57r26[12|56[20|28[16|6]]] 58r38[12|56[20|28[16|6]]] 52m28[12|64[20|28[16|6]]]
+. 57m26[12|64[20|28[16|6]]] 57r26[12|64[20|28[16|6]]] 58r38[12|64[20|28[16|6]]]
+47i7 Stop{integer} 51m40[12|48[20|28[16|6]]] 51r40[12|48[20|28[16|6]]] 54m35[12|48[20|28[16|6]]]
+. 54r35[12|48[20|28[16|6]]] 57r38[12|48[20|28[16|6]]] 58r32[12|48[20|28[16|6]]]
+. 51m40[12|56[20|28[16|6]]] 51r40[12|56[20|28[16|6]]] 54m35[12|56[20|28[16|6]]]
+. 54r35[12|56[20|28[16|6]]] 57r38[12|56[20|28[16|6]]] 58r32[12|56[20|28[16|6]]]
+. 51m40[12|64[20|28[16|6]]] 51r40[12|64[20|28[16|6]]] 54m35[12|64[20|28[16|6]]]
+. 54r35[12|64[20|28[16|6]]] 57r38[12|64[20|28[16|6]]] 58r32[12|64[20|28[16|6]]]
+70i7 Pos{integer} 73m26[12|48[20|28[16|6]]] 74m27[12|48[20|28[16|6]]] 74r27[12|48[20|28[16|6]]]
+. 75r15[12|48[20|28[16|6]]] 73m26[12|56[20|28[16|6]]] 74m27[12|56[20|28[16|6]]]
+. 74r27[12|56[20|28[16|6]]] 75r15[12|56[20|28[16|6]]] 73m26[12|64[20|28[16|6]]]
+. 74m27[12|64[20|28[16|6]]] 74r27[12|64[20|28[16|6]]] 75r15[12|64[20|28[16|6]]]
+92a7 Buf{string} 97m27[12|48[20|28[16|6]]] 97r27[12|48[20|28[16|6]]] 99m40[12|48[20|28[16|6]]]
+. 101m46[12|48[20|28[16|6]]] 104r23[12|48[20|28[16|6]]] 97m27[12|56[20|28[16|6]]]
+. 97r27[12|56[20|28[16|6]]] 99m40[12|56[20|28[16|6]]] 101m46[12|56[20|28[16|6]]]
+. 104r23[12|56[20|28[16|6]]] 97m27[12|64[20|28[16|6]]] 97r27[12|64[20|28[16|6]]]
+. 99m40[12|64[20|28[16|6]]] 101m46[12|64[20|28[16|6]]] 104r23[12|64[20|28[16|6]]]
+93i7 Ptr{natural} 97m32[12|48[20|28[16|6]]] 97r32[12|48[20|28[16|6]]] 99m45[12|48[20|28[16|6]]]
+. 99r45[12|48[20|28[16|6]]] 101m51[12|48[20|28[16|6]]] 101r51[12|48[20|28[16|6]]]
+. 104r33[12|48[20|28[16|6]]] 97m32[12|56[20|28[16|6]]] 97r32[12|56[20|28[16|6]]]
+. 99m45[12|56[20|28[16|6]]] 99r45[12|56[20|28[16|6]]] 101m51[12|56[20|28[16|6]]]
+. 101r51[12|56[20|28[16|6]]] 104r33[12|56[20|28[16|6]]] 97m32[12|64[20|28[16|6]]]
+. 97r32[12|64[20|28[16|6]]] 99m45[12|64[20|28[16|6]]] 99r45[12|64[20|28[16|6]]]
+. 101m51[12|64[20|28[16|6]]] 101r51[12|64[20|28[16|6]]] 104r33[12|64[20|28[16|6]]]
+116a7 Buf{string} 121m44[12|48[20|28[16|6]]] 123m50[12|48[20|28[16|6]]] 129r49[12|48[20|28[16|6]]]
+. 121m44[12|56[20|28[16|6]]] 123m50[12|56[20|28[16|6]]] 129r49[12|56[20|28[16|6]]]
+. 121m44[12|64[20|28[16|6]]] 123m50[12|64[20|28[16|6]]] 129r49[12|64[20|28[16|6]]]
+117i7 Ptr{natural} 121m49[12|48[20|28[16|6]]] 121r49[12|48[20|28[16|6]]]
+. 123m55[12|48[20|28[16|6]]] 123r55[12|48[20|28[16|6]]] 126r10[12|48[20|28[16|6]]]
+. 129r37[12|48[20|28[16|6]]] 129r59[12|48[20|28[16|6]]] 121m49[12|56[20|28[16|6]]]
+. 121r49[12|56[20|28[16|6]]] 123m55[12|56[20|28[16|6]]] 123r55[12|56[20|28[16|6]]]
+. 126r10[12|56[20|28[16|6]]] 129r37[12|56[20|28[16|6]]] 129r59[12|56[20|28[16|6]]]
+. 121m49[12|64[20|28[16|6]]] 121r49[12|64[20|28[16|6]]] 123m55[12|64[20|28[16|6]]]
+. 123r55[12|64[20|28[16|6]]] 126r10[12|64[20|28[16|6]]] 129r37[12|64[20|28[16|6]]]
+. 129r59[12|64[20|28[16|6]]]
+X 17 spark.ads
+29K9*SPARK 16|1r6 2r6 6r26 14r14 17r4 18r4 19r4 22r7 26r10 29r18 34r19 36r18
+. 37r16 38r16 39r18 40r16 49r10 52r18 57r19 59r18 60r16 61r16 62r18 63r16
+. 75r10 75r56 76r10 76r57 77r10 77r57 79r10 84r10 85r10 87r18 92r19 93r19
+. 95r18 96r16 97r16 98r18 99r16 107r7 17|66e10
+42n25*Success{41E9} 16|29r32 52r32 87r32
+49n25*End_Error{41E9} 16|39r32 62r32 98r32
+50n25*Data_Error{41E9} 16|36r32 59r32 95r32
+61e7*Status{41E9} 16|38m18 42m18 46m18 51m15 54m15 57m15 60m15 63m15 72m22
+. 76m25 79m25 82m25 85m25 88m25 98m18 102m18 106m18 109m18 112m45 113m45
+. 114m45 123m23 126m26 128m26 130m26
+62e7*Sort{57E9} 16|35r17 96r17
+63p7*File{7|65P9} 16|44r38 108r38
+X 18 spark-text_io.ads
+35K15*Text_IO 16|1w12 2r12 6r32 14r20 17r10 18r10 19r10 22r13 26r16 29r24
+. 34r25 36r24 37r22 38r22 39r24 40r22 49r16 52r24 57r25 59r24 60r22 61r22
+. 62r24 63r22 75r16 75r62 76r16 76r63 77r16 77r63 79r16 84r16 85r16 87r24
+. 92r25 93r25 95r24 96r22 97r22 98r24 99r22 107r13 18|755e18
+44R9*File_Type<17|53R9>
+45E9*File_Status<17|41E9>
+46E9*File_Mode<7|67E9>
+47I9*Count<7|78I9>
+50I12*Field{integer}
+51I12*Number_Base{integer}
+62R9*Character_Result 16|14r28 18|67e14
+62e27*Status{45E9} 16|86r23
+64e26*Item{character} 16|88r31
+88r4*Standard_Input{44R9} 16|52r34 53r27 54r30 55r27 56r30 57r40 72m7 76m10
+. 79m10 82m10 85m10 88m10
+89r4*Standard_Output{44R9} 16|78r29 79r30 80r27 81r27 82r30 83r27 84r30 85r34
+. 86r37 87r34 88r37 89r41 123m7 126m10 128m10 130m10
+100U14*Init_Standard_Input 16|17s18
+107U14*Init_Standard_Output 16|18s18
+114U14*Init_Standard_Error 16|19s18
+123V13*Status{45E9} 16|64s47 78s21
+129V13*Is_Standard_Input{boolean} 16|57s21
+133V13*Is_Standard_Output{boolean} 16|89s21
+146V13*Is_Standard_File{boolean} 16|47s19 47s45 72s19 72s45
+152V13*Is_Open{boolean} 16|66s19 79s21
+155V13*Mode{46E9} 16|67s19 67s33 80s21
+162V13*Name{string} 16|45s19 45s33 53s21 54s24 68s19 68s33 81s21 82s24
+166V13*Form{string} 16|46s19 46s33 55s21 56s24 69s19 69s33 83s21 84s24
+170V13*Is_Readable{boolean} 16|43s19 44s19 52s21
+174V13*Is_Writable{boolean} 16|64s19 65s19
+335V14*Line_Length{47I9} 16|70s19 70s40 85s21 86s24
+342V14*Page_Length{47I9} 16|71s19 71s40 87s21 88s24
+362U14*New_Line<7|262p14> 16|75s70 76s71 77s71 107s21
+385U14*Skip_Line<7|271p14> 16|38s30 61s30 93s33 97s30
+552U14*Get 16|85s24
+683U14*Put 16|26s24 49s24 75s24 76s24 77s24 84s24
+740U14*Put_Line 16|22s21 34s33 37s30 40s30 57s33 60s30 63s30 79s24 92s33
+. 96s30 99s30
+X 19 spark-text_io-integer_io.ads
+27k23*Integer_IO 16|2w20 6r40 19|102e29
+X 27 s-imgbiu.ads
+44U14*Set_Image_Based_Integer 16|54r9[27|44] 101s10[27|44] 123s10[27|44]
+X 28 s-imgint.ads
+51U14*Set_Image_Integer 16|52r9[28|41] 97s10[28|41]
+X 29 s-imgllb.ads
+44U14*Set_Image_Based_Integer 16|62r9[29|44] 101s10[29|44] 123s10[29|44]
+X 30 s-imglli.ads
+51U14*Set_Image_Integer 16|60r9[30|41] 97s10[30|41]
+X 31 s-imglllb.ads
+44U14*Set_Image_Based_Integer 16|70r9[31|44] 101s10[31|44] 123s10[31|44]
+X 32 s-imgllli.ads
+51U14*Set_Image_Integer 16|68r9[32|41] 97s10[32|41]
+X 33 s-imglllw.ads
+45U14*Set_Image_Width_Integer 16|69r9[33|44] 99s10[33|44] 121s10[33|44]
+X 34 s-imgllw.ads 61r9[34|44] 99s10[34|44] 121s10[34|44]
+X 35 s-imgwiu.ads 53r9[35|44] 99s10[35|44] 121s10[35|44]
+X 38 s-valint.ads
+49V13*Scan_Integer{integer} 16|51r9[38|44] 57s15[38|44] 74s15[38|44]
+X 39 s-vallli.ads 59r9[39|44] 57s15[39|44] 74s15[39|44]
+X 40 s-valllli.ads 67r9[40|44] 57s15[40|44] 74s15[40|44]
+
+QQ SPARKVERSION SPARK Community 2021 (20210519)
+GG EK_DIRECT_CALLS main__int_io__get 0
+GG EK_GLOBALS main__int_io__get local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 2 main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__get__2 0
+GG EK_GLOBALS main__int_io__get__2 local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 2 main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 1 ada___spark__text_io__standard_input LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__put 0
+GG EK_GLOBALS main__int_io__put local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 2 main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__put__2 0
+GG EK_GLOBALS main__int_io__put__2 local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 2 main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 1 ada___spark__text_io__standard_output LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__get__3 0
+GG EK_GLOBALS main__int_io__get__3 local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 2 main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__put__3 0
+GG EK_GLOBALS main__int_io__put__3 local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 2 main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__get 0
+GG EK_GLOBALS main__int_io__ada_integer_io__get local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 3 main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 1 ada___ada__text_io__file_system LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__get__2 0
+GG EK_GLOBALS main__int_io__ada_integer_io__get__2 local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 3 main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 1 ada___ada__text_io__file_system LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__put 0
+GG EK_GLOBALS main__int_io__ada_integer_io__put local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 3 main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 1 ada___ada__text_io__file_system LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__put__2 0
+GG EK_GLOBALS main__int_io__ada_integer_io__put__2 local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 3 main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 1 ada___ada__text_io__file_system LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__get__3 0
+GG EK_GLOBALS main__int_io__ada_integer_io__get__3 local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 3 main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__put__3 0
+GG EK_GLOBALS main__int_io__ada_integer_io__put__3 local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 3 main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_int__get 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_int__get local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 4 main__int_io__ada_integer_io__aux_int main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 5 ada___system__val_int__impl__scan_integer ada___ada___ada__text_io__generic_aux__check_end_of_field ada___ada___ada__text_io__generic_aux__load_width ada___ada___ada__text_io__generic_aux__load_integer ada___ada___ada__text_io__generic_aux__string_skip FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_int__gets 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_int__gets local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 4 main__int_io__ada_integer_io__aux_int main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 2 ada___system__val_int__impl__scan_integer ada___ada___ada__text_io__generic_aux__string_skip FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_int__put 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_int__put local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 4 main__int_io__ada_integer_io__aux_int main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 4 ada___system__img_biu__impl__set_image_based_integer ada___system__img_int__impl__set_image_integer ada___system__img_wiu__impl__set_image_width_integer ada___ada___ada__text_io__generic_aux__put_item FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_int__puts 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_int__puts local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 4 main__int_io__ada_integer_io__aux_int main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 2 ada___system__img_biu__impl__set_image_based_integer ada___system__img_wiu__impl__set_image_width_integer FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_int 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_int local TRUE E_PACKAGE FALSE ORIGIN_FLOW 3 main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 initializes 0 refined_initializes 0 calls_proof 0 calls 0 calls_conditional 0 local_var 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_lli__get 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_lli__get local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 4 main__int_io__ada_integer_io__aux_lli main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 5 ada___system__val_lli__impl__scan_integer ada___ada___ada__text_io__generic_aux__check_end_of_field ada___ada___ada__text_io__generic_aux__load_width ada___ada___ada__text_io__generic_aux__load_integer ada___ada___ada__text_io__generic_aux__string_skip FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_lli__gets 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_lli__gets local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 4 main__int_io__ada_integer_io__aux_lli main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 2 ada___system__val_lli__impl__scan_integer ada___ada___ada__text_io__generic_aux__string_skip FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_lli__put 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_lli__put local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 4 main__int_io__ada_integer_io__aux_lli main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 4 ada___system__img_llb__impl__set_image_based_integer ada___system__img_lli__impl__set_image_integer ada___system__img_llw__impl__set_image_width_integer ada___ada___ada__text_io__generic_aux__put_item FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_lli__puts 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_lli__puts local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 4 main__int_io__ada_integer_io__aux_lli main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 2 ada___system__img_llb__impl__set_image_based_integer ada___system__img_llw__impl__set_image_width_integer FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_lli 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_lli local TRUE E_PACKAGE FALSE ORIGIN_FLOW 3 main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 initializes 0 refined_initializes 0 calls_proof 0 calls 0 calls_conditional 0 local_var 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_llli__get 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_llli__get local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 4 main__int_io__ada_integer_io__aux_llli main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 5 ada___system__val_llli__impl__scan_integer ada___ada___ada__text_io__generic_aux__check_end_of_field ada___ada___ada__text_io__generic_aux__load_width ada___ada___ada__text_io__generic_aux__load_integer ada___ada___ada__text_io__generic_aux__string_skip FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_llli__gets 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_llli__gets local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 4 main__int_io__ada_integer_io__aux_llli main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 2 ada___system__val_llli__impl__scan_integer ada___ada___ada__text_io__generic_aux__string_skip FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_llli__put 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_llli__put local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 4 main__int_io__ada_integer_io__aux_llli main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 4 ada___system__img_lllb__impl__set_image_based_integer ada___system__img_llli__impl__set_image_integer ada___system__img_lllw__impl__set_image_width_integer ada___ada___ada__text_io__generic_aux__put_item FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_llli__puts 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_llli__puts local TRUE E_PROCEDURE FALSE ORIGIN_FLOW 4 main__int_io__ada_integer_io__aux_llli main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 2 ada___system__img_lllb__impl__set_image_based_integer ada___system__img_lllw__impl__set_image_width_integer FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io__aux_llli 0
+GG EK_GLOBALS main__int_io__ada_integer_io__aux_llli local TRUE E_PACKAGE FALSE ORIGIN_FLOW 3 main__int_io__ada_integer_io main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 initializes 0 refined_initializes 0 calls_proof 0 calls 0 calls_conditional 0 local_var 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io__ada_integer_io 0
+GG EK_GLOBALS main__int_io__ada_integer_io local TRUE E_PACKAGE FALSE ORIGIN_FLOW 2 main__int_io main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 initializes 0 refined_initializes 0 calls_proof 0 calls 0 calls_conditional 0 local_var 2 main__int_io__ada_integer_io__default_width main__int_io__ada_integer_io__default_base FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main__int_io 0
+GG EK_GLOBALS main__int_io local TRUE E_PACKAGE FALSE ORIGIN_FLOW 1 main proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 initializes 0 refined_initializes 0 calls_proof 0 calls 0 calls_conditional 0 local_var 0 FALSE FALSE FALSE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_DIRECT_CALLS main 0
+GG EK_GLOBALS main local FALSE E_PROCEDURE FALSE ORIGIN_FLOW 0 proper_proof_in 0 proper_input 0 proper_output 0 refined_proof_in 0 refined_input 0 refined_output 0 calls_proof 0 calls 0 calls_conditional 9 ada___spark__text_io__init_standard_input ada___spark__text_io__init_standard_output ada___spark__text_io__init_standard_error ada___spark__text_io__new_line__3 ada___spark__text_io__skip_line__3 ada___spark__text_io__get__2 ada___spark__text_io__put__4 ada___spark__text_io__put_line__2 gcd_verified_contracts__euclid_gcd_verified FALSE FALSE TRUE FALSE ENTRY_CALLS 0 SUSPENDS_ON 0 UNSYNCH_ACCESSES 0 LOCKS 0
+GG EK_FLOW_SCOPE interfaces__rotate_right__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__getc FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_int TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___system__crtl__rewind FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__skip_page__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__put FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_right_arithmetic__5 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_lli__gets FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io__aux_lli VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__is_blank FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__is_standard_error FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_wiu__impl__set_image_width_integer FALSE FALSE FALSE FALSE TRUE ada___system__img_wiu__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__rotate_left__5 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__load_width FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__rmdir FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__put__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_lli__put FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io__aux_lli VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__open FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__afcb_allocate__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io PRIVATE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__put__2 FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__file_control_block TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___spark__text_io__is_standard_writable FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__rotate_right__5 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__new_line__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_wiu__impl__set_image_width_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__img_wiu__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__afcb_close__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io PRIVATE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__load_skip FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__chdir FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_lli__puts FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io__aux_lli VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_left__6 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__afcb_free__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io PRIVATE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__get__3 FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__load FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__get_line FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__read__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io PRIVATE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__is_standard_file FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_right__6 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__look_ahead FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__mkdir FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__put__3 FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__end_of_page FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_right_arithmetic__6 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__skip_line FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__load__2 FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams TRUE FALSE FALSE FALSE FALSE interfaces
+GG EK_FLOW_SCOPE main FALSE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE ada___ada__streams__stream_element_arraySR FALSE FALSE FALSE FALSE TRUE ada___ada__streams PRIVATE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__write__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io PRIVATE_PART
+GG EK_FLOW_SCOPE ada___system__value_u TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___system__unsigned_types__rotate_left__6 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__setvbuf FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__set_page_length__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__is_open FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_uns TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__load__3 FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__end_of_page__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__text_buffers TRUE FALSE FALSE FALSE FALSE ada___ada__strings
+GG EK_FLOW_SCOPE ada___system__unsigned_types__rotate_right__6 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__look_ahead__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__end_of_file FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__mode__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__close FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__streams__stream_element_arraySW FALSE FALSE FALSE FALSE TRUE ada___ada__streams PRIVATE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__skip_line__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__tmpnam FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__load__4 FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___spark__text_io__end_of_file__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__name FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__text_buffers__put FALSE FALSE FALSE FALSE TRUE ada___ada___ada__strings__text_buffers VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__put__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__tmpfile FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__delete FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__text_buffers__wide_put FALSE FALSE FALSE FALSE TRUE ada___ada___ada__strings__text_buffers VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__get_immediate FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__load_digits FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_llli TRUE FALSE FALSE TRUE ada___ada___ada__text_io__integer_aux TRUE main__int_io__ada_integer_io BODY_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__end_of_line FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__form FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__ungetc FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__set_col__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__text_buffers__wide_wide_put FALSE FALSE FALSE FALSE TRUE ada___ada___ada__strings__text_buffers VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__get_line__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_uns__impl TRUE FALSE FALSE TRUE ada___system__value_u TRUE ada___system__val_uns VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__load_digits__2 FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__text_buffers__put_utf_8 FALSE FALSE FALSE FALSE TRUE ada___ada___ada__strings__text_buffers VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__reset FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__is_readable FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__unlink FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_int TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___system__img_biu__impl TRUE FALSE FALSE TRUE ada___system__image_b TRUE ada___system__img_biu VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__load_extended_digits FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__text_buffers__wide_put_utf_16 FALSE FALSE FALSE FALSE TRUE ada___ada___ada__strings__text_buffers VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__get_immediate__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__file_control_block__afcb_allocate FALSE FALSE FALSE FALSE TRUE ada___system__file_control_block VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__end_of_line__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_uns__impl__scan_raw_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__val_uns__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__stdin FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__eof_char FALSE FALSE FALSE FALSE TRUE ada___ada__text_io PRIVATE_PART
+GG EK_FLOW_SCOPE ada___system__file_control_block__afcb_close FALSE FALSE FALSE FALSE TRUE ada___system__file_control_block VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__stdout FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__initialize_standard_files FALSE FALSE FALSE FALSE TRUE ada___ada__text_io PRIVATE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__text_buffers__new_line FALSE FALSE FALSE FALSE TRUE ada___ada___ada__strings__text_buffers VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__open FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__stderr FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__load_extended_digits__2 FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__file_control_block__afcb_free FALSE FALSE FALSE FALSE TRUE ada___system__file_control_block VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__is_writable FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__set_page_length__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__new_page FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_uns__impl__scan_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__val_uns__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_biu__impl__set_image_based_integer FALSE FALSE FALSE FALSE TRUE ada___system__img_biu__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__text_buffers__current_indent FALSE FALSE FALSE FALSE TRUE ada___ada___ada__strings__text_buffers VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__load_integer FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__text_buffers__increase_indent FALSE FALSE FALSE FALSE TRUE ada___ada___ada__strings__text_buffers VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__get_immediate__3 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__io_exceptions TRUE FALSE FALSE FALSE FALSE ada
+GG EK_FLOW_SCOPE ada___system__crtl__close FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces TRUE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE ada___system__val_uns__impl__value_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__val_uns__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__load_real FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_biu__impl__set_image_based_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__img_biu__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__look_ahead FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__create__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__read FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__reset__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__nextc FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__put_line FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_llli__get FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io__aux_llli VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__text_buffers__decrease_indent FALSE FALSE FALSE FALSE TRUE ada___ada___ada__strings__text_buffers VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__feof FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__put_item FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__streams TRUE FALSE FALSE FALSE FALSE ada
+GG EK_FLOW_SCOPE ada___ada__text_io__get_immediate__4 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__ferror FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__new_page__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__strlen FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_llli__gets FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io__aux_llli VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__write FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__store_char FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__image_i TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_llli__put FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io__aux_llli VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__value_i TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__string_skip FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__strncpy FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__line_length__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__skip_page FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__ungetc FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__get__3 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_llli__puts FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io__aux_llli VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__look_ahead__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__streams__read FALSE FALSE FALSE FALSE TRUE ada___ada__streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_llb TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___ada__text_io__mode FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__parameters TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___system__img_biu TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___spark__text_io__line_length__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__atoi FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__set_col__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__streams__write FALSE FALSE FALSE FALSE TRUE ada___ada__streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__fileno FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__page_length__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__integer_io TRUE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__skip_page__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_int__impl TRUE FALSE FALSE TRUE ada___system__image_i TRUE ada___system__img_int VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__name FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__open__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__get__4 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_lli TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___system__crtl__clearerr FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__streams__read_sea FALSE FALSE FALSE FALSE TRUE ada___ada__streams PRIVATE_PART
+GG EK_FLOW_SCOPE main__int_io TRUE FALSE FALSE TRUE ada___ada___spark__text_io__integer_io TRUE main BODY_PART
+GG EK_FLOW_SCOPE ada___system__val_int__impl TRUE FALSE FALSE TRUE ada___system__value_i TRUE ada___system__val_int VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__page_length__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE standard__unchecked_conversion FALSE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE ada___ada__text_io__form FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__streams__write_sea FALSE FALSE FALSE FALSE TRUE ada___ada__streams PRIVATE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__dup FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_int__impl__image_integer FALSE FALSE FALSE FALSE TRUE ada___system__img_int__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__parameters__default_stack_size FALSE FALSE FALSE FALSE TRUE ada___system__parameters VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__new_line__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__end_of_page FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__parameters__minimum_stack_size FALSE FALSE FALSE FALSE TRUE ada___system__parameters VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__get_immediate FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__parameters__adjust_storage_size FALSE FALSE FALSE FALSE TRUE ada___system__parameters VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__put_line__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_int__impl__set_image_integer FALSE FALSE FALSE FALSE TRUE ada___system__img_int__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__put__3 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__dup2 FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__is_open FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_int__impl__scan_integer FALSE FALSE FALSE FALSE TRUE ada___system__val_int__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__set_input FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__end_of_page__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE system TRUE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE ada___system__crtl__fclose FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_lli TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___system__img_llb__impl TRUE FALSE FALSE TRUE ada___system__image_b TRUE ada___system__img_llb VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__set_output FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_int__impl__value_integer FALSE FALSE FALSE FALSE TRUE ada___system__val_int__impl VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_left FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__end_of_file FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__fdopen FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__set_error FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_llu TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__fread FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_llb__impl__set_image_based_integer FALSE FALSE FALSE FALSE TRUE ada___system__img_llb__impl VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__standard_input FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__close FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__put__4 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__fflush FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__get_immediate__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__standard_output FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__end_of_file__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__fread__2 FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__set_line__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_llb__impl__set_image_based_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__img_llb__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__standard_error FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__fgetc FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_llu__impl TRUE FALSE FALSE TRUE ada___system__value_u TRUE ada___system__val_llu VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__get FALSE FALSE FALSE FALSE TRUE main__int_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__set_col FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__wch_con TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___spark__text_io__new_line__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__current_input FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__get_line FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__fgets FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__delete FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__strings TRUE FALSE FALSE FALSE FALSE ada
+GG EK_FLOW_SCOPE ada___system__img_llw TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___ada__text_io__current_output FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE interfaces__rotate_left FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_llu__impl__scan_raw_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__val_llu__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__current_error FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_lli__impl TRUE FALSE FALSE TRUE ada___system__image_i TRUE ada___system__img_lli VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_llu__impl__scan_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__val_llu__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__fopen FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_right FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__get_immediate__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__utf_encoding__to_unsigned_8 FALSE FALSE FALSE TRUE standard__unchecked_conversion TRUE ada___ada___ada__strings__utf_encoding__to_unsigned_8GP6061 VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__standard_input__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__get__2 FALSE FALSE FALSE FALSE TRUE main__int_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_llu__impl__value_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__val_llu__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__standard_output__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__reset__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_lli__impl__image_integer FALSE FALSE FALSE FALSE TRUE ada___system__img_lli__impl VISIBLE_PART
+GG EK_FLOW_SCOPE system__Olt FALSE FALSE FALSE FALSE TRUE system VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_llli TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE interfaces__shift_left__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__standard_error__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__fputc FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE system__Ole FALSE FALSE FALSE FALSE TRUE system VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_lli__impl__set_image_integer FALSE FALSE FALSE FALSE TRUE ada___system__img_lli__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___spark__text_io__integer_io TRUE FALSE FALSE FALSE FALSE ada___spark__text_io
+GG EK_FLOW_SCOPE ada___ada__text_io__current_input__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE system__Ogt FALSE FALSE FALSE FALSE TRUE system VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__utf_encoding__to_unsigned_8GP6061 TRUE FALSE FALSE FALSE TRUE ada___ada___ada__strings__utf_encoding PRIVATE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__get_line__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__utf_encoding__to_unsigned_16 FALSE FALSE FALSE TRUE standard__unchecked_conversion TRUE ada___ada___ada__strings__utf_encoding__to_unsigned_16GP6157 VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_lli__impl TRUE FALSE FALSE TRUE ada___system__value_i TRUE ada___system__val_lli VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__current_output__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__fputwc FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE system__Oge FALSE FALSE FALSE FALSE TRUE system VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__skip_line__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__set_col__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__current_error__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE system__Oeq FALSE FALSE FALSE FALSE TRUE system VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__utf_encoding TRUE FALSE FALSE FALSE FALSE ada___ada__strings
+GG EK_FLOW_SCOPE ada___ada__text_io__flush FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__image_w TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___system__crtl__fputs FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__fwrite FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__get_immediate__4 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__utf_encoding__to_unsigned_16GP6157 TRUE FALSE FALSE FALSE TRUE ada___ada___ada__strings__utf_encoding PRIVATE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__utf_encoding__to_unsigned_32 FALSE FALSE FALSE TRUE standard__unchecked_conversion TRUE ada___ada___ada__strings__utf_encoding__to_unsigned_32GP6260 VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__wch_con__get_wc_encoding_method FALSE FALSE FALSE FALSE TRUE ada___system__wch_con VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_lli__impl__scan_integer FALSE FALSE FALSE FALSE TRUE ada___system__val_lli__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__set_line__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__free FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_left__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__wch_con__get_wc_encoding_method__2 FALSE FALSE FALSE FALSE TRUE ada___system__wch_con VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__reset__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__set_line FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_lllu TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___system__wch_con__is_start_of_encoding FALSE FALSE FALSE FALSE TRUE ada___system__wch_con VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_lli__impl__value_integer FALSE FALSE FALSE FALSE TRUE ada___system__val_lli__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__get_line__3 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__freopen FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_right__2 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__put FALSE FALSE FALSE FALSE TRUE main__int_io VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_int TRUE FALSE FALSE TRUE ada___ada___ada__text_io__integer_aux TRUE main__int_io__ada_integer_io BODY_PART
+GG EK_FLOW_SCOPE ada___system__img_lllb TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___ada___ada__strings__utf_encoding__to_unsigned_32GP6260 TRUE FALSE FALSE FALSE TRUE ada___ada___ada__strings__utf_encoding PRIVATE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__skip_line__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__flush__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__get_line__4 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_llw__impl TRUE FALSE FALSE TRUE ada___system__image_w TRUE ada___system__img_llw VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__setvbuf FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_left__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__fseek FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__put_line FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io TRUE FALSE FALSE FALSE FALSE spark
+GG EK_FLOW_SCOPE ada___spark__text_io__get__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE spark TRUE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE ada___system__val_lllu__impl TRUE FALSE FALSE TRUE ada___system__value_u TRUE ada___system__val_lllu VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_llw__impl__set_image_width_integer FALSE FALSE FALSE FALSE TRUE ada___system__img_llw__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__set_line_length FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__utf_encoding__encoding FALSE FALSE FALSE FALSE TRUE ada___ada___ada__strings__utf_encoding VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__fseek64 FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__flush FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_llw__impl__set_image_width_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__img_llw__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_lllu__impl__scan_raw_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__val_lllu__impl VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__end_of_line FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__set_line__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__ftell FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_lllu__impl__scan_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__val_lllu__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_left FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__put_line__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_left__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__end_of_line__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__ftell64 FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__col__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_lllu__impl__value_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__val_lllu__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_lllb__impl TRUE FALSE FALSE TRUE ada___system__image_b TRUE ada___system__img_lllb VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_right FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_llli TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__file_exists FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__set_line_length__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__utf_encoding__from_utf_16 FALSE FALSE FALSE FALSE TRUE ada___ada___ada__strings__utf_encoding PRIVATE_PART
+GG EK_FLOW_SCOPE main__int_io__put__2 FALSE FALSE FALSE FALSE TRUE main__int_io VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_int__get FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io__aux_int VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__new_page FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__is_regular_file FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_right_arithmetic FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__get__4 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__getenv FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__set_binary_mode FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_int__gets FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io__aux_int VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_right__3 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__col__4 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__utf_encoding__to_utf_16 FALSE FALSE FALSE FALSE TRUE ada___ada___ada__strings__utf_encoding PRIVATE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__col FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__rotate_left FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__get__3 FALSE FALSE FALSE FALSE TRUE main__int_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__set_text_mode FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_lllb__impl__set_image_based_integer FALSE FALSE FALSE FALSE TRUE ada___system__img_lllb__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada TRUE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE ada___spark__text_io__line__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_llli__impl TRUE FALSE FALSE TRUE ada___system__value_i TRUE ada___system__val_llli VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_int__put FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io__aux_int VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__set_page_length FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__rotate_right FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__isatty FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__utf_encoding__raise_encoding_error FALSE FALSE FALSE FALSE TRUE ada___ada___ada__strings__utf_encoding PRIVATE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__text_buffers__root_buffer_typePartial_DIC FALSE FALSE FALSE FALSE TRUE ada___ada___ada__strings__text_buffers VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_left__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__col__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_lllb__impl__set_image_based_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__img_lllb__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_left__2 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__line__4 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_int__puts FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io__aux_int VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__put__3 FALSE FALSE FALSE FALSE TRUE main__int_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__lseek FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__flush__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_right__2 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__line FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__page__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__integer_aux TRUE TRUE FALSE FALSE FALSE ada___ada__text_io
+GG EK_FLOW_SCOPE ada___system__img_lllw TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io TRUE FALSE FALSE TRUE ada___ada___ada__text_io__integer_io TRUE main__int_io BODY_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_right_arithmetic__2 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_llli__impl__scan_integer FALSE FALSE FALSE FALSE TRUE ada___system__val_llli__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io TRUE FALSE FALSE FALSE FALSE ada
+GG EK_FLOW_SCOPE ada___system__crtl__malloc FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__page__4 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__set_mode FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__rotate_left__2 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__line__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_llli__impl TRUE FALSE FALSE TRUE ada___system__image_i TRUE ada___system__img_llli VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__put__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__set_page_length__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__val_llli__impl__value_integer FALSE FALSE FALSE FALSE TRUE ada___system__val_llli__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__get FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___interfaces__c_streams__full_name FALSE FALSE FALSE FALSE TRUE ada___interfaces__c_streams VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__rotate_right__2 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__page FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__strings__text_buffers__output_mapping TRUE FALSE FALSE FALSE TRUE ada___ada___ada__strings__text_buffers PRIVATE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__memcpy FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__new_page__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_left__3 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_llli__impl__image_integer FALSE FALSE FALSE FALSE TRUE ada___system__img_llli__impl VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_left__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_right__3 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__line_length FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_llli__impl__set_image_integer FALSE FALSE FALSE FALSE TRUE ada___system__img_llli__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__page__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__memmove FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_right_arithmetic__3 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__init_standard_input FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_right__4 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__set_line_length__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__get FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__get FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__rotate_left__3 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_lli TRUE FALSE FALSE TRUE ada___ada___ada__text_io__integer_aux TRUE main__int_io__ada_integer_io BODY_PART
+GG EK_FLOW_SCOPE ada___system__img_lllw__impl TRUE FALSE FALSE TRUE ada___system__image_w TRUE ada___system__img_lllw VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__line_length__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__rotate_right__3 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_left__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_wiu TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___system__crtl__mktemp FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__init_standard_output FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__file_typePartial_DIC FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__get__2 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__page_length FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_left__4 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__image_b TRUE FALSE FALSE FALSE FALSE system
+GG EK_FLOW_SCOPE ada___ada__text_io__get__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__get__2 FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__pclose FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_lllw__impl__set_image_width_integer FALSE FALSE FALSE FALSE TRUE ada___system__img_lllw__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_right__4 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__skip_page FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__init_standard_error FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__create FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_right_arithmetic__4 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__popen FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_lllw__impl__set_image_width_unsigned FALSE FALSE FALSE FALSE TRUE ada___system__img_lllw__impl VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__page_length__2 FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__shift_right_arithmetic__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__put__4 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__rotate_left__4 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__put FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__status FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada__text_io__new_line FALSE FALSE FALSE FALSE TRUE ada___ada__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__rotate_right__4 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux TRUE TRUE FALSE FALSE FALSE ada___ada__text_io
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__check_end_of_field FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__crtl__realloc FALSE FALSE FALSE FALSE TRUE ada___system__crtl VISIBLE_PART
+GG EK_FLOW_SCOPE interfaces__rotate_left__5 FALSE FALSE FALSE FALSE TRUE interfaces VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__is_standard_input FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_left__5 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__put FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__img_wiu__impl TRUE FALSE FALSE TRUE ada___system__image_w TRUE ada___system__img_wiu VISIBLE_PART
+GG EK_FLOW_SCOPE gcd_verified_contracts TRUE FALSE FALSE FALSE FALSE __standard
+GG EK_FLOW_SCOPE ada___ada___ada__text_io__generic_aux__check_on_one_line FALSE FALSE FALSE FALSE TRUE ada___ada___ada__text_io__generic_aux VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__set_line_length__3 FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE ada___system__unsigned_types__shift_right__5 FALSE FALSE FALSE FALSE TRUE ada___system__unsigned_types VISIBLE_PART
+GG EK_FLOW_SCOPE main__int_io__ada_integer_io__aux_lli__get FALSE FALSE FALSE FALSE TRUE main__int_io__ada_integer_io__aux_lli VISIBLE_PART
+GG EK_FLOW_SCOPE ada___spark__text_io__is_standard_output FALSE FALSE FALSE FALSE TRUE ada___spark__text_io VISIBLE_PART
+GG EK_FLOW_SCOPE gcd_verified_contracts__euclid_gcd_verified FALSE FALSE FALSE FALSE TRUE gcd_verified_contracts VISIBLE_PART
+GG EK_END_MARKER

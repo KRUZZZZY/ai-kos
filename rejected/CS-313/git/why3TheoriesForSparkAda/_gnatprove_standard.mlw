@@ -1,0 +1,766 @@
+module Main
+  (* the module of references is needed in all modules *)
+  use export ref.Ref
+  use export "_gnatprove_standard_th".Main_Main
+
+  (* exception used to simulate return statements *)
+  exception Return__exc
+
+  (* The type for the heap, and the heap variable. This variable represents
+     all effects that we cannot describe more precisely, and that do not
+     interfere with other variables, i.e., writes through pointers, aliased
+     variables etc. *)
+  type __type_of_heap
+  val __HEAP : ref __type_of_heap
+
+  (* the return type for the functions that correspond to 'Image *)
+  type __image
+
+  (* A predicate symbol that ignores its argument.
+       It is used for instantiation of generic package with a user-defined
+       axiomatization. *)
+  predicate __ignore "inline" (x : 'a) = true
+
+  (* Program function that sets the value of its parameter to any possible
+     value allowed by its type. *)
+  val __havoc (x : ref 'a) : unit
+     writes { x }
+
+end
+
+module Integer
+  use export "_gnatprove_standard_th".Integer
+end
+
+module Int_Power
+  use export int.Power
+end
+
+module Int_Minmax
+  use import int.Int
+  use int.MinMax
+
+  function int_max (x y : int) : int = MinMax.max x y
+
+  function int_min (x y : int) : int = MinMax.min x y
+
+end
+
+module Int_Abs
+  use export int.Abs
+end
+
+module Int_Division
+  use import int.Int
+  use int.ComputerDivision
+  use int.EuclideanDivision
+
+  (* Ada division and rem operator correspond to what Why3 calls "computer
+  division". Ada mod operator does not correspond to any predefined operator
+  in Why3. *)
+  function div (x y : int) : int = ComputerDivision.div x y
+  function euclid_div (x y : int) : int = EuclideanDivision.div x y
+
+  function rem (x y : int) : int = ComputerDivision.mod x y
+
+  (* This is the formula I found after playing with mod and euclidean mod *)
+  function mod (x y : int) : int =
+    if y > 0 then EuclideanDivision.mod x y else EuclideanDivision.mod x y + y
+
+  (* This function is used for the (implicit) modulo operation on modular
+  types. The modulus is always positive, and in that case, the Ada mod or
+  Euclidean mod are OK. We take the Euclidean one because it is better
+  supported. *)
+  function math_mod (x y : int) : int = EuclideanDivision.mod x y
+
+  (* These program functions are there to generate division checks *)
+
+  val div_ (x:int) (y:int) : int
+     requires { y<>0 }
+     ensures { result = div x y }
+
+  val euclid_div_ (x:int) (y:int) : int
+     requires { y<>0 }
+     ensures { result = euclid_div x y }
+
+  val rem_ (x:int) (y:int) : int
+     requires { y<>0 }
+     ensures{ result = rem x y }
+
+  val mod_ (x:int) (y:int) : int
+     requires { y<>0 }
+     ensures { result = mod x y }
+
+end
+
+module Floating
+  use real.Real
+  use import real.RealInfix
+  use real.Abs as AbsReal
+  use export real.Truncate
+  use export real.PowerInt
+  use real.MinMax
+  use real.FromInt
+
+  use floating_point.Rounding
+  use floating_point.Single
+  use floating_point.Double
+
+  function round_single (x : real) : real = Single.round Rounding.NearestTiesToEven x
+
+  function round_double (x : real) : real = Double.round Rounding.NearestTiesToEven x
+
+  (* The rounding error on a floating-point operation can be bounded, see page 7 of
+     paper "The pitfalls of verifying floating-point computations" by David Monniaux:
+     http://arxiv.org/abs/cs/0701192
+
+     "As a result, for any floating-point type with a bounded number of bits,
+      there exist two positive reals εrel and εabs such that
+        |x − r(x)| ≤ max(εrel.|x|, εabs)
+      The following, coarser, property may be easier to use in some contexts:
+        |x − r(x)| ≤ εrel.|x| + εabs"
+
+     The first part is the error made when rounding to a normal number (which is
+     proportional to the absolute value of the exact mathematical result), and the
+     second part is the error made when rounding to a subnormal number. In the case
+     of round-to-even, we have:
+
+     εrel = 2 ** (-p) where p is the number of bits of the mantissa
+     εabs = 2 ** (Emin - p) where Emin is the minimal value of the exponent
+
+     with for single precision: p = 24, Emin = -126
+          for double precision: p = 53, Emin = -1022
+  *)
+
+
+  (* this axiom expresses that every single is also a double *)
+
+  use export _gnatprove_standard_th.Floating_Func
+
+  function real_of_int (x : int) : real = FromInt.from_int x
+
+  function round real : int
+
+  axiom Round_down:
+    forall x:real. x -. real_of_int (floor x) <. 0.5 -> round (x) = floor (x)
+
+  axiom Round_up:
+    forall x:real. real_of_int (ceil x) -. x <. 0.5 -> round (x) = ceil (x)
+
+  axiom Round_neg_tie:
+    forall x:real.
+      x -. real_of_int (floor x) = 0.5 /\ x <. 0.0 -> round (x) = floor (x)
+
+  axiom Round_pos_tie:
+    forall x:real.
+      real_of_int (ceil x) -. x = 0.5 /\ x >. 0.0 -> round (x) = ceil (x)
+
+  axiom Round_int :
+    forall i:int [round (real_of_int i)]. round (real_of_int i) = i
+
+  axiom Round_near_int :
+    forall i:int. forall x:real.
+      -.0.5 <. x /\ x <. 0.5 -> (round(real_of_int(i) +. x) = i)
+
+  axiom Round_monotonic:
+    forall x y:real. x <=. y -> Int.(<=) (round x) (round y)
+
+  axiom Round_monotonic_int1:
+    forall x:real, i:int. x <=. real_of_int i -> Int.(<=) (round x) i
+
+  axiom Round_monotonic_int2:
+    forall x:real, i:int. real_of_int i <=. x -> Int.(<=) i (round x)
+
+  axiom Round_bound:
+    forall x:real.
+      x -. 0.5 <=. real_of_int (round x) /\ real_of_int (round x) <=. x +. 0.5
+
+  function div_real (x : real) (y : real) : real = x /. y
+
+  val div_real_ (x:real) (y:real) : real
+    requires { y<>0.0 }
+    ensures { result = div_real x y }
+
+end
+
+module Boolean
+  use export bool.Bool
+  use export bool.Ite
+  use import int.Int
+  use import Main
+
+  use export "_gnatprove_standard_th".Boolean_Func
+
+  (* Boolean logical connectors, functions for conversion of booleans, etc *)
+
+  function to_int (b : bool) : int =
+   if b = True then 1 else 0
+
+  function of_int (i : int) : bool =
+   if i = 0 then False else True
+
+  function last : int = 1
+  function first : int = 0
+
+  predicate in_range (x : int) = x = 0 \/ x = 1
+
+  predicate dynamic_property "inline" (f l x : int) = in_range x
+
+  function attr__ATTRIBUTE_IMAGE bool : __image
+
+  predicate attr__ATTRIBUTE_VALUE__pre_check (x : __image)
+
+  function attr__ATTRIBUTE_VALUE __image : bool
+
+  val attr__ATTRIBUTE_VALUE_ (x : __image)  : bool
+    requires { attr__ATTRIBUTE_VALUE__pre_check x }
+    ensures { true }
+
+  val range_check_ (n : int) : int
+    requires { in_range n }
+    ensures { result = n }
+
+  val check_not_last (n : int) : int
+    requires { n <> last }
+    ensures { result = n }
+
+  val check_not_first (n : int) : int
+    requires { n <> first }
+    ensures { result = n }
+
+end
+
+(* The following theories care about the *contents* of Arrays, and defines
+   access and update functions. It does not care about properties of bounds.
+   However, boolean equality and sliding needs array bounds as *input*. These
+   functions are independent of the representation of
+   constrained/unconstrained arrays. This also means that there is some
+   special circuitry in gnat2why to actually call these functions.
+
+   For Boolean equality, the arguments are, in order:
+    - the first array
+    - for each dimension, first and last
+    - the second array
+    - for each dimension, first and last
+
+  Boolean equality is true when all dimensions of the two arrays are of the
+  same length, and the arrays contain the same elements in their valid range
+  (note that access needs to be slided when the bounds do not coincide, but
+  the length is the same)
+
+  For sliding, the arguments are, in order:
+    - the array
+    - for each dimension, the old and new value of first
+
+  Sliding shifts the elements of the array according to the difference between
+  the old and new value of first
+
+*)
+theory Array__Index
+  type t
+
+  predicate le t t
+  predicate lt t t
+  predicate gt t t
+
+  function  add t t : t
+  function  sub t t : t
+
+  function one : t
+end
+
+theory Array__1
+
+  use import bool.Bool
+
+  clone Array__Index as I1
+
+  type map 'a
+
+  function get (map 'a) I1.t : 'a
+  function set (map 'a) I1.t 'a : map 'a
+
+  axiom Select_eq :
+    forall m : map 'a. forall i : I1.t.
+    forall a : 'a [set m i a].  get (set m i a) i = a
+
+  axiom Select_neq :
+    forall m : map 'a. forall i j : I1.t.
+    forall a : 'a [get (set m i a) j| set m i a, get m j].
+    i <> j -> get (set m i a) j = get m j
+
+  function bool_eq (map 'a) I1.t I1.t (map 'a) I1.t I1.t : bool
+
+   axiom T__ada_array___equal_def:
+     forall a:map 'a.
+     forall af : I1.t. forall al : I1.t.
+     forall b:map 'a.
+     forall bf : I1.t. forall bl : I1.t [bool_eq a af al b bf bl].
+         ((if I1.le af al then I1.add (I1.sub al af) I1.one = I1.add (I1.sub bl bf) I1.one else I1.gt bf bl)
+          /\ (forall i:I1.t[get a i].
+                (I1.le af i /\ I1.le i al) ->
+                (get a i = get b (I1.add (I1.sub bf af) i))))
+         <-> bool_eq a af al b bf bl = True
+
+  function slide (map 'a) I1.t I1.t : map 'a
+
+  axiom slide_eq :
+    forall a : map 'a.
+    forall first : I1.t
+      [slide a first first].
+      slide a first first = a
+
+  axiom slide_def :
+    forall a : map 'a.
+    forall old_first : I1.t.
+    forall new_first : I1.t.
+    forall i : I1.t
+      [get (slide a old_first new_first) i].
+      get (slide a old_first new_first) i = get a (I1.sub i (I1.sub new_first old_first))
+
+  (* Concatenation is only defined for one-dimensional arrays; it appends a
+     map to another. We do not really care about the valid ranges of the
+     original arrays, but we need to know for each access to the
+     concatenation, which of the arguments we need to look at. Also, if we are
+     interested in the second argument, a shift must be made depending on the
+     original "first" value. *)
+
+  function concat (map 'a) I1.t I1.t (map 'a) I1.t I1.t : map 'a
+
+  axiom concat_def :
+    forall a b : map 'a.
+    forall a_first a_last b_first b_last : I1.t.
+    forall i : I1.t [get (concat a a_first a_last b b_first b_last) i].
+      ((I1.le a_first i /\ I1.le i a_last) ->
+          get (concat a a_first a_last b b_first b_last) i = get a i)
+         /\
+      ((I1.gt i a_last) ->
+        get (concat a a_first a_last b b_first b_last) i = get b (I1.add (I1.sub i a_last) (I1.sub b_first I1.one)))
+
+   (* Comparison between arrays. Only defined for arrays of discrete.  *)
+
+   function compare (map 'a) I1.t I1.t (map 'a) I1.t I1.t : int
+
+   (* Logical operators on arrays. Only defined for arrays of boolean. *)
+
+   function xorb (map 'a) I1.t I1.t (map 'a) I1.t I1.t : map 'a
+   function andb (map 'a) I1.t I1.t (map 'a) I1.t I1.t : map 'a
+   function orb (map 'a) I1.t I1.t (map 'a) I1.t I1.t : map 'a
+   function notb (map 'a) I1.t I1.t : map 'a
+
+   (* a singleton array is the array which is defined only at the given
+   position, and yields the given value. *)
+
+   function singleton 'a I1.t : map 'a
+
+   axiom singleton_def :
+    forall v : 'a.
+    forall i : I1.t  [get (singleton v i) i].
+      get (singleton v i) i = v
+end
+
+theory Array__2
+  use import bool.Bool
+
+  clone Array__Index as I1
+  clone Array__Index as I2
+
+  type map 'a
+
+  function get (map 'a) I1.t I2.t : 'a
+  function set (map 'a) I1.t I2.t 'a : map 'a
+
+  axiom Select_eq :
+    forall m : map 'a.
+    forall i : I1.t.
+    forall j : I2.t.
+    forall a : 'a [set m i j a].  get (set m i j a) i j = a
+
+  axiom Select_neq :
+    forall m : map 'a.
+    forall i i2 : I1.t.
+    forall j j2 : I2.t.
+    forall a : 'a [get (set m i j a) i2 j2| set m i j a, get m i2 j2].
+    not (i = i2 /\ j = j2) -> get (set m i j a) i2 j2 = get m i2 j2
+
+  function bool_eq (map 'a) I1.t I1.t I2.t I2.t (map 'a) I1.t I1.t I2.t I2.t : bool
+
+   axiom T__ada_array___equal_def:
+     forall a:map 'a.
+     forall af al : I1.t.
+     forall af2 al2 : I2.t.
+     forall b:map 'a.
+     forall bf bl : I1.t.
+     forall bf2 bl2 : I2.t [bool_eq a af al af2 al2 b bf bl bf2 bl2].
+         ((if I1.le af al then I1.add (I1.sub al af) I1.one = I1.add (I1.sub bl bf) I1.one else I1.gt bf bl) /\
+          (if I2.le af2 al2 then I2.add (I2.sub al2 af2) I2.one = I2.add (I2.sub bl2 bf2) I2.one else I2.gt bf2 bl2) /\
+          (forall i : I1.t. forall j : I2.t[get a i j].
+                (I1.le af i /\ I1.le i al) ->
+                (I2.le af2 j /\ I2.le j al2) ->
+                (get a i j = get b (I1.add (I1.sub bf af) i) (I2.add (I2.sub bf2 af2) j))))
+         <-> bool_eq a af al af2 al2 b bf bl bf2 bl2 = True
+
+  function slide (map 'a) I1.t I1.t I2.t I2.t : map 'a
+
+  axiom slide_def :
+    forall a : map 'a.
+    forall new_first    old_first   : I1.t.
+    forall new_first_2  old_first_2 : I2.t.
+    forall i : I1.t.
+    forall j : I2.t
+      [get (slide a old_first new_first old_first_2 new_first_2) i j].
+      get (slide a old_first new_first old_first_2 new_first_2) i j =
+        get a (I1.sub i (I1.sub new_first old_first)) (I2.sub j (I2.sub new_first_2 old_first_2))
+end
+
+theory Array__3
+  use import bool.Bool
+
+  clone Array__Index as I1
+  clone Array__Index as I2
+  clone Array__Index as I3
+
+  type map 'a
+
+  function get (map 'a) I1.t I2.t I3.t : 'a
+  function set (map 'a) I1.t I2.t I3.t 'a : map 'a
+
+  axiom Select_eq :
+    forall m : map 'a.
+    forall i : I1.t.
+    forall j : I2.t.
+    forall k : I3.t.
+    forall a : 'a [set m i j k a].  get (set m i j k a) i j k = a
+
+  axiom Select_neq :
+    forall m : map 'a.
+    forall i i2 : I1.t.
+    forall j j2 : I2.t.
+    forall k k2 : I3.t.
+    forall a : 'a [get (set m i j k a) i2 j2 k2| set m i j k a, get m i2 j2 k2].
+    not (i = i2 /\ j = j2 /\ k = k2) ->
+      get (set m i j k a) i2 j2 k2 = get m i2 j2 k2
+
+  function bool_eq (map 'a)
+    I1.t I1.t I2.t I2.t I3.t I3.t (map 'a) I1.t I1.t I2.t I2.t I3.t I3.t : bool
+
+   axiom T__ada_array___equal_def:
+     forall a:map 'a.
+     forall af al   : I1.t.
+     forall af2 al2 : I2.t.
+     forall af3 al3 : I3.t.
+     forall b:map 'a.
+     forall bf bl   : I1.t.
+     forall bf2 bl2 : I2.t.
+     forall bf3 bl3 : I3.t
+      [bool_eq a af al af2 al2 af3 al3 b bf bl bf2 bl2 bf3 bl3].
+         ((if I1.le af  al  then I1.add (I1.sub al  af)  I1.one = I1.add (I1.sub bl  bf)  I1.one else I1.gt bf  bl) /\
+          (if I2.le af2 al2 then I2.add (I2.sub al2 af2) I2.one = I2.add (I2.sub bl2 bf2) I2.one else I2.gt bf2 bl2) /\
+          (if I3.le af3 al3 then I3.add (I3.sub al3 af3) I3.one = I3.add (I3.sub bl3 bf3) I3.one else I3.gt bf3 bl3) /\
+          (forall i : I1.t. forall j : I2.t. forall k : I3.t[get a i j k].
+                (I1.le af i  /\ I1.le i al ) ->
+                (I2.le af2 j /\ I2.le j al2) ->
+                (I3.le af3 k /\ I3.le k al3) ->
+                (get a i j k = get b (I1.add (I1.sub bf af) i) (I2.add (I2.sub bf2 af2) j) (I3.add (I3.sub bf3 af3) k))))
+         <-> bool_eq a af al af2 al2 af3 al3 b bf bl bf2 bl2 bf3 bl3 = True
+
+  function slide (map 'a) I1.t I1.t I2.t I2.t I3.t I3.t : map 'a
+
+  axiom slide_def :
+    forall a : map 'a.
+    forall old_first   new_first   : I1.t.
+    forall old_first_2 new_first_2 : I2.t.
+    forall old_first_3 new_first_3 : I3.t.
+    forall i : I1.t.
+    forall j : I2.t.
+    forall k : I3.t
+      [get (slide a old_first new_first old_first_2 new_first_2
+                    old_first_3 new_first_3) i j k].
+      get (slide a old_first new_first old_first_2 new_first_2
+                   old_first_3 new_first_3) i j k =
+        get a (I1.sub i (I1.sub new_first old_first))
+              (I2.sub j (I2.sub new_first_2 old_first_2))
+              (I3.sub k (I3.sub new_first_3 old_first_3))
+end
+
+theory Array__4
+  use import bool.Bool
+
+  clone Array__Index as I1
+  clone Array__Index as I2
+  clone Array__Index as I3
+  clone Array__Index as I4
+
+  type map 'a
+
+  function get (map 'a) I1.t I2.t I3.t I4.t : 'a
+  function set (map 'a) I1.t I2.t I3.t I4.t 'a : map 'a
+
+  axiom Select_eq :
+    forall m : map 'a.
+    forall i : I1.t.
+    forall j : I2.t.
+    forall k : I3.t.
+    forall l : I4.t.
+    forall a : 'a [set m i j k l a].  get (set m i j k l a) i j k l = a
+
+  axiom Select_neq :
+    forall m : map 'a.
+    forall i i2 : I1.t.
+    forall j j2 : I2.t.
+    forall k k2 : I3.t.
+    forall l l2 : I4.t.
+    forall a : 'a
+      [get (set m i j k l a) i2 j2 k2 l2|
+       set m i j k l a, get m i2 j2 k2 l2].
+    not (i = i2 /\ j = j2 /\ k = k2 /\ l = l2) ->
+      get (set m i j k l a) i2 j2 k2 l2 = get m i2 j2 k2 l2
+
+  function bool_eq (map 'a)
+    I1.t I1.t I2.t I2.t I3.t I3.t I4.t I4.t (map 'a) I1.t I1.t I2.t I2.t I3.t I3.t I4.t I4.t : bool
+
+   axiom T__ada_array___equal_def:
+     forall a:map 'a.
+     forall af al   : I1.t.
+     forall af2 al2 : I2.t.
+     forall af3 al3 : I3.t.
+     forall af4 al4 : I4.t.
+     forall b:map 'a.
+     forall bf bl   : I1.t.
+     forall bf2 bl2 : I2.t.
+     forall bf3 bl3 : I3.t.
+     forall bf4 bl4 : I4.t
+      [bool_eq a af al af2 al2 af3 al3 af4 al4 b bf bl bf2 bl2 bf3 bl3 bf4 bl4].
+         ((if I1.le af  al  then I1.add (I1.sub al  af)  I1.one = I1.add (I1.sub bl  bf)  I1.one else I1.gt bf  bl) /\
+          (if I2.le af2 al2 then I2.add (I2.sub al2 af2) I2.one = I2.add (I2.sub bl2 bf2) I2.one else I2.gt bf2 bl2) /\
+          (if I3.le af3 al3 then I3.add (I3.sub al3 af3) I3.one = I3.add (I3.sub bl3 bf3) I3.one else I3.gt bf3 bl3) /\
+          (if I4.le af4 al4 then I4.add (I4.sub al4 af4) I4.one = I4.add (I4.sub bl4 bf4) I4.one else I4.gt bf4 bl4) /\
+          (forall i : I1.t. forall j : I2.t. forall k : I3.t. forall l : I4.t[get a i j k l].
+                (I1.le af i  /\ I1.le i al ) ->
+                (I2.le af2 j /\ I2.le j al2) ->
+                (I3.le af3 k /\ I3.le k al3) ->
+                (I4.le af4 l /\ I4.le l al4) ->
+                (get a i j k l = get b (I1.add (I1.sub bf af) i) (I2.add (I2.sub bf2 af2) j) (I3.add (I3.sub bf3 af3) k) (I4.add (I4.sub bf4 af4) l))))
+         <-> bool_eq a af al af2 al2 af3 al3 af4 al4 b bf bl bf2 bl2 bf3 bl3 bf4 bl4 = True
+
+  function slide (map 'a) I1.t I1.t I2.t I2.t I3.t I3.t I4.t I4.t : map 'a
+
+  axiom slide_def :
+    forall a : map 'a.
+    forall old_first   new_first   : I1.t.
+    forall old_first_2 new_first_2 : I2.t.
+    forall old_first_3 new_first_3 : I3.t.
+    forall old_first_4 new_first_4 : I4.t.
+    forall i : I1.t.
+    forall j : I2.t.
+    forall k : I3.t.
+    forall l : I4.t
+      [get (slide a old_first new_first old_first_2 new_first_2
+                    old_first_3 new_first_3 old_first_4 new_first_4) i j k l].
+      get (slide a old_first new_first old_first_2 new_first_2
+                   old_first_3 new_first_3 old_first_4 new_first_4) i j k l =
+        get a (I1.sub i (I1.sub new_first old_first))
+              (I2.sub j (I2.sub new_first_2 old_first_2))
+              (I3.sub k (I3.sub new_first_3 old_first_3))
+              (I4.sub l (I4.sub new_first_4 old_first_4))
+end
+
+module BVAda
+  type t
+
+  function abs "inline" (x : t) : t = x
+
+  predicate ult t t
+  predicate ule t t
+  predicate ugt t t
+  predicate uge t t
+
+  use import bool.Bool
+  function bool_eq (x: t) (y: t) : bool = x = y
+  function bool_ne (x: t) (y: t) : bool = x <> y
+  function bool_lt (x: t) (y: t) : bool = ult x y
+  function bool_le (x: t) (y: t) : bool = ule x y
+  function bool_gt (x: t) (y: t) : bool = ugt x y
+  function bool_ge (x: t) (y: t) : bool = uge x y
+
+  use import int.Int
+  function one : t
+
+  function (*) t t : t
+
+  function power t int : t
+
+  axiom Power_0 : forall x: t. power x 0 = one
+
+  lemma Power_1 : forall x : t. power x 1 = x
+
+  axiom Power_s : forall x: t, n: int. n >= 0 -> power x (n+1) = x * power x n
+
+  lemma Power_s_alt: forall x: t, n: int. n > 0 -> power x n = x * power x (n-1)
+
+  lemma Power_sum : forall x: t, n m: int. 0 <= n -> 0 <= m ->
+    power x (n+m) = power x n * power x m
+
+  lemma Power_mult : forall x:t, n m : int. 0 <= n -> 0 <= m ->
+    power x (Int.(*) n m) = power (power x n) m
+
+  lemma Power_mult2 : forall x y: t, n: int. 0 <= n ->
+    power (x * y) n = power x n * power y n
+
+end
+
+module BV8
+  use export bv.BV8
+
+  function one : t = of_int 1
+
+  clone export BVAda with
+    type t = t,
+    predicate ult = ult,
+    predicate ule = ule,
+    predicate ugt = ugt,
+    predicate uge = uge,
+    function ( * ) = mul,
+    function one = one
+
+  val of_int_ (i : int) : t
+    requires{ uint_in_range i }
+    ensures{ result = of_int i }
+
+  val udiv_ (x : t) (y : t) : t
+    requires{ y <> zero }
+    ensures{ result = udiv x y }
+
+  val urem_ (x : t) (y : t) : t
+    requires{ y <> zero }
+    ensures{ result = urem x y }
+end
+
+module BV16
+  use export bv.BV16
+
+  function one : t = of_int 1
+
+  clone export BVAda with
+    type t = t,
+    predicate ult = ult,
+    predicate ule = ule,
+    predicate ugt = ugt,
+    predicate uge = uge,
+    function ( * ) = mul,
+    function one = one
+
+  val of_int_ (i : int) : t
+    requires{ uint_in_range i }
+    ensures{ result = of_int i }
+
+  val udiv_ (x : t) (y : t) : t
+    requires{ y <> zero }
+    ensures{ result = udiv x y }
+
+  val urem_ (x : t) (y : t) : t
+    requires{ y <> zero }
+    ensures{ result = urem x y }
+end
+
+module BV32
+  use export bv.BV32
+
+  function one : t = of_int 1
+
+  clone export BVAda with
+    type t = t,
+    predicate ult = ult,
+    predicate ule = ule,
+    predicate ugt = ugt,
+    predicate uge = uge,
+    function ( * ) = mul,
+    function one = one
+
+  val of_int_ (i : int) : t
+    requires{ uint_in_range i }
+    ensures{ result = of_int i }
+
+  val udiv_ (x : t) (y : t) : t
+    requires{ y <> zero }
+    ensures{ result = udiv x y }
+
+  val urem_ (x : t) (y : t) : t
+    requires{ y <> zero }
+    ensures{ result = urem x y }
+end
+
+module BV64
+  use export bv.BV64
+
+  function one : t = of_int 1
+
+  clone export BVAda with
+    type t = t,
+    predicate ult = ult,
+    predicate ule = ule,
+    predicate ugt = ugt,
+    predicate uge = uge,
+    function ( * ) = mul,
+    function one = one
+
+  val of_int_ (i : int) : t
+    requires{ uint_in_range i }
+    ensures{ result = of_int i }
+
+  val udiv_ (x : t) (y : t) : t
+    requires{ y <> zero }
+    ensures{ result = udiv x y }
+
+  val urem_ (x : t) (y : t) : t
+    requires{ y <> zero }
+    ensures{ result = urem x y }
+end
+
+module BVConv_32_64
+  use export bv.BVConverter_32_64
+
+  val range_check_ (f l x : BV64.t) : BV64.t
+    requires { (BV64.ule f x) /\ (BV64.ule x l) }
+    ensures { result = x }
+end
+
+module BVConv_16_64
+  use export bv.BVConverter_16_64
+
+  val range_check_ (f l x : BV64.t) : BV64.t
+    requires { (BV64.ule f x) /\ (BV64.ule x l) }
+    ensures { result = x }
+end
+
+module BVConv_8_64
+  use export bv.BVConverter_8_64
+
+  val range_check_ (f l x : BV64.t) : BV64.t
+    requires { (BV64.ule f x) /\ (BV64.ule x l) }
+    ensures { result = x }
+end
+
+module BVConv_16_32
+  use export bv.BVConverter_16_32
+
+  val range_check_ (f l x : BV32.t) : BV32.t
+    requires { (BV32.ule f x) /\ (BV32.ule x l) }
+    ensures { result = x }
+end
+
+module BVConv_8_32
+  use export bv.BVConverter_8_32
+
+  val range_check_ (f l x : BV32.t) : BV32.t
+    requires { (BV32.ule f x) /\ (BV32.ule x l) }
+    ensures { result = x }
+end
+
+module BVConv_8_16
+  use export bv.BVConverter_8_16
+
+  val range_check_ (f l x : BV16.t) : BV16.t
+    requires { (BV16.ule f x) /\ (BV16.ule x l) }
+    ensures { result = x }
+end

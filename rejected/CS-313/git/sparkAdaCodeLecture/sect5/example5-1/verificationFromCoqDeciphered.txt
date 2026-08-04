@@ -1,0 +1,23 @@
+forall (m:integer) (n:integer),
+  ((0 <= m) /\ (n < 0)) ->
+  ((m < 0 -> 
+       let o := n - 1 in 
+             ((in_range o) /\
+                forall (o1:integer), o1 = o -> 
+                 forall (n1:integer), (n1 = o1) ->
+                 let o2 := m + 1 in 
+                    ((in_range o2) /\ 
+                     forall (o3:integer), o3 = o2 
+                     -> forall (m1:integer), (m1 = o3) 
+                        -> (in_range m +  1) /\ 
+                           (m1 = m + 1%)))) /\
+  ((~ m < 0) -> 
+        let o := n + 1 in 
+           (in_range o) 
+           /\ forall (o1:integer), (o1 = o) 
+              -> forall (n1:integer),  n1 = o1 
+                 -> let o2 := m - 1 in 
+                    ((in_range o2) /\
+                     forall (o3:integer), (o3 = o2) 
+                     -> forall (m1:integer),  (m1 = o3) 
+                        -> (in_range (m + 1)  /\ m1 = m + 1

@@ -1,0 +1,8 @@
+              
+-c
+-x
+ada
+-gnatA
+-gnatwa
+-gnatc
+-gnates=C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove\04f78d87.tmp

@@ -1,0 +1,43 @@
+Diagnosis: Why You Scored 6, 6, 7, 6
+Your original 10 slides are well-written and structurally solid (hence the 7 on structure), but the core problem is this: the entire presentation is pure theory with zero numerical results or visualisations. The feedback directly flagged this. Your dissertation now has extensive simulation output — six figures, a comparison dashboard, and quantitative tables — none of which appears in your slides. That gap is costing you points across all four criteria.
+The other issue is length. 10 purely theoretical slides with no figures to dwell on will run well under 10 minutes, which explains the 6/10 on time.
+
+How Each Criterion Improves
+Mathematical content (6 → 9): Your dissertation now contains the Poisson limit derivation (§4.2), the exact giant component size formula via the branching process extinction probability ρ = e^(−λ(1−ρ)) (§4.3), and the full mean-field recursion deriving p_k ~ 2m²k⁻³ for BA (§6.3, Equation 6.1). None of this is in your slides. Presenting even one of these derivations with a sentence explaining what it proves lifts your mathematical depth substantially.
+Communication of ideas (6 → 9): This is your biggest gain. Every figure in the dissertation is a communication tool that your slides currently lack. The WS small-world plot (Figure 5.1) showing L dropping before C is one of the most visually intuitive results in all of network science — if you put it on a slide and spend 90 seconds walking through it, that alone transforms the presentation. Similarly, the six-panel comparison dashboard (Figure 7.1) gives the audience an instant side-by-side view of everything you've covered.
+Structure (7 → 9): The structure is already good, but the narrative arc will tighten considerably when each model section ends with a simulation slide that "answers" a research question. Your dissertation already frames things this way (§4.3 "Answer to RQ1", §5.3 "small-world window"). Mirror that in your slides.
+Time (6 → 9): Adding roughly 4–5 new simulation/results slides and speaking to each figure for 60–90 seconds will comfortably fill 10 minutes.
+
+Proposed New Slide Structure (14 slides)
+Keep existing slides but modify:
+
+Slide 1 (Title): Keep as-is.
+Slide 2 (Motivation): Keep, but add one sentence at the bottom: "We test these theoretical properties through Python simulation, running hundreds of trials per parameter value." This primes the audience for what's coming.
+Slide 3 (ER Definition): Keep, but add the Poisson limit formula: P(deg(v) = k) → e^(−λ)λ^k/k! and state this is a provable convergence result — this strengthens the mathematical content mark.
+Slide 4 (ER Phase Transitions): Keep, but add the exact giant component size formula (1−ρ)n where ρ = e^(−λ(1−ρ)). For example, say "at λ = 2, solving numerically gives ρ ≈ 0.203, so ~79.7% of the graph is absorbed into the giant component." This replaces a vague bullet point with a concrete, impressive result.
+Slide 5 (WS Construction): Keep but combine with your current slide 6 — they're short enough to merge.
+Slide 7 (BA Construction): Keep as-is.
+Slide 8 (BA Scale-Free): Keep, but add the mean-field derivation result: p_k = 2m(m+1)/[k(k+1)(k+2)] ≈ 2m²k⁻³. One line of algebra to justify the exponent τ = 3 being independent of m is a strong mathematical content signal.
+Slide 9 (Comparison Table): Keep but replace with an expanded version (see below).
+Slide 10 (Conclusions): Keep, but restructure around the three research questions your dissertation answers.
+
+New slides to insert:
+
+New Slide 4b — "ER Simulation: Degree Distribution Confirms Poisson": Show Figure 4.1 from the dissertation (the histogram of empirical degree distribution overlaid with the Poisson(8.00) curve, plus the residual plot below). Key talking point: 1115 simulation runs, n=2000, RMSE = 0.00015 — near-perfect agreement validates the theory numerically.
+New Slide 4c — "ER Phase Transition: Giant Component Emergence": Show Figure 4.2 (the 4-panel plot of mean degree, clustering, path length, and giant component fraction vs p). Key talking point: the empirical 0.5 threshold at p ≈ 0.0014 sits slightly above the theoretical p_c = 1/n = 0.001, consistent with finite-size effects at n = 1000.
+New Slide 5b — "WS Simulation: The Small-World Window": Show Figure 5.1 (the normalised C(β)/C(0) and L(β)/L(0) vs log β plot). This is your most visually compelling result. Key talking point: at β = 10⁻³, path length has already dropped to 81% of the lattice value while clustering is still 100% intact. By β = 10⁻¹, L is at 14% while C remains 75%. Quote Table 5.1 directly.
+New Slide 8b — "BA Simulation: Power-Law Degree Distribution": Show Figure 6.3 (the BA graph visualisation with hub-node sizes, plus the heavy-tailed degree distribution histogram on the right). Key talking point: unlike ER where all nodes are roughly similar size, the BA graph shows visible hubs with degree 15–20 while most nodes have degree 2–5. The distribution decays as k⁻³.
+New Slide 9b — "Comparison Dashboard": Replace or supplement the current comparison table with Figure 7.1 (the six-panel dashboard). Top row shows the three degree distributions side by side — Poisson, narrow symmetric, heavy-tailed power-law. Bottom row shows clustering vs path length scatter for each model across all runs. This is your strongest "bringing it all together" slide.
+
+
+Practical Tips for Delivery
+The 10-minute target is the other major issue. With 14 slides, your pacing should be roughly:
+
+Title + motivation: 1 minute
+ER theory + 2 simulation slides: 3 minutes
+WS theory + simulation slide: 2 minutes
+BA theory + simulation slide: 2 minutes
+Comparison dashboard + conclusions: 2 minutes
+
+When presenting a simulation figure, always follow this three-beat structure: (1) state what you simulated and the parameters, (2) point to what the plot shows, (3) connect it back to the theorem it confirms or the research question it answers. That keeps you mathematically grounded rather than just describing graphics.
+The research questions your dissertation explicitly answers are strong anchor points: RQ1 (ER phase transition threshold), RQ2 (WS small-world window boundaries C(β)/C(0) > 0.5 and L(β)/L(0) < 0.5), and RQ3 (BA power-law exponent τ = 3 independent of m). Stating these explicitly in your conclusion slide and connecting them to your simulation figures will significantly strengthen both the mathematical content and communication marks.

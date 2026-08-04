@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Liquipedia · Global Overwatch Elo{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div>
+    <h1>Liquipedia Backfill Bot</h1>
+    <p>Standalone scraper that appends historical rows to the OWCS workbook for normal approval.</p>
+  </div>
+</header>
+
+<section class="command-panel">
+  <h2>Run Commands</h2>
+  <code>py -m app.src.liquipedia_bot --mode dry-run</code>
+  <code>py -m app.src.liquipedia_bot --mode backfill</code>
+  <code>py -m app.src.liquipedia_bot --mode incremental</code>
+</section>
+
+<table class="health">
+  <tbody>
+    <tr><th>Workbook</th><td>{{ workbook_path }}</td><td><span class="pill">append-only</span></td></tr>
+    <tr><th>State File</th><td>{{ state_path }}</td><td><span class="pill {{ 'good' if state else 'warning' }}">{{ "found" if state else "not created" }}</span></td></tr>
+    <tr><th>Cache</th><td>{{ cache_path }}</td><td><span class="pill {{ 'good' if cache_exists else 'warning' }}">{{ "found" if cache_exists else "not created" }}</span></td></tr>
+    <tr><th>Log</th><td>{{ log_path }}</td><td><span class="pill {{ 'good' if log_exists else 'warning' }}">{{ "found" if log_exists else "not created" }}</span></td></tr>
+    <tr><th>Rate Limit</th><td colspan="2">{{ rate_limit }} seconds base delay, plus weighted random jitter</td></tr>
+  </tbody>
+</table>
+
+<h2>Last State</h2>
+<pre class="state">{{ state | tojson(indent=2) }}</pre>
+{% endblock %}

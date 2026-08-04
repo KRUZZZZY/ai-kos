@@ -1,0 +1,101 @@
+{
+  "spark": [
+    {
+      "name": "Main",
+      "sloc": [
+        {
+          "file": "main.ads",
+          "line": 3
+        }
+      ],
+      "spark": "all"
+    }
+  ],
+  "flow": [
+  ],
+  "assumptions": [
+    {
+      "assumptions": [
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Init",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 59
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Is_Safe",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 46
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Monitor_Level_Crossing",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 53
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Print_Status",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 39
+              }
+            ]
+          }
+        },
+        {
+          "predicate": "CLAIM_EFFECTS",
+          "arg": {
+            "name": "Level_Crossing.Read_Distance",
+            "sloc": [
+              {
+                "file": "level_crossing.ads",
+                "line": 28
+              }
+            ]
+          }
+        }
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "Main",
+          "sloc": [
+            {
+              "file": "main.ads",
+              "line": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "timings": {
+    "globals (advanced)": 1.53211001306772E-02,
+    "flow analysis": 8.72500007972121E-04,
+    "marking": 8.49999996717088E-05,
+    "properties (advanced)": 7.78000030550174E-05,
+    "globals (basic)": 1.44092999398708E-02
+  }
+}

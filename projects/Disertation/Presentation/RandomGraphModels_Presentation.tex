@@ -1,0 +1,338 @@
+% ============================================================
+%  Beamer Presentation: Simulating Random Graph Models in Python
+%  MA-300/MA-350/MA-360  Interim Presentation
+%  Swansea University — Academic Year 2025/26
+% ============================================================
+\documentclass[t]{beamer}
+
+\usepackage[english]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+
+% ----- Theme ------------------------------------------------
+\usetheme{CambridgeUS}
+\usecolortheme{beaver}
+
+% ----- Colour tweaks ----------------------------------------
+\definecolor{swanseablue}{RGB}{0,62,116}
+\definecolor{swanseagold}{RGB}{200,155,40}
+\definecolor{lightgray}{RGB}{245,245,245}
+
+\setbeamercolor{title}{fg=white, bg=swanseablue}
+\setbeamercolor{frametitle}{fg=white, bg=swanseablue}
+\setbeamercolor{structure}{fg=swanseablue}
+\setbeamercolor{block title}{fg=white, bg=swanseablue}
+\setbeamercolor{block body}{bg=lightgray}
+\setbeamercolor{block title alerted}{fg=white, bg=darkred}
+\setbeamercolor{block body alerted}{bg=lightgray}
+\setbeamercolor{itemize item}{fg=swanseablue}
+\setbeamercolor{itemize subitem}{fg=swanseagold}
+
+% ----- Remove navigation symbols ---------------------------
+\beamertemplatenavigationsymbolsempty
+
+% ----- Metadata --------------------------------------------
+\title[Random Graph Models]{Simulating Random Graph Models in Python}
+\subtitle{Dissertation Presentation}
+\author{Zachariah Markusson}
+\institute[Swansea University]{Department of Mathematics\\
+Swansea University}
+\date{Academic Year 2025/26}
+
+% ============================================================
+\begin{document}
+
+% ============================================================
+%  SLIDE 1 — Title
+% ============================================================
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ============================================================
+%  SLIDE 2 — Motivation
+% ============================================================
+\section{Motivation}
+
+\begin{frame}{Why Study Random Graph Models?}
+
+\textbf{Networks are everywhere:}
+\begin{itemize}
+  \item Social networks, the internet, neural networks, citation graphs
+  \item All share structural properties that cannot be captured by deterministic models
+\end{itemize}
+
+\medskip
+
+\textbf{Key structural questions:}
+\begin{itemize}
+  \item How do large networks form and evolve?
+  \item Why do real-world networks have short average path lengths (\emph{small-world property})?
+  \item Why do a small number of nodes attract the majority of connections (\emph{hubs})?
+\end{itemize}
+
+\medskip
+
+\begin{block}{Goal of this Project}
+  Understand the \textbf{mathematical foundations} of three principal random graph models
+  and explore their theoretical structural properties through rigorous analysis and simulation.
+\end{block}
+
+\end{frame}
+
+% ============================================================
+%  SLIDE 3 — Erdős–Rényi
+% ============================================================
+\section{Erd\H{o}s--R\'{e}nyi Model}
+
+\begin{frame}{The Erd\H{o}s--R\'{e}nyi Model $G(n,p)$}
+
+\begin{block}{Definition}
+  Let $n \in \mathbb{N}$ be the number of vertices and $p \in [0,1]$.
+  The random graph $G(n,p)$ is formed on vertex set $V = \{1,\ldots,n\}$
+  by including each possible edge independently with probability $p$.
+\end{block}
+
+\medskip
+
+\textbf{Fundamental properties:}
+\begin{itemize}
+  \item \textbf{Expected edges:}
+        $\displaystyle\mathbb{E}[|E|] = p\binom{n}{2}$
+
+  \item \textbf{Degree distribution:}
+        $d(v) \sim \mathrm{Binomial}(n-1,\, p)$, so
+        $\mathbb{E}[d(v)] = p(n-1)$
+
+  \item \textbf{Connectivity threshold:}
+        $p_c = \dfrac{\ln n}{n}$
+
+        For $p > p_c$, the graph is \emph{almost surely} connected as $n \to \infty$;
+        for $p < p_c$, isolated vertices persist almost surely.
+\end{itemize}
+
+\end{frame}
+
+% ============================================================
+%  SLIDE 4 — ER structural interpretation
+% ============================================================
+
+\begin{frame}{Erd\H{o}s--R\'{e}nyi: Structural Interpretation}
+\footnotesize
+
+\textbf{Phase transitions:}
+\begin{itemize}
+  \item Below $p_c$: the graph consists of many small, disconnected components.
+  \item At $p = \frac{1}{n}$: a \emph{giant component} of size $\Theta(n)$ emerges.
+  \item Above $p_c$: a single connected component dominates with high probability.
+\end{itemize}
+
+\smallskip
+
+\textbf{Limitations as a real-world model:}
+\begin{itemize}
+  \item Degree distribution is \textbf{Binomial} (tightly concentrated around mean) — no heavy tails.
+  \item \textbf{Low clustering:} the probability of two neighbours of $v$ being connected
+        is simply $p$ — clustering coefficient $C \approx p \ll 1$ for sparse graphs.
+  \item Does not replicate the high clustering observed in social or biological networks.
+\end{itemize}
+
+\begin{alertblock}{Key Takeaway}
+  $G(n,p)$ gives sharp threshold theory but misses key real-network features:
+  strong clustering and heavy-tailed degree distributions.
+\end{alertblock}
+
+\end{frame}
+
+% ============================================================
+%  SLIDE 5 — Watts–Strogatz
+% ============================================================
+\section{Watts--Strogatz Model}
+
+\begin{frame}{The Watts--Strogatz Small-World Model}
+
+\begin{block}{Construction}
+  \begin{enumerate}
+    \item Begin with a \textbf{regular ring lattice}: $n$ vertices arranged in a circle,
+          each connected to its $k$ nearest neighbours ($k$ even, $k \ll n$).
+    \item For each edge, \textbf{rewire} it with probability $\beta \in [0,1]$
+          to a uniformly chosen random vertex (avoiding self-loops and duplicates).
+  \end{enumerate}
+\end{block}
+
+\medskip
+
+\textbf{Effect of the rewiring parameter $\beta$:}
+\begin{itemize}
+  \item $\beta = 0$: pure ring lattice — high clustering, large average path length.
+  \item $\beta = 1$: effectively a random graph — low clustering, short path length.
+  \item $0 < \beta \ll 1$: \textbf{small-world regime} — a few long-range shortcuts
+        dramatically reduce average path length while clustering remains high.
+\end{itemize}
+
+\end{frame}
+
+% ============================================================
+%  SLIDE 6 — WS properties
+% ============================================================
+
+\begin{frame}{Watts--Strogatz: Clustering and Path Length}
+
+\textbf{Clustering coefficient} (informally): the probability that two neighbours
+of a vertex are themselves connected — a measure of local cohesion.
+
+\medskip
+
+\textbf{Why clustering stays high for small $\beta$:}
+\begin{itemize}
+  \item Most edges remain in place; the local lattice structure is preserved.
+  \item The fraction of rewired edges is small, so triangles are not destroyed.
+\end{itemize}
+
+\medskip
+
+\textbf{Why average path length drops sharply:}
+\begin{itemize}
+  \item Even a small number of random shortcuts act as \emph{bridges} between
+        distant parts of the network.
+  \item Reduces diameter from $O(n/k)$ on the lattice to $O(\log n)$.
+\end{itemize}
+
+\begin{alertblock}{The Small-World Phenomenon}
+  High clustering (like a lattice) \emph{and} short path lengths (like a random graph)
+  can coexist — precisely the regime observed in real-world networks.
+\end{alertblock}
+
+\end{frame}
+
+% ============================================================
+%  SLIDE 7 — Barabási–Albert
+% ============================================================
+\section{Barab\'{a}si--Albert Model}
+
+\begin{frame}{The Barab\'{a}si--Albert Preferential Attachment Model}
+
+\begin{block}{Construction}
+  \begin{enumerate}
+    \item Begin with a small initial connected graph on $m_0$ vertices.
+    \item At each time step, add one new vertex with $m \leq m_0$ edges.
+    \item Each new edge connects to an existing vertex $i$ with probability
+          proportional to $i$'s current degree:
+          \[
+            P(i) \;=\; \frac{d_i}{\displaystyle\sum_{j} d_j}
+          \]
+  \end{enumerate}
+\end{block}
+
+\medskip
+
+\textbf{Intuition:} \emph{``The rich get richer.''} \\
+High-degree vertices attract more connections — a positive feedback mechanism.
+
+\end{frame}
+
+% ============================================================
+%  SLIDE 8 — BA properties
+% ============================================================
+
+\begin{frame}{Barab\'{a}si--Albert: Scale-Free Networks}
+\footnotesize
+
+\textbf{Power-law degree distribution:}
+\[
+  P(k) \;\sim\; k^{-3}, \qquad k \to \infty
+\]
+
+This is derived rigorously via a mean-field or master-equation approach and holds
+asymptotically as the network grows.
+
+\smallskip
+
+\textbf{What power-law implies structurally:}
+\begin{itemize}
+  \item \textbf{Heavy tail:} A small number of vertices (\emph{hubs}) accumulate
+        a disproportionately large share of all edges.
+  \item \textbf{Scale-free:} No characteristic degree scale exists —
+        the distribution has no finite variance in the limit.
+  \item \textbf{Robustness and vulnerability:} The network is highly robust
+        to random failures (most nodes have low degree) but fragile under
+        targeted attacks on hubs.
+\end{itemize}
+
+\begin{alertblock}{Key Takeaway}
+  Preferential attachment explains heavy-tailed degrees and hubs seen in
+  web and citation networks.
+\end{alertblock}
+
+\end{frame}
+
+% ============================================================
+%  SLIDE 9 — Comparison Table
+% ============================================================
+\section{Comparison}
+
+\begin{frame}{Comparative Structural Properties}
+
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{table}[h]
+\scriptsize
+\begin{tabular}{>{\bfseries}p{2.2cm} p{2.5cm} p{2.5cm} p{2.5cm}}
+\toprule
+ & \textbf{Erd\H{o}s--R\'{e}nyi} & \textbf{Watts--Strogatz} & \textbf{Barab\'{a}si--Albert} \\
+\midrule
+Mechanism      & Independent edge probability $p$ & Rewiring a ring lattice & Growth + preferential attachment \\
+\addlinespace
+Degree dist.   & Binomial$(n{-}1,p)$ & Approx.\ Poisson for small $\beta$ & Power law $P(k)\sim k^{-3}$ \\
+\addlinespace
+Clustering     & Low ($\approx p$) & High for small $\beta$ & Low–moderate \\
+\addlinespace
+Hubs           & None & None & Present (heavy tail) \\
+\addlinespace
+Typical uses   & Connectivity thresholds, percolation & Social, neural networks & Web, citation, scale-free nets \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{frame}
+
+% ============================================================
+%  SLIDE 10 — Implications, Limitations & Conclusion
+% ============================================================
+\section{Conclusion}
+
+\begin{frame}{Theoretical Implications and Conclusions}
+\footnotesize
+
+\textbf{Theoretical implications:}
+\begin{itemize}
+  \item \textbf{ER:} Provides exact threshold phenomena via probabilistic methods,
+        but is too homogeneous for most real networks.
+  \item \textbf{WS:} Demonstrates that \emph{local structure} and \emph{global efficiency}
+        are not mutually exclusive — a key insight for network science.
+  \item \textbf{BA:} Shows that \emph{growth} and \emph{feedback} alone are sufficient
+        to generate empirically observed heavy-tailed distributions.
+\end{itemize}
+
+\smallskip
+
+\textbf{Limitations:}
+\begin{itemize}
+  \item WS does not produce power-law degree distributions.
+  \item BA has low clustering — hybrid models (e.g., Holme--Kim) address this.
+  \item All three assume \emph{undirected, unweighted} graphs.
+\end{itemize}
+
+\smallskip
+
+\begin{block}{Summary}
+  Each model captures a different structural mechanism.
+  Together they motivate richer models for real-world complex networks.
+\end{block}
+
+\end{frame}
+
+% ============================================================
+\end{document}

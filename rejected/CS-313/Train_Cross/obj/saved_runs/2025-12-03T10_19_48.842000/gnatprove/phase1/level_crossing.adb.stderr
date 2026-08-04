@@ -1,0 +1,8 @@
+level_crossing.ads:136:27: error: binary operator expected
+level_crossing.ads:137:47: error: binary operator expected
+level_crossing.ads:139:81: error: missing ","
+level_crossing.ads:140:16: error: binary operator expected
+level_crossing.ads:142:27: error: binary operator expected
+level_crossing.ads:143:47: error: binary operator expected
+level_crossing.ads:145:81: error: missing ","
+level_crossing.ads:146:16: error: binary operator expected

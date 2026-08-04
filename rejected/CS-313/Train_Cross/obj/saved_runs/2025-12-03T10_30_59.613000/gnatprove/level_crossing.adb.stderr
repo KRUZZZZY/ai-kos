@@ -1,0 +1,2 @@
+level_crossing.ads:170:62: medium: "Status_System.Trains" might not be initialized[#0]
+level_crossing.ads:172:25: medium: "Status_System.Trains" might not be initialized[#1]

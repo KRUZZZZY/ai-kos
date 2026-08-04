@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+<mime-type type="text/gpr">
+<comment>Ada project file gpr</comment>
+<glob pattern="*.gpr"/>
+</mime-type>
+</mime-info>
+
+
+ 

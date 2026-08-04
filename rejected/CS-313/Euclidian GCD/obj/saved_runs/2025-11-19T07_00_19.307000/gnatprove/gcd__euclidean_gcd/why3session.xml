@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="CVC4" version="1.6-gnatprove" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="gnat-json">
+<path name=".."/><path name="gcd__euclidean_gcd.gnat-json"/>
+<theory name="Gcd__euclidean_gcd__subprogram_def">
+ <goal name="def&#39;vc">
+ <transf name="split_goal_wp_conj" >
+  <goal name="def&#39;vc.0" proved="true">
+  <transf name="trivial_true" proved="true" >
+  </transf>
+  </goal>
+  <goal name="def&#39;vc.1" proved="true">
+  <proof prover="0"><result status="valid" steps="5"/></proof>
+  </goal>
+  <goal name="def&#39;vc.2" proved="true">
+  <proof prover="0"><result status="valid" steps="5"/></proof>
+  </goal>
+  <goal name="def&#39;vc.3" proved="true">
+  <proof prover="0"><result status="valid" steps="5"/></proof>
+  </goal>
+  <goal name="def&#39;vc.4" proved="true">
+  <proof prover="0"><result status="valid" steps="5"/></proof>
+  </goal>
+  <goal name="def&#39;vc.5" proved="true">
+  <proof prover="0"><result status="valid" steps="5"/></proof>
+  </goal>
+  <goal name="def&#39;vc.6" proved="true">
+  <proof prover="0"><result status="valid" steps="5"/></proof>
+  </goal>
+  <goal name="def&#39;vc.7" proved="true">
+  <proof prover="0"><result status="valid" steps="5"/></proof>
+  </goal>
+  <goal name="def&#39;vc.8" proved="true">
+  <proof prover="0"><result status="valid" steps="5"/></proof>
+  </goal>
+  <goal name="def&#39;vc.9" proved="true">
+  <proof prover="0"><result status="valid" steps="5"/></proof>
+  </goal>
+  <goal name="def&#39;vc.10" proved="true">
+  <proof prover="0"><result status="valid" steps="305"/></proof>
+  </goal>
+  <goal name="def&#39;vc.11" proved="true">
+  <proof prover="0"><result status="valid" steps="5"/></proof>
+  </goal>
+  <goal name="def&#39;vc.12">
+  <proof prover="0"><result status="unknown" steps="5515"/></proof>
+  </goal>
+  <goal name="def&#39;vc.13" proved="true">
+  <proof prover="0"><result status="valid" steps="4500"/></proof>
+  </goal>
+  <goal name="def&#39;vc.14">
+  <proof prover="0"><result status="timeout" steps="13703"/></proof>
+  </goal>
+  <goal name="def&#39;vc.15" proved="true">
+  <proof prover="0"><result status="valid" steps="4521"/></proof>
+  </goal>
+  <goal name="def&#39;vc.16" proved="true">
+  <proof prover="0"><result status="valid" steps="5"/></proof>
+  </goal>
+  <goal name="def&#39;vc.17" proved="true">
+  <proof prover="0"><result status="valid" steps="301"/></proof>
+  </goal>
+  <goal name="def&#39;vc.18" proved="true">
+  <proof prover="0"><result status="valid" steps="5"/></proof>
+  </goal>
+  <goal name="def&#39;vc.19">
+  <proof prover="0"><result status="timeout"/></proof>
+  </goal>
+  <goal name="def&#39;vc.20" proved="true">
+  <proof prover="0"><result status="valid" steps="4258"/></proof>
+  </goal>
+  <goal name="def&#39;vc.21">
+  <proof prover="0"><result status="timeout"/></proof>
+  </goal>
+  <goal name="def&#39;vc.22" proved="true">
+  <proof prover="0"><result status="valid" steps="5041"/></proof>
+  </goal>
+  <goal name="def&#39;vc.23">
+  <proof prover="0"><result status="timeout"/></proof>
+  </goal>
+  <goal name="def&#39;vc.24">
+  <proof prover="0"><result status="timeout" steps="24680"/></proof>
+  </goal>
+  <goal name="def&#39;vc.25">
+  <proof prover="0"><result status="timeout" steps="15490"/></proof>
+  </goal>
+  <goal name="def&#39;vc.26">
+  <proof prover="0"><result status="timeout" steps="23411"/></proof>
+  </goal>
+  <goal name="def&#39;vc.27">
+  <proof prover="0"><result status="timeout" steps="16754"/></proof>
+  </goal>
+  <goal name="def&#39;vc.28">
+  <proof prover="0"><result status="timeout"/></proof>
+  </goal>
+  <goal name="def&#39;vc.29">
+  <proof prover="0"><result status="unknown" steps="5832"/></proof>
+  </goal>
+  <goal name="def&#39;vc.30">
+  <proof prover="0"><result status="unknown" steps="5832"/></proof>
+  </goal>
+  <goal name="def&#39;vc.31" proved="true">
+  <proof prover="0"><result status="valid" steps="21"/></proof>
+  </goal>
+  <goal name="def&#39;vc.32" proved="true">
+  <proof prover="0"><result status="valid" steps="242"/></proof>
+  </goal>
+  <goal name="def&#39;vc.33">
+  <proof prover="0"><result status="timeout" steps="16774"/></proof>
+  </goal>
+  <goal name="def&#39;vc.34">
+  <proof prover="0"><result status="timeout" steps="27717"/></proof>
+  </goal>
+  <goal name="def&#39;vc.35" proved="true">
+  <transf name="trivial_true" proved="true" >
+  </transf>
+  </goal>
+  <goal name="def&#39;vc.36">
+  <proof prover="0"><result status="timeout"/></proof>
+  </goal>
+  <goal name="def&#39;vc.37">
+  <proof prover="0"><result status="timeout"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

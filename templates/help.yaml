@@ -1,0 +1,145 @@
+name: help
+version: 1.0.0
+description: Explains how a specific component of a project works. Names the project and component explicitly. Used for developer
+  documentation, onboarding, and reference.
+use_when:
+- Documenting how a module, service, or function works
+- Explaining architecture decisions for future reference
+- Creating onboarding docs for a project component
+- Writing a troubleshooting guide for a specific system
+ai_prompt: Explain how a specific component works. Name the project it belongs to and the component name. Write ~5 paragraphs
+  of explanation. Include concrete examples of usage, configuration, or behavior. End with common patterns or pitfalls. Use
+  the same terminology the codebase uses.
+fields:
+  id:
+    type: uuid
+    required: true
+    desc: Auto-generated UUID
+    example: 550e8400-e29b-41d4-a716-446655440000
+  title:
+    type: string
+    required: true
+    desc: Article title, 1-200 chars
+    constraint: max 200 chars
+    example: How to Configure Qdrant for Hybrid Search
+  slug:
+    type: kebab-case
+    required: true
+    desc: URL-safe identifier, lowercase alphanumeric + hyphens
+    constraint: 'pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$'
+    example: qdrant-hybrid-search-config
+  created_at:
+    type: date
+    required: true
+    desc: Creation date (ISO 8601)
+    example: '2026-08-04'
+  updated_at:
+    type: date
+    required: true
+    desc: Last modification date
+    example: '2026-08-04'
+  reviewed_at:
+    type: date
+    required: true
+    desc: Last review date
+    example: '2026-08-04'
+  next_review_at:
+    type: date
+    required: true
+    desc: Next scheduled review
+    constraint: must be >= updated_at
+    example: '2026-11-04'
+  stability:
+    type: enum
+    required: true
+    desc: How stable this knowledge is
+    values:
+    - stable
+    - moderate
+    - volatile
+    default: moderate
+  sensitivity_label:
+    type: enum
+    required: true
+    desc: Access control label
+    values:
+    - public
+    - internal
+    - confidential
+    - restricted
+    default: internal
+  keywords:
+    type: list[string]
+    required: true
+    desc: 3-8 lowercase keywords for auto-linking. Choose words other related articles would also use.
+    constraint: 3-8 items, all lowercase, no duplicates
+    example:
+    - qdrant
+    - hybrid-search
+    - configuration
+    - vectors
+    - retrieval
+  summary:
+    type: string
+    required: true
+    desc: 1-2 sentence description, shown in search results
+    constraint: max 300 chars
+    example: Step-by-step guide to configuring Qdrant for hybrid dense+sparse vector search with RRF fusion.
+  related:
+    type: list[string]
+    required: false
+    desc: Slugs of related articles — auto-managed by linker. Do not set manually.
+    constraint: managed by linker, >=3 shared keywords triggers auto-link
+  provenance:
+    type: list[string]
+    required: true
+    desc: Original source file paths or URLs
+    constraint: at least 1 entry
+    example:
+    - docs.qdrant.tech/hybrid-search
+    - session-2026-08-04-research
+  ai_notes:
+    type: string
+    required: false
+    desc: Private agent workspace, not shown to humans. Use for uncertainty, TODOs, merge notes.
+  retrieval_count:
+    type: integer
+    required: false
+    desc: Times this article was retrieved. Auto-incremented.
+    default: 0
+  type:
+    type: enum
+    required: true
+    desc: Article type
+    value: help
+  project:
+    type: string
+    required: true
+    desc: Which project this component belongs to.
+    example: AI-KOS
+  component:
+    type: string
+    required: true
+    desc: The specific component being explained.
+    example: SearchIndex class (search.py)
+  explanation:
+    type: string
+    required: true
+    desc: ~5 paragraphs explaining how the component works.
+    constraint: 5 paragraphs max, each 2-4 sentences
+    example: The SearchIndex builds an in-memory inverted index over all knowledge articles. It tokenizes article text into
+      lowercase alphanumeric tokens, removes stop words, and computes term frequencies per document. The index supports full-text
+      search using TF-IDF scoring with cosine similarity. A keyword match bonus of 30% per matching keyword is applied on
+      top of text similarity. The index is cached and automatically rebuilds when article files change, tracked via file mtime.
+  examples:
+    type: list[string]
+    required: false
+    desc: Concrete examples of usage, configuration, or behavior.
+    example:
+    - search('how to configure qdrant') → returns ranked results with snippets
+    - compare('ai-kos') → finds ai-kos-mission as most similar (0.86 score, 5 shared keywords)
+    - Index rebuilds in <10ms when no files changed, ~50ms for full 100-article rebuild
+stress_points:
+- project and component both empty → validation fails
+- explanation is one giant paragraph → auto-formatted but harder to read
+- examples reference non-existent slugs → fine, they're illustrative

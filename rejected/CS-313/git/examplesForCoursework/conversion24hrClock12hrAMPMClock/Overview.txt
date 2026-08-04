@@ -1,0 +1,52 @@
+This file contains multiple versions of the clock example.
+See the README.txt file for information why regarding that this is a simplified 
+version of the conversion from 24 hr to 12 hr and why we use this simplified
+version.
+
+
+
+vers01onlyAdaNoMainAdbFile
+   This version has no main.adb file. 
+   It can be compiled, which creates files which can
+   be linked from other programs, but it has no main file to be executed.
+   It contains just the package clock in clock.ads and clock.adb which defines
+   the procedure carrying out the conversion.
+
+vers02OnlyAdaWithIOWithMainAdbFile
+   Adds a main.adb file to vers01onlyAdaNoMainAdbFile
+   This can be compiled to create an executable file main 
+
+vers03UsingAsLibrary
+   Replaces the usage of Ada input/output functions by the As_Library
+   which allows data/information flow analysis in SPARK Ada.
+   
+vers04WithAddedRanges
+   Adds types which are range restricted to vers03UsingAsLibrary.
+
+vers05WithRecordType
+   Adds a record type to vers04WithAddedRanges
+
+vers06WithFunction
+   Adds a function to vers05WithRecordType
+   Note: In previous versions function occurred in all previous version
+   We removed the function from vers01* - vers05*  since in the coursework 
+   we usually have more than one output, and a function can only be defined
+   after a record type was created which bundles the outputs into one output.
+
+vers07withDependsClauses
+    Adds to vers06WithFunction  depends clauses so that
+    the code passes the information flow
+
+vers08withVerificationConditions
+    Adds verification conditions to the example. Passes verification in 
+    SPARK Ada
+
+vers09optionalWithProcedureOfInput
+    This is an optional version, since some students wanted to use a procedure
+    for reading the inputs, in order to avoid repetitive code.
+
+    It is desirable to make these inputs via a procedure, but not required 
+    in the coursework since dealing with Standard_Input and Standard_Output 
+    is a more advanced feature, and the focus of the coursework 1 is to
+    learn the basics of SPARK Ada.
+

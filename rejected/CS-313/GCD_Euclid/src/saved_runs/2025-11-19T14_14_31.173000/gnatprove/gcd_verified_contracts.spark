@@ -1,0 +1,899 @@
+{
+  "spark": [
+    {
+      "name": "GCD_Verified_Contracts",
+      "sloc": [
+        {
+          "file": "gcd_verified_contracts.ads",
+          "line": 3
+        }
+      ],
+      "spark": "all"
+    },
+    {
+      "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+      "sloc": [
+        {
+          "file": "gcd_verified_contracts.ads",
+          "line": 4
+        }
+      ],
+      "spark": "all"
+    }
+  ],
+  "flow": [
+    {
+      "file": "gcd_verified_contracts.ads",
+      "line": 7,
+      "col": 7,
+      "rule": "UNINITIALIZED",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "gcd_verified_contracts.ads",
+      "line": 8,
+      "col": 7,
+      "rule": "UNINITIALIZED",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "gcd_verified_contracts.ads",
+      "line": 9,
+      "col": 7,
+      "rule": "UNINITIALIZED",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 18,
+      "col": 7,
+      "rule": "UNINITIALIZED",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 19,
+      "col": 7,
+      "rule": "UNINITIALIZED",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    },
+    {
+      "file": "gcd_verified_contracts.ads",
+      "line": 11,
+      "col": 6,
+      "rule": "DEPENDS_WRONG",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": {
+      },
+      "how_proved": "flow"
+    }
+  ],
+  "session_map": {
+    " 1": "C:\\Users\\zacha\\Documents\\Year 3 Swansea\\CS-313\\GCD_Euclid\\src\\gnatprove\\gcd_verified_contracts__euclid_gcd_verified"
+  },
+  "proof": [
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 28,
+      "col": 21,
+      "rule": "VC_DIVISION_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "gcd_verified_contracts.adb",
+      "check_line": 28,
+      "check_col": 21,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 29,
+      "col": 21,
+      "rule": "VC_DIVISION_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "gcd_verified_contracts.adb",
+      "check_line": 29,
+      "check_col": 21,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 30,
+      "col": 28,
+      "rule": "VC_ASSERT",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "altergo": {
+              "result": "Valid",
+              "steps": 2689,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "gcd_verified_contracts.adb",
+      "check_line": 30,
+      "check_col": 28,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "altergo": {
+          "count": 1,
+          "max_steps": 2689,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 35,
+      "col": 21,
+      "rule": "VC_DIVISION_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "gcd_verified_contracts.adb",
+      "check_line": 35,
+      "check_col": 21,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 36,
+      "col": 21,
+      "rule": "VC_DIVISION_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "gcd_verified_contracts.adb",
+      "check_line": 36,
+      "check_col": 21,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 37,
+      "col": 28,
+      "rule": "VC_ASSERT",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "altergo": {
+              "result": "Valid",
+              "steps": 1972,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "gcd_verified_contracts.adb",
+      "check_line": 37,
+      "check_col": 28,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "altergo": {
+          "count": 1,
+          "max_steps": 1972,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 44,
+      "col": 13,
+      "rule": "VC_ASSERT",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "Z3": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "gcd_verified_contracts.adb",
+      "check_line": 44,
+      "check_col": 13,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        },
+        "Z3": {
+          "count": 2,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 23,
+      "col": 13,
+      "rule": "VC_LOOP_INVARIANT_PRESERV",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "gcd_verified_contracts.adb",
+      "check_line": 23,
+      "check_col": 13,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 3,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 23,
+      "col": 13,
+      "rule": "VC_LOOP_INVARIANT_INIT",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "gcd_verified_contracts.adb",
+      "check_line": 23,
+      "check_col": 13,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 3,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 50,
+      "col": 25,
+      "rule": "VC_ASSERT",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "gcd_verified_contracts.adb",
+      "check_line": 50,
+      "check_col": 25,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 51,
+      "col": 25,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "gcd_verified_contracts.adb",
+      "check_line": 51,
+      "check_col": 25,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 55,
+      "col": 25,
+      "rule": "VC_ASSERT",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "gcd_verified_contracts.adb",
+      "check_line": 55,
+      "check_col": 25,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "gcd_verified_contracts.adb",
+      "line": 56,
+      "col": 25,
+      "rule": "VC_RANGE_CHECK",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 0
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "gcd_verified_contracts.adb",
+      "check_line": 56,
+      "check_col": 25,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 1,
+          "max_steps": 1,
+          "max_time": 0.00000000000000E+00
+        }
+      }
+    },
+    {
+      "file": "gcd_verified_contracts.ads",
+      "line": 13,
+      "col": 8,
+      "rule": "VC_POSTCONDITION",
+      "severity": "info",
+      "entity": {
+        "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+        "sloc": [
+          {
+            "file": "gcd_verified_contracts.ads",
+            "line": 4
+          }
+        ]
+      },
+      "check_tree": [
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 2,
+              "time": 2.00000000000000E-01
+            }
+          },
+          "transformations": {
+          }
+        },
+        {
+          "proof_attempts": {
+            "CVC4": {
+              "result": "Valid",
+              "steps": 1,
+              "time": 2.00000000000000E-01
+            }
+          },
+          "transformations": {
+          }
+        }
+      ],
+      "check_file": "gcd_verified_contracts.ads",
+      "check_line": 13,
+      "check_col": 8,
+      "session_dir": 1,
+      "how_proved": "prover",
+      "stats": {
+        "CVC4": {
+          "count": 2,
+          "max_steps": 2,
+          "max_time": 2.00000002980232E-01
+        }
+      }
+    }
+  ],
+  "assumptions": [
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "GCD_Verified_Contracts",
+          "sloc": [
+            {
+              "file": "gcd_verified_contracts.ads",
+              "line": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_POST",
+        "arg": {
+          "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+          "sloc": [
+            {
+              "file": "gcd_verified_contracts.ads",
+              "line": 4
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_EFFECTS",
+        "arg": {
+          "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+          "sloc": [
+            {
+              "file": "gcd_verified_contracts.ads",
+              "line": 4
+            }
+          ]
+        }
+      }
+    },
+    {
+      "assumptions": [
+      ],
+      "claim": {
+        "predicate": "CLAIM_AORTE",
+        "arg": {
+          "name": "GCD_Verified_Contracts.Euclid_GCD_Verified",
+          "sloc": [
+            {
+              "file": "gcd_verified_contracts.ads",
+              "line": 4
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "timings": {
+    "gnatwhy3.transformations.eliminate_algebraic": 0.00000000000000E+00,
+    "gnatwhy3.transformations.inline_trivial": 7.81250000000000E-02,
+    "codepeer results": 1.13599999167491E-04,
+    "init_why_sections": 4.13600006140769E-04,
+    "gnatwhy3.transformations.eliminate_let_term": 0.00000000000000E+00,
+    "gnatwhy3.transformations.detect_polymorphism": 0.00000000000000E+00,
+    "gnatwhy3.transformations.eliminate_literal": 0.00000000000000E+00,
+    "gnatwhy3.run_vcs": 2.50000000000000E-01,
+    "globals (advanced)": 2.67600000370294E-04,
+    "gnatwhy3.transformations.eliminate_algebraic_if_poly": 0.00000000000000E+00,
+    "gnatwhy3.transformations.eliminate_definition_if_poly": 0.00000000000000E+00,
+    "flow analysis": 2.06810003146529E-03,
+    "gnatwhy3.transformations.simplify_formula": 0.00000000000000E+00,
+    "marking": 1.19199998152908E-04,
+    "translation of standard": 1.82799994945526E-03,
+    "gnatwhy3.transformations.eliminate_recursion": 0.00000000000000E+00,
+    "properties (advanced)": 1.73000007634982E-05,
+    "gnatwhy3.register_vcs": 0.00000000000000E+00,
+    "gnatwhy3.transformations.eliminate_epsilon": 0.00000000000000E+00,
+    "globals (basic)": 2.62399989878759E-04,
+    "gnatwhy3.schedule_vcs": 0.00000000000000E+00,
+    "gnatwhy3.transformations.prepare_for_counterexmp": 0.00000000000000E+00,
+    "gnatwhy3.save_session": 0.00000000000000E+00,
+    "gnatwhy3.transformations.eliminate_inductive": 0.00000000000000E+00,
+    "gnatwhy3.transformations.encoding_smt_if_poly": 0.00000000000000E+00,
+    "gnatwhy3.transformations.eliminate_unused_hypo": 0.00000000000000E+00,
+    "gnatwhy3.transformations.eliminate_builtin": 0.00000000000000E+00,
+    "gnatwhy3.transformations.discriminate_if_poly": 0.00000000000000E+00,
+    "gnatwhy3.init": 1.09375000000000E-01,
+    "gnatwhy3.transformations.introduce_premises": 0.00000000000000E+00
+  }
+}

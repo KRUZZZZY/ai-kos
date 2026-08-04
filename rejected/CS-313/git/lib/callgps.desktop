@@ -1,0 +1,8 @@
+[Desktop Entry]
+Exec=$HOME/bin/callgps
+MimeType=application/gpr;
+Name=callgps
+NoDisplay=true
+Terminal=true
+TerminalOptions=--noclose
+Type=Application

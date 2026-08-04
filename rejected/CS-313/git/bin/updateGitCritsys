@@ -1,0 +1,3 @@
+#!/bin/bash
+
+xterm -e "cd ~/git/criticalhighintegritysystems/; echo git pull; git pull; bash"

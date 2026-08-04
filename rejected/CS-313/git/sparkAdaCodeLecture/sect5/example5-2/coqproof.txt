@@ -1,0 +1,53 @@
+Theorem WP_parameter_def : forall (m:integer) (n:integer),
+  (((to_int m) < 0%Z)%Z -> let o := ((to_int n) - 1%Z)%Z in ((in_range o) /\
+  forall (o1:integer), ((to_int o1) = o) -> forall (n1:integer), (n1 = o1) ->
+  let o2 := ((to_int m) + 1%Z)%Z in ((in_range o2) /\ forall (o3:integer),
+  ((to_int o3) = o2) -> forall (m1:integer), (m1 = o3) -> ((in_range
+  ((to_int m) + 1%Z)%Z) /\ ((to_int m1) = ((to_int m) + 1%Z)%Z))))) /\
+  ((~ ((to_int m) < 0%Z)%Z) -> let o := ((to_int n) + 1%Z)%Z in ((in_range
+  o) /\ forall (o1:integer), ((to_int o1) = o) -> forall (n1:integer),
+  (n1 = o1) -> let o2 := ((to_int m) - 1%Z)%Z in ((in_range o2) /\
+  forall (o3:integer), ((to_int o3) = o2) -> forall (m1:integer),
+  (m1 = o3) -> ((in_range ((to_int m) + 1%Z)%Z) /\
+  ((to_int m1) = ((to_int m) + 1%Z)%Z))))).
+intros m n.
+
+replacing (to_int m) by m
+omitting %Z
+forall (m:integer) (n:integer),
+  ((m < 0) -> let o := (n - 1) in ((in_range o) /\
+  forall (o1:integer), (o1 = o) -> forall (n1:integer), (n1 = o1) ->
+  let o2 := (m + 1) in ((in_range o2) /\ forall (o3:integer),
+  (o3 = o2) -> forall (m1:integer), (m1 = o3) -> ((in_range
+  (m + 1)) /\ (m1 = (m + 1)))))) /\
+  ((~ (m < 0)) -> let o := (n + 1) in ((in_range
+  o) /\ forall (o1:integer), (o1 = o) -> forall (n1:integer),
+  (n1 = o1) -> let o2 := (m - 1) in ((in_range o2) /\
+  forall (o3:integer), (o3 = o2) -> forall (m1:integer),
+  (m1 = o3) -> ((in_range (m + 1)) /\
+  (m1 = (m + 1)))))).
+
+realigining, replacing forall (m : integer) by forall m
+
+forall m n, ((m < 0) 
+  -> let o := (n - 1) in 
+       ((in_range o) /\
+        forall o1, (o1 = o) -> 
+          forall n1, (n1 = o1) ->
+            let o2 := (m + 1) in 
+              ((in_range o2) /\
+               forall o3,  (o3 = o2) -> 
+                 forall m1, (m1 = o3) -> 
+                   ((in_range   (m + 1)) /\ (m1 = (m + 1)))))) /\
+  ((~ (m < 0)) -> 
+      let o := (n + 1) in 
+        ((in_range  o) /\ 
+        forall o1, (o1 = o) -> 
+          forall n1,  (n1 = o1) -> 
+            let o2 := (m - 1) in 
+               ((in_range o2) /\
+               forall o3, (o3 = o2) -> 
+                forall m1,  (m1 = o3) -> 
+                  ((in_range (m + 1)) /\  (m1 = (m + 1)))))).
+
+          

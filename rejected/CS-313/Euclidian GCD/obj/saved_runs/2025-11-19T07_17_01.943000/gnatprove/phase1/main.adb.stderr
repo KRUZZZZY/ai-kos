@@ -1,0 +1,2 @@
+main.adb:1:06: error: file "spark.ads" not found
+main.adb:2:06: error: file "spark.ads" not found

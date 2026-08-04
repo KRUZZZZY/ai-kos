@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Rebuilds · Global Overwatch Elo{% endblock %}
+{% block content %}
+<header class="page-head"><div><h1>Rebuild Controls</h1><p>Recalculate the full historical rating timeline.</p></div></header>
+<form class="inline-form" method="post" action="/rebuild/full">
+  <input name="reason" value="Manual full rebuild">
+  <button type="submit">Run Full Rebuild</button>
+</form>
+<table>
+  <thead><tr><th>ID</th><th>Created</th><th>Trigger</th><th>Reason</th></tr></thead>
+  <tbody>
+  {% for version in versions %}
+    <tr><td>{{ version.id }}</td><td>{{ version.created_at }}</td><td>{{ version.triggered_by }}</td><td>{{ version.reason }}</td></tr>
+  {% else %}
+    <tr><td colspan="4" class="empty">No rebuilds recorded.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

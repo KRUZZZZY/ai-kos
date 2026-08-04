@@ -1,0 +1,15 @@
+main.adb:12:10: error: no candidate interpretations match the actuals:
+main.adb:12:10: error: missing argument for parameter "Item" in call to "Get" declared at a-textio.ads:449
+main.adb:12:10: error: missing argument for parameter "Item" in call to "Get" declared at a-textio.ads:376
+main.adb:12:15: error: expected type "Standard.String"
+main.adb:12:15: error: found type "Standard.Integer"
+main.adb:12:15: error:   ==> in call to "Get" at a-textio.ads:452
+main.adb:12:15: error:   ==> in call to "Get" at a-textio.ads:379
+main.adb:20:10: error: no candidate interpretations match the actuals:
+main.adb:20:10: error: missing argument for parameter "Item" in call to "Get" declared at a-textio.ads:449
+main.adb:20:10: error: missing argument for parameter "Item" in call to "Get" declared at a-textio.ads:376
+main.adb:20:15: error: expected type "Standard.String"
+main.adb:20:15: error: found type "Standard.Integer"
+main.adb:20:15: error:   ==> in call to "Get" at a-textio.ads:452
+main.adb:20:15: error:   ==> in call to "Get" at a-textio.ads:379
+main.adb:37:12: error: "Answer" is undefined (more references follow)

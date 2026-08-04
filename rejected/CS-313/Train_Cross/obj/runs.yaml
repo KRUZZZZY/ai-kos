@@ -1,0 +1,218 @@
+'2025-12-03T07:27:32.278000':
+  category: GNATprove
+  files:
+  - C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove
+  label: Basic Prove All Sources
+  output: 'Phase 1 of 2: generation of Global contracts ...
+
+    Phase 2 of 2: flow analysis and proof ...
+
+    Summary logged in C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove\gnatprove.out
+
+    '
+  output_parser: GNATprove_Parser
+  timestamp: '2025-12-03T07:27:32.278000'
+'2025-12-03T07:27:38.905000':
+  category: GNATprove
+  files:
+  - C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove
+  label: Examine All Sources
+  output: 'Phase 1 of 2: generation of Global contracts ...
+
+    Phase 2 of 2: analysis of data and information flow ...
+
+    Summary logged in C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove\gnatprove.out
+
+    '
+  output_parser: GNATprove_Parser
+  timestamp: '2025-12-03T07:27:38.905000'
+'2025-12-03T07:27:47.066000':
+  category: GNATprove
+  files:
+  - C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove
+  label: Basic Prove All Sources
+  output: 'Phase 1 of 2: generation of Global contracts ...
+
+    Phase 2 of 2: flow analysis and proof ...
+
+    Summary logged in C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove\gnatprove.out
+
+    '
+  output_parser: GNATprove_Parser
+  timestamp: '2025-12-03T07:27:47.066000'
+'2025-12-03T09:33:24.744000':
+  category: GNATprove
+  files:
+  - C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove
+  label: Basic Prove All Sources
+  output: 'Phase 1 of 2: generation of Global contracts ...
+
+    Phase 2 of 2: flow analysis and proof ...
+
+    level_crossing.ads:120:62: medium: "Status_System.Trains" might not be initialized[#0]
+
+    level_crossing.ads:122:25: medium: "Status_System.Trains" might not be initialized[#1]
+
+    level_crossing.ads:145:18: medium: missing dependency "Standard_Output => Train_Number"[#4]
+
+    level_crossing.ads:145:18: medium: missing dependency "Standard_Output => Status_System"[#5]
+
+    level_crossing.ads:146:18: medium: missing dependency "Standard_Input => Train_Number"[#2]
+
+    level_crossing.ads:146:18: medium: missing dependency "Standard_Input => Status_System"[#3]
+
+    main.adb:43:33: medium: loop invariant might fail in first iteration[#0]
+
+    main.adb:43:33: medium: loop invariant might not be preserved by an arbitrary
+    iteration[#1]
+
+    Summary logged in C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove\gnatprove.out
+
+    '
+  output_parser: GNATprove_Parser
+  timestamp: '2025-12-03T09:33:24.744000'
+'2025-12-03T10:19:48.842000':
+  category: GNATprove
+  files:
+  - C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove
+  label: Basic Prove All Sources
+  output: 'Phase 1 of 2: generation of Global contracts ...
+
+    level_crossing.ads:136:27: error: binary operator expected
+
+    level_crossing.ads:137:47: error: binary operator expected
+
+    level_crossing.ads:139:81: error: missing ","
+
+    level_crossing.ads:140:16: error: binary operator expected
+
+    level_crossing.ads:142:27: error: binary operator expected
+
+    level_crossing.ads:143:47: error: binary operator expected
+
+    level_crossing.ads:145:81: error: missing ","
+
+    level_crossing.ads:146:16: error: binary operator expected
+
+    level_crossing.ads:136:27: error: binary operator expected
+
+    level_crossing.ads:137:47: error: binary operator expected
+
+    level_crossing.ads:139:81: error: missing ","
+
+    level_crossing.ads:140:16: error: binary operator expected
+
+    level_crossing.ads:142:27: error: binary operator expected
+
+    level_crossing.ads:143:47: error: binary operator expected
+
+    level_crossing.ads:145:81: error: missing ","
+
+    level_crossing.ads:146:16: error: binary operator expected
+
+    gnatprove: error during generation of Global contracts
+
+    '
+  output_parser: GNATprove_Parser
+  timestamp: '2025-12-03T10:19:48.842000'
+'2025-12-03T10:25:47.022000':
+  category: GNATprove
+  files:
+  - C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove
+  label: Examine All Sources
+  output: 'Phase 1 of 2: generation of Global contracts ...
+
+    Phase 2 of 2: analysis of data and information flow ...
+
+    level_crossing.ads:165:62: medium: "Status_System.Trains" might not be initialized[#4]
+
+    level_crossing.ads:167:25: medium: "Status_System.Trains" might not be initialized[#5]
+
+    level_crossing.ads:195:18: medium: missing dependency "Standard_Output => Train_Number"[#2]
+
+    level_crossing.ads:195:18: medium: missing dependency "Standard_Output => Status_System"[#3]
+
+    level_crossing.ads:196:18: medium: missing dependency "Standard_Input => Train_Number"[#0]
+
+    level_crossing.ads:196:18: medium: missing dependency "Standard_Input => Status_System"[#1]
+
+    Summary logged in C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove\gnatprove.out
+
+    '
+  output_parser: GNATprove_Parser
+  timestamp: '2025-12-03T10:25:47.022000'
+'2025-12-03T10:26:16.377000':
+  category: GNATprove
+  files:
+  - C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove
+  label: Basic Prove All Sources
+  output: 'Phase 1 of 2: generation of Global contracts ...
+
+    Phase 2 of 2: flow analysis and proof ...
+
+    level_crossing.ads:165:62: medium: "Status_System.Trains" might not be initialized[#4]
+
+    level_crossing.ads:167:25: medium: "Status_System.Trains" might not be initialized[#5]
+
+    level_crossing.ads:195:18: medium: missing dependency "Standard_Output => Train_Number"[#2]
+
+    level_crossing.ads:195:18: medium: missing dependency "Standard_Output => Status_System"[#3]
+
+    level_crossing.ads:196:18: medium: missing dependency "Standard_Input => Train_Number"[#0]
+
+    level_crossing.ads:196:18: medium: missing dependency "Standard_Input => Status_System"[#1]
+
+    main.adb:43:33: medium: loop invariant might fail in first iteration[#0]
+
+    main.adb:43:33: medium: loop invariant might not be preserved by an arbitrary
+    iteration[#1]
+
+    Summary logged in C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove\gnatprove.out
+
+    '
+  output_parser: GNATprove_Parser
+  timestamp: '2025-12-03T10:26:16.377000'
+'2025-12-03T10:26:27.688000':
+  category: GNATprove
+  files:
+  - C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove
+  label: Examine All Sources
+  output: 'Phase 1 of 2: generation of Global contracts ...
+
+    Phase 2 of 2: analysis of data and information flow ...
+
+    level_crossing.ads:165:62: medium: "Status_System.Trains" might not be initialized[#4]
+
+    level_crossing.ads:167:25: medium: "Status_System.Trains" might not be initialized[#5]
+
+    level_crossing.ads:195:18: medium: missing dependency "Standard_Output => Train_Number"[#2]
+
+    level_crossing.ads:195:18: medium: missing dependency "Standard_Output => Status_System"[#3]
+
+    level_crossing.ads:196:18: medium: missing dependency "Standard_Input => Train_Number"[#0]
+
+    level_crossing.ads:196:18: medium: missing dependency "Standard_Input => Status_System"[#1]
+
+    Summary logged in C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove\gnatprove.out
+
+    '
+  output_parser: GNATprove_Parser
+  timestamp: '2025-12-03T10:26:27.688000'
+'2025-12-03T10:30:59.613000':
+  category: GNATprove
+  files:
+  - C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove
+  label: Basic Prove All Sources
+  output: 'Phase 1 of 2: generation of Global contracts ...
+
+    Phase 2 of 2: flow analysis and proof ...
+
+    level_crossing.ads:170:62: medium: "Status_System.Trains" might not be initialized[#0]
+
+    level_crossing.ads:172:25: medium: "Status_System.Trains" might not be initialized[#1]
+
+    Summary logged in C:\Users\zacha\Documents\Year 3 Swansea\CS-313\Train_Cross\obj\gnatprove\gnatprove.out
+
+    '
+  output_parser: GNATprove_Parser
+  timestamp: '2025-12-03T10:30:59.613000'

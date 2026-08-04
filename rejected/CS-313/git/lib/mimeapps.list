@@ -1,0 +1,7 @@
+[Added Associations]
+application/gpr=callgps.desktop;
+application/gps=callgps.desktop;
+application/mlw=callwhy3.desktop;
+application/why3=callwhy3.desktop;
+
+[Removed Associations]

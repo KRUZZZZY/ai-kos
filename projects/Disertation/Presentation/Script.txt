@@ -1,0 +1,69 @@
+Slide 1: Title Slide
+
+Script:
+"Hello everyone. My name is [Your Name], and for my project, I wanted to explore the bridge between abstract graph theory and the messy networks we see in the real world. We’re going to look at three foundational models and see how well they actually hold up when you stop doing calculus and start running simulations."  
+Slide 2: The Three Questions
+
+Script:
+"I centered my work around three research questions. First: how does a random graph suddenly 'snap' into a connected structure? Second: can we have a network that is both highly local and globally connected? And third: why do some nodes in the real world become massive 'hubs' while others stay tiny?. These questions guided my simulations and my look into the history of the field."  
+Slide 3: The Erdős–Rényi Model (Definition)
+
+Script:
+"We start in 1959 with Erdős and Rényi. Their model is the 'blank slate' of graph theory. You take n points and flip a coin for every possible connection with a probability p. It’s mathematically elegant because it’s so simple, and it leads to a very predictable degree distribution—a Poisson curve where most nodes have roughly the same number of friends."  
+Slide 4: ER Phase Transitions
+
+Script:
+"The most famous feature here is the Phase Transition. Think of it like water freezing. If your probability p is too low, the graph is just 'dust'—tiny isolated clusters. But once you hit a critical threshold, a 'Giant Component' suddenly emerges that swallows up most of the graph. This is the mathematical birth of a network."  
+Slide 5: ER Simulation (RQ1 Results)
+
+Script:
+"When I ran the simulations for RQ1, I found something interesting. Theory says the transition should happen at p=0.001, but my data showed it closer to 0.0014. This 40% gap isn't a mistake; it's a 'finite-size effect'. Because my graph only had 1,000 nodes, the transition was a smooth ramp rather than the sharp, infinite step described in textbooks."  
+Slide 6: Watts–Strogatz (The Small-World Problem)
+
+Script:
+"But Erdős–Rényi has a problem: it doesn't look like a social network. In real life, my friends are likely friends with each other—that’s 'clustering.' Watts and Strogatz realized that regular lattices have high clustering but huge distances, while random graphs have short distances but no clustering. They wanted to find the middle ground."  
+Slide 7: WS Simulation (RQ2 Results)
+
+Script:
+"For RQ2, I looked for the 'Small-World Window.' By taking a circle of nodes and randomly 'rewiring' just a few edges, you get the best of both worlds. My simulations confirmed their theory: at a rewiring rate of 10−3, the path length drops like a stone, but the local clusters stay almost entirely intact. It’s the 'six degrees of separation' in action."  
+Slide 8: Barabási–Albert (The Power Law)
+
+Script:
+"Finally, we have the Barabási–Albert model. If you look at the World Wide Web, it doesn't look like a Poisson curve. It has 'hubs'—nodes like Google or Amazon with millions of links. This is a Scale-Free network. The math tells us the degree distribution follows a Power Law (k−3), meaning hubs are rare but inevitable."  
+Slide 9: Preferential Attachment (The Mechanism)
+
+Script:
+"How do these hubs form? Through Preferential Attachment, or the 'rich get richer' effect. Unlike the previous models where the number of nodes is fixed, this graph grows over time. New nodes prefer to link to existing nodes that are already popular. This feedback loop is what creates the massive disparity between a hub and a leaf."  
+Slide 10: BA Simulation (RQ3 Results)
+
+Script:
+"For RQ3, measuring this was the hardest part of the project. A single run with 30 nodes gave me a mess. I had to build a SQLite database to store and aggregate hundreds of runs just to see the pattern. Eventually, I measured a slope of −2.73. It's close to the theoretical −3, and the slight difference again comes down to those 'finite-size effects'—real-world simulations have limits that asymptotic theory doesn't."
+
+Slide 11: The Story of Random Graphs (Timeline)
+
+Script:
+"Before we wrap up the data, I want to take a step back and look at the story of how we got here. Random graph theory didn't start with Python simulations; it began in 1938 with researchers like Jennings and Moreno looking at 'chance sociograms' to understand human links.  
+
+We then moved into the era of pure mathematics in 1959 with the Erdős-Rényi model—this was abstract probability at its finest. It wasn't until the late 90s and early 2000s, with Watts, Strogatz, Barabási, and Albert, that the field shifted to model the 'Small-World' and 'Scale-Free' structures of the modern world.  
+
+My own journey started in 2025, thanks to a prompt from Dr. Angelica Pachon, to see if these theoretical limits actually hold up when we build them from scratch. This timeline represents a shift from abstract definitions to something I could finally test, plot, and understand."  
+Slide 12: Conclusions (RQ1 & RQ2)
+
+Script:
+"So, what did we actually find? For RQ1, we saw the giant component emerge as predicted, but with a 40% discrepancy in the threshold—p≈0.0014 versus the theoretical 0.001. This isn't a failure of the code; it’s a visible example of finite-size effects. Theory assumes n→∞, but in the real world (and my simulation), the transition is a 'smooth ramp' rather than a sharp step.
+
+For RQ2, we successfully identified the Small-World window between 10−3<β<10−1. What was most satisfying here was verifying that at the lower boundary, the path length L had already dropped to 81%, while clustering remained perfectly intact at 1.00. It turned an approximate claim into a verified numerical result."
+Slide 13: Conclusions (RQ3 & Simulation Value)
+
+Script:
+"For RQ3, our Barabási-Albert simulations confirmed the ⟨k⟩=2m relation with almost no scatter. However, the log-log slope came in at −2.73 rather than the asymptotic −3. Again, this finite-size truncation is exactly what theory predicts when n is not infinite.
+
+This highlights what simulation adds beyond equations. Theoretical results describe the limit, but finite networks are what we actually use. Plus, if I'm being honest, I simply enjoy looking at the graphs—they make the O(n−1/3) scaling of a transition width far more intuitive than a line of calculus."
+Slide 14: Final Reflections & Future Work
+
+Script:
+"Looking back, my original project plan from November was... optimistic. I thought implementing a model was the same as understanding it. I spent a day coding Erdős-Rényi and weeks rereading Chapter 4 of van der Hofstad to understand why p=1/n mattered. I also planned to use spectral clustering and Jacobian matrices—none of which ended up in the final work because they didn't serve the 'story' of the three research questions.
+
+I made mistakes, too. I originally confused the extinction probability ρ with survival probability, which broke the math entirely. Correcting those errors through the cycle of 'read-code-fail-reread' was frustrating, but it’s where the real learning happened.
+
+If I were to continue this, I’d look at epidemic spreading—testing how these different structures affect how quickly a virus might move through a network. The infrastructure is there; it’s just a matter of the next simulation."

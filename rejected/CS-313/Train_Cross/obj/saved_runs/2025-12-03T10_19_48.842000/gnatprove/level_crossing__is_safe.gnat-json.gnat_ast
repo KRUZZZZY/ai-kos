@@ -1,0 +1,1143 @@
+(* Module for axiomatizing type "barrier_state_type" defined at level_crossing.ads:42, created in Gnat2Why.Types.Translate_Type *)
+module Level_crossing__barrier_state_type
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  
+  type barrier_state_type  
+  
+  function   first () requires { True } ensures  { True } returns int = 0
+  
+  function   last () requires { True } ensures  { True } returns int = 1
+  
+  function   in_range (x : int) requires { True } ensures  { True } returns
+     = ((first <= x) /\ (x <= last))
+  
+  clone export ada__model.Static_Discrete with axiom . type t = barrier_state_type,
+    function first = first, function last = last,
+    predicate in_range = in_range
+  
+  type barrier_state_type__ref  = { mutable barrier_state_type__content : barrier_state_type }
+  
+  function   barrier_state_type__ref_barrier_state_type__content__projection
+    (a : barrier_state_type__ref) requires {  } ensures  {  } returns
+    barrier_state_type = a.barrier_state_type__content
+  
+  meta model_projection function barrier_state_type__ref_barrier_state_type__content__projection
+  
+  meta inline:no function barrier_state_type__ref_barrier_state_type__content__projection
+  
+  function   barrier_state_type__havoc (x : barrier_state_type__ref) requires
+    {  } ensures  {  } returns unit
+
+end
+
+(* Module defining to_rep/of_rep for type "barrier_state_type" defined at level_crossing.ads:42, created in Gnat2Why.Types.Translate_Type *)
+module Level_crossing__barrier_state_type__rep
+  
+  use        Level_crossing__barrier_state_type
+  use import _gnatprove_standard.Main
+  use import int.Int
+  
+  clone export ada__model.Rep_Proj_Int with axiom . type t = Level_crossing__barrier_state_type.barrier_state_type,
+    predicate in_range = Level_crossing__barrier_state_type.in_range
+  
+  meta model_projection function to_rep
+  
+  meta inline:no function to_rep
+
+end
+
+(* Module for axiomatizing type "distance_range" defined at level_crossing.ads:36, created in Gnat2Why.Types.Translate_Type *)
+module Level_crossing__distance_range
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  
+  type distance_range  = <range 0 10000>
+  
+  function   first () requires { True } ensures  { True } returns int = 0
+  
+  function   last () requires { True } ensures  { True } returns int = 10000
+  
+  function   in_range (x : int) requires { True } ensures  { True } returns
+     = ((first <= x) /\ (x <= last))
+  
+  clone export ada__model.Static_Discrete with axiom . type t = distance_range,
+    function first = first, function last = last,
+    predicate in_range = in_range
+  
+  type distance_range__ref  = { mutable distance_range__content : distance_range }
+  
+  function   distance_range__ref_distance_range__content__projection
+    (a : distance_range__ref) requires {  } ensures  {  } returns
+    distance_range = a.distance_range__content
+  
+  meta model_projection function distance_range__ref_distance_range__content__projection
+  
+  meta inline:no function distance_range__ref_distance_range__content__projection
+  
+  function   distance_range__havoc (x : distance_range__ref) requires {  }
+    ensures  {  } returns unit
+
+end
+
+(* Module defining to_rep/of_rep for type "distance_range" defined at level_crossing.ads:36, created in Gnat2Why.Types.Translate_Type *)
+module Level_crossing__distance_range__rep
+  
+  use        Level_crossing__distance_range
+  use import _gnatprove_standard.Main
+  use import int.Int
+  
+  function   to_rep (x : Level_crossing__distance_range.distance_range)
+    requires { True } ensures  { True } returns
+    int = (Level_crossing__distance_range.distance_range'int x)
+  
+  clone export ada__model.Rep_Proj_Int with axiom . type t = Level_crossing__distance_range.distance_range,
+    predicate in_range = Level_crossing__distance_range.in_range,
+    function to_rep = to_rep
+  
+  meta model_projection function to_rep
+  
+  meta inline:no function to_rep
+
+end
+
+(* Module for axiomatizing type "speed_range" defined at level_crossing.ads:39, created in Gnat2Why.Types.Translate_Type *)
+module Level_crossing__speed_range
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  
+  type speed_range  = <range 0 56>
+  
+  function   first () requires { True } ensures  { True } returns int = 0
+  
+  function   last () requires { True } ensures  { True } returns int = 56
+  
+  function   in_range (x : int) requires { True } ensures  { True } returns
+     = ((first <= x) /\ (x <= last))
+  
+  clone export ada__model.Static_Discrete with axiom . type t = speed_range,
+    function first = first, function last = last,
+    predicate in_range = in_range
+  
+  type speed_range__ref  = { mutable speed_range__content : speed_range }
+  
+  function   speed_range__ref_speed_range__content__projection
+    (a : speed_range__ref) requires {  } ensures  {  } returns
+    speed_range = a.speed_range__content
+  
+  meta model_projection function speed_range__ref_speed_range__content__projection
+  
+  meta inline:no function speed_range__ref_speed_range__content__projection
+  
+  function   speed_range__havoc (x : speed_range__ref) requires {  } ensures 
+    {  } returns unit
+
+end
+
+(* Module defining to_rep/of_rep for type "speed_range" defined at level_crossing.ads:39, created in Gnat2Why.Types.Translate_Type *)
+module Level_crossing__speed_range__rep
+  
+  use        Level_crossing__speed_range
+  use import _gnatprove_standard.Main
+  use import int.Int
+  
+  function   to_rep (x : Level_crossing__speed_range.speed_range) requires
+    { True } ensures  { True } returns
+    int = (Level_crossing__speed_range.speed_range'int x)
+  
+  clone export ada__model.Rep_Proj_Int with axiom . type t = Level_crossing__speed_range.speed_range,
+    predicate in_range = Level_crossing__speed_range.in_range,
+    function to_rep = to_rep
+  
+  meta model_projection function to_rep
+  
+  meta inline:no function to_rep
+
+end
+
+(* Module for axiomatizing the record theory associated to type "train_info" defined at level_crossing.ads:48, created in Why.Gen.Records.Create_Rep_Record_Theory_If_Needed *)
+module Level_crossing__train_info__rep
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        _gnatprove_standard.Boolean
+  use        Level_crossing__distance_range
+  use        Level_crossing__distance_range__rep
+  use        Level_crossing__speed_range
+  use        Level_crossing__speed_range__rep
+  
+  type __split_fields  = { [name:Distance]
+                           [model_trace:.1599]rec__level_crossing__train_info__distance : Level_crossing__distance_range.distance_range;
+                           [name:Speed]
+                           [model_trace:.1604]rec__level_crossing__train_info__speed : Level_crossing__speed_range.speed_range;
+                           [name:Is_Present]
+                           [model_trace:.1608]rec__level_crossing__train_info__is_present : bool }
+  
+  function [name:Distance] [model_trace:.1599] 
+    __split_fields_rec__level_crossing__train_info__distance__projection
+    (a : __split_fields) requires {  } ensures  {  } returns
+    Level_crossing__distance_range.distance_range = a.rec__level_crossing__train_info__distance
+  
+  meta model_projection function __split_fields_rec__level_crossing__train_info__distance__projection
+  
+  meta inline:no function __split_fields_rec__level_crossing__train_info__distance__projection
+  
+  function [name:Speed] [model_trace:.1604] 
+    __split_fields_rec__level_crossing__train_info__speed__projection
+    (a : __split_fields) requires {  } ensures  {  } returns
+    Level_crossing__speed_range.speed_range = a.rec__level_crossing__train_info__speed
+  
+  meta model_projection function __split_fields_rec__level_crossing__train_info__speed__projection
+  
+  meta inline:no function __split_fields_rec__level_crossing__train_info__speed__projection
+  
+  function [name:Is_Present] [model_trace:.1608] 
+    __split_fields_rec__level_crossing__train_info__is_present__projection
+    (a : __split_fields) requires {  } ensures  {  } returns
+    bool = a.rec__level_crossing__train_info__is_present
+  
+  meta model_projection function __split_fields_rec__level_crossing__train_info__is_present__projection
+  
+  meta inline:no function __split_fields_rec__level_crossing__train_info__is_present__projection
+  
+  type __split_fields__ref  = { mutable __split_fields__content : __split_fields }
+  
+  function   __split_fields__ref___split_fields__content__projection
+    (a : __split_fields__ref) requires {  } ensures  {  } returns
+    __split_fields = a.__split_fields__content
+  
+  meta model_projection function __split_fields__ref___split_fields__content__projection
+  
+  meta inline:no function __split_fields__ref___split_fields__content__projection
+  
+  function   __split_fields__havoc (x : __split_fields__ref) requires {  }
+    ensures  {  } returns unit
+  
+  type __rep  = { __split_fields : __split_fields }
+  
+  function   __rep___split_fields__projection (a : __rep) requires {  }
+    ensures  {  } returns __split_fields = a.__split_fields
+  
+  meta model_projection function __rep___split_fields__projection
+  
+  meta inline:no function __rep___split_fields__projection
+  
+  function   to_base (a : __rep) requires { True } ensures  { True } returns
+    __rep = a
+  
+  function   of_base (a : __rep) requires { True } ensures  { True } returns
+    __rep = a
+  
+  function   level_crossing__train_info__distance__pred (a : __rep) requires
+    { True } ensures  { True } returns  = True
+  
+  function   rec__level_crossing__train_info__distance_ (a : __rep) requires
+    { (level_crossing__train_info__distance__pred a) } ensures 
+    { (result = a.__split_fields.rec__level_crossing__train_info__distance) }
+    returns Level_crossing__distance_range.distance_range
+  
+  function   level_crossing__train_info__speed__pred (a : __rep) requires
+    { True } ensures  { True } returns  = True
+  
+  function   rec__level_crossing__train_info__speed_ (a : __rep) requires
+    { (level_crossing__train_info__speed__pred a) } ensures 
+    { (result = a.__split_fields.rec__level_crossing__train_info__speed) }
+    returns Level_crossing__speed_range.speed_range
+  
+  function   level_crossing__train_info__is_present__pred (a : __rep)
+    requires { True } ensures  { True } returns  = True
+  
+  function   rec__level_crossing__train_info__is_present_ (a : __rep)
+    requires { (level_crossing__train_info__is_present__pred a) } ensures 
+    { (result = a.__split_fields.rec__level_crossing__train_info__is_present) }
+    returns bool
+  
+  function   bool_eq (a : __rep b : __rep) requires { True } ensures 
+    { True } returns
+    bool = (if
+           (((Level_crossing__distance_range__rep.to_rep
+                a.__split_fields.rec__level_crossing__train_info__distance)
+               = (Level_crossing__distance_range__rep.to_rep
+                    b.__split_fields.rec__level_crossing__train_info__distance))
+              /\
+              ((Level_crossing__speed_range__rep.to_rep
+                  a.__split_fields.rec__level_crossing__train_info__speed)
+                 = (Level_crossing__speed_range__rep.to_rep
+                      b.__split_fields.rec__level_crossing__train_info__speed))
+              /\
+              ((_gnatprove_standard.Boolean.to_int
+                  a.__split_fields.rec__level_crossing__train_info__is_present)
+                 = (_gnatprove_standard.Boolean.to_int
+                      b.__split_fields.rec__level_crossing__train_info__is_present)))
+           then True  else False)
+
+end
+
+(* Module for axiomatizing type "train_info" defined at level_crossing.ads:48, created in Gnat2Why.Types.Translate_Type *)
+module Level_crossing__train_info
+  
+  use export Level_crossing__train_info__rep
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  
+  type train_info  = --pp_transparent_type_definition NOT IMPLEMENTED
+  
+  function   value__size () requires {  } ensures  {  } returns int
+  
+  function   object__size () requires {  } ensures  {  } returns int
+  
+  function   alignment () requires {  } ensures  {  } returns int
+  
+  axiom value__size_axiom : ((value__size ) >= 0)
+  
+  axiom object__size_axiom : ((object__size ) >= 0)
+  
+  axiom alignment_axiom : ((alignment ) >= 0)
+  
+  function   level_crossing__train_info__distance__first__bit () requires
+    {  } ensures  {  } returns int
+  
+  function   level_crossing__train_info__distance__last__bit () requires {  }
+    ensures  {  } returns int
+  
+  function   level_crossing__train_info__distance__position () requires {  }
+    ensures  {  } returns int
+  
+  axiom level_crossing__train_info__distance__first__bit_axiom : ((level_crossing__train_info__distance__first__bit
+                                                                    ) >= 0)
+  
+  axiom level_crossing__train_info__distance__last__bit_axiom : ((level_crossing__train_info__distance__last__bit
+                                                                    )
+                                                                   > (
+                                                                   level_crossing__train_info__distance__first__bit
+                                                                    ))
+  
+  axiom level_crossing__train_info__distance__position_axiom : ((level_crossing__train_info__distance__position
+                                                                   ) >= 0)
+  
+  function   level_crossing__train_info__speed__first__bit () requires {  }
+    ensures  {  } returns int
+  
+  function   level_crossing__train_info__speed__last__bit () requires {  }
+    ensures  {  } returns int
+  
+  function   level_crossing__train_info__speed__position () requires {  }
+    ensures  {  } returns int
+  
+  axiom level_crossing__train_info__speed__first__bit_axiom : ((level_crossing__train_info__speed__first__bit
+                                                                  ) >= 0)
+  
+  axiom level_crossing__train_info__speed__last__bit_axiom : ((level_crossing__train_info__speed__last__bit
+                                                                 )
+                                                                > (level_crossing__train_info__speed__first__bit
+                                                                    ))
+  
+  axiom level_crossing__train_info__speed__position_axiom : ((level_crossing__train_info__speed__position
+                                                                ) >= 0)
+  
+  function   level_crossing__train_info__is_present__first__bit () requires
+    {  } ensures  {  } returns int
+  
+  function   level_crossing__train_info__is_present__last__bit () requires
+    {  } ensures  {  } returns int
+  
+  function   level_crossing__train_info__is_present__position () requires
+    {  } ensures  {  } returns int
+  
+  axiom level_crossing__train_info__is_present__first__bit_axiom : ((level_crossing__train_info__is_present__first__bit
+                                                                    ) >= 0)
+  
+  axiom level_crossing__train_info__is_present__last__bit_axiom : ((level_crossing__train_info__is_present__last__bit
+                                                                    )
+                                                                    > (
+                                                                    level_crossing__train_info__is_present__first__bit
+                                                                    ))
+  
+  axiom level_crossing__train_info__is_present__position_axiom : ((level_crossing__train_info__is_present__position
+                                                                    ) >= 0)
+  
+  function   user_eq (a : train_info b : train_info) requires { True }
+    ensures  { True } returns bool
+  
+  function   dummy () requires {  } ensures  {  } returns train_info
+  
+  type train_info__ref  = { mutable train_info__content : train_info }
+  
+  function   train_info__ref_train_info__content__projection
+    (a : train_info__ref) requires {  } ensures  {  } returns
+    train_info = a.train_info__content
+  
+  meta model_projection function train_info__ref_train_info__content__projection
+  
+  meta inline:no function train_info__ref_train_info__content__projection
+  
+  function   train_info__havoc (x : train_info__ref) requires {  } ensures 
+    {  } returns unit
+
+end
+
+(* Module for axiomatizing the array theory associated to type "Ttrain_arrayB" defined at level_crossing.ads:55, created in Why.Gen.Arrays.Create_Rep_Array_Theory *)
+module Array__Int__Level_crossing__train_info
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        Level_crossing__train_info
+  
+  function   index_I1_one () requires { True } ensures  { True } returns
+    int = 1
+  
+  type component_type  = --pp_transparent_type_definition NOT IMPLEMENTED
+  
+  clone export _gnatprove_standard.Array__1 with axiom . type I1.t = int,
+    predicate I1.le = <=, predicate I1.lt = <, predicate I1.gt = >,
+    function I1.add = +, function I1.sub = -, function I1.one = index_I1_one,
+    type component_type = component_type
+  
+  function   bool_eq
+    (a : map a__first : int a__last : int b : map b__first : int
+    b__last : int) requires { True } ensures  { True } returns
+    bool = ((if (a__first <= a__last) then
+            ((b__first <= b__last) /\
+               ((a__last - a__first) = (b__last - b__first)))
+             else (b__first > b__last)) /\
+              --pp_universal_quantif NOT IMPLEMENTED)
+  
+  axiom bool_eq_rev : --pp_universal_quantif NOT IMPLEMENTED
+
+end
+
+(* Module for axiomatizing type "train_array" defined at level_crossing.ads:55, created in Gnat2Why.Types.Translate_Type *)
+module Level_crossing__train_array
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  
+  type component_type  = --pp_transparent_type_definition NOT IMPLEMENTED
+  
+  function   first () requires {  } ensures  {  } returns int = 1
+  
+  function   last () requires {  } ensures  {  } returns int = 3
+  
+  clone export ada__model.Constr_Array with axiom . type map = Array__Int__Level_crossing__train_info.map,
+    function array_bool_eq = Array__Int__Level_crossing__train_info.bool_eq,
+    function first = first, function last = last, type index_rep_type = int
+
+end
+
+(* Module for axiomatizing the record theory associated to type "status_system_type" defined at level_crossing.ads:58, created in Why.Gen.Records.Create_Rep_Record_Theory_If_Needed *)
+module Level_crossing__status_system_type__rep
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        _gnatprove_standard.Boolean
+  use        Level_crossing__barrier_state_type
+  use        Level_crossing__barrier_state_type__rep
+  use        Level_crossing__train_array
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  
+  type __split_fields  = { [name:Trains]
+                           [model_trace:.1622]rec__level_crossing__status_system_type__trains : Array__Int__Level_crossing__train_info.map;
+                           [model_trace:.1627]
+                           [name:Barrier_State]rec__level_crossing__status_system_type__barrier_state : Level_crossing__barrier_state_type.barrier_state_type;
+                           [name:Sensor_Fault]
+                           [model_trace:.1631]rec__level_crossing__status_system_type__sensor_fault : bool }
+  
+  function [name:Trains] [model_trace:.1622] 
+    __split_fields_rec__level_crossing__status_system_type__trains__projection
+    (a : __split_fields) requires {  } ensures  {  } returns
+    Array__Int__Level_crossing__train_info.map = a.rec__level_crossing__status_system_type__trains
+  
+  meta model_projection function __split_fields_rec__level_crossing__status_system_type__trains__projection
+  
+  meta inline:no function __split_fields_rec__level_crossing__status_system_type__trains__projection
+  
+  function [model_trace:.1627] [name:Barrier_State] 
+    __split_fields_rec__level_crossing__status_system_type__barrier_state__projection
+    (a : __split_fields) requires {  } ensures  {  } returns
+    Level_crossing__barrier_state_type.barrier_state_type = a.rec__level_crossing__status_system_type__barrier_state
+  
+  meta model_projection function __split_fields_rec__level_crossing__status_system_type__barrier_state__projection
+  
+  meta inline:no function __split_fields_rec__level_crossing__status_system_type__barrier_state__projection
+  
+  function [name:Sensor_Fault] [model_trace:.1631] 
+    __split_fields_rec__level_crossing__status_system_type__sensor_fault__projection
+    (a : __split_fields) requires {  } ensures  {  } returns
+    bool = a.rec__level_crossing__status_system_type__sensor_fault
+  
+  meta model_projection function __split_fields_rec__level_crossing__status_system_type__sensor_fault__projection
+  
+  meta inline:no function __split_fields_rec__level_crossing__status_system_type__sensor_fault__projection
+  
+  type __split_fields__ref  = { mutable __split_fields__content : __split_fields }
+  
+  function   __split_fields__ref___split_fields__content__2__projection
+    (a : __split_fields__ref) requires {  } ensures  {  } returns
+    __split_fields = a.__split_fields__content
+  
+  meta model_projection function __split_fields__ref___split_fields__content__2__projection
+  
+  meta inline:no function __split_fields__ref___split_fields__content__2__projection
+  
+  function   __split_fields__havoc (x : __split_fields__ref) requires {  }
+    ensures  {  } returns unit
+  
+  type __rep  = { __split_fields : __split_fields }
+  
+  function   __rep___split_fields__2__projection (a : __rep) requires {  }
+    ensures  {  } returns __split_fields = a.__split_fields
+  
+  meta model_projection function __rep___split_fields__2__projection
+  
+  meta inline:no function __rep___split_fields__2__projection
+  
+  function   to_base (a : __rep) requires { True } ensures  { True } returns
+    __rep = a
+  
+  function   of_base (a : __rep) requires { True } ensures  { True } returns
+    __rep = a
+  
+  function   level_crossing__status_system_type__trains__pred (a : __rep)
+    requires { True } ensures  { True } returns  = True
+  
+  function   rec__level_crossing__status_system_type__trains_ (a : __rep)
+    requires { (level_crossing__status_system_type__trains__pred a) }
+    ensures 
+    { (result
+         = a.__split_fields.rec__level_crossing__status_system_type__trains) }
+    returns Array__Int__Level_crossing__train_info.map
+  
+  function   level_crossing__status_system_type__barrier_state__pred
+    (a : __rep) requires { True } ensures  { True } returns  = True
+  
+  function   rec__level_crossing__status_system_type__barrier_state_
+    (a : __rep) requires
+    { (level_crossing__status_system_type__barrier_state__pred a) } ensures 
+    { (result
+         = a.__split_fields.rec__level_crossing__status_system_type__barrier_state) }
+    returns Level_crossing__barrier_state_type.barrier_state_type
+  
+  function   level_crossing__status_system_type__sensor_fault__pred
+    (a : __rep) requires { True } ensures  { True } returns  = True
+  
+  function   rec__level_crossing__status_system_type__sensor_fault_
+    (a : __rep) requires
+    { (level_crossing__status_system_type__sensor_fault__pred a) } ensures 
+    { (result
+         = a.__split_fields.rec__level_crossing__status_system_type__sensor_fault) }
+    returns bool
+  
+  function   bool_eq (a : __rep b : __rep) requires { True } ensures 
+    { True } returns
+    bool = (if
+           ((Level_crossing__train_array.bool_eq
+               a.__split_fields.rec__level_crossing__status_system_type__trains
+               b.__split_fields.rec__level_crossing__status_system_type__trains)
+              /\
+              ((Level_crossing__barrier_state_type__rep.to_rep
+                  a.__split_fields.rec__level_crossing__status_system_type__barrier_state)
+                 = (Level_crossing__barrier_state_type__rep.to_rep
+                      b.__split_fields.rec__level_crossing__status_system_type__barrier_state))
+              /\
+              ((_gnatprove_standard.Boolean.to_int
+                  a.__split_fields.rec__level_crossing__status_system_type__sensor_fault)
+                 = (_gnatprove_standard.Boolean.to_int
+                      b.__split_fields.rec__level_crossing__status_system_type__sensor_fault)))
+           then True  else False)
+
+end
+
+(* Module for axiomatizing type "status_system_type" defined at level_crossing.ads:58, created in Gnat2Why.Types.Translate_Type *)
+module Level_crossing__status_system_type
+  
+  use export Level_crossing__status_system_type__rep
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  
+  type status_system_type  = --pp_transparent_type_definition NOT IMPLEMENTED
+  
+  function   value__size () requires {  } ensures  {  } returns int
+  
+  function   object__size () requires {  } ensures  {  } returns int
+  
+  function   alignment () requires {  } ensures  {  } returns int
+  
+  axiom value__size_axiom : ((value__size ) >= 0)
+  
+  axiom object__size_axiom : ((object__size ) >= 0)
+  
+  axiom alignment_axiom : ((alignment ) >= 0)
+  
+  function   level_crossing__status_system_type__trains__first__bit ()
+    requires {  } ensures  {  } returns int
+  
+  function   level_crossing__status_system_type__trains__last__bit ()
+    requires {  } ensures  {  } returns int
+  
+  function   level_crossing__status_system_type__trains__position () requires
+    {  } ensures  {  } returns int
+  
+  axiom level_crossing__status_system_type__trains__first__bit_axiom : 
+  ((level_crossing__status_system_type__trains__first__bit ) >= 0)
+  
+  axiom level_crossing__status_system_type__trains__last__bit_axiom : 
+  ((level_crossing__status_system_type__trains__last__bit )
+     > (level_crossing__status_system_type__trains__first__bit ))
+  
+  axiom level_crossing__status_system_type__trains__position_axiom : 
+  ((level_crossing__status_system_type__trains__position ) >= 0)
+  
+  function   level_crossing__status_system_type__barrier_state__first__bit 
+    () requires {  } ensures  {  } returns int
+  
+  function   level_crossing__status_system_type__barrier_state__last__bit 
+    () requires {  } ensures  {  } returns int
+  
+  function   level_crossing__status_system_type__barrier_state__position 
+    () requires {  } ensures  {  } returns int
+  
+  axiom level_crossing__status_system_type__barrier_state__first__bit_axiom : 
+  ((level_crossing__status_system_type__barrier_state__first__bit ) >= 0)
+  
+  axiom level_crossing__status_system_type__barrier_state__last__bit_axiom : 
+  ((level_crossing__status_system_type__barrier_state__last__bit )
+     > (level_crossing__status_system_type__barrier_state__first__bit ))
+  
+  axiom level_crossing__status_system_type__barrier_state__position_axiom : 
+  ((level_crossing__status_system_type__barrier_state__position ) >= 0)
+  
+  function   level_crossing__status_system_type__sensor_fault__first__bit 
+    () requires {  } ensures  {  } returns int
+  
+  function   level_crossing__status_system_type__sensor_fault__last__bit 
+    () requires {  } ensures  {  } returns int
+  
+  function   level_crossing__status_system_type__sensor_fault__position 
+    () requires {  } ensures  {  } returns int
+  
+  axiom level_crossing__status_system_type__sensor_fault__first__bit_axiom : 
+  ((level_crossing__status_system_type__sensor_fault__first__bit ) >= 0)
+  
+  axiom level_crossing__status_system_type__sensor_fault__last__bit_axiom : 
+  ((level_crossing__status_system_type__sensor_fault__last__bit )
+     > (level_crossing__status_system_type__sensor_fault__first__bit ))
+  
+  axiom level_crossing__status_system_type__sensor_fault__position_axiom : 
+  ((level_crossing__status_system_type__sensor_fault__position ) >= 0)
+  
+  function   user_eq (a : status_system_type b : status_system_type) requires
+    { True } ensures  { True } returns bool
+  
+  function   dummy () requires {  } ensures  {  } returns status_system_type
+  
+  type status_system_type__ref  = { mutable status_system_type__content : status_system_type }
+  
+  function   status_system_type__ref_status_system_type__content__projection
+    (a : status_system_type__ref) requires {  } ensures  {  } returns
+    status_system_type = a.status_system_type__content
+  
+  meta model_projection function status_system_type__ref_status_system_type__content__projection
+  
+  meta inline:no function status_system_type__ref_status_system_type__content__projection
+  
+  function   status_system_type__havoc (x : status_system_type__ref) requires
+    {  } ensures  {  } returns unit
+
+end
+
+(* Module giving axioms for type "status_system_type" defined at level_crossing.ads:58, created in Gnat2Why.Types.Generate_Type_Completion *)
+module Level_crossing__status_system_type___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        Level_crossing__status_system_type
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol]
+    [introduced] temp___expr_224) : Level_crossing__status_system_type.status_system_type
+    ([mlw:proxy_symbol] [introduced] temp___is_init_220) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_221) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_222) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_223) : bool) requires
+    { True } ensures  { True } returns  = True
+  
+  function   default_initial_assumption
+    (([mlw:proxy_symbol]
+    [introduced] temp___expr_226) : Level_crossing__status_system_type.status_system_type
+    ([mlw:proxy_symbol] [introduced] temp___skip_top_level_227) : bool)
+    requires { True } ensures  { True } returns  = True
+
+end
+
+(* Module for possibly declaring a logic function for "calculate_danger_distance" defined at level_crossing.ads:76, created in Gnat2Why.Subprograms.Translate_Subprogram_Spec *)
+module Level_crossing__calculate_danger_distance
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  
+  function   calculate_danger_distance (speed : int) requires { True }
+    ensures  { True } returns int
+  
+  function   calculate_danger_distance__function_guard
+    (([mlw:proxy_symbol] [introduced] temp___result_162) : int speed : int)
+    requires { True } ensures  { True } returns bool
+
+end
+
+(* Module for axiomatizing type "natural", created in Gnat2Why.Types.Translate_Type *)
+module Standard__natural
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  
+  type natural  = <range 0 2147483647>
+  
+  function   first () requires { True } ensures  { True } returns int = 0
+  
+  function   last () requires { True } ensures  { True } returns
+    int = 2147483647
+  
+  function   in_range (x : int) requires { True } ensures  { True } returns
+     = ((first <= x) /\ (x <= last))
+  
+  clone export ada__model.Static_Discrete with axiom . type t = natural,
+    function first = first, function last = last,
+    predicate in_range = in_range
+  
+  type natural__ref  = { mutable natural__content : natural }
+  
+  function   natural__ref_natural__content__projection (a : natural__ref)
+    requires {  } ensures  {  } returns natural = a.natural__content
+  
+  meta model_projection function natural__ref_natural__content__projection
+  
+  meta inline:no function natural__ref_natural__content__projection
+  
+  function   natural__havoc (x : natural__ref) requires {  } ensures  {  }
+    returns unit
+
+end
+
+(* Module giving axioms for type "natural", created in Gnat2Why.Types.Generate_Type_Completion *)
+module Standard__natural___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        Standard__natural
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol] [introduced] temp___expr_46) : int
+    ([mlw:proxy_symbol] [introduced] temp___is_init_42) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_43) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_44) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_45) : bool) requires
+    { True } ensures  { True } returns
+     = (if
+       ((([mlw:proxy_symbol] [introduced] temp___is_init_42) = True) \/
+          (Standard__natural.first <= Standard__natural.last))
+       then
+       (Standard__natural.dynamic_property Standard__natural.first
+          Standard__natural.last ([mlw:proxy_symbol]
+          [introduced] temp___expr_46))
+       )
+  
+  function   default_initial_assumption
+    (([mlw:proxy_symbol] [introduced] temp___expr_47) : int
+    ([mlw:proxy_symbol] [introduced] temp___skip_top_level_48) : bool)
+    requires { True } ensures  { True } returns  = True
+
+end
+
+(* Module giving axioms for type "speed_range" defined at level_crossing.ads:39, created in Gnat2Why.Types.Generate_Type_Completion *)
+module Level_crossing__speed_range___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        Level_crossing__speed_range
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol] [introduced] temp___expr_180) : int
+    ([mlw:proxy_symbol] [introduced] temp___is_init_176) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_177) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_178) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_179) : bool) requires
+    { True } ensures  { True } returns
+     = (if
+       ((([mlw:proxy_symbol] [introduced] temp___is_init_176) = True) \/
+          (Level_crossing__speed_range.first
+             <= Level_crossing__speed_range.last))
+       then
+       (Level_crossing__speed_range.dynamic_property
+          Level_crossing__speed_range.first Level_crossing__speed_range.last
+          ([mlw:proxy_symbol] [introduced] temp___expr_180))
+       )
+  
+  function   default_initial_assumption
+    (([mlw:proxy_symbol] [introduced] temp___expr_181) : int
+    ([mlw:proxy_symbol] [introduced] temp___skip_top_level_182) : bool)
+    requires { True } ensures  { True } returns  = True
+
+end
+
+(* Module giving a program function and a defining axiom for the expression function "calculate_danger_distance" defined at level_crossing.ads:76, created in Gnat2Why.Subprograms.Translate_Expression_Function_Body *)
+module Level_crossing__calculate_danger_distance___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        _gnatprove_standard.Int_Division
+  use        Standard__natural___axiom
+  use        Level_crossing__calculate_danger_distance
+  use        Level_crossing__speed_range___axiom
+  
+  function   calculate_danger_distance (speed : int) requires { True }
+    ensures 
+    { ((result
+          = (Level_crossing__calculate_danger_distance.calculate_danger_distance
+               speed)) /\
+         (Level_crossing__calculate_danger_distance.calculate_danger_distance__function_guard
+            result speed) /\
+         ((Standard__natural___axiom.dynamic_invariant result True False True
+             True) /\
+            ((result
+                = ( (800
+                       + (_gnatprove_standard.Int_Division.div
+                            (speed * speed) 2)))) /\
+               (([GP_Pretty_Ada:1665] (result >= 800)) /\
+                  ([GP_Pretty_Ada:1671] (result <= 2368)))))) } returns int
+  
+  axiom calculate_danger_distance__post_axiom : --pp_universal_quantif NOT IMPLEMENTED
+  
+  axiom calculate_danger_distance__def_axiom : --pp_universal_quantif NOT IMPLEMENTED
+
+end
+
+(* Module for defining the constant "status" defined at level_crossing.ads:87, created in Gnat2Why.Decls.Translate_Constant *)
+module Level_crossing__is_safe__status
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        Level_crossing__status_system_type
+  
+  function [model_projected] [name:Status] [model_trace:1679]
+    [sloc:level_crossing.ads:87] status () requires {  } ensures  {  }
+    returns Level_crossing__status_system_type.status_system_type
+
+end
+
+(* Module giving axioms for type "distance_range" defined at level_crossing.ads:36, created in Gnat2Why.Types.Generate_Type_Completion *)
+module Level_crossing__distance_range___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        Level_crossing__distance_range
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol] [introduced] temp___expr_173) : int
+    ([mlw:proxy_symbol] [introduced] temp___is_init_169) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_170) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_171) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_172) : bool) requires
+    { True } ensures  { True } returns
+     = (if
+       ((([mlw:proxy_symbol] [introduced] temp___is_init_169) = True) \/
+          (Level_crossing__distance_range.first
+             <= Level_crossing__distance_range.last))
+       then
+       (Level_crossing__distance_range.dynamic_property
+          Level_crossing__distance_range.first
+          Level_crossing__distance_range.last ([mlw:proxy_symbol]
+          [introduced] temp___expr_173))
+       )
+  
+  function   default_initial_assumption
+    (([mlw:proxy_symbol] [introduced] temp___expr_174) : int
+    ([mlw:proxy_symbol] [introduced] temp___skip_top_level_175) : bool)
+    requires { True } ensures  { True } returns  = True
+
+end
+
+(* Module giving axioms for type "barrier_state_type" defined at level_crossing.ads:42, created in Gnat2Why.Types.Generate_Type_Completion *)
+module Level_crossing__barrier_state_type___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        Level_crossing__barrier_state_type
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol] [introduced] temp___expr_187) : int
+    ([mlw:proxy_symbol] [introduced] temp___is_init_183) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_184) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_185) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_186) : bool) requires
+    { True } ensures  { True } returns
+     = (if
+       ((([mlw:proxy_symbol] [introduced] temp___is_init_183) = True) \/
+          (Level_crossing__barrier_state_type.first
+             <= Level_crossing__barrier_state_type.last))
+       then
+       (Level_crossing__barrier_state_type.dynamic_property
+          Level_crossing__barrier_state_type.first
+          Level_crossing__barrier_state_type.last ([mlw:proxy_symbol]
+          [introduced] temp___expr_187))
+       )
+  
+  function   default_initial_assumption
+    (([mlw:proxy_symbol] [introduced] temp___expr_188) : int
+    ([mlw:proxy_symbol] [introduced] temp___skip_top_level_189) : bool)
+    requires { True } ensures  { True } returns  = True
+
+end
+
+(* Module giving axioms for type "train_info" defined at level_crossing.ads:48, created in Gnat2Why.Types.Generate_Type_Completion *)
+module Level_crossing__train_info___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        Level_crossing__train_info
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol]
+    [introduced] temp___expr_201) : Level_crossing__train_info.train_info
+    ([mlw:proxy_symbol] [introduced] temp___is_init_197) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_198) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_199) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_200) : bool) requires
+    { True } ensures  { True } returns  = True
+  
+  function   default_initial_assumption
+    (([mlw:proxy_symbol]
+    [introduced] temp___expr_202) : Level_crossing__train_info.train_info
+    ([mlw:proxy_symbol] [introduced] temp___skip_top_level_203) : bool)
+    requires { True } ensures  { True } returns  = True
+
+end
+
+(* Module giving axioms for type "train_array" defined at level_crossing.ads:55, created in Gnat2Why.Types.Generate_Type_Completion *)
+module Level_crossing__train_array___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  
+  function   dynamic_invariant
+    (([mlw:proxy_symbol]
+    [introduced] temp___expr_211) : Array__Int__Level_crossing__train_info.map
+    ([mlw:proxy_symbol] [introduced] temp___is_init_207) : bool
+    ([mlw:proxy_symbol] [introduced] temp___skip_constant_208) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_toplevel_209) : bool
+    ([mlw:proxy_symbol] [introduced] temp___do_typ_inv_210) : bool) requires
+    { True } ensures  { True } returns  = True
+  
+  function   default_initial_assumption
+    (([mlw:proxy_symbol]
+    [introduced] temp___expr_213) : Array__Int__Level_crossing__train_info.map
+    ([mlw:proxy_symbol] [introduced] temp___skip_top_level_214) : bool)
+    requires { True } ensures  { True } returns  = True
+
+end
+
+(* Module giving an empty axiom for the entity "status" defined at level_crossing.ads:87, created in Gnat2Why.Driver.Translate_Entity.Generate_Empty_Axiom_Theory *)
+module Level_crossing__is_safe__status___axiom
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  
+  
+
+end
+
+(* Module for checking contracts and absence of run-time errors in subprogram "is_safe" defined at level_crossing.ads:87, created in Gnat2Why.Subprograms.Generate_VCs_For_Subprogram *)
+module Level_crossing__is_safe__subprogram_def
+  
+  use import _gnatprove_standard.Main
+  use import int.Int
+  use import int.Int
+  use        _gnatprove_standard.Boolean
+  use        Level_crossing__status_system_type
+  use        Level_crossing__status_system_type___axiom
+  use        Level_crossing__calculate_danger_distance
+  use        Level_crossing__calculate_danger_distance___axiom
+  use        Level_crossing__is_safe__status
+  use        Level_crossing__distance_range
+  use        Level_crossing__distance_range__rep
+  use        Level_crossing__speed_range
+  use        Level_crossing__speed_range__rep
+  use        Level_crossing__barrier_state_type
+  use        Level_crossing__barrier_state_type__rep
+  use        Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Array__Int__Level_crossing__train_info
+  use        Standard__natural___axiom
+  use        Level_crossing__distance_range___axiom
+  use        Level_crossing__speed_range___axiom
+  use        Level_crossing__barrier_state_type___axiom
+  use        Level_crossing__train_info___axiom
+  use        Level_crossing__train_array___axiom
+  use        Level_crossing__status_system_type___axiom
+  use        Level_crossing__calculate_danger_distance___axiom
+  use        Level_crossing__is_safe__status___axiom
+  
+  val level_crossing__is_safe__result [model_trace:1678@result]
+  [model_projected]
+  [name:Is_Safe] : bool
+  
+  function [GP_Subp:level_crossing.ads:87] [sloc:level_crossing.ads:87] def
+    (__void_param : unit) requires { True } ensures 
+    { ([sloc:level_crossing.ads:96] ([GP_Reason:VC_POSTCONDITION]
+                                    [GP_Shape:pragargs__cmp]
+                                    [GP_Sloc:level_crossing.ads:96:17]
+                                    [model_vc_post] [GP_Id:2]
+                                    [comment:   with Post => Is_Safe'Result =                 ^ level_crossing.ads:96:17:VC_POSTCONDITION] 
+                                    ([GP_Pretty_Ada:21484]
+                                    [GP_Sloc:level_crossing.ads:96:17] (
+                                    (!level_crossing__is_safe__result = True)
+                                      <->
+                                      (((( Level_crossing__is_safe__status.status).Level_crossing__status_system_type.__split_fields.Level_crossing__status_system_type.rec__level_crossing__status_system_type__sensor_fault
+                                           = True) /\
+                                          ((Level_crossing__barrier_state_type__rep.to_rep
+                                              ( Level_crossing__is_safe__status.status).Level_crossing__status_system_type.__split_fields.Level_crossing__status_system_type.rec__level_crossing__status_system_type__barrier_state)
+                                             = 0)) \/
+                                         (--pp_not NOT IMPLEMENTED /\
+                                            (--pp_not NOT IMPLEMENTED \/
+                                               ((Level_crossing__barrier_state_type__rep.to_rep
+                                                   ( Level_crossing__is_safe__status.status).Level_crossing__status_system_type.__split_fields.Level_crossing__status_system_type.rec__level_crossing__status_system_type__barrier_state)
+                                                  = 0)))))))) } returns
+     = (* Assume dynamic invariants of inputs of the subprogram level_crossing.ads:87 *);
+        assume
+        { (Level_crossing__status_system_type___axiom.dynamic_invariant
+             Level_crossing__is_safe__status.status True False True True) };
+        (* Assume moved pointers in outputs of the subprogram level_crossing.ads:87 *);
+        (* Check for RTE in the Pre of the subprogram level_crossing.ads:87 *);
+        abstract ensures
+        { True } begin  (let _ = True in ())  end;
+        (* Assume Pre of the subprogram level_crossing.ads:87 *);
+        (try
+        ();
+          ([GP_Sloc:level_crossing.ads:88:7] ([sloc:level_crossing.ads:88] (
+                                             level_crossing__is_safe__result
+                                             :=
+                                             (if
+                                             ( Level_crossing__is_safe__status.status).Level_crossing__status_system_type.__split_fields.Level_crossing__status_system_type.rec__level_crossing__status_system_type__sensor_fault
+                                             then
+                                             ((Level_crossing__barrier_state_type__rep.to_rep
+                                                 ( Level_crossing__is_safe__status.status).Level_crossing__status_system_type.__split_fields.Level_crossing__status_system_type.rec__level_crossing__status_system_type__barrier_state)
+                                                = 0)
+                                              else
+                                             (let t =
+                                             ( any  pre {} post {} return
+                                               int)
+                                             in
+                                             (if
+                                             (_gnatprove_standard.Boolean.andb
+                                                (1 <= t) (t <= 3))
+                                             then
+                                             abstract ensures
+                                             { True } begin  (let _ =
+                                                            (if
+                                                            (( (let ([mlw:proxy_symbol]
+                                                             [introduced] temp___294)
+                                                             =
+                                                             ( Level_crossing__is_safe__status.status).Level_crossing__status_system_type.__split_fields.Level_crossing__status_system_type.rec__level_crossing__status_system_type__trains
+                                                             in
+                                                             (Array__Int__Level_crossing__train_info.get
+                                                                ([mlw:proxy_symbol]
+                                                                [introduced] temp___294)
+                                                                t))).Level_crossing__train_info.__split_fields.Level_crossing__train_info.rec__level_crossing__train_info__is_present
+                                                               &&
+                                                               ((Level_crossing__distance_range__rep.to_rep
+                                                                   ( (let ([mlw:proxy_symbol]
+                                                                   [introduced] temp___295)
+                                                                   =
+                                                                   ( Level_crossing__is_safe__status.status).Level_crossing__status_system_type.__split_fields.Level_crossing__status_system_type.rec__level_crossing__status_system_type__trains
+                                                                   in
+                                                                   (Array__Int__Level_crossing__train_info.get
+                                                                    ([mlw:proxy_symbol]
+                                                                    [introduced] temp___295)
+                                                                    t))).Level_crossing__train_info.__split_fields.Level_crossing__train_info.rec__level_crossing__train_info__distance)
+                                                                  <= (
+                                                                  Level_crossing__calculate_danger_distance___axiom.calculate_danger_distance
+                                                                    ( (
+                                                                    Level_crossing__speed_range__rep.to_rep
+                                                                    ( (let ([mlw:proxy_symbol]
+                                                                    [introduced] temp___296)
+                                                                    =
+                                                                    ( Level_crossing__is_safe__status.status).Level_crossing__status_system_type.__split_fields.Level_crossing__status_system_type.rec__level_crossing__status_system_type__trains
+                                                                    in
+                                                                    (
+                                                                    Array__Int__Level_crossing__train_info.get
+                                                                    ([mlw:proxy_symbol]
+                                                                    [introduced] temp___296)
+                                                                    t))).Level_crossing__train_info.__split_fields.Level_crossing__train_info.rec__level_crossing__train_info__speed)))))
+                                                            then
+                                                            ((Level_crossing__barrier_state_type__rep.to_rep
+                                                                ( Level_crossing__is_safe__status.status).Level_crossing__status_system_type.__split_fields.Level_crossing__status_system_type.rec__level_crossing__status_system_type__barrier_state)
+                                                               = 0)
+                                                             else
+                                                            (_gnatprove_standard.Boolean.of_int
+                                                               1))
+                                                            in ())  end
+                                             ));
+                                             ( any  pre {} post
+                                             {((result = True) <->
+                                                 --pp_universal_quantif NOT IMPLEMENTED)}
+                                             return bool)));
+          raise Return__exc));
+    raise Return__exc with | Return__exc  -> ());
+  abstract ensures
+  { True } begin  (let _ =
+                 ((_gnatprove_standard.Boolean.to_int
+                     !level_crossing__is_safe__result)
+                    = (_gnatprove_standard.Boolean.to_int
+                         (_gnatprove_standard.Boolean.orb
+                            (_gnatprove_standard.Boolean.andb
+                               ( Level_crossing__is_safe__status.status).Level_crossing__status_system_type.__split_fields.Level_crossing__status_system_type.rec__level_crossing__status_system_type__sensor_fault
+                               ((Level_crossing__barrier_state_type__rep.to_rep
+                                   ( Level_crossing__is_safe__status.status).Level_crossing__status_system_type.__split_fields.Level_crossing__status_system_type.rec__level_crossing__status_system_type__barrier_state)
+                                  = 0))
+                            (_gnatprove_standard.Boolean.andb
+                               --pp_not NOT IMPLEMENTED
+                               (_gnatprove_standard.Boolean.orb
+                                  --pp_not NOT IMPLEMENTED
+                                  ((Level_crossing__barrier_state_type__rep.to_rep
+                                      ( Level_crossing__is_safe__status.status).Level_crossing__status_system_type.__split_fields.Level_crossing__status_system_type.rec__level_crossing__status_system_type__barrier_state)
+                                     = 0))))))
+                 in ())  end;
+  !level_crossing__is_safe__result
+
+end

@@ -1,0 +1,116 @@
+theory Main_Main
+
+  (* ignore blocks of code *)
+  function ___ignore 'a : ()
+
+  (* special private type for private types not in SPARK and hidden extension
+  components *)
+  type __private
+
+  (* dummy value for the null extension when the dynamic type matches the
+  static type *)
+  function __null_ext__ : __private
+
+  (* special type for representation of fixed_point types *)
+  type __fixed = int
+
+end
+
+theory Integer
+  use import int.Int
+  use import bool.Bool
+
+  function bool_eq int int : bool
+  function bool_ne int int : bool
+  function bool_lt int int : bool
+  function bool_le int int : bool
+  function bool_gt int int : bool
+  function bool_ge int int : bool
+
+  axiom bool_eq_axiom:
+    forall x:int.
+    forall y:int.
+      bool_eq x y = True <-> x = y
+
+  axiom bool_ne_axiom:
+    forall x:int.
+    forall y:int.
+      bool_ne x y = True <-> x <> y
+
+  axiom bool_lt_axiom:
+    forall x:int.
+    forall y:int.
+      bool_lt x y = True <-> x < y
+
+  axiom bool_int__le_axiom:
+    forall x:int.
+    forall y:int.
+      bool_le x y = True <-> x <= y
+
+  axiom bool_gt_axiom:
+    forall x:int.
+    forall y:int.
+        bool_gt x y = True <-> x > y
+
+  axiom bool_ge_axiom:
+    forall x:int.
+    forall y:int.
+        bool_ge x y = True <-> x >= y
+
+end
+
+theory Floating_Func
+  use import bool.Bool
+  use import real.Real
+  use import real.RealInfix
+  use import real.MinMax
+
+  function bool_lt real real : bool
+  function bool_le real real : bool
+  function bool_gt real real : bool
+  function bool_ge real real : bool
+  function bool_eq real real : bool
+  function bool_neq real real : bool
+
+  axiom Bool_real__lt_axiom:
+    forall x:real.
+    forall y:real.
+      bool_lt x y = True <-> x <. y
+
+  axiom Bool_real__le_axiom:
+    forall x:real.
+    forall y:real.
+      bool_le x y = True <-> x <=. y
+
+  axiom Bool_real__gt_axiom:
+    forall x:real.
+    forall y:real.
+        bool_gt x y = True <-> x >. y
+
+  axiom Bool_real__ge_axiom:
+    forall x:real.
+    forall y:real.
+      bool_ge x y = True <-> x >=. y
+
+  axiom Bool_real__eq_axiom:
+    forall x:real.
+    forall y:real.
+      bool_eq x y = True <-> x = y
+
+  axiom Bool_real__neq_axiom:
+    forall x:real.
+    forall y:real.
+       bool_neq x y = True <-> x <> y
+
+  function real_max (x y : real) : real = MinMax.max x y
+  function real_min (x y : real) : real = MinMax.min x y
+
+end
+
+theory Boolean_Func
+  use import bool.Bool
+
+  function bool_eq (x : bool) (y : bool) : bool =
+    if x = y then True else False
+
+end

@@ -1,0 +1,1 @@
+gcd.ads:9:25: medium: postcondition might fail, cannot prove A mod G = 0[#0]

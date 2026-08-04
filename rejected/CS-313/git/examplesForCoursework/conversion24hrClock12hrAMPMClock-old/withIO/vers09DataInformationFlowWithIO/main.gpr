@@ -1,0 +1,9 @@
+project Main is
+
+   package Compiler is
+      for Default_Switches ("ada") use ("-gnatwa");
+   end Compiler;
+  
+
+end Main;
+

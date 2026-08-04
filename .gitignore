@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project-specific
+inbox/*
+!inbox/.gitkeep
+knowledge/bundles/*.backup
+*.log
+
+# Keep archive/projects/rejected tracked but ignore transient build artifacts inside projects
+projects/*/node_modules/
+projects/*/__pycache__/
+projects/*/.venv/
+projects/*/build/
+projects/*/dist/
+
+# Embedded git repos (managed separately)
+projects/Disertation/All_In_One/repo_remote/
+projects/Internship-Finder/uk-internships/
+rejected/NSE_ELO/
+rejected/nse-bracket/

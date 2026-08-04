@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-KOS Knowledge Graph</title>
+<style>
+  :root {
+    --bg: #1e1e2e;
+    --surface: #2b2b3c;
+    --surface-hover: #34344a;
+    --text: #cdd6f4;
+    --text-muted: #a6adc8;
+    --border: #45475a;
+    --accent: #89b4fa;
+    --detail-bg: rgba(30, 30, 46, 0.97);
+    --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    user-select: none;
+  }
+
+  /* ── Header ────────────────────────────── */
+  #header {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+
+  #header > * { pointer-events: auto; }
+
+  #title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #title .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+
+  #stats {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    background: var(--surface);
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  #stats span { display: flex; align-items: center; gap: 5px; }
+  #stats .value { color: var(--text); font-weight: 600; }
+
+  /* ── Search ────────────────────────────── */
+  #search-box {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    z-index: 100;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s;
+  }
+
+  #search-box:focus-within {
+    border-color: var(--accent);
+  }
+
+  #search-box svg { opacity: 0.5; flex-shrink: 0; }
+
+  #search-input {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 14px;
+    width: 200px;
+    outline: none;
+    font-family: inherit;
+  }
+
+  #search-input::placeholder { color: var(--text-muted); }
+
+  /* ── Legend ────────────────────────────── */
+  #legend {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    box-shadow: var(--shadow);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .legend-item:hover { background: var(--surface-hover); color: var(--text); }
+  .legend-item.active { background: var(--surface-hover); color: var(--text); }
+  .legend-item.inactive { opacity: 0.35; }
+
+  .legend-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── Siggraph container ─────────────────── */
+  #graph-container {
+    width: 100vw;
+    height: 100vh;
+    cursor: grab;
+  }
+
+  #graph-container:active { cursor: grabbing; }
+
+  #graph-container svg { width: 100%; height: 100%; }
+
+  /* ── Tooltip ───────────────────────────── */
+  .tooltip {
+    position: absolute;
+    pointer-events: none;
+    z-index: 200;
+    background: var(--detail-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    max-width: 320px;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    transition: opacity 0.15s;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .tooltip.visible { opacity: 1; }
+
+  .tooltip .tt-title {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .tooltip .tt-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .tooltip .tt-keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+
+  .tooltip .tt-keyword {
+    background: var(--surface);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .tooltip .tt-summary {
+    color: var(--text-muted);
+    font-style: italic;
+    border-top: 1px solid var(--border);
+    padding-top: 6px;
+    margin-top: 4px;
+  }
+
+  /* ── Detail panel (click) ──────────────── */
+  #detail-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 400px;
+    max-width: 90vw;
+    height: 100vh;
+    z-index: 150;
+    background: var(--detail-bg);
+    border-left: 1px solid var(--border);
+    padding: 24px;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -4px 0 32px rgba(0,0,0,0.3);
+  }
+
+  #detail-panel.open { transform: translateX(0); }
+
+  #detail-panel .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: background 0.15s;
+  }
+
+  #detail-panel .close-btn:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+
+  #detail-panel h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    padding-right: 40px;
+  }
+
+  #detail-panel .meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  #detail-panel .type-badge {
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  #detail-panel .slug-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+
+  #detail-panel .kw-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+
+  #detail-panel .kw-list span {
+    background: var(--surface);
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  #detail-panel .links-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    margin-top: 16px;
+  }
+
+  #detail-panel .related-link {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-size: 13px;
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  #detail-panel .related-link:hover { background: var(--surface-hover); }
+
+  /* ── Links (edges) ──────────────────────── */
+  .link {
+    stroke: var(--border);
+    stroke-opacity: 0.4;
+    transition: stroke-opacity 0.2s;
+  }
+
+  .link:hover { stroke-opacity: 0.8; }
+  .link.highlighted { stroke: var(--accent); stroke-opacity: 0.7; stroke-width: 2px; }
+  .link.dimmed { stroke-opacity: 0.05; }
+
+  /* ── Nodes ─────────────────────────────── */
+  .node { cursor: pointer; transition: opacity 0.2s; }
+  .node.dimmed { opacity: 0.15; }
+  .node.highlighted { opacity: 1; }
+
+  .node circle {
+    stroke: var(--bg);
+    stroke-width: 2px;
+    transition: stroke-width 0.2s, r 0.2s;
+  }
+
+  .node:hover circle {
+    stroke-width: 3px;
+    filter: brightness(1.3);
+  }
+
+  .node text {
+    font-size: 11px;
+    font-weight: 500;
+    fill: var(--text-muted);
+    text-anchor: middle;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+  }
+
+  .node.highlighted text { fill: var(--text); font-weight: 600; }
+
+  /* ── Scrollbar ──────────────────────────── */
+  #detail-panel::-webkit-scrollbar { width: 6px; }
+  #detail-panel::-webkit-scrollbar-track { background: transparent; }
+  #detail-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── Help hint ─────────────────────────── */
+  #hint {
+    position: absolute;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-muted);
+    font-size: 12px;
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 50;
+    transition: opacity 0.5s;
+  }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div id="title">
+    <span class="dot"></span>
+    AI-KOS Knowledge Graph
+  </div>
+  <div id="stats">
+    <span>Nodes <span class="value" id="stat-nodes">0</span></span>
+    <span>Links <span class="value" id="stat-links">0</span></span>
+  </div>
+</div>
+
+<div id="search-box">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path>
+  </svg>
+  <input type="text" id="search-input" placeholder="Search articles..." autocomplete="off">
+</div>
+
+<div id="graph-container"></div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<div id="detail-panel">
+  <button class="close-btn" id="close-detail">&times;</button>
+  <div id="detail-content"></div>
+</div>
+
+<div id="legend"></div>
+
+<div id="hint">🖱 Drag nodes &bull; Scroll to zoom &bull; Click for details</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+// ════════════════════════════════════════════════════════════════
+// AI-KOS Knowledge Graph — Embedded article data
+// Generated from knowledge/ directory markdown files.
+// Re-run `python -m ai_kos.cli graph` to regenerate.
+// ════════════════════════════════════════════════════════════════
+
+const ARTICLES = [
+  {
+    slug: "ai-kos", title: "AI-KOS Knowledge Database", type: "base",
+    summary: "AI-KOS is a self-building knowledge database that auto-links articles sharing 3+ keywords.",
+    keywords: ["ai-kos","knowledge","database","auto-link","articles","hermes"],
+    related: ["ai-kos-mission","ai-kos-plan","hybrid-search-research","ingest-file","obsidian-graph-idea","process-articles-backup-skills","session-writeback"]
+  },
+  {
+    slug: "ai-kos-mission", title: "Mission: AI-KOS Self-Building Knowledge Database", type: "mission",
+    summary: "Project mission for AI-KOS — a self-building knowledge database with auto-linking and smart ingestion.",
+    keywords: ["mission","ai-kos","database","hermes","knowledge","auto-link"],
+    related: ["ai-kos","ai-kos-plan","hybrid-search-research","process-articles-backup-skills"]
+  },
+  {
+    slug: "ai-kos-plan", title: "AI-KOS v1.5 Development Plan", type: "plan",
+    summary: "Development plan for AI-KOS v1.5 — self-building knowledge database with auto-linking.",
+    keywords: ["ai-kos","plan","knowledge","database","roadmap","features"],
+    related: ["ai-kos","ai-kos-mission","article-types-guide","hybrid-search-research"]
+  },
+  {
+    slug: "auto-linker", title: "How the Auto-Linker Works", type: "help",
+    summary: "Explanation of how AI-KOS automatically creates wikilinks between articles sharing keywords.",
+    keywords: ["auto-link","keywords","wikilinks","linking","overlap"],
+    related: ["choosing-keywords","keyword-system"]
+  },
+  {
+    slug: "keyword-system", title: "AI-KOS Keyword System", type: "help",
+    summary: "How AI-KOS keywords drive automatic article linking and duplicate detection.",
+    keywords: ["keywords","linking","auto-link","overlap","merge","wikilinks"],
+    related: ["auto-linker","choosing-keywords"]
+  },
+  {
+    slug: "choosing-keywords", title: "How to Choose Good Keywords", type: "base",
+    summary: "Strategy for choosing 3-8 keywords that maximize linking and make articles discoverable.",
+    keywords: ["keywords","linking","overlap","strategy","ai-kos"],
+    related: ["auto-linker","creation-protocol","keyword-system"]
+  },
+  {
+    slug: "creation-protocol", title: "AI-KOS Article Creation Protocol", type: "process",
+    summary: "Standard protocol for creating any AI-KOS knowledge article. Follow this every time you preserve knowledge.",
+    keywords: ["creation","protocol","article","ai-kos","knowledge","keywords","template","linking"],
+    related: ["article-types-guide","choosing-keywords"]
+  },
+  {
+    slug: "article-types-guide", title: "AI-KOS Article Types Guide", type: "help",
+    summary: "Complete guide to the 7 AI-KOS article types — when to use each, what fields are required, and how they interconnect.",
+    keywords: ["article-types","base","process","plan","help","template","ai-kos","knowledge"],
+    related: ["ai-kos-plan","creation-protocol","process-articles-backup-skills"]
+  },
+  {
+    slug: "process-articles-backup-skills", title: "Process Articles as Skill Backups", type: "help",
+    summary: "Why AI-KOS process articles serve as permanent backups for Hermes skills that get archived by the curator.",
+    keywords: ["process","skill","backup","ai-kos","knowledge","articles","hermes"],
+    related: ["ai-kos","ai-kos-mission","article-types-guide","ingest-file","obsidian-graph-idea","session-writeback"]
+  },
+  {
+    slug: "session-writeback", title: "Session Writeback Protocol", type: "process",
+    summary: "Protocol for preserving what Hermes learns during a session as permanent AI-KOS knowledge articles.",
+    keywords: ["session","writeback","ai-kos","knowledge","articles","preserve"],
+    related: ["ai-kos","ingest-file","obsidian-graph-idea","process-articles-backup-skills"]
+  },
+  {
+    slug: "ingest-file", title: "How to Ingest a File into AI-KOS", type: "process",
+    summary: "Step-by-step procedure for ingesting any file into the AI-KOS knowledge database.",
+    keywords: ["ingest","ai-kos","knowledge","articles","pdf","docx","extract"],
+    related: ["ai-kos","obsidian-graph-idea","process-articles-backup-skills","session-writeback"]
+  },
+  {
+    slug: "obsidian-graph-idea", title: "Consider adding Obsidian graph visualization", type: "note",
+    summary: "Idea: use Obsidian to visualize the AI-KOS knowledge graph since articles already use wikilinks.",
+    keywords: ["obsidian","wikilinks","ai-kos","knowledge","articles","graph"],
+    related: ["ai-kos","ingest-file","process-articles-backup-skills","session-writeback"]
+  },
+  {
+    slug: "hybrid-search-research", title: "Research: Hybrid Search Architectures", type: "research-note",
+    summary: "Research notes on hybrid dense+sparse search architectures for AI-KOS retrieval.",
+    keywords: ["hybrid-search","qdrant","rrf","ai-kos","knowledge","retrieval","database"],
+    related: ["ai-kos","ai-kos-mission","ai-kos-plan"]
+  }
+];
+
+// ── Type colors (Obsidian-inspired, dark-theme optimized) ──────
+const TYPE_COLORS = {
+  "base":          "#56DFFF",
+  "process":       "#FF73B3",
+  "plan":          "#33FF33",
+  "help":          "#44FFFF",
+  "research-note": "#D0D0FF",
+  "note":          "#9900FF",
+  "mission":       "#FF4040"
+};
+
+const TYPE_LABELS = {
+  "base": "Base",
+  "process": "Process",
+  "plan": "Plan",
+  "help": "Help",
+  "research-note": "Research Note",
+  "note": "Note",
+  "mission": "Mission"
+};
+
+// ════════════════════════════════════════════════════════════════
+// Graph construction
+// ════════════════════════════════════════════════════════════════
+
+// Build node list
+const nodes = ARTICLES.map((a, i) => ({
+  id: a.slug,
+  index: i,
+  title: a.title,
+  type: a.type,
+  keywords: a.keywords,
+  summary: a.summary,
+  related: a.related,
+  degree: 0  // filled below
+}));
+
+// Build link list from `related` field (bidirectional dedup)
+const slugSet = new Set(nodes.map(n => n.id));
+const linkMap = new Map();
+const links = [];
+
+for (const node of nodes) {
+  for (const target of node.related) {
+    if (!slugSet.has(target)) continue; // skip external refs
+    const key = [node.id, target].sort().join('|');
+    if (linkMap.has(key)) continue;
+    linkMap.set(key, true);
+
+    // Count shared keywords for edge weight
+    const targetNode = nodes.find(n => n.id === target);
+    const shared = targetNode
+      ? node.keywords.filter(k => targetNode.keywords.includes(k)).length
+      : 0;
+
+    links.push({
+      source: node.id,
+      target: target,
+      weight: Math.max(shared, 1),
+      sourceNode: node,
+      targetNode: nodes.find(n => n.id === target)
+    });
+  }
+}
+
+// Compute degree for node sizing
+for (const link of links) {
+  link.sourceNode.degree++;
+  if (link.targetNode) link.targetNode.degree++;
+}
+
+// ════════════════════════════════════════════════════════════════
+// D3 Force Simulation
+// ════════════════════════════════════════════════════════════════
+
+const container = d3.select("#graph-container");
+const width = () => container.node().clientWidth;
+const height = () => container.node().clientHeight;
+
+const svg = container.append("svg")
+  .attr("viewBox", [0, 0, width(), height()]);
+
+const g = svg.append("g");
+
+// Zoom
+const zoom = d3.zoom()
+  .scaleExtent([0.15, 4])
+  .on("zoom", (event) => {
+    g.attr("transform", event.transform);
+  });
+
+svg.call(zoom);
+
+// Arrow marker
+svg.append("defs").selectAll("marker")
+  .data(["arrow"])
+  .join("marker")
+  .attr("id", "arrow")
+  .attr("viewBox", "0 -4 8 8")
+  .attr("refX", 20)
+  .attr("refY", 0)
+  .attr("markerWidth", 5)
+  .attr("markerHeight", 5)
+  .attr("orient", "auto")
+  .append("path")
+  .attr("fill", "#45475a")
+  .attr("d", "M0,-4L8,0L0,4");
+
+// ── Links ──────────────────────────────────────────────────────
+const link = g.append("g")
+  .selectAll("line")
+  .data(links)
+  .join("line")
+  .attr("class", "link")
+  .attr("stroke-width", d => Math.max(0.8, d.weight * 0.6))
+  .attr("marker-end", "url(#arrow)");
+
+// ── Force simulation ──────────────────────────────────────────
+const simulation = d3.forceSimulation()
+  .force("link", d3.forceLink(links)
+    .id(d => d.id)
+    .distance(d => 120 - d.weight * 8)
+    .strength(d => 0.1 + d.weight * 0.12))
+  .force("charge", d3.forceManyBody().strength(-300))
+  .force("center", d3.forceCenter(width() / 2, height() / 2))
+  .force("collision", d3.forceCollide(d => 15 + d.degree * 2.5 + 2));
+
+// ── Nodes ──────────────────────────────────────────────────────
+const node = g.append("g")
+  .selectAll("g")
+  .data(nodes)
+  .join("g")
+  .attr("class", "node")
+  .call(drag(simulation));
+
+node.append("circle")
+  .attr("r", d => 7 + d.degree * 2.5)
+  .attr("fill", d => TYPE_COLORS[d.type] || "#666");
+
+node.append("text")
+  .text(d => d.title.length > 28 ? d.title.slice(0, 26) + "…" : d.title)
+  .attr("dy", d => -(9 + d.degree * 2.5 + 8))
+  .attr("font-size", d => 10 + Math.min(d.degree, 6) + "px");
+
+// ── Start simulation ──────────────────────────────────────────
+simulation
+  .nodes(nodes)
+  .on("tick", ticked);
+
+function ticked() {
+  link
+    .attr("x1", d => d.source.x)
+    .attr("y1", d => d.source.y)
+    .attr("x2", d => d.target.x)
+    .attr("y2", d => d.target.y);
+
+  node
+    .attr("transform", d => `translate(${d.x},${d.y})`);
+}
+
+// ── Drag behavior ─────────────────────────────────────────────
+function drag(sim) {
+  function dragstarted(event, d) {
+    if (!event.active) sim.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+  function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+  function dragended(event, d) {
+    if (!event.active) sim.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+  return d3.drag()
+    .on("start", dragstarted)
+    .on("drag", dragged)
+    .on("end", dragended);
+}
+
+// ════════════════════════════════════════════════════════════════
+// Tooltip
+// ════════════════════════════════════════════════════════════════
+
+const tooltip = d3.select("#tooltip");
+
+node.on("mouseenter", (event, d) => {
+  tooltip.classed("visible", true)
+    .html(`
+      <div class="tt-title">${escapeHtml(d.title)}</div>
+      <div class="tt-type" style="background:${TYPE_COLORS[d.type]}22; color:${TYPE_COLORS[d.type]}">
+        ${TYPE_LABELS[d.type] || d.type}
+      </div>
+      <div class="tt-keywords">
+        ${d.keywords.map(k => `<span class="tt-keyword">${escapeHtml(k)}</span>`).join('')}
+      </div>
+      <div class="tt-summary">${escapeHtml(d.summary)}</div>
+    `);
+
+  // Highlight connected nodes + links
+  const connected = new Set([d.id, ...d.related.filter(r => slugSet.has(r))]);
+  node.classed("dimmed", n => !connected.has(n.id));
+  node.classed("highlighted", n => n.id === d.id);
+  link.classed("dimmed", l => !(l.source.id === d.id || l.target.id === d.id));
+  link.classed("highlighted", l => l.source.id === d.id || l.target.id === d.id);
+});
+
+node.on("mousemove", (event) => {
+  const [mx, my] = d3.pointer(event, document.body);
+  const ttNode = tooltip.node();
+  const ttW = ttNode.offsetWidth;
+  const ttH = ttNode.offsetHeight;
+  let left = mx + 16;
+  let top = my - ttH / 2;
+  if (left + ttW > window.innerWidth - 20) left = mx - ttW - 16;
+  if (top < 10) top = 10;
+  if (top + ttH > window.innerHeight - 10) top = window.innerHeight - ttH - 10;
+  tooltip.style("left", left + "px").style("top", top + "px");
+});
+
+node.on("mouseleave", () => {
+  tooltip.classed("visible", false);
+  node.classed("dimmed", false).classed("highlighted", false);
+  link.classed("dimmed", false).classed("highlighted", false);
+});
+
+// ════════════════════════════════════════════════════════════════
+// Click → detail panel
+// ════════════════════════════════════════════════════════════════
+
+const detailPanel = d3.select("#detail-panel");
+const detailContent = d3.select("#detail-content");
+
+node.on("click", (event, d) => {
+  showDetail(d);
+
+  // Center on the node with animation
+  const transform = d3.zoomTransform(svg.node());
+  const cx = width() / 2;
+  const cy = height() / 2;
+  const tx = cx - d.x * transform.k;
+  const ty = cy - d.y * transform.k;
+
+  svg.transition().duration(500).call(
+    zoom.transform,
+    d3.zoomIdentity.translate(tx, ty).scale(transform.k)
+  );
+});
+
+function showDetail(d) {
+  detailPanel.classed("open", true);
+  const color = TYPE_COLORS[d.type] || "#666";
+
+  const relatedArticles = d.related
+    .filter(r => slugSet.has(r))
+    .map(r => {
+      const found = nodes.find(n => n.id === r);
+      return found || { id: r, title: r, type: "" };
+    });
+
+  detailContent.html(`
+    <h2>${escapeHtml(d.title)}</h2>
+    <div class="meta">
+      <span class="type-badge" style="background:${color}22; color:${color}">
+        ${TYPE_LABELS[d.type] || d.type}
+      </span>
+      <span class="slug-text">${escapeHtml(d.id)}</span>
+    </div>
+    <div class="kw-list">
+      ${d.keywords.map(k => `<span>${escapeHtml(k)}</span>`).join('')}
+    </div>
+    <p style="color:var(--text-muted); line-height:1.6; font-style:italic;">
+      ${escapeHtml(d.summary)}
+    </p>
+    ${relatedArticles.length ? `
+      <div class="links-title">Connected Articles (${relatedArticles.length})</div>
+      ${relatedArticles.map(r => `
+        <div class="related-link" data-slug="${escapeHtml(r.id)}">
+          <span style="display:inline-block;width:8px;height:8px;border-radius:50%;
+            background:${TYPE_COLORS[r.type] || '#666'};margin-right:8px;"></span>
+          ${escapeHtml(r.title)}
+        </div>
+      `).join('')}
+    ` : '<div class="links-title">No connections</div>'}
+  `);
+
+  // Click handler for related links inside detail panel
+  detailContent.selectAll(".related-link").on("click", (event, rd) => {
+    const targetNode = nodes.find(n => n.id === rd.id);
+    if (targetNode) showDetail(targetNode);
+  });
+}
+
+d3.select("#close-detail").on("click", () => {
+  detailPanel.classed("open", false);
+});
+
+// ════════════════════════════════════════════════════════════════
+// Search
+// ════════════════════════════════════════════════════════════════
+
+const searchInput = d3.select("#search-input");
+let searchTimer;
+
+searchInput.on("input", () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    const query = searchInput.property("value").toLowerCase().trim();
+
+    if (!query) {
+      node.classed("dimmed", false).classed("highlighted", false);
+      link.classed("dimmed", false).classed("highlighted", false);
+      return;
+    }
+
+    const matched = new Set();
+    for (const n of nodes) {
+      const searchText = [n.title, n.type, ...n.keywords, n.summary].join(" ").toLowerCase();
+      if (searchText.includes(query)) {
+        matched.add(n.id);
+        n.related.filter(r => slugSet.has(r)).forEach(r => matched.add(r));
+      }
+    }
+
+    node.classed("dimmed", n => !matched.has(n.id));
+    node.classed("highlighted", n => n.title.toLowerCase().includes(query) || n.keywords.some(k => k.includes(query)));
+    link.classed("dimmed", l => !(matched.has(l.source.id) && matched.has(l.target.id)));
+    link.classed("highlighted", l => matched.has(l.source.id) && matched.has(l.target.id));
+  }, 200);
+});
+
+// ════════════════════════════════════════════════════════════════
+// Legend
+// ════════════════════════════════════════════════════════════════
+
+const legend = d3.select("#legend");
+const typeOrder = ["base","process","plan","help","research-note","note","mission"];
+
+let activeFilter = null;
+
+const legendItems = legend.selectAll(".legend-item")
+  .data(typeOrder)
+  .join("div")
+  .attr("class", "legend-item")
+  .attr("data-type", d => d)
+  .html(d => `
+    <span class="legend-dot" style="background:${TYPE_COLORS[d]}"></span>
+    ${TYPE_LABELS[d]}
+  `)
+  .on("click", (event, d) => {
+    const item = d3.select(event.currentTarget);
+    if (activeFilter === d) {
+      // Deselect
+      activeFilter = null;
+      legendItems.classed("active", false).classed("inactive", false);
+      node.classed("dimmed", false).classed("highlighted", false);
+      link.classed("dimmed", false).classed("highlighted", false);
+    } else {
+      // Select filter
+      activeFilter = d;
+      legendItems.classed("active", t => t === d);
+      legendItems.classed("inactive", t => t !== d);
+
+      const matchedIds = new Set(nodes.filter(n => n.type === d).map(n => n.id));
+      // Also include connected nodes
+      for (const n of nodes) {
+        if (n.type === d) {
+          n.related.filter(r => slugSet.has(r)).forEach(r => matchedIds.add(r));
+        }
+      }
+
+      node.classed("dimmed", n => !matchedIds.has(n.id));
+      node.classed("highlighted", n => n.type === d);
+      link.classed("dimmed", l => !(matchedIds.has(l.source.id) && matchedIds.has(l.target.id)));
+      link.classed("highlighted", l => l.source.type === d || l.target.type === d);
+    }
+  });
+
+// ════════════════════════════════════════════════════════════════
+// Stats
+// ════════════════════════════════════════════════════════════════
+
+d3.select("#stat-nodes").text(nodes.length);
+d3.select("#stat-links").text(links.length);
+
+// ════════════════════════════════════════════════════════════════
+// Resize handler
+// ════════════════════════════════════════════════════════════════
+
+window.addEventListener("resize", () => {
+  svg.attr("viewBox", [0, 0, width(), height()]);
+});
+
+// ════════════════════════════════════════════════════════════════
+// Keyboard shortcuts
+// ════════════════════════════════════════════════════════════════
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    detailPanel.classed("open", false);
+    searchInput.property("value", "");
+    node.classed("dimmed", false).classed("highlighted", false);
+    link.classed("dimmed", false).classed("highlighted", false);
+    legendItems.classed("active", false).classed("inactive", false);
+    activeFilter = null;
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === "f") {
+    e.preventDefault();
+    document.getElementById("search-input").focus();
+  }
+  if (e.key === "0" && !e.ctrlKey && !e.metaKey) {
+    svg.transition().duration(500).call(zoom.transform, d3.zoomIdentity);
+  }
+});
+
+// ════════════════════════════════════════════════════════════════
+// Utility
+// ════════════════════════════════════════════════════════════════
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>

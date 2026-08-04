@@ -1,0 +1,6 @@
+level_crossing.ads:120:62: medium: "Status_System.Trains" might not be initialized[#0]
+level_crossing.ads:122:25: medium: "Status_System.Trains" might not be initialized[#1]
+level_crossing.ads:145:18: medium: missing dependency "Standard_Output => Train_Number"[#4]
+level_crossing.ads:145:18: medium: missing dependency "Standard_Output => Status_System"[#5]
+level_crossing.ads:146:18: medium: missing dependency "Standard_Input => Train_Number"[#2]
+level_crossing.ads:146:18: medium: missing dependency "Standard_Input => Status_System"[#3]

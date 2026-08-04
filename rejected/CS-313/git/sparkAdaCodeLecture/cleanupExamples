@@ -1,0 +1,48 @@
+rm  */*/*.o
+rm  */*/*.ali
+rm  */*/*.db
+rm  */*/*.db.shm
+rm  */*/*.db.wal
+rm  */*/main 
+rm -r  */*/gnatprove
+rm */*/use_int_io  
+rm */*/use_int_io_1  
+rm */*/use_int_io_2  
+rm */*/gnatinspect.db-shm
+rm */*/gnatinspect.db-wal
+
+rm  */*/*/*.o
+rm  */*/*/*.ali
+rm  */*/*/*.db
+rm  */*/*/*.db.shm
+rm  */*/*/*.db.wal
+rm  */*/*/main 
+rm -r  */*/*/gnatprove
+rm */*/*/use_int_io 
+rm */*/*/use_int_io_1 
+rm */*/*/use_int_io_2
+rm */*/*/gnatinspect.db-shm
+rm */*/*/gnatinspect.db-wal
+
+
+rm  */*/*/*/*.o
+rm  */*/*/*/*.ali
+rm  */*/*/*/*.db
+rm  */*/*/*/*.db.shm
+rm  */*/*/*/*.db.wal
+rm  */*/*/*/main 
+rm -r  */*/*/*/gnatprove
+rm */*/*/*/use_int_io 
+rm */*/*/*/use_int_io_1 
+rm */*/*/*/use_int_io_2 
+rm */*/*/*/gnatinspect.db-shm
+rm */*/*/*/gnatinspect.db-wal
+
+rm */*/test_string_io  */*/test_integer_io
+rm */*/test1
+
+rm -r */.emacsBackup
+rm -r */*/.emacsBackup
+rm -r */*/*/.emacsBackup
+rm -r */*/*/*/.emacsBackup
+rm -r */*/*/*/*/.emacsBackup

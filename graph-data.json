@@ -1,0 +1,352 @@
+{
+  "nodes": [
+    {
+      "id": "creation-protocol",
+      "title": "AI-KOS Article Creation Protocol",
+      "type": "process",
+      "keywords": [
+        "creation",
+        "protocol",
+        "article",
+        "ai-kos",
+        "knowledge",
+        "keywords",
+        "template",
+        "linking"
+      ],
+      "summary": "Standard protocol for creating any AI-KOS knowledge article. Follow this every time you preserve knowledge.",
+      "group": 1,
+      "linkCount": 2
+    },
+    {
+      "id": "process-articles-backup-skills",
+      "title": "Process Articles as Skill Backups",
+      "type": "help",
+      "keywords": [
+        "process",
+        "skill",
+        "backup",
+        "ai-kos",
+        "knowledge",
+        "articles",
+        "hermes"
+      ],
+      "summary": "Why AI-KOS process articles serve as permanent backups for Hermes skills that get archived by the curator.",
+      "group": 3,
+      "linkCount": 6
+    },
+    {
+      "id": "ai-kos-plan",
+      "title": "AI-KOS v1.5 Development Plan",
+      "type": "plan",
+      "keywords": [
+        "ai-kos",
+        "plan",
+        "knowledge",
+        "database",
+        "roadmap",
+        "features"
+      ],
+      "summary": "Development plan for AI-KOS v1.5 \u2014 self-building knowledge database with auto-linking.",
+      "group": 2,
+      "linkCount": 4
+    },
+    {
+      "id": "article-types-guide",
+      "title": "AI-KOS Article Types Guide",
+      "type": "help",
+      "keywords": [
+        "article-types",
+        "base",
+        "process",
+        "plan",
+        "help",
+        "template",
+        "ai-kos",
+        "knowledge"
+      ],
+      "summary": "Complete guide to the 7 AI-KOS article types \u2014 when to use each, what fields are required, and how they interconnect.",
+      "group": 3,
+      "linkCount": 3
+    },
+    {
+      "id": "session-writeback",
+      "title": "Session Writeback Protocol",
+      "type": "process",
+      "keywords": [
+        "session",
+        "writeback",
+        "ai-kos",
+        "knowledge",
+        "articles",
+        "preserve"
+      ],
+      "summary": "Protocol for preserving what Hermes learns during a session as permanent AI-KOS knowledge articles.",
+      "group": 1,
+      "linkCount": 4
+    },
+    {
+      "id": "keyword-system",
+      "title": "AI-KOS Keyword System",
+      "type": "help",
+      "keywords": [
+        "keywords",
+        "linking",
+        "auto-link",
+        "overlap",
+        "merge",
+        "wikilinks"
+      ],
+      "summary": "How AI-KOS keywords drive automatic article linking and duplicate detection.",
+      "group": 3,
+      "linkCount": 2
+    },
+    {
+      "id": "ai-kos",
+      "title": "AI-KOS Knowledge Database",
+      "type": "base",
+      "keywords": [
+        "ai-kos",
+        "knowledge",
+        "database",
+        "auto-link",
+        "articles",
+        "hermes"
+      ],
+      "summary": "AI-KOS is a self-building knowledge database that auto-links articles sharing 3+ keywords.",
+      "group": 0,
+      "linkCount": 7
+    },
+    {
+      "id": "ingest-file",
+      "title": "How to Ingest a File into AI-KOS",
+      "type": "process",
+      "keywords": [
+        "ingest",
+        "ai-kos",
+        "knowledge",
+        "articles",
+        "pdf",
+        "docx",
+        "extract"
+      ],
+      "summary": "Step-by-step procedure for ingesting any file into the AI-KOS knowledge database.",
+      "group": 1,
+      "linkCount": 4
+    },
+    {
+      "id": "obsidian-graph-idea",
+      "title": "Consider adding Obsidian graph visualization",
+      "type": "note",
+      "keywords": [
+        "obsidian",
+        "wikilinks",
+        "ai-kos",
+        "knowledge",
+        "articles",
+        "graph"
+      ],
+      "summary": "Idea: use Obsidian to visualize the AI-KOS knowledge graph since articles already use wikilinks.",
+      "group": 5,
+      "linkCount": 4
+    },
+    {
+      "id": "ai-kos-mission",
+      "title": "Mission: AI-KOS Self-Building Knowledge Database",
+      "type": "mission",
+      "keywords": [
+        "mission",
+        "ai-kos",
+        "database",
+        "hermes",
+        "knowledge",
+        "auto-link"
+      ],
+      "summary": "Project mission for AI-KOS \u2014 a self-building knowledge database with auto-linking and smart ingestion.",
+      "group": 6,
+      "linkCount": 4
+    },
+    {
+      "id": "choosing-keywords",
+      "title": "How to Choose Good Keywords",
+      "type": "base",
+      "keywords": [
+        "keywords",
+        "linking",
+        "overlap",
+        "strategy",
+        "ai-kos"
+      ],
+      "summary": "Strategy for choosing 3-8 keywords that maximize linking and make articles discoverable.",
+      "group": 0,
+      "linkCount": 3
+    },
+    {
+      "id": "hybrid-search-research",
+      "title": "Research: Hybrid Search Architectures",
+      "type": "research-note",
+      "keywords": [
+        "hybrid-search",
+        "qdrant",
+        "rrf",
+        "ai-kos",
+        "knowledge",
+        "retrieval",
+        "database"
+      ],
+      "summary": "Research notes on hybrid dense+sparse search architectures for AI-KOS retrieval.",
+      "group": 4,
+      "linkCount": 3
+    },
+    {
+      "id": "auto-linker",
+      "title": "How the Auto-Linker Works",
+      "type": "help",
+      "keywords": [
+        "auto-link",
+        "keywords",
+        "wikilinks",
+        "linking",
+        "overlap"
+      ],
+      "summary": "Explanation of how AI-KOS automatically creates wikilinks between articles sharing keywords.",
+      "group": 3,
+      "linkCount": 2
+    }
+  ],
+  "edges": [
+    {
+      "source": "creation-protocol",
+      "target": "article-types-guide",
+      "weight": 3
+    },
+    {
+      "source": "creation-protocol",
+      "target": "choosing-keywords",
+      "weight": 3
+    },
+    {
+      "source": "process-articles-backup-skills",
+      "target": "ai-kos",
+      "weight": 4
+    },
+    {
+      "source": "process-articles-backup-skills",
+      "target": "ai-kos-mission",
+      "weight": 3
+    },
+    {
+      "source": "process-articles-backup-skills",
+      "target": "article-types-guide",
+      "weight": 3
+    },
+    {
+      "source": "process-articles-backup-skills",
+      "target": "ingest-file",
+      "weight": 3
+    },
+    {
+      "source": "process-articles-backup-skills",
+      "target": "obsidian-graph-idea",
+      "weight": 3
+    },
+    {
+      "source": "process-articles-backup-skills",
+      "target": "session-writeback",
+      "weight": 3
+    },
+    {
+      "source": "ai-kos-plan",
+      "target": "ai-kos",
+      "weight": 3
+    },
+    {
+      "source": "ai-kos-plan",
+      "target": "ai-kos-mission",
+      "weight": 3
+    },
+    {
+      "source": "ai-kos-plan",
+      "target": "article-types-guide",
+      "weight": 3
+    },
+    {
+      "source": "ai-kos-plan",
+      "target": "hybrid-search-research",
+      "weight": 3
+    },
+    {
+      "source": "session-writeback",
+      "target": "ai-kos",
+      "weight": 3
+    },
+    {
+      "source": "session-writeback",
+      "target": "ingest-file",
+      "weight": 3
+    },
+    {
+      "source": "session-writeback",
+      "target": "obsidian-graph-idea",
+      "weight": 3
+    },
+    {
+      "source": "keyword-system",
+      "target": "auto-linker",
+      "weight": 5
+    },
+    {
+      "source": "keyword-system",
+      "target": "choosing-keywords",
+      "weight": 3
+    },
+    {
+      "source": "ai-kos",
+      "target": "ai-kos-mission",
+      "weight": 5
+    },
+    {
+      "source": "ai-kos",
+      "target": "hybrid-search-research",
+      "weight": 3
+    },
+    {
+      "source": "ai-kos",
+      "target": "ingest-file",
+      "weight": 3
+    },
+    {
+      "source": "ai-kos",
+      "target": "obsidian-graph-idea",
+      "weight": 3
+    },
+    {
+      "source": "ingest-file",
+      "target": "obsidian-graph-idea",
+      "weight": 3
+    },
+    {
+      "source": "ai-kos-mission",
+      "target": "hybrid-search-research",
+      "weight": 3
+    },
+    {
+      "source": "choosing-keywords",
+      "target": "auto-linker",
+      "weight": 3
+    }
+  ],
+  "stats": {
+    "total_nodes": 13,
+    "total_edges": 24,
+    "by_type": {
+      "base": 2,
+      "process": 3,
+      "plan": 1,
+      "help": 4,
+      "research-note": 1,
+      "note": 1,
+      "mission": 1
+    }
+  }
+}

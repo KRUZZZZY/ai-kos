@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=gnatstudio
+GenericName=Gnat Studio
+Comment=gnatstudio
+Exec=/opt/GNAT/2021/bin/gnatstudio %F
+Icon=/opt/GNAT/2021/share/gnatstudio/icons/hicolor/32x32/apps/gnatstudio_logo.png
+Type=Application
+StartupNotify=false
+NoDisplay=true
+Hidden=false
+Terminal=false
+Categories=Graphics;Viewer;
+MimeType=x-scheme-handler/adaproject

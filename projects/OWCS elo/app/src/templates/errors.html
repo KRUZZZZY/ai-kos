@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Errors · Global Overwatch Elo{% endblock %}
+{% block content %}
+<header class="page-head"><div><h1>Error Dashboard</h1><p>Failed imports, malformed rows, and sync runs.</p></div></header>
+<h2>Open Import Issues</h2>
+<table>
+  <thead><tr><th>Time</th><th>Source</th><th>Reference</th><th>Message</th></tr></thead>
+  <tbody>
+  {% for issue in issues %}
+    <tr><td>{{ issue.created_at }}</td><td>{{ issue.source_system }}</td><td>{{ issue.reference }}</td><td>{{ issue.message }}</td></tr>
+  {% else %}
+    <tr><td colspan="4" class="empty">No open issues.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<h2>Sync Runs</h2>
+<table>
+  <thead><tr><th>Started</th><th>Source</th><th>Status</th><th>Seen</th><th>Inserted</th><th>Updated</th></tr></thead>
+  <tbody>
+  {% for run in sync_runs %}
+    <tr><td>{{ run.started_at }}</td><td>{{ run.source_system }}</td><td>{{ run.status }}</td><td>{{ run.items_seen }}</td><td>{{ run.items_inserted }}</td><td>{{ run.items_updated }}</td></tr>
+  {% else %}
+    <tr><td colspan="6" class="empty">No sync runs yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

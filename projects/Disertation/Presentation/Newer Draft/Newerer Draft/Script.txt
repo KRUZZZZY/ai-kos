@@ -1,0 +1,110 @@
+Slide 1: Title Slide
+
+Script:
+"Before I start — very sorry to all the mathematicians in the room. I am fully aware that two of the models I'm covering today are not strictly random graph models in the classical sense, but for the sake of brevity, I will pretend that they are.
+
+Now — has anyone here heard of the Kevin Bacon game? The idea is that you can connect almost any Hollywood actor to Kevin Bacon through chains of shared film appearances, and it typically takes fewer than six steps. What's remarkable is that this isn't just a party trick. Kevin Bacon has an average path length of about three — you can reach him from virtually any other actor in three hops. And the reason it works is structural: there's high clustering within genres and production circles, short average distances across the whole network, and a handful of massively well-connected hubs — Bacon being the obvious example.
+
+That combination of clustering, short paths, and hubs shows up in social networks, the internet, neural systems, and citation graphs. And it's what this project is about. My name is Zachariah Markusson, and I wanted to explore the bridge between the abstract theory of random graphs and the messy networks we actually see in the real world — by building them from scratch and running simulations to see how well the theory holds up."
+
+Slide 2: Why Study Random Graph Models?
+
+Script:
+"Networks are genuinely everywhere. Social networks, the internet, neural connections, citation graphs — and despite how different those things are, they all share that same strange set of structural properties the Kevin Bacon game captures. The question is: what kind of mathematical model actually reproduces them?
+
+A purely deterministic model can't do it — the real world is too messy. So over the past sixty-odd years, three foundational probabilistic models emerged to tackle different pieces of the puzzle. Erdős-Rényi handles raw connectivity and phase transitions. Watts-Strogatz captures the small-world property — high local clustering alongside short global paths. And Barabási-Albert explains where hubs come from. Each model is deliberately simple; the interest is in what emerges from the rules."
+
+Slide 3: The Three Research Questions
+
+Script:
+"I centred my work around three specific, testable research questions — one for each model.
+
+For Erdős-Rényi: at what value of the edge probability p does a giant connected component first cross 50% of the graph in simulation, and how does that compare with the theoretical threshold of 1 over n?
+
+For Watts-Strogatz: over what range of the rewiring probability beta does the model simultaneously maintain high clustering and short average path length — and can I pin down those boundaries numerically rather than just qualitatively?
+
+And for Barabási-Albert: does the degree distribution actually follow a power law with the predicted exponent of negative three, and does the mean degree scale as 2m across different values of the attachment parameter?
+
+These three questions gave me something concrete to measure against. Theory tells you what should happen as n goes to infinity — my job was to see what actually happens at n equals a thousand."
+
+Slide 4: The Erdős–Rényi Model (Definition)
+
+Script:
+"We start in 1959 with Erdős and Rényi. Their model is the blank slate of graph theory. You take n points and flip a coin for every possible connection with a probability p. It's mathematically elegant because it's so simple, and it leads to a very predictable degree distribution — a Poisson curve where most nodes have roughly the same number of friends, and extreme outliers are exponentially rare. Crucially: no hubs."
+
+Slide 5: ER Phase Transitions
+
+Script:
+"The most famous feature here is the phase transition. Think of it like water freezing. If your probability p is too low, the graph is just dust — tiny isolated clusters. But once you hit the critical threshold around p equals 1 over n, a giant component suddenly emerges that swallows up most of the graph. The mathematical birth of a network. Below the threshold the largest component is only logarithmic in size; above it, you get a component linear in n."
+
+Slide 6: ER Simulation (RQ1 Results)
+
+Script:
+"When I ran the simulations for RQ1, I found something interesting. Theory says the transition should happen at p equals 0.001 for n equals 1000, but my data showed it closer to 0.0014. This 40% gap isn't a mistake — it's a finite-size effect. Because my graph only had 1,000 nodes, the transition was a smooth ramp rather than the sharp, infinite step described in textbooks. The width of that ramp is itself a theoretical prediction — it scales as n to the minus one-third — so the discrepancy is actually the theory working correctly at finite scale."
+
+Slide 7: Watts–Strogatz (The Small-World Problem)
+
+Script:
+"But Erdős-Rényi has a fundamental problem: it doesn't look like a social network. In real life, my friends are likely to be friends with each other — that's clustering. The ER model has almost none of it in the sparse regime.
+
+Watts and Strogatz identified the tension. Regular ring lattices have high clustering, but path lengths grow linearly with n. ER graphs have short paths but no clustering. Neither captures the Kevin Bacon effect on its own. Their insight was that you don't need many random shortcuts — just a handful is enough to collapse the path length while leaving the local structure almost entirely intact."
+
+Slide 8: WS Simulation (RQ2 Results)
+
+Script:
+"For RQ2, I was looking for the small-world window — the range of the rewiring parameter beta where you get both short paths and high clustering simultaneously.
+
+My simulations confirmed the theory. At a rewiring rate of around ten to the minus three, the average path length had already dropped to 81% of its lattice value — while the clustering coefficient remained completely intact at 1.00. That's the lower boundary of the window. At the upper boundary, ten to the minus one, path length was at just 14% of its lattice value while clustering still sat at 75% — comfortably above the threshold. Both conditions were satisfied throughout. The answer to RQ2: the small-world window sits between beta equals ten to the minus three and ten to the minus one."
+
+Slide 9: Barabási–Albert (The Power Law)
+
+Script:
+"Finally, we get to hubs. Look at the World Wide Web — it doesn't follow a Poisson distribution. It has nodes like Google or Amazon with millions of links while most pages have almost none. That's a power law: the probability of a node having degree k scales as k to the minus three. The consequence is a heavy tail — hubs are rare, but they are inevitable, and a small number of them dominate the structure of the entire network.
+
+This is qualitatively different from anything the previous two models produce. ER has exponentially decaying tails and no hubs. WS preserves the degree distribution you started with. The Barabási-Albert model is the first of the three to generate this heavy-tailed, scale-free behaviour — and it does so through a single elegant mechanism."
+
+Slide 10: Preferential Attachment (The Mechanism)
+
+Script:
+"That mechanism is preferential attachment — the rich get richer. Unlike the previous models where the number of nodes is fixed, this graph grows over time. At each step a new node arrives and connects to m existing nodes, with the probability of connecting to any particular node proportional to its current degree. High-degree nodes attract more edges, which makes them higher degree, which attracts still more edges. This feedback loop is what creates the massive disparity between a hub and a leaf — and the theoretical prediction is that this produces a power law with exponent exactly minus three. RQ3 is asking whether simulation actually confirms that."
+
+Slide 11: BA Simulation (RQ3 Results)
+
+Script:
+"For RQ3, measuring the power law was the hardest part of the project. A single run with 30 nodes gave me a mess. I had to build a SQLite database to store and aggregate hundreds of runs just to see the pattern emerge.
+
+The mean degree relation — k bar equals 2m — held almost perfectly across every value of m I tested. That part was clean.
+
+The power law exponent was harder. Fitting a log-log slope over 200 runs at n equals 2000, I measured minus 2.73, with an R-squared of 0.998. The theory predicts minus 3. Again, a finite-size effect: at n equals 2000 the tail truncates at around degree 50 to 80, and the OLS fit gets pulled upward by that truncation. As n grows, the slope converges to minus 3. The discrepancy is not a failure — it's exactly what the theory predicts should happen at this scale."
+
+Slide 12: The Story of Random Graphs (Timeline)
+
+Script:
+"Before the conclusions, I want to briefly zoom out. Random graph theory didn't begin with Python simulations. The earliest roots go back to 1938, with Jennings and Moreno treating social connections as data. Then in 1959, Erdős and Rényi put it on a rigorous mathematical footing — pure probability theory.
+
+It wasn't until the late nineties and early 2000s that the field shifted toward modelling networks we actually live in — Watts-Strogatz in 1998, Barabási-Albert in 1999. My project sits at the end of that timeline: taking sixty years of asymptotic theory and asking what it actually looks like when you build it from scratch."
+
+Slide 13: Conclusions (RQ1 & RQ2)
+
+Script:
+"So — what did we find?
+
+For RQ1: the giant component emerged as predicted, with the threshold at p approximately 0.0014 against the theoretical 0.001. A 40% discrepancy, consistent with finite-size effects at n equals 1000.
+
+For RQ2: the small-world window was confirmed between beta equals ten to the minus three and ten to the minus one. At the lower boundary, path length was already dropping while clustering remained perfectly intact. Both conditions for the small-world regime were satisfied throughout."
+
+Slide 14: Conclusions (RQ3 & Simulation Value)
+
+Script:
+"For RQ3: the mean degree relation k bar equals 2m held with almost no scatter. The power law slope came in at minus 2.73 against the asymptotic minus 3 — finite-size tail truncation, exactly as theory predicts.
+
+The broader point: theoretical results describe the limit as n goes to infinity, but finite networks are what we actually use and care about. The simulations make visible the gap between the limit and the reality. The phase transition is a smooth ramp, not a sharp step. The power law tail gets cut off. And I'll be honest — I also just genuinely enjoy looking at the graphs."
+
+Slide 15: Final Reflections & Future Work
+
+Script:
+"Looking back, my original project plan from November was optimistic. I thought implementing a model was the same as understanding it. I spent a day coding Erdős-Rényi and weeks rereading Chapter 4 of van der Hofstad to understand why p equals 1 over n was the interesting value. I also planned to use spectral clustering and Jacobian matrices — none of which ended up in the final work, because they didn't serve the story.
+
+I made mistakes too. I originally confused the extinction probability with the survival probability, which broke the phase transition analysis entirely. Correcting that through the cycle of read-code-fail-reread was frustrating, but that's where the real learning happened.
+
+If I were to continue this, I'd look at epidemic spreading — testing how these different structures affect how quickly a virus moves through a network. All three models would give you very different answers, and the infrastructure is already there."

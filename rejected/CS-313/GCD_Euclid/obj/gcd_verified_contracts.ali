@@ -1,0 +1,50 @@
+V "GNAT Lib v2021"
+A -gnatA
+A -gnatwe
+A -gnata
+A -gnat12
+A -mtune=generic
+A -march=x86-64
+P ZX
+
+RN
+RV NO_DIRECT_BOOLEAN_OPERATORS
+RV NO_IMPLEMENTATION_ASPECT_SPECIFICATIONS
+RV NO_IMPLEMENTATION_PRAGMAS
+
+U gcd_verified_contracts%b  gcd_verified_contracts.adb  45edc460 NE OO PK
+Z system.assertions%s	s-assert.adb		s-assert.ali
+
+U gcd_verified_contracts%s  gcd_verified_contracts.ads  17b22dfe EE NE OO PK
+
+D ada.ads		20210520051132 76789da1 ada%s
+D a-assert.ads		20210520051128 a718b65c ada.assertions%s
+D a-unccon.ads		20210520051130 0e9b276f ada.unchecked_conversion%s
+D gcd_verified_contracts.ads  20251119095026 17b22dfe gcd_verified_contracts%s
+D gcd_verified_contracts.adb  20251119095026 525fe99e gcd_verified_contracts%b
+D system.ads		20210520051136 2ffa5114 system%s
+D s-assert.ads		20210520051132 6a49a4e4 system.assertions%s
+D s-exctab.ads		20210520051132 54135002 system.exception_table%s
+D s-stalib.ads		20210520051134 472fbca8 system.standard_library%s
+G a e
+G c Z s b [euclid_gcd_verified gcd_verified_contracts 4 14 none]
+X 4 gcd_verified_contracts.ads
+3K9*GCD_Verified_Contracts 15l5 15e27 5|3b14 62l5 62t27
+4U14*Euclid_GCD_Verified 5>7 6>7 7<7 8<7 9<7 5|5b14 60l8 60t27
+5i7 A{positive} 11r34 13r17 5|6b7 12r31 23r21 44r21
+6i7 B{positive} 11r37 14r21 5|7b7 13r31 24r25 45r25
+7i7 G{positive} 11r19 13r30 14r34 5|8b7 51m10 56m10
+8i7 GA{integer} 11r22 13r35 5|9b7 52m10 57m10
+9i7 GB{integer} 11r26 14r39 5|10b7 53m10 58m10
+X 5 gcd_verified_contracts.adb
+12i7 R{integer} 21r13 23r26 24r30 25r19 25r51 27r13 28r19 29r19 30r28 33m13
+. 35r23 36r25 37r36 44r26 45r30 46r19 46r51 49r10 55r25 56r25
+13i7 S{integer} 21r24 23r35 24r39 25r29 25r41 27r17 28r23 29r25 30r36 35r19
+. 36r19 37r28 40m13 44r35 45r39 46r29 46r41 50r25 51r25
+14i7 RA{integer} 23r30 31r19 38m13 38r19 44r30 57r16
+15i7 SA{integer} 23r39 31m13 31r28 38r24 44r39 52r16
+16i7 RB{integer} 24r34 32r19 39m13 39r19 45r34 58r16
+17i7 SB{integer} 24r43 32m13 32r28 39r24 45r43 53r16
+18i7 D{integer} 28m13 30r32 31r24 32r24 35m13 37r32 38r29 39r29
+19i7 R1{integer} 29m13 30r40 33r18 36m13 37r40 40r18
+
