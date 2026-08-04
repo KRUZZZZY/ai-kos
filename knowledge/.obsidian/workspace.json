@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "bundles/general/female-orgasm-research-synthesis.md",
+                "file": "bundles/general/erdos-renyi-model.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "female-orgasm-research-synthesis"
+              "title": "erdos-renyi-model"
             }
           }
         ]
@@ -190,11 +190,14 @@
   },
   "active": "31e21735638b7b50",
   "lastOpenFiles": [
+    "bundles/general/deep-research-pipeline-workflow.md",
+    "bundles/general/docling-graph-research.md",
+    "bundles/general/deep-research-tool-mission.md",
+    "bundles/general/female-orgasm-research-synthesis.md",
     "bundles/general/what-are-the-key-neurophysiological-mechanism.md",
     "bundles/general/research-what-are-the-key-neurophysiological-mechanisms-of.md",
     "bundles/general/female-orgasm-neurophysiology-hormones-types-evolu.md",
     "bundles/general/research-self-building-kb-architectural-patterns.md",
-    "bundles/general/female-orgasm-research-synthesis.md",
     "bundles/general/female-sexual-anatomy.md",
     "bundles/general/gemini-deep-research-architecture.md",
     "bundles/general/research-female-orgasm-neurophysiology-hormones-types-evolu.md",
@@ -212,9 +215,6 @@
     "bundles/general/auto-linker.md",
     "bundles/general/session-writeback.md",
     "bundles/general/session-2026-08-04-ai-kos-build.md",
-    "bundles/general/deep-research-tool-mission.md",
-    "bundles/general/deep-research-enterprise-implications.md",
-    "bundles/general/perplexity-sonar-deep-research.md",
-    "bundles/general/openai-deep-research-architecture.md"
+    "bundles/general/deep-research-enterprise-implications.md"
   ]
 }

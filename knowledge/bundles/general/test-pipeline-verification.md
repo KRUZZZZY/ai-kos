@@ -17,7 +17,8 @@ keywords:
 - verification
 - auto-link
 summary: Smoke test article to verify the full AI-KOS pipeline is operational.
-related: []
+related:
+- deep-research-pipeline-workflow
 provenance:
 - /tmp/test_ingest.md
 retrieval_count: 0

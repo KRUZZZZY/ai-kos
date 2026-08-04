@@ -22,7 +22,8 @@ keywords:
 summary: 'Raw research findings from Firecrawl deep research on female orgasm: 12
   sources across 6 dimensions (neurophysiology, hormones, types, evolution, measurement,
   anorgasmia), with 6 full-text PMC papers scraped.'
-related: []
+related:
+- deep-research-pipeline-workflow
 provenance:
 - inbox/female-orgasm-research-findings.md
 - Firecrawl API v2 search + scrape
