@@ -312,3 +312,16 @@ def _extract_keywords(text: str) -> List[str]:
     words = re.findall(r'[a-zA-Z]{4,}', text.lower())
     stop = {'this','that','with','from','have','been','were','they','their','about','which','what','when','where','over','into','such','other','only','also','very','just','some','each','both','more','most','many','and','using','the','are','was','not','all','can','has','had','its','but'}
     return list(dict.fromkeys(w for w in words if w not in stop))[:8]
+
+
+def pmc_to_pdf(url: str) -> str:
+    """Convert a PMC article URL to its PDF version for cleaner extraction.
+
+    PMC HTML pages return nav-heavy boilerplate from web_extract.
+    The PDF endpoint yields clean article text with none of that noise.
+    Non-PMC URLs are returned unchanged.
+    """
+    match = re.match(r'(https?://www\.ncbi\.nlm\.nih\.gov/pmc/articles/PMC\d+)', url)
+    if match:
+        return f"{match.group(1)}/pdf/"
+    return url

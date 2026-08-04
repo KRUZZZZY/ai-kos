@@ -23,7 +23,9 @@ keywords:
 summary: 'Research synthesis on female orgasm across 6 dimensions: brain imaging,
   hormonal regulation, orgasm types, evolutionary theories, measurement methods, and
   anorgasmia management. Based on 12 Firecrawl sources + 6 PMC papers.'
-related: []
+related:
+- research-what-are-the-key-neurophysiological-mechanisms-of
+- what-are-the-key-neurophysiological-mechanism
 provenance:
 - inbox/female-orgasm-research-synthesis.md
 - inbox/female-orgasm-research-findings.md
