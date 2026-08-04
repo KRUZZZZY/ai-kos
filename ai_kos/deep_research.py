@@ -229,6 +229,18 @@ def synthesize_report(result: ResearchResult) -> str:
     return "\n".join(lines)
 
 
+def _smart_truncate(text: str, max_len: int) -> str:
+    """Truncate at last word boundary before max_len."""
+    if len(text) <= max_len:
+        return text
+    cut = text[:max_len].rstrip()
+    # Try to break at last space
+    last_space = cut.rfind(' ')
+    if last_space > max_len // 2:
+        return cut[:last_space]
+    return cut
+
+
 def persist_research(result: ResearchResult, knowledge_dir: str = "knowledge") -> Dict[str, str]:
     """Save research findings as AI-KOS articles: one research-note per sub-question, one base synthesis."""
     from ai_kos.articles import create_article
@@ -239,24 +251,39 @@ def persist_research(result: ResearchResult, knowledge_dir: str = "knowledge") -
     # Create research-note for overall findings
     key_notes = []
     for f in result.findings[:10]:
-        key_notes.append(f"{f.get('key_claim', '')} [{f.get('source_title', '')}]")
+        key_notes.append(f"{f.get('key_claim', '')} [{f.get('title', '')}]")
 
     gaps = result.knowledge_gaps if result.knowledge_gaps else ["No significant gaps identified"]
 
+    # Generate a clean title
+    clean_title = _smart_truncate(result.question, 80)
+
     slug = re.sub(r'[^a-z0-9\s-]', '', result.question.lower()).replace(" ", "-")[:50]
     slug = re.sub(r'-+', '-', slug).strip('-')
+
+    # Extract a clean summary from synthesis (first non-heading, non-empty paragraph)
+    summary_text = ""
+    if result.synthesis:
+        for line in result.synthesis.split('\n'):
+            stripped = line.strip()
+            if stripped and not stripped.startswith('#'):
+                summary_text = stripped[:250]
+                break
+    if not summary_text:
+        summary_text = f"Deep research findings on: {clean_title}"
+
     r = create_article("research-note", {
-        "title": f"Research: {result.question[:80]}",
+        "title": f"Research: {clean_title}",
         "slug": f"research-{slug}",
         "keywords": _extract_keywords(result.question)[:8],
-        "summary": result.synthesis[:250] if result.synthesis else f"Deep research findings on: {result.question[:100]}",
-        "provenance": [f.get("source_url", "") for f in result.findings[:5]],
+        "summary": summary_text[:250],
+        "provenance": [f.get("url", "") for f in result.findings[:5]],
         "stability": "volatile",
         "sensitivity_label": "internal",
-        "topic": result.question[:100],
+        "topic": clean_title,
         "key_notes": key_notes,
         "open_questions": gaps,
-        "sources": [f"{f.get('source_title', '')}: {f.get('source_url', '')}" for f in result.findings[:10]],
+        "sources": [f"{f.get('title', '')}: {f.get('url', '')}" for f in result.findings[:10]],
     })
     if r.get("status") == "created":
         created["research_note"] = r["slug"]
@@ -265,10 +292,10 @@ def persist_research(result: ResearchResult, knowledge_dir: str = "knowledge") -
     if result.synthesis:
         base_slug = slug[:45]
         r2 = create_article("base", {
-            "title": result.question[:100],
+            "title": clean_title,
             "slug": base_slug,
             "keywords": _extract_keywords(result.question)[:8],
-            "summary": result.synthesis[:250],
+            "summary": summary_text[:250],
             "provenance": ["deep-research-synthesis"],
             "stability": "moderate",
             "sensitivity_label": "internal",

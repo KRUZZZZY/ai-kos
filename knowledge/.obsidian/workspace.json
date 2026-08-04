@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "bundles/general/stanford-storm-framework.md",
+                "file": "bundles/general/female-orgasm-research-synthesis.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "stanford-storm-framework"
+              "title": "female-orgasm-research-synthesis"
             }
           }
         ]
@@ -191,11 +191,18 @@
   "active": "31e21735638b7b50",
   "lastOpenFiles": [
     "bundles/general/female-orgasm-neurophysiology-hormones-types-evolu.md",
+    "bundles/general/research-self-building-kb-architectural-patterns.md",
+    "bundles/general/female-orgasm-research-synthesis.md",
+    "bundles/general/female-sexual-anatomy.md",
+    "bundles/general/gemini-deep-research-architecture.md",
     "bundles/general/research-female-orgasm-neurophysiology-hormones-types-evolu.md",
-    "bundles/general/female-orgasm-research.md",
-    "bundles/general/session-end-protocol.md",
+    "bundles/general/research-female-orgasm-firecrawl-findings.md",
+    "bundles/general/test-pipeline-verification.md",
     "bundles/general/run-random-graph-suite.md",
     "bundles/general/random-graph-simulation-suite.md",
+    "bundles/general/stanford-storm-framework.md",
+    "bundles/general/female-orgasm-research.md",
+    "bundles/general/session-end-protocol.md",
     "bundles/general/random-graph-models.md",
     "bundles/general/random-graph-dissertation-notes.md",
     "bundles/general/random-graph-model-comparison.md",
@@ -205,16 +212,9 @@
     "bundles/general/session-2026-08-04-ai-kos-build.md",
     "bundles/general/deep-research-tool-mission.md",
     "bundles/general/deep-research-enterprise-implications.md",
-    "bundles/general/stanford-storm-framework.md",
     "bundles/general/perplexity-sonar-deep-research.md",
     "bundles/general/openai-deep-research-architecture.md",
-    "bundles/general/gemini-deep-research-architecture.md",
     "bundles/general/ai-deep-research-systems.md",
-    "bundles/general/tailscale-vs-headscale.md",
-    "bundles/general/watts-strogatz-model.md",
-    "bundles/general/creation-protocol.md",
-    "bundles/general/obsidian-graph-idea.md",
-    "bundles/general/hybrid-search-research.md",
-    "bundles/general/female-sexual-anatomy.md"
+    "bundles/general/tailscale-vs-headscale.md"
   ]
 }

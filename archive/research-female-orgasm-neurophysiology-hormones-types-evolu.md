@@ -29,7 +29,7 @@ summary: '# Female Orgasm: Extended Research Synthesis
   dominance drives arousal, while sympathetic activation triggers rhythmic pelvic
   floor cont'
 related:
-- female-orgasm-neurophysiology-hormones-types-evolu
+- female-orgasm-research-synthesis
 provenance:
 - ''
 - ''

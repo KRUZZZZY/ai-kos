@@ -22,6 +22,7 @@ keywords:
 summary: Extended research synthesis on female orgasm covering neurophysiology, hormonal
   regulation, types, evolutionary theories, measurement, and clinical disorders.
 related:
+- female-orgasm-research-synthesis
 - research-female-orgasm-neurophysiology-hormones-types-evolu
 provenance:
 - deep-research-synthesis
