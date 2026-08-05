@@ -1,3 +1,0 @@
-(X'Old + 1) + 1 = (X'Old + 1) + 1
-
-U = X + 1 ->  U+1 = X'Old + 3  (not provable)

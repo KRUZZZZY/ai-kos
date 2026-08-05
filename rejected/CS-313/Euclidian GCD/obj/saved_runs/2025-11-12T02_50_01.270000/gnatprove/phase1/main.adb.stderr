@@ -1,2 +1,0 @@
-main.adb:3:06: error: "Ada.Text_Io.As_Library" is not a predefined library unit
-main.adb:4:06: error: "Ada.Integer_Text_Io.As_Library" is not a predefined library unit

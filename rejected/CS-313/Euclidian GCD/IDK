@@ -1,4 +1,0 @@
-Builder results
-    C:\Users\zacha\Documents\Year 3 Swansea\CS-313\GCD_Euclid\src\main.adb
-        30:21 error: operator for type "File_Status" defined at spark-text_io.ads:45 is not directly visible
-        37:23 error: "Success" is not visible (more references follow)

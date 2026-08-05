@@ -1,2 +1,0 @@
-level_crossing.ads:133:36: warning: condition can only be False if invalid values present [-gnatwc]
-level_crossing.ads:138:33: warning: condition can only be False if invalid values present [-gnatwc]

@@ -1,2 +1,0 @@
-echo why3 ide -C ~/git/criticalhighintegritysystems/lib/why3.conf -L ~/git/criticalhighintegritysystems/why3TheoriesForSparkAda/ $1
-why3 ide -C ~/git/criticalhighintegritysystems/lib/why3.conf -L ~/git/criticalhighintegritysystems/why3TheoriesForSparkAda/ $1

@@ -31,11 +31,14 @@ inbox/*
 
 # External repos (managed separately)
 # - knowledge/  → https://github.com/KRUZZZZY/ai-kos-knowledge
+# - archive/    → https://github.com/KRUZZZZY/ai-kos-archive
 # - projects/   → https://github.com/KRUZZZZY/owcs-elo
 #               → https://github.com/KRUZZZZY/internship-finder
 #               → https://github.com/KRUZZZZY/dissertation
 projects/
 knowledge/
+archive/
+rejected/
 
 # Test artifacts
 .coverage

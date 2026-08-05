@@ -1,2 +1,0 @@
-gcd_verified_contracts.adb:18:07: warning: initialization of "D" has no effect[#0]
-gcd_verified_contracts.adb:19:07: warning: initialization of "R1" has no effect[#1]

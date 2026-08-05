@@ -1,3 +1,0 @@
-
-procedure Example2;
-

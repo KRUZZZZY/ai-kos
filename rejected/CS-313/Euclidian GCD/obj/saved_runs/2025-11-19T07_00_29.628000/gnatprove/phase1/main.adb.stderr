@@ -1,8 +1,0 @@
-main.adb:55:35: error: expected type "Standard.Long_Long_Integer"
-main.adb:55:35: error: found type "Standard.Integer"
-gcd.ads:15:18: error: invalid operand types for operator "*"
-gcd.ads:15:18: error: left operand has type "Standard.Long_Long_Integer"
-gcd.ads:15:18: error: right operand has type "Standard.Natural"
-gcd.ads:16:18: error: invalid operand types for operator "*"
-gcd.ads:16:18: error: left operand has type "Standard.Long_Long_Integer"
-gcd.ads:16:18: error: right operand has type "Standard.Natural"

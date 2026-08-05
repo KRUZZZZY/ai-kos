@@ -1,9 +1,0 @@
-project MainWithoutRangeCheck is
-
-   package Compiler is
-      for Default_Switches ("ada") use ("-gnato33");
-   end Compiler;
-  
-
-end MainWithoutRangeCheck;
-
