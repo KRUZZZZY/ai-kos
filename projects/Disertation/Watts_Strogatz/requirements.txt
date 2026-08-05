@@ -1,5 +1,0 @@
-networkx>=2.8
-matplotlib>=3.5
-
-# Optional for packaging/testing
-pytest>=7.0

@@ -27,28 +27,17 @@ Thumbs.db
 # Project-specific
 inbox/*
 !inbox/.gitkeep
-knowledge/bundles/*.backup
 *.log
 
-# Keep archive/projects/rejected tracked but ignore transient build artifacts inside projects
-projects/*/node_modules/
-projects/*/__pycache__/
-projects/*/.venv/
-projects/*/build/
-projects/*/dist/
+# External repos (managed separately)
+# - knowledge/  → https://github.com/KRUZZZZY/ai-kos-knowledge
+# - projects/   → https://github.com/KRUZZZZY/owcs-elo
+#               → https://github.com/KRUZZZZY/internship-finder
+#               → https://github.com/KRUZZZZY/dissertation
+projects/
+knowledge/
 
 # Test artifacts
 .coverage
 htmlcov/
 .pytest_cache/
-
-# Generated runtime files
-knowledge/taskqueue.db
-knowledge/.vectors/
-
-# Embedded git repos (managed separately)
-projects/Disertation/All_In_One/repo_remote/
-projects/Disertation/*.zip
-projects/Internship-Finder/uk-internships/
-rejected/NSE_ELO/
-rejected/nse-bracket/
