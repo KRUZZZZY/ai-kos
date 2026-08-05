@@ -21,6 +21,7 @@ async def _start_server():
         stdin=asyncio.subprocess.PIPE,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
+        limit=2**20,  # 1MB buffer — large enough for 71+ article listings
     )
     # Initialize
     await _mcp_request(proc, "initialize", {
