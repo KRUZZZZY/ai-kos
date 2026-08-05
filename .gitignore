@@ -48,6 +48,7 @@ knowledge/.vectors/
 
 # Embedded git repos (managed separately)
 projects/Disertation/All_In_One/repo_remote/
+projects/Disertation/*.zip
 projects/Internship-Finder/uk-internships/
 rejected/NSE_ELO/
 rejected/nse-bracket/
