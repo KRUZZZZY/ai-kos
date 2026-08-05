@@ -167,16 +167,30 @@ class ResearchPipeline:
         self,
         search_fn: Optional[Callable] = None,
         review_callback: Optional[Callable] = None,
+        skip_search: bool = False,
     ) -> PipelineState:
         """Execute all steps from the first pending one.
 
         Args:
             search_fn: Callable(sub_question, query) -> List[Dict] for web search.
-                       If omitted, search step is skipped (caller does it externally).
+                       Required unless skip_search=True or raw_findings already in context.
             review_callback: Callable(state) -> bool for human review approval.
                              Returns True to approve, False to reject.
                              If omitted, review step is auto-approved.
+            skip_search: If True, the search step is deliberately skipped.
+                         Use when findings are pre-loaded or search is handled externally.
+
+        Raises:
+            PipelineError: If search_fn is None and skip_search is False
+                          and raw_findings is not already in context.
         """
+        if not skip_search and search_fn is None and "raw_findings" not in self.state.context:
+            raise PipelineError(
+                "search_fn is required for the search step. "
+                "Pass a search function, set skip_search=True, or pre-load raw_findings in context."
+            )
+        self._search_fn = search_fn
+        self._skip_search = skip_search
         self.state.status = "running"
         self._save_state()
 
@@ -238,27 +252,31 @@ class ResearchPipeline:
         self,
         search_fn: Optional[Callable] = None,
         review_callback: Optional[Callable] = None,
+        skip_search: bool = False,
     ) -> PipelineState:
         """Resume a paused or failed pipeline from its last checkpoint.
 
         Same signature as run(). Picks up from the first pending/failed step.
+        On resume, if the pipeline has raw_findings from a previous partial run,
+        search_fn is not required (skip_search is auto-detected).
         """
+        # If raw_findings exist from a prior run, search can be skipped
+        if not skip_search and search_fn is None and "raw_findings" in self.state.context:
+            skip_search = True
+
         # Reset status from paused/failed to running for retry
         if self.state.status in ("awaiting_review", "failed"):
-            # Find the step we're resuming from
             next_step = self._next_pending_step()
             if next_step:
                 step = self.state.steps[next_step]
                 if step.status == "paused":
-                    # Review step — proceed with existing review_callback
                     pass
                 elif step.status == "failed":
-                    # Reset attempts for a fresh retry cycle on resume
                     step.attempts = 0
             self.state.status = "running"
             self._save_state()
 
-        return self.run(search_fn=search_fn, review_callback=review_callback)
+        return self.run(search_fn=search_fn, review_callback=review_callback, skip_search=skip_search)
 
     def _execute_step(
         self,
@@ -295,11 +313,16 @@ class ResearchPipeline:
 
     def _step_search(self, search_fn: Optional[Callable]) -> list:
         """Execute web searches for each sub-question."""
-        if search_fn is None:
-            logger.info("Pipeline: no search_fn provided — skipping search step")
+        if getattr(self, '_skip_search', False):
+            logger.info("Pipeline: search step deliberately skipped (skip_search=True)")
             if "raw_findings" not in self.state.context:
                 self.state.context["raw_findings"] = []
             return self.state.context.get("raw_findings", [])
+
+        if search_fn is None:
+            raise PipelineError(
+                "search_fn is required — pass a search function or set skip_search=True"
+            )
 
         sub_questions = self.state.context.get("sub_questions", [])
         queries = self.state.context.get("search_queries", [])

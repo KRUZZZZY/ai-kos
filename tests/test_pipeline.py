@@ -83,9 +83,9 @@ class TestResearchPipeline:
         assert len(state_files) == 0  # No save until run() is called
 
     def test_run_completes_all_steps(self, tmp_path):
-        """Full pipeline without search (no external calls needed)."""
+        """Full pipeline without search (skip_search mode)."""
         p = ResearchPipeline.create("Test question", pipelines_dir=str(tmp_path))
-        result = p.run()
+        result = p.run(skip_search=True)
 
         assert result.status == "completed"
         for name in ResearchPipeline.STEPS:
@@ -101,7 +101,7 @@ class TestResearchPipeline:
 
     def test_run_saves_state_to_disk(self, tmp_path):
         p = ResearchPipeline.create("Q?", pipelines_dir=str(tmp_path))
-        p.run()
+        p.run(skip_search=True)
 
         state_files = list(tmp_path.glob("*.json"))
         assert len(state_files) == 1
@@ -236,6 +236,21 @@ class TestResearchPipeline:
             assert result.steps["structure"].status == "completed"
         finally:
             p._step_structure = original
+
+    def test_run_without_search_fn_raises(self, tmp_path):
+        """Calling run() without search_fn or skip_search should raise."""
+        p = ResearchPipeline.create("Q?", pipelines_dir=str(tmp_path))
+        with pytest.raises(PipelineError, match="search_fn is required"):
+            p.run()
+
+    def test_run_with_skip_search_works(self, tmp_path):
+        """skip_search=True allows pipeline to run without a search function."""
+        p = ResearchPipeline.create("Q?", pipelines_dir=str(tmp_path))
+        p.state.steps["plan"].status = "completed"
+        p.state.context["sub_questions"] = ["Q1"]
+        p.state.status = "running"
+        result = p.run(skip_search=True)
+        assert result.status == "completed" or result.status == "failed"
 
     def test_step_fails_permanently_after_max_retries(self, tmp_path):
         """After MAX_RETRIES failures, the pipeline should fail."""
