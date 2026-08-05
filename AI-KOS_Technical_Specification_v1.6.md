@@ -351,10 +351,117 @@ decay:
 
 ---
 
-## 14. Version History
+## 14. Article Index Cache
+
+### 14.1 Design
+
+`_ArticleIndex` is an in-memory cache of slug→filepath + slug→frontmatter mappings. It replaces per-call filesystem scans with O(1) dictionary lookups. Built once on first access, incrementally updated on writes.
+
+### 14.2 Lifecycle
+
+- **Build:** First call to any function that reads articles triggers a single `rglob("*.md")` scan of `knowledge/`. YAML frontmatter is parsed and cached.
+- **Update:** `create_article()`, `update_article()`, and `delete_article()` call `index.upsert()` or `index.remove()` — no full rebuild needed.
+- **Invalidate:** `_refresh_index()` forces a full rebuild on next access (for external file changes).
+
+### 14.3 Consumers
+
+- `_slug_path(slug)` — O(1) filepath lookup (was O(n) rglob per call)
+- `list_articles()` — returns from cache (was O(n) YAML parse every call)
+- `stats()` — computed from cached frontmatter (was O(n) filesystem scan)
+- `find_merge_candidates()` — iterates cached dict, not filesystem
+
+### 14.4 Scaling
+
+At 71 articles the improvement is imperceptible. At 500 it eliminates noticeable latency. At 5000 it prevents catastrophic degradation — `list_articles()` goes from 5000 YAML parses to zero.
+
+---
+
+## 15. Schema Migration System
+
+### 15.1 Design
+
+Articles are markdown files, not SQL rows. Migrations are pure-Python transforms: `(frontmatter_dict, body_text) → (frontmatter_dict, body_text)`. Each migration is registered with a version number and applied in order.
+
+### 15.2 Registration
+
+```python
+from ai_kos.migrate import register
+
+@register(version=2, name="add_new_field")
+def _add_new_field(fm, body):
+    fm["new_field"] = "default_value"
+    return fm, body
+```
+
+Migrations are sorted by version and applied sequentially. The `schema_version` field in each article's frontmatter tracks which migrations have been applied.
+
+### 15.3 Execution
+
+- **Idempotent:** Checking `fm.get("schema_version", 0) >= target_version` before applying prevents double-runs.
+- **Atomic writes:** `tempfile + os.replace` ensures no partial writes if the process crashes.
+- **Dry-run:** `run_migrations(dry_run=True)` previews changes without writing.
+- **CLI:** `ai-kos migrate [--dry-run]`
+- **MCP:** `ai_kos_migrate` tool
+
+### 15.4 Built-in Migrations
+
+| Version | Name | Description |
+|---------|------|-------------|
+| 1 | add_schema_version | Adds `schema_version: 1` to articles without it (baseline) |
+
+### 15.5 Adding a Migration
+
+1. Increment `CURRENT_SCHEMA_VERSION` in `migrate.py`
+2. Write a transform function decorated with `@register(version=N, name="...")`
+3. The function receives `(frontmatter_dict, body_str)` and returns `(frontmatter_dict, body_str)`
+4. Run `ai-kos migrate --dry-run` to preview
+5. Run `ai-kos migrate` to apply
+
+---
+
+## 16. MCP Server Async Architecture
+
+### 16.1 Problem
+
+The MCP server runs on an asyncio event loop. All 15 tool handlers were called synchronously inside an async function — every `yaml.safe_load()`, file read, and linker scan blocked the event loop. One slow article search would block all concurrent agent requests.
+
+### 16.2 Solution
+
+All blocking I/O is offloaded to a thread pool via `asyncio.to_thread()` (Python 3.9+ stdlib). The `handle_call_tool` handler extracts tool dispatch into a pure sync function `_dispatch_tool()` and calls it via:
+
+```python
+result = await asyncio.to_thread(_dispatch_tool, name, arguments)
+```
+
+This is the recommended pattern from Python docs and the Temporal SDK. No rewrite of the sync article/search code needed — just a thread-pool wrapper in the server layer.
+
+### 16.3 Tool Inventory (15 tools)
+
+| Tool | Thread-pool? | Reason |
+|------|-------------|--------|
+| ai_kos_ingest | Yes | PDF/DOCX extraction |
+| ai_kos_create | Yes | YAML parse + file write + linker trigger |
+| ai_kos_search | Yes | TF-IDF index scan |
+| ai_kos_read | Yes | File read + YAML parse |
+| ai_kos_link | Yes | O(n²) article scan |
+| ai_kos_list | Yes | Article listing |
+| ai_kos_merge_candidates | Yes | Keyword overlap computation |
+| ai_kos_templates | No | Pure in-memory dict |
+| ai_kos_graph | Yes | Graph export |
+| ai_kos_compare | Yes | TF-IDF comparison |
+| ai_kos_stats | Yes | Stats from index |
+| ai_kos_clean | Yes | Filesystem operations |
+| ai_kos_research_plan | Yes | Plan generation |
+| ai_kos_research_persist | Yes | Article creation |
+| ai_kos_migrate | Yes | Bulk filesystem writes |
+
+---
+
+## 17. Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.6.1 | 2026-08-05 | Article index cache, async MCP server (asyncio.to_thread), schema migration system, schema_version field. Performance + architecture fixes. |
 | 1.6.0 | 2026-08-05 | Pipeline, SemanticSearch, TaskQueue, Bindings modules. Repo split. |
 | 1.5.0 | 2026-08-04 | Deep research pipeline. MCP server (14 tools). 48 articles. |
 | 1.0-1.4 | 2026-07 | Initial builds, microservice architecture (deprecated). |

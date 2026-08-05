@@ -171,11 +171,8 @@ class SearchIndex:
 
     def search(self, query: str, top_k: int = 10, article_type: Optional[str] = None) -> List[dict]:
         """Full-text search with TF-IDF scoring + keyword match bonus. Returns ranked results with snippets."""
-        if not self.docs:
-            self.build()
-
         query_tokens = tokenize(query)
-        if not query_tokens:
+        if not query_tokens or not self.docs:
             return []
 
         # Compute query TF-IDF vector
