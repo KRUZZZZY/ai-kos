@@ -21,7 +21,12 @@ summary: 'Watts–Strogatz model: start from ring lattice, rewire edges with pro
   β. Produces small-world networks with high clustering AND short path lengths for
   β∈[0.01,0.1].'
 related:
+- barabasi-albert-model
+- erdos-renyi-model
+- graph-theory-basics
 - network-metrics
+- random-graph-dissertation-mission
+- random-graph-dissertation-notes
 - random-graph-model-comparison
 - random-graph-models
 provenance:
@@ -34,3 +39,6 @@ tags:
 ---
 
 The Watts–Strogatz model interpolates between a regular ring lattice (β=0) and an Erdős–Rényi random graph (β=1). Construction: start with n vertices in a ring, each connected to k nearest neighbours (k/2 per side). Then rewire each edge with probability β: replace one endpoint with a uniformly random vertex, avoiding duplicates and self-loops. At β=0: regular lattice with high clustering C₀=3(k-2)/[4(k-1)] but long paths L₀≈n/(2k). At β=1: random graph with short paths but low clustering C≈k/n. The small-world window: for β∈[0.01,0.1], the network simultaneously maintains C(β)/C₀>0.5 AND L(β)/L₀<0.5. This is the 'small-world' regime — high clustering (like a lattice) with short paths (like a random graph). Published by Watts & Strogatz in Nature (1998), it explained how social networks, neural networks, and power grids can have both properties. The model revealed that very few random 'shortcut' edges suffice to drastically reduce path length while preserving local clustering.
+
+## Related
+[[barabasi-albert-model]] [[erdos-renyi-model]] [[graph-theory-basics]] [[network-metrics]] [[random-graph-dissertation-mission]] [[random-graph-dissertation-notes]] [[random-graph-model-comparison]] [[random-graph-models]]

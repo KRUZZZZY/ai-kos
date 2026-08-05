@@ -20,7 +20,12 @@ keywords:
 - project
 summary: ELO rating system for Overwatch Championship Series (OWCS) esports. Scrapes
   Liquipedia for match data, computes ELO ratings, maintains a database.
-related: []
+related:
+- cs375-revision-app-mission
+- internship-finder-mission
+- ma308-coursework-mission
+- railway-crossing-cs313-mission
+- random-graph-dissertation-mission
 provenance:
 - inbox/OWCS elo/
 retrieval_count: 0
@@ -47,3 +52,6 @@ Python-based system with a SQLite database for persistent rating storage. A Liqu
 - Computes accurate ELO ratings with configurable K-factor
 - Maintains historical rating database with match-level granularity
 - Bot logs scraping activity and errors for monitoring
+
+## Related
+[[cs375-revision-app-mission]] [[internship-finder-mission]] [[ma308-coursework-mission]] [[railway-crossing-cs313-mission]] [[random-graph-dissertation-mission]]

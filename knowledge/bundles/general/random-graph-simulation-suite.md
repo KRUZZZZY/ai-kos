@@ -22,9 +22,29 @@ keywords:
 summary: 'How the Random Graph Simulation Suite works: generates ER/WS/BA graphs,
   computes metrics, stores results in SQLite, and produces publication-quality figures.'
 related:
+- ai-kos
+- ai-kos-mission
+- ai-kos-plan
+- article-types-guide
+- creation-protocol
+- docling-graph-research
+- durable-execution-research
+- harden-aws-ssm-jump-host
+- hybrid-search-research
+- ingest-file
+- langgraph-orchestration-research
+- memsearch-claude-memory-research
 - networkx-implementation-notes
+- obsidian-graph-idea
+- oss-consolidation-strategy
+- process-articles-backup-skills
+- processing-inbox-with-taskqueue
+- random-graph-dissertation-mission
 - random-graph-dissertation-notes
 - run-random-graph-suite
+- session-end-protocol
+- session-writeback
+- taskqueue-how-it-works
 provenance:
 - projects/Disertation/Writing/Material/README.md
 retrieval_count: 0
@@ -44,3 +64,6 @@ The simulation suite is a single Python script (random_graphs.py) with three mod
 - metrics = compute_metrics(G)  # {'avg_degree': 5.95, 'clustering': 0.056, 'avg_path_length': 2.64}
 - save_run('erdos_renyi', {'n': 1000, 'p': 0.001}, metrics)
 - Results viewable via: sqlite3 random_graphs.db 'SELECT * FROM runs ORDER BY clustering DESC LIMIT 10'
+
+## Related
+[[ai-kos]] [[ai-kos-mission]] [[ai-kos-plan]] [[article-types-guide]] [[creation-protocol]] [[docling-graph-research]] [[durable-execution-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[ingest-file]] [[langgraph-orchestration-research]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[process-articles-backup-skills]] [[processing-inbox-with-taskqueue]] [[random-graph-dissertation-mission]] [[random-graph-dissertation-notes]] [[run-random-graph-suite]] [[session-end-protocol]] [[session-writeback]] [[taskqueue-how-it-works]]

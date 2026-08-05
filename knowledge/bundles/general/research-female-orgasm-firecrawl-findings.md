@@ -24,6 +24,9 @@ summary: 'Raw research findings from Firecrawl deep research on female orgasm: 1
   anorgasmia), with 6 full-text PMC papers scraped.'
 related:
 - deep-research-pipeline-workflow
+- female-orgasm-research-synthesis
+- research-what-are-the-key-neurophysiological-mechanisms-of
+- what-are-the-key-neurophysiological-mechanism
 provenance:
 - inbox/female-orgasm-research-findings.md
 - Firecrawl API v2 search + scrape
@@ -66,3 +69,6 @@ tags:
 - https://pmc.ncbi.nlm.nih.gov/articles/PMC10303466/
 - https://www.sciencedirect.com/science/article/pii/S0015028202029667
 - https://pmc.ncbi.nlm.nih.gov/articles/PMC2861501/
+
+## Related
+[[deep-research-pipeline-workflow]] [[female-orgasm-research-synthesis]] [[research-what-are-the-key-neurophysiological-mechanisms-of]] [[what-are-the-key-neurophysiological-mechanism]]

@@ -24,6 +24,7 @@ summary: 'Research synthesis on female orgasm across 6 dimensions: brain imaging
   hormonal regulation, orgasm types, evolutionary theories, measurement methods, and
   anorgasmia management. Based on 12 Firecrawl sources + 6 PMC papers.'
 related:
+- research-female-orgasm-firecrawl-findings
 - research-what-are-the-key-neurophysiological-mechanisms-of
 - what-are-the-key-neurophysiological-mechanism
 provenance:
@@ -56,3 +57,6 @@ Vaginal photoplethysmography (VPA) is the gold-standard physiological measure si
 SSRI/SNRI antidepressants are the leading iatrogenic cause (serotonergic inhibition of spinal orgasm reflex). Directed masturbation is first-line behavioral treatment with strong evidence. Comprehensive management includes psychoeducation, sensate focus, vibrator therapy, mindfulness CBT, bupropion augmentation, and pelvic floor physiotherapy. Prevalence: 10-15% lifelong.
 
 *Sources: 12 URLs across 6 research dimensions, Firecrawl live search + scrape.*
+
+## Related
+[[research-female-orgasm-firecrawl-findings]] [[research-what-are-the-key-neurophysiological-mechanisms-of]] [[what-are-the-key-neurophysiological-mechanism]]

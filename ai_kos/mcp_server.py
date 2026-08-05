@@ -5,7 +5,7 @@ Tools:
   ai_kos_create  — Create a new knowledge article (AI-simplified version)
   ai_kos_search  — Hybrid semantic search + keyword search
   ai_kos_read    — Read an article by slug
-  ai_kos_link    — Run auto-linker (≥3 shared keywords → [[wikilinks]])
+  ai_kos_link    — Run auto-linker (≥2 shared keywords → [[wikilinks]])
   ai_kos_list    — List articles, filter by type/keyword
   ai_kos_merge_candidates — Find articles with high keyword overlap with a given slug
   ai_kos_templates — Show all 7 article templates with prompts
@@ -83,8 +83,13 @@ TOOLS = [
     ),
     types.Tool(
         name="ai_kos_link",
-        description="Run the auto-linker. Scans all articles and creates [[wikilinks]] between any pair sharing >=3 keywords. Also reports merge candidates (>80% keyword overlap).",
-        input_schema={"type": "object", "properties": {}},
+        description="Run the auto-linker. Scans all articles and creates [[wikilinks]] between any pair sharing >=N keywords (configurable via min_overlap, default 2). Also reports merge candidates (>80% keyword overlap).",
+        input_schema={
+            "type": "object",
+            "properties": {
+                "min_overlap": {"type": "integer", "description": "Minimum shared keywords to create a link. Default from config (2). Higher = fewer links (thicker). Lower = more links (weaker)."},
+            },
+        },
     ),
     types.Tool(
         name="ai_kos_list",
@@ -223,7 +228,7 @@ async def handle_call_tool(_ctx, req: types.CallToolRequestParams) -> types.Call
         elif name == "ai_kos_link":
             from ai_kos.linker import link_all
 
-            result = link_all()
+            result = link_all(min_overlap=arguments.get("min_overlap"))
 
         elif name == "ai_kos_list":
             from ai_kos.articles import list_articles
@@ -380,10 +385,15 @@ async def main():
         )
 
 
-if __name__ == "__main__":
+def entrypoint():
+    """Synchronous entry point for console_scripts."""
     import asyncio
 
     asyncio.run(main())
+
+
+if __name__ == "__main__":
+    entrypoint()
 
 
 def _mv(src, dst):

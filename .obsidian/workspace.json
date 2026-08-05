@@ -178,8 +178,16 @@
       "bases:Create new base": false
     }
   },
-  "active": "816abb5df437c961",
+  "active": "c26a7b3f74fd1b94",
   "lastOpenFiles": [
+    "knowledge/bundles/general/configuring-declarative-bindings.md",
+    "knowledge/bundles/general/processing-inbox-with-taskqueue.md",
+    "knowledge/bundles/general/setting-up-semantic-search.md",
+    "knowledge/bundles/general/using-the-research-pipeline.md",
+    "knowledge/bundles/general/declarative-bindings-how-it-works.md",
+    "knowledge/bundles/general/taskqueue-how-it-works.md",
+    "knowledge/bundles/general/semantic-search-how-it-works.md",
+    "knowledge/bundles/general/research-pipeline-how-it-works.md",
     "knowledge/bundles/general/random-graph-model-comparison.md",
     "knowledge/bundles/general/networkx-implementation-notes.md",
     "knowledge/bundles/general/barabasi-albert-model.md",
@@ -217,14 +225,6 @@
     "rejected/CS-313/Train_Cross_Clean/src/README.md",
     "rejected/CS-313/git/README.md",
     "knowledge/bundles/general/ma308-coursework-mission.md",
-    "knowledge/bundles/general/railway-crossing-cs313-mission.md",
-    "knowledge/bundles/general/random-graph-dissertation-mission.md",
-    "projects/CS-313/Train_Cross_Clean/src/README.md",
-    "projects/CS-313/git/README.md",
-    "projects/Disertation/Writing/Material/README.md",
-    "projects/Disertation/All_In_One/repo_remote/README.md",
-    "projects/Disertation/Presentation/presentation_cheat_sheet.md",
-    "projects/Disertation/Watts_Strogatz/README.md",
-    "projects/Disertation/All_In_One/README.md"
+    "knowledge/bundles/general/railway-crossing-cs313-mission.md"
   ]
 }

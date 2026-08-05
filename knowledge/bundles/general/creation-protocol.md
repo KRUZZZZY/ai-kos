@@ -21,8 +21,26 @@ keywords:
 summary: Standard protocol for creating any AI-KOS knowledge article. Follow this
   every time you preserve knowledge.
 related:
+- ai-kos
+- ai-kos-mission
+- ai-kos-plan
 - article-types-guide
+- auto-linker
 - choosing-keywords
+- docling-graph-research
+- durable-execution-research
+- harden-aws-ssm-jump-host
+- hybrid-search-research
+- ingest-file
+- keyword-system
+- langgraph-orchestration-research
+- memsearch-claude-memory-research
+- networkx-implementation-notes
+- obsidian-graph-idea
+- oss-consolidation-strategy
+- process-articles-backup-skills
+- random-graph-simulation-suite
+- run-random-graph-suite
 - session-end-protocol
 - session-writeback
 provenance:
@@ -51,4 +69,4 @@ A concise, well-linked knowledge article is created in the database. It is conne
 8. VERIFY: Call ai_kos_read(slug) to confirm the article was created. Check the 'related' field contains expected wikilinks. If links are missing, check keyword overlap with related articles.
 
 ## Related
-[[article-types-guide]] [[choosing-keywords]]
+[[ai-kos]] [[ai-kos-mission]] [[ai-kos-plan]] [[article-types-guide]] [[auto-linker]] [[choosing-keywords]] [[docling-graph-research]] [[durable-execution-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[ingest-file]] [[keyword-system]] [[langgraph-orchestration-research]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[process-articles-backup-skills]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[session-end-protocol]] [[session-writeback]]

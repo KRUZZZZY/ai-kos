@@ -26,6 +26,7 @@ summary: Functional neuroimaging studies, particularly fMRI, have revealed that 
   of orgasm
 related:
 - female-orgasm-research-synthesis
+- research-female-orgasm-firecrawl-findings
 - research-what-are-the-key-neurophysiological-mechanisms-of
 provenance:
 - deep-research-synthesis
@@ -56,3 +57,6 @@ A notable finding from Wise et al. (2017) is the absence of significant regional
 ## Clinical Implications for Anorgasmia
 
 Female orgasmic disorder affects 10-28% of women and involves complex interplay of neurobiological, vascular, hormonal, and psychosocial factors. Recent research highlights the importance of interoceptive awareness and cognitive-affective processing. No FDA-approved pharmacotherapy exists specifically for female orgasmic disorder, but oxytocin-based interventions (intra-vaginal and intranasal) show preliminary promise. Future directions include standardization of clitoral blood flow assessment and quantitative sensory testing as diagnostic tools.
+
+## Related
+[[female-orgasm-research-synthesis]] [[research-female-orgasm-firecrawl-findings]] [[research-what-are-the-key-neurophysiological-mechanisms-of]]

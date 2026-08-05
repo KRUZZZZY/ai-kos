@@ -22,6 +22,8 @@ summary: Research on replacing custom embedding/indexing microservices with Qdra
   native FastEmbed for in-process dense+sparse vector generation.
 related:
 - hybrid-search-research
+- oss-consolidation-strategy
+- semantic-search-how-it-works
 provenance:
 - inbox/Leverage Open Source For Coding Efficiency.md
 retrieval_count: 0
@@ -48,3 +50,6 @@ tags:
 ## Sources
 - Qdrant FastEmbed docs
 - Qdrant Query API v1.10 release notes
+
+## Related
+[[hybrid-search-research]] [[oss-consolidation-strategy]] [[semantic-search-how-it-works]]

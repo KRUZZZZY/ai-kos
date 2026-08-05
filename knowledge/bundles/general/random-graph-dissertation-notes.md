@@ -23,12 +23,17 @@ summary: 'Undergraduate dissertation: simulating Erdős–Rényi, Watts–Stroga
   Barabási–Albert random graph models in Python with NetworkX and SQLite. Key findings
   on phase transitions, small-world windows, and power-law degree distributions.'
 related:
+- barabasi-albert-model
+- erdos-renyi-model
+- graph-theory-basics
+- network-metrics
 - networkx-implementation-notes
 - random-graph-dissertation-mission
 - random-graph-model-comparison
 - random-graph-models
 - random-graph-simulation-suite
 - run-random-graph-suite
+- watts-strogatz-model
 provenance:
 - projects/Disertation/Writing/dissertation.txt
 retrieval_count: 0
@@ -58,3 +63,6 @@ tags:
 - Barabási & Albert, Science 286, 509-512 (1999)
 - Erdős & Rényi, Publicationes Mathematicae Debrecen 6, 290-297 (1959)
 - NetworkX: Hagberg, Schult, Swart, SciPy 2008
+
+## Related
+[[barabasi-albert-model]] [[erdos-renyi-model]] [[graph-theory-basics]] [[network-metrics]] [[networkx-implementation-notes]] [[random-graph-dissertation-mission]] [[random-graph-model-comparison]] [[random-graph-models]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[watts-strogatz-model]]

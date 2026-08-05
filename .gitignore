@@ -37,6 +37,15 @@ projects/*/.venv/
 projects/*/build/
 projects/*/dist/
 
+# Test artifacts
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Generated runtime files
+knowledge/taskqueue.db
+knowledge/.vectors/
+
 # Embedded git repos (managed separately)
 projects/Disertation/All_In_One/repo_remote/
 projects/Internship-Finder/uk-internships/

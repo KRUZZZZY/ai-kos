@@ -10,12 +10,12 @@ embedding:
   dense_dim: 768
 
 paths:
-  knowledge_dir: knowledge
-  inbox_dir: inbox
-  archive_dir: archive
-  rejected_dir: rejected
-  projects_dir: projects
-  templates_dir: templates
+  knowledge_dir: /home/kruzzzzy/Documents/AI_KOS_PROJECT/knowledge
+  inbox_dir: /home/kruzzzzy/Documents/AI_KOS_PROJECT/inbox
+  archive_dir: /home/kruzzzzy/Documents/AI_KOS_PROJECT/archive
+  rejected_dir: /home/kruzzzzy/Documents/AI_KOS_PROJECT/rejected
+  projects_dir: /home/kruzzzzy/Documents/AI_KOS_PROJECT/projects
+  templates_dir: /home/kruzzzzy/Documents/AI_KOS_PROJECT/templates
 
 linking:
   min_keyword_overlap: 3

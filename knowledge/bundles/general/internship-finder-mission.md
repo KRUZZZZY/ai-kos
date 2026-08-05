@@ -19,7 +19,12 @@ keywords:
 - scraping
 summary: Project to find and track UK internships. Scrapes listings, sends notifications,
   maintains application status.
-related: []
+related:
+- cs375-revision-app-mission
+- ma308-coursework-mission
+- owcs-elo-mission
+- railway-crossing-cs313-mission
+- random-graph-dissertation-mission
 provenance:
 - inbox/Internship-Finder/
 retrieval_count: 0
@@ -46,3 +51,6 @@ The project uses Python scripts to scrape internship listings from UK job boards
 - Sends email notifications for new matching listings
 - Maintains deduplicated database of opportunities
 - Tracks application status per listing
+
+## Related
+[[cs375-revision-app-mission]] [[ma308-coursework-mission]] [[owcs-elo-mission]] [[railway-crossing-cs313-mission]] [[random-graph-dissertation-mission]]

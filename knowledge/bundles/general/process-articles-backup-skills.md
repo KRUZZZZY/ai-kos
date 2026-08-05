@@ -22,16 +22,28 @@ summary: Why AI-KOS process articles serve as permanent backups for Hermes skill
 related:
 - ai-kos
 - ai-kos-mission
+- ai-kos-plan
 - article-types-guide
+- configuring-declarative-bindings
+- creation-protocol
 - docling-graph-research
 - durable-execution-research
 - harden-aws-ssm-jump-host
+- hybrid-search-research
 - ingest-file
+- langgraph-orchestration-research
 - memsearch-claude-memory-research
+- networkx-implementation-notes
 - obsidian-graph-idea
+- oss-consolidation-strategy
+- processing-inbox-with-taskqueue
+- random-graph-simulation-suite
 - run-random-graph-suite
 - session-end-protocol
 - session-writeback
+- setting-up-semantic-search
+- using-the-research-pipeline
+- wire-ai-kos-mcp-server
 provenance:
 - hermes-agent-skill.md
 - ai-kos-spec-v1.5.md
@@ -51,4 +63,4 @@ Hermes has a curator system that tracks skill usage. Skills created by agents th
 - Discovered a 12-step procedure for resetting the GPU after a CUDA OOM → create process article, no need for a Hermes skill
 
 ## Related
-[[ai-kos]] [[ai-kos-mission]] [[article-types-guide]] [[ingest-file]] [[obsidian-graph-idea]] [[session-writeback]]
+[[ai-kos]] [[ai-kos-mission]] [[ai-kos-plan]] [[article-types-guide]] [[configuring-declarative-bindings]] [[creation-protocol]] [[docling-graph-research]] [[durable-execution-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[ingest-file]] [[langgraph-orchestration-research]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[processing-inbox-with-taskqueue]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[session-end-protocol]] [[session-writeback]] [[setting-up-semantic-search]] [[using-the-research-pipeline]] [[wire-ai-kos-mcp-server]]

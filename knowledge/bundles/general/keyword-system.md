@@ -20,6 +20,7 @@ summary: How AI-KOS keywords drive automatic article linking and duplicate detec
 related:
 - auto-linker
 - choosing-keywords
+- creation-protocol
 provenance:
 - ai-kos-linker.py
 - ai-kos-schemas.py
@@ -41,4 +42,4 @@ Every AI-KOS article has 3-8 lowercase keywords in its YAML frontmatter. Keyword
 - ingest-file article: [ingest, file, ai-kos, pdf, docx, extract] → shares only 'ai-kos' with ai-kos article = 1 shared → no link (good, they're different enough)
 
 ## Related
-[[auto-linker]] [[choosing-keywords]]
+[[auto-linker]] [[choosing-keywords]] [[creation-protocol]]

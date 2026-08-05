@@ -22,9 +22,25 @@ keywords:
 summary: 'Dissertation project: simulation, visualization, and analysis of Erdős–Rényi,
   Watts–Strogatz, and Barabási–Albert random graph models with SQLite backend.'
 related:
+- ai-kos-architecture-modernization-mission
+- ai-kos-mission
+- barabasi-albert-model
+- cs375-revision-app-mission
+- deep-research-tool-mission
+- erdos-renyi-model
+- graph-theory-basics
+- internship-finder-mission
+- ma308-coursework-mission
+- network-metrics
+- networkx-implementation-notes
+- owcs-elo-mission
+- railway-crossing-cs313-mission
 - random-graph-dissertation-notes
 - random-graph-model-comparison
 - random-graph-models
+- random-graph-simulation-suite
+- run-random-graph-suite
+- watts-strogatz-model
 provenance:
 - inbox/Disertation/
 retrieval_count: 0
@@ -52,3 +68,6 @@ Python-based simulation suite with three model implementations: Erdős–Rényi 
 - Full metric computation verified against theoretical predictions
 - SQLite backend storing and querying simulation results
 - Visualization of degree distributions, clustering, and path lengths
+
+## Related
+[[ai-kos-architecture-modernization-mission]] [[ai-kos-mission]] [[barabasi-albert-model]] [[cs375-revision-app-mission]] [[deep-research-tool-mission]] [[erdos-renyi-model]] [[graph-theory-basics]] [[internship-finder-mission]] [[ma308-coursework-mission]] [[network-metrics]] [[networkx-implementation-notes]] [[owcs-elo-mission]] [[railway-crossing-cs313-mission]] [[random-graph-dissertation-notes]] [[random-graph-model-comparison]] [[random-graph-models]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[watts-strogatz-model]]

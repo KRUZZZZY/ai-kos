@@ -23,8 +23,18 @@ summary: 'Step-by-step procedure for running the AI-KOS deep research pipeline: 
   the web via Firecrawl, write results to inbox, ingest files, create knowledge articles,
   run auto-linker, and clean up.'
 related:
+- ai-kos
+- ai-kos-mission
+- deep-research-tool-mission
+- docling-graph-research
+- ingest-file
+- processing-inbox-with-taskqueue
 - research-female-orgasm-firecrawl-findings
+- research-pipeline-how-it-works
+- session-2026-08-04-ai-kos-build
+- taskqueue-how-it-works
 - test-pipeline-verification
+- using-the-research-pipeline
 provenance:
 - session-2026-08-04-hermes
 - ai_kos/deep_research.py
@@ -52,3 +62,6 @@ New knowledge articles appear in the AI-KOS knowledge base, searchable and auto-
 6. Watch limits: summary max 300 chars. Slug must match ^[a-z0-9]+(?:-[a-z0-9]+)*$ — strip all punctuation. Title max 200 chars. Keywords 3-8 lowercase.
 7. Auto-link: create_article runs the linker automatically. Verify with ai_kos_search that new articles appear in results. If articles don't cross-link, check that they share >=3 keywords.
 8. Clean: run ai_kos_clean to move inbox files to archive/. Verify inbox is empty.
+
+## Related
+[[ai-kos]] [[ai-kos-mission]] [[deep-research-tool-mission]] [[docling-graph-research]] [[ingest-file]] [[processing-inbox-with-taskqueue]] [[research-female-orgasm-firecrawl-findings]] [[research-pipeline-how-it-works]] [[session-2026-08-04-ai-kos-build]] [[taskqueue-how-it-works]] [[test-pipeline-verification]] [[using-the-research-pipeline]]

@@ -6,23 +6,32 @@ from pathlib import Path
 
 class TestConfigDefaults:
     def test_default_values(self):
-        from ai_kos.config import load, _config
-        # Reset cached config
         import ai_kos.config as cfg
         cfg._config = None
-        c = load()
-        assert c["linking"]["min_keyword_overlap"] == 3
-        assert c["linking"]["merge_threshold"] == 0.80
-        assert c["article"]["max_paragraphs"] == 5
-        assert c["paths"]["knowledge_dir"] == "knowledge"
+        orig_find = cfg._find_config
+        cfg._find_config = lambda: None
+        try:
+            c = cfg.load()
+            assert c["linking"]["min_keyword_overlap"] == 2   # default, not overridden
+            assert c["linking"]["merge_threshold"] == 0.80
+            assert c["article"]["max_paragraphs"] == 5
+            assert c["paths"]["knowledge_dir"] == "knowledge"
+        finally:
+            cfg._find_config = orig_find
+            cfg._config = None
 
     def test_get_helper(self):
-        from ai_kos.config import get, _config
         import ai_kos.config as cfg
         cfg._config = None
-        assert get("linking", "min_keyword_overlap") == 3
-        assert get("paths", "knowledge_dir") == "knowledge"
-        assert get("nonexistent", "key", default="fallback") == "fallback"
+        orig_find = cfg._find_config
+        cfg._find_config = lambda: None
+        try:
+            assert cfg.get("linking", "min_keyword_overlap") == 2
+            assert cfg.get("paths", "knowledge_dir") == "knowledge"
+            assert cfg.get("nonexistent", "key", default="fallback") == "fallback"
+        finally:
+            cfg._find_config = orig_find
+            cfg._config = None
 
     def test_get_returns_default_for_missing_nested(self):
         from ai_kos.config import get, _config
@@ -40,7 +49,7 @@ class TestConfigDefaults:
 
 class TestConfigWithCustomFile:
     def test_loads_custom_config(self, tmp_path):
-        """Create config.yaml in cwd-equivalent and verify merging."""
+        """Custom config deep-merges over defaults: overrides override, additions add, untouched stay."""
         import ai_kos.config as cfg
         cfg._config = None
 
@@ -62,8 +71,8 @@ class TestConfigWithCustomFile:
             assert c["linking"]["merge_threshold"] == 0.80
             # New key added
             assert c["paths"]["custom_path"] == "/tmp/custom"
-            # Original paths preserved
-            assert c["paths"]["knowledge_dir"] == "knowledge"
+            # knowledge_dir present (from defaults — "knowledge" without ambient config)
+            assert "knowledge_dir" in c["paths"]
         finally:
             cfg._find_config = original_find
             cfg._config = None

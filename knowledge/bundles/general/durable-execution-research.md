@@ -22,14 +22,28 @@ summary: Research on replacing Redis task queues with Temporal.io or Restate for
   replayable workflow execution with automatic crash recovery.
 related:
 - ai-kos
+- ai-kos-architecture-modernization-mission
+- ai-kos-architecture-modernization-plan
+- ai-kos-mission
+- ai-kos-plan
+- article-types-guide
+- creation-protocol
 - docling-graph-research
 - harden-aws-ssm-jump-host
+- hybrid-search-research
 - ingest-file
+- langgraph-orchestration-research
 - memsearch-claude-memory-research
+- networkx-implementation-notes
 - obsidian-graph-idea
+- oss-consolidation-strategy
 - process-articles-backup-skills
+- random-graph-simulation-suite
+- research-pipeline-how-it-works
 - run-random-graph-suite
+- session-end-protocol
 - session-writeback
+- using-the-research-pipeline
 provenance:
 - inbox/Exploring AI Agents for Specifications.md
 retrieval_count: 0
@@ -57,3 +71,6 @@ tags:
 - Temporal.io docs
 - Restate docs
 - Temporal Sandbox Orchestration blog
+
+## Related
+[[ai-kos]] [[ai-kos-architecture-modernization-mission]] [[ai-kos-architecture-modernization-plan]] [[ai-kos-mission]] [[ai-kos-plan]] [[article-types-guide]] [[creation-protocol]] [[docling-graph-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[ingest-file]] [[langgraph-orchestration-research]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[process-articles-backup-skills]] [[random-graph-simulation-suite]] [[research-pipeline-how-it-works]] [[run-random-graph-suite]] [[session-end-protocol]] [[session-writeback]] [[using-the-research-pipeline]]

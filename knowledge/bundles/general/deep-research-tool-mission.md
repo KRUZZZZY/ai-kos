@@ -23,6 +23,18 @@ summary: Build an autonomous deep research tool for AI-KOS that decomposes quest
   findings as articles.
 related:
 - ai-deep-research-systems
+- ai-kos-architecture-modernization-mission
+- ai-kos-mission
+- deep-research-enterprise-implications
+- deep-research-pipeline-workflow
+- gemini-deep-research-architecture
+- openai-deep-research-architecture
+- perplexity-sonar-deep-research
+- random-graph-dissertation-mission
+- research-pipeline-how-it-works
+- session-2026-08-04-ai-kos-build
+- stanford-storm-framework
+- using-the-research-pipeline
 provenance:
 - ai_kos/deep_research.py
 retrieval_count: 0
@@ -48,3 +60,6 @@ The deep research engine follows a 4-phase pipeline inspired by the best feature
 - Cross-reference correctly identifies confirm/contradict/extend/new relationships
 - Research findings persist as linked AI-KOS articles
 - Full pipeline: plan → search → cross-reference → persist works end-to-end
+
+## Related
+[[ai-deep-research-systems]] [[ai-kos-architecture-modernization-mission]] [[ai-kos-mission]] [[deep-research-enterprise-implications]] [[deep-research-pipeline-workflow]] [[gemini-deep-research-architecture]] [[openai-deep-research-architecture]] [[perplexity-sonar-deep-research]] [[random-graph-dissertation-mission]] [[research-pipeline-how-it-works]] [[session-2026-08-04-ai-kos-build]] [[stanford-storm-framework]] [[using-the-research-pipeline]]

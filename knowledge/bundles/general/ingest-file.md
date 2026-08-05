@@ -20,13 +20,24 @@ keywords:
 summary: Step-by-step procedure for ingesting any file into the AI-KOS knowledge database.
 related:
 - ai-kos
+- ai-kos-mission
+- ai-kos-plan
+- article-types-guide
+- creation-protocol
+- deep-research-pipeline-workflow
 - docling-graph-research
 - durable-execution-research
 - harden-aws-ssm-jump-host
+- hybrid-search-research
+- langgraph-orchestration-research
 - memsearch-claude-memory-research
+- networkx-implementation-notes
 - obsidian-graph-idea
+- oss-consolidation-strategy
 - process-articles-backup-skills
+- random-graph-simulation-suite
 - run-random-graph-suite
+- session-end-protocol
 - session-writeback
 provenance:
 - ai-kos-skill.md
@@ -54,4 +65,4 @@ File is converted into a concise, linked knowledge article with auto-generated w
 8. Call ai_kos_create(type, data) to persist the article
 
 ## Related
-[[ai-kos]] [[obsidian-graph-idea]] [[process-articles-backup-skills]] [[session-writeback]]
+[[ai-kos]] [[ai-kos-mission]] [[ai-kos-plan]] [[article-types-guide]] [[creation-protocol]] [[deep-research-pipeline-workflow]] [[docling-graph-research]] [[durable-execution-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[langgraph-orchestration-research]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[process-articles-backup-skills]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[session-end-protocol]] [[session-writeback]]

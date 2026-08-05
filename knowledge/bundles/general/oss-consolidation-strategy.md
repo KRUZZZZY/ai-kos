@@ -23,8 +23,28 @@ summary: 'Strategy for replacing custom AI-KOS microservices with mature open-so
   alternatives: Qdrant Alloy for retrieval, docling-graph for ingestion, LangGraph
   for orchestration, Temporal/Restate for durable execution.'
 related:
+- ai-kos
+- ai-kos-architecture-modernization-mission
+- ai-kos-architecture-modernization-plan
+- ai-kos-mission
+- ai-kos-plan
+- article-types-guide
+- creation-protocol
+- docling-graph-research
+- durable-execution-research
+- harden-aws-ssm-jump-host
 - hybrid-search-research
+- ingest-file
 - langgraph-orchestration-research
+- memsearch-claude-memory-research
+- networkx-implementation-notes
+- obsidian-graph-idea
+- process-articles-backup-skills
+- qdrant-alloy-research
+- random-graph-simulation-suite
+- run-random-graph-suite
+- session-end-protocol
+- session-writeback
 provenance:
 - inbox/Exploring AI Agents for Specifications.md
 - inbox/Leverage Open Source For Coding Efficiency.md
@@ -35,3 +55,6 @@ tags:
 ---
 
 AI-KOS v1.5 originally specified 10-12 microservices (ingestion, consolidation, retrieval, governance, router, scheduler, health, session, graph, CI). Running this many services on consumer hardware creates CPU context-switching overhead, memory fragmentation, and network serialization bottlenecks. The open-source ecosystem now offers mature alternatives that replace or consolidate these services. Qdrant with FastEmbed replaces the separate embedding-service and sparse-index-service by generating dense and sparse vectors in-process. Docling-graph replaces the custom ingestion pipeline with layout-aware parsing, structure-aware chunking, and direct OKF-compatible output. LangGraph replaces the governance-service state machine with directed cyclic graphs and native checkpointing. Temporal or Restate replace the Redis task queue with durable execution, automatic retry, and crash recovery. This consolidation reduces the service count from 10+ to 3-4 and eliminates custom state management, queue coordination, and embedding microservices.
+
+## Related
+[[ai-kos]] [[ai-kos-architecture-modernization-mission]] [[ai-kos-architecture-modernization-plan]] [[ai-kos-mission]] [[ai-kos-plan]] [[article-types-guide]] [[creation-protocol]] [[docling-graph-research]] [[durable-execution-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[ingest-file]] [[langgraph-orchestration-research]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[process-articles-backup-skills]] [[qdrant-alloy-research]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[session-end-protocol]] [[session-writeback]]

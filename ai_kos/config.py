@@ -12,7 +12,7 @@ _DEFAULT_CONFIG = {
     "reranker": {"enabled": True, "model": "ms-marco-MiniLM-L-6-v2", "candidate_k": 30, "top_n": 8},
     "search": {"default_top_k": 50, "fusion": "rrf"},
     "decay": {"lambda_stable": 0.01, "lambda_moderate": 0.05, "lambda_volatile": 0.15, "critical": 0.3},
-    "linking": {"min_keyword_overlap": 3, "merge_threshold": 0.80},
+    "linking": {"min_keyword_overlap": 2, "merge_threshold": 0.80},
     "article": {"max_paragraphs": 5, "min_keywords": 3, "max_keywords": 8, "summary_max_chars": 300},
     "paths": {
         "inbox_dir": "inbox", "knowledge_dir": "knowledge", "templates_dir": "templates",

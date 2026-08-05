@@ -22,15 +22,24 @@ summary: Protocol for preserving what Hermes learns during a session as permanen
   AI-KOS knowledge articles.
 related:
 - ai-kos
+- ai-kos-mission
+- ai-kos-plan
+- article-types-guide
 - creation-protocol
 - docling-graph-research
 - durable-execution-research
 - harden-aws-ssm-jump-host
+- hybrid-search-research
 - ingest-file
+- langgraph-orchestration-research
 - memsearch-claude-memory-research
+- networkx-implementation-notes
 - obsidian-graph-idea
+- oss-consolidation-strategy
 - process-articles-backup-skills
+- random-graph-simulation-suite
 - run-random-graph-suite
+- session-2026-08-04-ai-kos-build
 - session-end-protocol
 provenance:
 - ai-kos-creation-protocol.md
@@ -69,4 +78,4 @@ All durable knowledge from the session is preserved as interconnected AI-KOS art
 7. CLEAN UP: Archive any notes that became base articles by removing them or updating their type.
 
 ## Related
-[[ai-kos]] [[ingest-file]] [[obsidian-graph-idea]] [[process-articles-backup-skills]]
+[[ai-kos]] [[ai-kos-mission]] [[ai-kos-plan]] [[article-types-guide]] [[creation-protocol]] [[docling-graph-research]] [[durable-execution-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[ingest-file]] [[langgraph-orchestration-research]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[process-articles-backup-skills]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[session-2026-08-04-ai-kos-build]] [[session-end-protocol]]

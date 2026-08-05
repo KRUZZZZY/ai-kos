@@ -23,16 +23,25 @@ summary: Step-by-step instructions for installing and running the Random Graph S
   Suite from the dissertation project.
 related:
 - ai-kos
+- ai-kos-mission
+- ai-kos-plan
+- article-types-guide
+- creation-protocol
 - docling-graph-research
 - durable-execution-research
 - harden-aws-ssm-jump-host
+- hybrid-search-research
 - ingest-file
+- langgraph-orchestration-research
 - memsearch-claude-memory-research
 - networkx-implementation-notes
 - obsidian-graph-idea
+- oss-consolidation-strategy
 - process-articles-backup-skills
+- random-graph-dissertation-mission
 - random-graph-dissertation-notes
 - random-graph-simulation-suite
+- session-end-protocol
 - session-writeback
 provenance:
 - projects/Disertation/Writing/Material/README.md
@@ -61,3 +70,6 @@ Simulation suite generates 3,010 graphs across ER, WS, and BA models. Results st
 6. To customise: edit DB_PATH and OUT_DIR constants near the top of the script
 7. For programmatic use: from random_graphs import make_erdos_renyi, compute_metrics, save_run
 8. Query results: sqlite3 random_graphs.db 'SELECT * FROM runs WHERE model="erdos_renyi" ORDER BY avg_path_length ASC LIMIT 10'
+
+## Related
+[[ai-kos]] [[ai-kos-mission]] [[ai-kos-plan]] [[article-types-guide]] [[creation-protocol]] [[docling-graph-research]] [[durable-execution-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[ingest-file]] [[langgraph-orchestration-research]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[process-articles-backup-skills]] [[random-graph-dissertation-mission]] [[random-graph-dissertation-notes]] [[random-graph-simulation-suite]] [[session-end-protocol]] [[session-writeback]]

@@ -4,7 +4,7 @@ import tempfile, os, yaml
 from pathlib import Path
 from ai_kos.linker import (
     _parse_article, _calculate_links, link_all, ArticleMeta,
-    MIN_KEYWORD_OVERLAP, MERGE_THRESHOLD,
+    MERGE_THRESHOLD,
 )
 
 
@@ -72,10 +72,18 @@ class TestCalculateLinks:
         assert links["a"] == {"b"}
         assert links["b"] == {"a"}
 
-    def test_two_shared_no_link(self):
+    def test_two_shared_creates_link(self):
         articles = [
             ArticleMeta("a", "", {"x", "y"}, []),
             ArticleMeta("b", "", {"x", "y", "z"}, []),
+        ]
+        links, merges = _calculate_links(articles)
+        assert links["a"] == {"b"}
+
+    def test_one_shared_no_link(self):
+        articles = [
+            ArticleMeta("a", "", {"x", "p"}, []),
+            ArticleMeta("b", "", {"x", "q", "r"}, []),
         ]
         links, merges = _calculate_links(articles)
         assert links["a"] == set()
@@ -108,6 +116,37 @@ class TestCalculateLinks:
         assert links["a"] == {"b", "c"}
         assert links["b"] == {"a", "c"}
         assert links["c"] == {"a", "b"}
+
+    def test_variable_overlap_threshold(self):
+        articles = [
+            ArticleMeta("a", "", {"x", "y"}, []),
+            ArticleMeta("b", "", {"x", "y", "z"}, []),
+        ]
+        # At min_overlap=3, 2 shared keywords → no link
+        links3, _ = _calculate_links(articles, min_overlap=3)
+        assert links3["a"] == set()
+        # At min_overlap=2, 2 shared keywords → link
+        links2, _ = _calculate_links(articles, min_overlap=2)
+        assert links2["a"] == {"b"}
+        # At min_overlap=1, even 1 shared → link
+        articles2 = [
+            ArticleMeta("a", "", {"x", "p"}, []),
+            ArticleMeta("b", "", {"x", "q"}, []),
+        ]
+        links1, _ = _calculate_links(articles2, min_overlap=1)
+        assert links1["a"] == {"b"}
+
+    def test_link_all_with_explicit_overlap(self, tmp_path):
+        kd = tmp_path / "knowledge"
+        kd.mkdir()
+        make_article(str(kd / "a.md"), "a", ["python", "ai"])
+        make_article(str(kd / "b.md"), "b", ["python", "ai", "testing"])
+        # min_overlap=3: 2 shared → no link
+        r3 = link_all(str(kd), min_overlap=3)
+        assert r3["total_links_created"] == 0
+        # min_overlap=2: 2 shared → link
+        r2 = link_all(str(kd), min_overlap=2)
+        assert r2["total_links_created"] == 2
 
 
 class TestLinkAll:

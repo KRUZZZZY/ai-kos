@@ -22,14 +22,27 @@ summary: Research on replacing the custom ingestion pipeline with IBM's docling-
   for layout-aware PDF/Office parsing and structure-aware chunking.
 related:
 - ai-kos
+- ai-kos-mission
+- ai-kos-plan
+- article-types-guide
+- creation-protocol
+- deep-research-pipeline-workflow
 - durable-execution-research
 - harden-aws-ssm-jump-host
+- hybrid-search-research
 - ingest-file
+- langgraph-orchestration-research
 - memsearch-claude-memory-research
+- networkx-implementation-notes
 - obsidian-graph-idea
+- oss-consolidation-strategy
 - process-articles-backup-skills
+- processing-inbox-with-taskqueue
+- random-graph-simulation-suite
 - run-random-graph-suite
+- session-end-protocol
 - session-writeback
+- taskqueue-how-it-works
 provenance:
 - inbox/Exploring AI Agents for Specifications.md
 - inbox/Leverage Open Source For Coding Efficiency.md
@@ -58,3 +71,6 @@ tags:
 ## Sources
 - IBM docling-graph GitHub
 - Docling documentation
+
+## Related
+[[ai-kos]] [[ai-kos-mission]] [[ai-kos-plan]] [[article-types-guide]] [[creation-protocol]] [[deep-research-pipeline-workflow]] [[durable-execution-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[ingest-file]] [[langgraph-orchestration-research]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[process-articles-backup-skills]] [[processing-inbox-with-taskqueue]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[session-end-protocol]] [[session-writeback]] [[taskqueue-how-it-works]]

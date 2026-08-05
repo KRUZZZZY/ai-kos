@@ -20,7 +20,12 @@ keywords:
 - project
 summary: Java/JavaFX revision application for Swansea CS-375 module. Scrollable flashcard-style
   revision tool with themes and module content.
-related: []
+related:
+- internship-finder-mission
+- ma308-coursework-mission
+- owcs-elo-mission
+- railway-crossing-cs313-mission
+- random-graph-dissertation-mission
 provenance:
 - inbox/Year 3 Swansea/CS-375/Revision App/
 retrieval_count: 0
@@ -47,3 +52,6 @@ Built with Java and JavaFX for cross-platform desktop deployment. Uses Gradle fo
 - Multiple theme support (dark, light, grey)
 - Content covering CS-375 Logic and MA-308 topics
 - Cross-platform distribution via JAR + launcher scripts
+
+## Related
+[[internship-finder-mission]] [[ma308-coursework-mission]] [[owcs-elo-mission]] [[railway-crossing-cs313-mission]] [[random-graph-dissertation-mission]]

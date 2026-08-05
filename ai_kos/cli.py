@@ -26,7 +26,8 @@ def cmd_read(args):
 
 def cmd_link(args):
     from ai_kos.linker import link_all
-    print(json.dumps(link_all(), indent=2))
+    result = link_all(min_overlap=args.min_overlap)
+    print(json.dumps(result, indent=2))
 
 def cmd_list(args):
     from ai_kos.articles import list_articles
@@ -155,7 +156,9 @@ def main():
     pr = sub.add_parser("read", help="Read an article by slug")
     pr.add_argument("slug"); pr.set_defaults(func=cmd_read)
 
-    pl = sub.add_parser("link", help="Run auto-linker"); pl.set_defaults(func=cmd_link)
+    pl = sub.add_parser("link", help="Run auto-linker")
+    pl.add_argument("--min-overlap", type=int, default=None, help="Minimum shared keywords to create a link (default: from config, 2)")
+    pl.set_defaults(func=cmd_link)
 
     pls = sub.add_parser("list", help="List articles")
     pls.add_argument("-t","--type"); pls.add_argument("--keyword"); pls.set_defaults(func=cmd_list)

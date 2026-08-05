@@ -21,9 +21,31 @@ keywords:
 summary: Complete guide to the 7 AI-KOS article types — when to use each, what fields
   are required, and how they interconnect.
 related:
+- ai-kos
+- ai-kos-architecture-modernization-plan
+- ai-kos-mission
 - ai-kos-plan
+- configuring-declarative-bindings
 - creation-protocol
+- docling-graph-research
+- durable-execution-research
+- harden-aws-ssm-jump-host
+- hybrid-search-research
+- ingest-file
+- langgraph-orchestration-research
+- memsearch-claude-memory-research
+- networkx-implementation-notes
+- obsidian-graph-idea
+- oss-consolidation-strategy
 - process-articles-backup-skills
+- processing-inbox-with-taskqueue
+- random-graph-simulation-suite
+- run-random-graph-suite
+- session-end-protocol
+- session-writeback
+- setting-up-semantic-search
+- using-the-research-pipeline
+- wire-ai-kos-mcp-server
 provenance:
 - ai-kos-schemas.py
 retrieval_count: 0
@@ -47,4 +69,4 @@ AI-KOS has 7 article types, each with a specific purpose and template. BASE: For
 - Starting a new project → mission article defining it
 
 ## Related
-[[ai-kos-plan]] [[creation-protocol]] [[process-articles-backup-skills]]
+[[ai-kos]] [[ai-kos-architecture-modernization-plan]] [[ai-kos-mission]] [[ai-kos-plan]] [[configuring-declarative-bindings]] [[creation-protocol]] [[docling-graph-research]] [[durable-execution-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[ingest-file]] [[langgraph-orchestration-research]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[process-articles-backup-skills]] [[processing-inbox-with-taskqueue]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[session-end-protocol]] [[session-writeback]] [[setting-up-semantic-search]] [[using-the-research-pipeline]] [[wire-ai-kos-mcp-server]]

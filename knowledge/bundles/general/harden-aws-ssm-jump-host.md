@@ -24,14 +24,25 @@ summary: 'Step-by-step procedure for hardening an AWS Systems Manager jump host:
   instance type, prevent OOM kills, reap stale SSH tunnels, add memory monitoring.'
 related:
 - ai-kos
+- ai-kos-mission
+- ai-kos-plan
+- article-types-guide
+- creation-protocol
 - docling-graph-research
 - durable-execution-research
+- hybrid-search-research
 - ingest-file
+- langgraph-orchestration-research
 - memsearch-claude-memory-research
+- networkx-implementation-notes
 - obsidian-graph-idea
+- oss-consolidation-strategy
 - process-articles-backup-skills
+- random-graph-simulation-suite
 - run-random-graph-suite
+- session-end-protocol
 - session-writeback
+- tailscale-vs-headscale
 provenance:
 - inbox/Tailscale vs Headscale Evaluation.md
 retrieval_count: 0
@@ -55,3 +66,6 @@ Jump host survives memory pressure without OOM-killing the SSM agent. Stale tunn
 5. Configure CloudWatch alarm: mem_used_percent > 80 for 5 minutes → notify
 6. Optional: remove public IP, deploy VPC Endpoints for SSM (ssm, ssmmessages, ec2messages) — ~$21/month
 7. Optional: scale further to t3.medium (4GB) if 2GB is insufficient for 13+ concurrent users
+
+## Related
+[[ai-kos]] [[ai-kos-mission]] [[ai-kos-plan]] [[article-types-guide]] [[creation-protocol]] [[docling-graph-research]] [[durable-execution-research]] [[hybrid-search-research]] [[ingest-file]] [[langgraph-orchestration-research]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[process-articles-backup-skills]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[session-end-protocol]] [[session-writeback]] [[tailscale-vs-headscale]]

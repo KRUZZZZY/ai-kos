@@ -21,9 +21,31 @@ summary: Project mission for AI-KOS — a self-building knowledge database with 
   and smart ingestion.
 related:
 - ai-kos
+- ai-kos-architecture-modernization-mission
 - ai-kos-plan
+- article-types-guide
+- creation-protocol
+- deep-research-pipeline-workflow
+- deep-research-tool-mission
+- docling-graph-research
+- durable-execution-research
+- harden-aws-ssm-jump-host
 - hybrid-search-research
+- ingest-file
+- langgraph-orchestration-research
+- memsearch-claude-memory-research
+- networkx-implementation-notes
+- obsidian-graph-idea
+- oss-consolidation-strategy
 - process-articles-backup-skills
+- random-graph-dissertation-mission
+- random-graph-simulation-suite
+- run-random-graph-suite
+- session-2026-08-04-ai-kos-build
+- session-end-protocol
+- session-writeback
+- test-pipeline-verification
+- wire-ai-kos-mcp-server
 provenance:
 - specification-v1.5.md
 retrieval_count: 0
@@ -52,4 +74,4 @@ The system has four layers: (1) Ingestion — parses any file format and extract
 - Merge candidates are correctly identified at >80% overlap
 
 ## Related
-[[ai-kos]] [[ai-kos-plan]] [[hybrid-search-research]] [[process-articles-backup-skills]]
+[[ai-kos]] [[ai-kos-architecture-modernization-mission]] [[ai-kos-plan]] [[article-types-guide]] [[creation-protocol]] [[deep-research-pipeline-workflow]] [[deep-research-tool-mission]] [[docling-graph-research]] [[durable-execution-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[ingest-file]] [[langgraph-orchestration-research]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[process-articles-backup-skills]] [[random-graph-dissertation-mission]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[session-2026-08-04-ai-kos-build]] [[session-end-protocol]] [[session-writeback]] [[test-pipeline-verification]] [[wire-ai-kos-mcp-server]]

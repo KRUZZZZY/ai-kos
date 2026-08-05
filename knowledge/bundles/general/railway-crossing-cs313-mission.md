@@ -20,7 +20,12 @@ keywords:
 - project
 summary: Safety-critical railway level crossing control system in SPARK Ada with formal
   verification. Fail-safe design for Swansea CS-313 module.
-related: []
+related:
+- cs375-revision-app-mission
+- internship-finder-mission
+- ma308-coursework-mission
+- owcs-elo-mission
+- random-graph-dissertation-mission
 provenance:
 - inbox/CS-313/
 retrieval_count: 0
@@ -45,3 +50,6 @@ SPARK Ada implementation with formal verification of safety properties. Monitors
 - Fail-safe behavior proven — any sensor fault → barriers down
 - Dynamic danger distance calculation accounts for speed and braking
 - No single point of failure in the control logic
+
+## Related
+[[cs375-revision-app-mission]] [[internship-finder-mission]] [[ma308-coursework-mission]] [[owcs-elo-mission]] [[random-graph-dissertation-mission]]

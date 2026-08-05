@@ -18,6 +18,8 @@ keywords:
 - auto-link
 summary: Smoke test article to verify the full AI-KOS pipeline is operational.
 related:
+- ai-kos
+- ai-kos-mission
 - deep-research-pipeline-workflow
 provenance:
 - /tmp/test_ingest.md
@@ -28,3 +30,6 @@ tags:
 ---
 
 AI-KOS is a self-building knowledge database with auto-linking. This article was created as part of an end-to-end pipeline test.
+
+## Related
+[[ai-kos]] [[ai-kos-mission]] [[deep-research-pipeline-workflow]]

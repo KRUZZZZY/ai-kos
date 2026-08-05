@@ -29,6 +29,7 @@ related:
 - gemini-deep-research-architecture
 - openai-deep-research-architecture
 - perplexity-sonar-deep-research
+- stanford-storm-framework
 provenance:
 - inbox/AI Deep Research Systems Analysis.md
 retrieval_count: 0
@@ -38,3 +39,6 @@ tags:
 ---
 
 Modern AI deep research systems have moved beyond single-turn RAG to autonomous agent loops capable of multi-step task decomposition, dynamic search query adjustment, iterative source parsing, sandbox-based quantitative execution, and multi-document synthesis. Four major architectures exist. Google Gemini Deep Research: asynchronous 60-minute execution via Interactions API, native Google Workspace integration (zero-ETL — reads Gmail, Drive, Docs, Sheets directly), Collaborative Planning state machine for human-in-the-loop checkpoint before browsing. OpenAI Deep Research: RL-trained o3-deep-research model with internal self-reflection loops, 3-stage consumer pipeline (clarification → expansion → execution), Responses API for developers with web_search, file_search, code_interpreter tools. Perplexity Sonar: span-level indexing for atomic text retrieval, 20-50 parallel search queries, 200+ sources per report, delivers in under 2 minutes at ~$0.40/run. Stanford STORM: multi-perspective persona generation (5 expert personas per topic, each generating 5-10 sub-questions), perspective-driven Q&A, outline synthesis, and full article drafting. STORM achieves +25% structural organization and +10% topic coverage vs baseline models.
+
+## Related
+[[deep-research-enterprise-implications]] [[deep-research-tool-mission]] [[gemini-deep-research-architecture]] [[openai-deep-research-architecture]] [[perplexity-sonar-deep-research]] [[stanford-storm-framework]]

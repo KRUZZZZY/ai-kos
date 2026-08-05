@@ -20,9 +20,25 @@ summary: Development plan for AI-KOS v1.5 — self-building knowledge database w
   auto-linking.
 related:
 - ai-kos
+- ai-kos-architecture-modernization-plan
 - ai-kos-mission
 - article-types-guide
+- creation-protocol
+- docling-graph-research
+- durable-execution-research
+- harden-aws-ssm-jump-host
 - hybrid-search-research
+- ingest-file
+- langgraph-orchestration-research
+- memsearch-claude-memory-research
+- networkx-implementation-notes
+- obsidian-graph-idea
+- oss-consolidation-strategy
+- process-articles-backup-skills
+- random-graph-simulation-suite
+- run-random-graph-suite
+- session-end-protocol
+- session-writeback
 provenance:
 - specification-v1.5.md
 retrieval_count: 0
@@ -51,4 +67,4 @@ Build a self-building knowledge database that auto-links articles and detects du
 - Keyword extraction quality depends on AI summarization
 
 ## Related
-[[ai-kos]] [[ai-kos-mission]] [[article-types-guide]] [[hybrid-search-research]]
+[[ai-kos]] [[ai-kos-architecture-modernization-plan]] [[ai-kos-mission]] [[article-types-guide]] [[creation-protocol]] [[docling-graph-research]] [[durable-execution-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[ingest-file]] [[langgraph-orchestration-research]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[process-articles-backup-skills]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[session-end-protocol]] [[session-writeback]]

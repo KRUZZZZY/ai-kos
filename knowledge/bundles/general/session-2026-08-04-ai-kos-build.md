@@ -20,7 +20,14 @@ keywords:
 - session-end
 summary: 'Session where AI-KOS v1.5 was built from spec to fully functional: 49 articles,
   202 links, 14 MCP tools, 11 Python modules.'
-related: []
+related:
+- ai-kos-mission
+- deep-research-pipeline-workflow
+- deep-research-tool-mission
+- research-pipeline-how-it-works
+- session-end-protocol
+- session-writeback
+- using-the-research-pipeline
 provenance:
 - session-2026-08-04
 retrieval_count: 0
@@ -30,3 +37,6 @@ tags:
 ---
 
 Built AI-KOS v1.5 from specification to fully functional knowledge database. Created 7 article types with Pydantic schemas. Built auto-linking engine, TF-IDF search, MCP server (14 tools), deep research tool, Obsidian vault integration, D3.js graph visualizer. Ingested 9 research documents into 49 interlinked articles. Organized 6 projects. Created session-end skill for preserving knowledge permanently.
+
+## Related
+[[ai-kos-mission]] [[deep-research-pipeline-workflow]] [[deep-research-tool-mission]] [[research-pipeline-how-it-works]] [[session-end-protocol]] [[session-writeback]] [[using-the-research-pipeline]]

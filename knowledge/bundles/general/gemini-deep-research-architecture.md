@@ -24,8 +24,11 @@ summary: 'Architectural analysis of Google Gemini Deep Research: Interactions AP
   and 5-tool ecosystem.'
 related:
 - ai-deep-research-systems
+- deep-research-enterprise-implications
+- deep-research-tool-mission
 - openai-deep-research-architecture
 - perplexity-sonar-deep-research
+- stanford-storm-framework
 provenance:
 - inbox/AI Deep Research Systems Analysis.md
 retrieval_count: 0
@@ -49,3 +52,6 @@ tags:
 ## Sources
 - Google AI Developers docs
 - MindStudio Gemini Deep Research API guide
+
+## Related
+[[ai-deep-research-systems]] [[deep-research-enterprise-implications]] [[deep-research-tool-mission]] [[openai-deep-research-architecture]] [[perplexity-sonar-deep-research]] [[stanford-storm-framework]]

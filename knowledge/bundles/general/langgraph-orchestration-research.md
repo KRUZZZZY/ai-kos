@@ -20,7 +20,25 @@ keywords:
 summary: Research on replacing custom governance/router services with LangGraph's
   directed cyclic graph execution with native checkpointing.
 related:
+- ai-kos
+- ai-kos-mission
+- ai-kos-plan
+- article-types-guide
+- creation-protocol
+- docling-graph-research
+- durable-execution-research
+- harden-aws-ssm-jump-host
+- hybrid-search-research
+- ingest-file
+- memsearch-claude-memory-research
+- networkx-implementation-notes
+- obsidian-graph-idea
 - oss-consolidation-strategy
+- process-articles-backup-skills
+- random-graph-simulation-suite
+- run-random-graph-suite
+- session-end-protocol
+- session-writeback
 provenance:
 - inbox/Exploring AI Agents for Specifications.md
 - inbox/Leverage Open Source For Coding Efficiency.md
@@ -48,3 +66,6 @@ tags:
 ## Sources
 - LangGraph documentation
 - LangChain persistence framework docs
+
+## Related
+[[ai-kos]] [[ai-kos-mission]] [[ai-kos-plan]] [[article-types-guide]] [[creation-protocol]] [[docling-graph-research]] [[durable-execution-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[ingest-file]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[process-articles-backup-skills]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[session-end-protocol]] [[session-writeback]]

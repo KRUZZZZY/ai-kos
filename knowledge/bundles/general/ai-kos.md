@@ -21,16 +21,26 @@ summary: AI-KOS is a self-building knowledge database that auto-links articles s
 related:
 - ai-kos-mission
 - ai-kos-plan
+- article-types-guide
+- creation-protocol
+- deep-research-pipeline-workflow
 - docling-graph-research
 - durable-execution-research
 - harden-aws-ssm-jump-host
 - hybrid-search-research
 - ingest-file
+- langgraph-orchestration-research
 - memsearch-claude-memory-research
+- networkx-implementation-notes
 - obsidian-graph-idea
+- oss-consolidation-strategy
 - process-articles-backup-skills
+- random-graph-simulation-suite
 - run-random-graph-suite
+- session-end-protocol
 - session-writeback
+- test-pipeline-verification
+- wire-ai-kos-mcp-server
 provenance:
 - specification-v1.5.md
 retrieval_count: 0
@@ -42,4 +52,4 @@ tags:
 AI-KOS is a self-building knowledge database integrated with Hermes. It accepts any file format (PDF, DOCX, MD, TXT), extracts the text, and creates simplified .md articles. Each article has 3-8 keywords. When two articles share 3 or more keywords, the system automatically creates [[wikilinks]] between them. New articles are compared against existing ones — if keyword overlap exceeds 80%, they are flagged as merge candidates. Articles are capped at about 5 paragraphs to prevent context bloat when loaded into LLM prompts.
 
 ## Related
-[[ai-kos-mission]] [[ai-kos-plan]] [[hybrid-search-research]] [[ingest-file]] [[obsidian-graph-idea]] [[process-articles-backup-skills]] [[session-writeback]]
+[[ai-kos-mission]] [[ai-kos-plan]] [[article-types-guide]] [[creation-protocol]] [[deep-research-pipeline-workflow]] [[docling-graph-research]] [[durable-execution-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[ingest-file]] [[langgraph-orchestration-research]] [[memsearch-claude-memory-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[process-articles-backup-skills]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[session-end-protocol]] [[session-writeback]] [[test-pipeline-verification]] [[wire-ai-kos-mcp-server]]

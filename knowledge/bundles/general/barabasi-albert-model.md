@@ -21,8 +21,14 @@ summary: 'Barabási–Albert model: growth by preferential attachment. New nodes
   to existing nodes with probability proportional to degree, producing scale-free
   networks with P(k)∝k^(-3).'
 related:
+- erdos-renyi-model
+- graph-theory-basics
+- network-metrics
+- random-graph-dissertation-mission
+- random-graph-dissertation-notes
 - random-graph-model-comparison
 - random-graph-models
+- watts-strogatz-model
 provenance:
 - projects/Disertation/Writing/dissertation.txt
 - projects/Disertation/Reading/RemcoVol1.pdf
@@ -33,3 +39,6 @@ tags:
 ---
 
 The Barabási–Albert model generates scale-free networks through two mechanisms: growth and preferential attachment. Start with a small seed graph of m₀ nodes. At each step, add one new node with m edges connecting to existing nodes. Connection probability is proportional to degree: P(connect to v) = d(v)/∑d(u). Rich-get-richer dynamics. This produces power-law degree distributions P(k)∝k^(-τ) with τ≈3, confirmed by mean-field theory. Mean degree ⟨k⟩=2m. The network has hubs — nodes with very high degree that dominate connectivity. The model explains the scale-free structure of the World-Wide Web (pages link to popular pages), citation networks (papers cite well-cited papers), and protein interaction networks. Finite-size effects: at small n, the power-law tail is truncated. Aggregating over many runs at larger n stabilises the tail. Single runs at n=30 show tail truncated at degree 20 with OLS slope far from -3. The BA model, published by Barabási & Albert in Science (1999), revolutionised network science by showing how simple growth rules produce complex structure.
+
+## Related
+[[erdos-renyi-model]] [[graph-theory-basics]] [[network-metrics]] [[random-graph-dissertation-mission]] [[random-graph-dissertation-notes]] [[random-graph-model-comparison]] [[random-graph-models]] [[watts-strogatz-model]]

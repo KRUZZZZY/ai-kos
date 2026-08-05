@@ -1,4 +1,4 @@
-"""AI-KOS linker — automatic [[wikilink]] creation between articles sharing ≥3 keywords.
+"""AI-KOS linker — automatic [[wikilink]] creation between articles sharing >=N keywords.
 
 Scans all knowledge articles, finds pairs with keyword overlap, and creates
 bidirectional [[wikilinks]] in the `related` frontmatter field of each article.
@@ -14,8 +14,16 @@ from dataclasses import dataclass
 
 logger = logging.getLogger("ai-kos.linker")
 
-MIN_KEYWORD_OVERLAP = 3       # articles with ≥3 shared keywords get linked
-MERGE_THRESHOLD = 0.80        # >80% keyword overlap → flag as merge candidate
+MERGE_THRESHOLD = 0.80  # >80% keyword overlap → flag as merge candidate
+
+
+def _get_default_overlap() -> int:
+    """Read min_keyword_overlap from config, falling back to 2."""
+    try:
+        from ai_kos.config import get
+        return get("linking", "min_keyword_overlap", default=2)
+    except Exception:
+        return 2
 
 
 @dataclass
@@ -51,8 +59,8 @@ def _parse_article(filepath: str) -> ArticleMeta | None:
         return None
 
 
-def _calculate_links(articles: List[ArticleMeta]) -> Dict[str, Set[str]]:
-    """For each article, compute the slugs it should link to (≥3 shared keywords)."""
+def _calculate_links(articles: List[ArticleMeta], min_overlap: int = 2) -> tuple:
+    """For each article, compute the slugs it should link to (>= min_overlap shared keywords)."""
     new_links: Dict[str, Set[str]] = {a.slug: set() for a in articles}
     merge_candidates: List[Tuple[str, str, float]] = []
 
@@ -60,7 +68,7 @@ def _calculate_links(articles: List[ArticleMeta]) -> Dict[str, Set[str]]:
         for j in range(i + 1, len(articles)):
             b = articles[j]
             overlap = a.keywords & b.keywords
-            if len(overlap) >= MIN_KEYWORD_OVERLAP:
+            if len(overlap) >= min_overlap:
                 new_links[a.slug].add(b.slug)
                 new_links[b.slug].add(a.slug)
 
@@ -76,8 +84,11 @@ def _calculate_links(articles: List[ArticleMeta]) -> Dict[str, Set[str]]:
 
 
 def _patch_file(filepath: str, article: ArticleMeta, new_related: List[str]) -> bool:
-    """Update the `related` field in an article's frontmatter."""
+    """Update the `related` field in frontmatter and append [[wikilinks]] to body for Obsidian graph view."""
     try:
+        import re
+        import yaml
+
         with open(filepath, 'r') as f:
             content = f.read()
 
@@ -88,12 +99,20 @@ def _patch_file(filepath: str, article: ArticleMeta, new_related: List[str]) -> 
         if len(parts) < 2:
             return False
 
-        import yaml
         fm = yaml.safe_load(parts[1]) or {}
         fm['related'] = new_related
 
         new_fm = yaml.dump(fm, default_flow_style=False, sort_keys=False, allow_unicode=True).strip()
         body = parts[2] if len(parts) > 2 else ""
+
+        # Strip existing ## Related section so we don't duplicate
+        body = re.sub(r'\n## Related\n.*', '', body, flags=re.DOTALL)
+
+        # Append wikilinks for Obsidian graph view
+        if new_related:
+            wikilinks = ' '.join(f'[[{slug}]]' for slug in sorted(new_related))
+            body = body.rstrip() + f'\n\n## Related\n{wikilinks}\n'
+
         new_content = f"---\n{new_fm}\n---{body}"
 
         with open(filepath, 'w') as f:
@@ -104,8 +123,16 @@ def _patch_file(filepath: str, article: ArticleMeta, new_related: List[str]) -> 
         return False
 
 
-def link_all(knowledge_dir: str = "knowledge") -> dict:
-    """Scan all articles, compute links, and patch files. Idempotent."""
+def link_all(knowledge_dir: str = "knowledge", min_overlap: int | None = None) -> dict:
+    """Scan all articles, compute links, and patch files. Idempotent.
+
+    Args:
+        knowledge_dir: Path to knowledge articles.
+        min_overlap: Shared keyword threshold. Reads config if None, defaults to 2.
+    """
+    if min_overlap is None:
+        min_overlap = _get_default_overlap()
+
     articles = []
     for md in Path(knowledge_dir).rglob("*.md"):
         meta = _parse_article(str(md))
@@ -115,7 +142,7 @@ def link_all(knowledge_dir: str = "knowledge") -> dict:
     if not articles:
         return {"status": "no_articles", "count": 0}
 
-    new_links, merge_candidates = _calculate_links(articles)
+    new_links, merge_candidates = _calculate_links(articles, min_overlap)
 
     changes = 0
     link_map = {}
@@ -134,6 +161,7 @@ def link_all(knowledge_dir: str = "knowledge") -> dict:
         "articles_changed": changes,
         "total_links_created": sum(len(v) for v in new_links.values()),
         "merge_candidates": [{"a": a, "b": b, "overlap": r} for a, b, r in merge_candidates],
+        "min_overlap_used": min_overlap,
     }
 
 

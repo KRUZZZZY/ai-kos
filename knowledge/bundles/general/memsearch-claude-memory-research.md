@@ -22,13 +22,23 @@ summary: Research on memsearch and Claude Code's native memory hierarchy for sca
   AI-KOS beyond file-system context limits.
 related:
 - ai-kos
+- ai-kos-mission
+- ai-kos-plan
+- article-types-guide
+- creation-protocol
 - docling-graph-research
 - durable-execution-research
 - harden-aws-ssm-jump-host
+- hybrid-search-research
 - ingest-file
+- langgraph-orchestration-research
+- networkx-implementation-notes
 - obsidian-graph-idea
+- oss-consolidation-strategy
 - process-articles-backup-skills
+- random-graph-simulation-suite
 - run-random-graph-suite
+- session-end-protocol
 - session-writeback
 provenance:
 - inbox/Exploring AI Agents for Specifications.md
@@ -56,3 +66,6 @@ tags:
 ## Sources
 - Claude Code memory architecture docs
 - memsearch GitHub
+
+## Related
+[[ai-kos]] [[ai-kos-mission]] [[ai-kos-plan]] [[article-types-guide]] [[creation-protocol]] [[docling-graph-research]] [[durable-execution-research]] [[harden-aws-ssm-jump-host]] [[hybrid-search-research]] [[ingest-file]] [[langgraph-orchestration-research]] [[networkx-implementation-notes]] [[obsidian-graph-idea]] [[oss-consolidation-strategy]] [[process-articles-backup-skills]] [[random-graph-simulation-suite]] [[run-random-graph-suite]] [[session-end-protocol]] [[session-writeback]]

@@ -26,6 +26,7 @@ summary: Functional neuroimaging studies, particularly fMRI, have revealed that 
   of orgasm
 related:
 - female-orgasm-research-synthesis
+- research-female-orgasm-firecrawl-findings
 - what-are-the-key-neurophysiological-mechanism
 provenance:
 - https://pmc.ncbi.nlm.nih.gov/articles/PMC5675825/
@@ -67,3 +68,6 @@ tags:
 - Brain Activity Unique to Orgasm in Women: An fMRI Analysis (ScienceDirect): https://www.sciencedirect.com/science/article/abs/pii/S1743609517313966
 - Female Orgasmic Disorder: Current Understanding and Clinical Approaches: https://pubmed.ncbi.nlm.nih.gov/42314165/
 - The effect of intra-vaginal oxytocin on sexual function in breastfeeding mothers: a randomized triple-blind placebo-controlled trial: https://pmc.ncbi.nlm.nih.gov/articles/PMC8783987/
+
+## Related
+[[female-orgasm-research-synthesis]] [[research-female-orgasm-firecrawl-findings]] [[what-are-the-key-neurophysiological-mechanism]]

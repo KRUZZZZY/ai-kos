@@ -17,7 +17,12 @@ keywords:
 - python
 - project
 summary: 'MA-308 coursework: Python solutions notebook with accompanying PDF documents.'
-related: []
+related:
+- cs375-revision-app-mission
+- internship-finder-mission
+- owcs-elo-mission
+- railway-crossing-cs313-mission
+- random-graph-dissertation-mission
 provenance:
 - inbox/MA-308/
 retrieval_count: 0
@@ -41,3 +46,6 @@ Jupyter notebook (MA308_Python_Solutions.ipynb) containing Python solutions to c
 - All coursework problems solved in Python notebook
 - Solutions documented with explanations
 - Submitted with supporting PDF materials
+
+## Related
+[[cs375-revision-app-mission]] [[internship-finder-mission]] [[owcs-elo-mission]] [[railway-crossing-cs313-mission]] [[random-graph-dissertation-mission]]
