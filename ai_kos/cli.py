@@ -135,6 +135,12 @@ def cmd_research(args):
     plan = plan_research(args.question)
     print(json.dumps(asdict(plan), indent=2, default=str))
 
+def cmd_migrate(args):
+    """Run schema migrations on all articles."""
+    from ai_kos.migrate import run_migrations
+    result = run_migrations(dry_run=args.dry_run)
+    print(json.dumps(result, indent=2, default=str))
+
 def main():
     p = argparse.ArgumentParser("ai-kos", description="AI Knowledge Operating System")
     sub = p.add_subparsers(dest="cmd")
@@ -175,6 +181,10 @@ def main():
 
     pres = sub.add_parser("research", help="Generate a deep research plan from a question")
     pres.add_argument("question", help="The research question"); pres.set_defaults(func=cmd_research)
+
+    pm = sub.add_parser("migrate", help="Run schema migrations on all articles")
+    pm.add_argument("--dry-run", action="store_true", help="Preview changes without writing")
+    pm.set_defaults(func=cmd_migrate)
 
     args = p.parse_args()
     if not args.cmd: p.print_help(); sys.exit(1)

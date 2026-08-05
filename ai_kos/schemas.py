@@ -53,6 +53,7 @@ class _BaseFrontmatter(BaseModel):
     gap: bool = Field(default=False, description="True = known unknown")
     gap_question: Optional[str] = Field(default=None, description="Required when gap=True")
     gap_priority: Optional[float] = Field(default=None, ge=0.0, le=1.0, description="Required when gap=True")
+    schema_version: int = Field(default=1, ge=1, description="Schema version for migration tracking")
 
     @field_validator('keywords')
     @classmethod
