@@ -24,7 +24,21 @@ def _read_text(filepath: str) -> str:
 
 
 def _read_pdf(filepath: str) -> str:
-    """Extract text from PDF. Tries Docling first, then PyPDF2, then pdftotext."""
+    """Extract text from PDF. Tries pymupdf, Docling, PyPDF2, then pdftotext."""
+    # Try pymupdf (fast, reliable, handles most PDFs)
+    try:
+        import fitz
+        doc = fitz.open(filepath)
+        pages = []
+        for page in doc:
+            pages.append(page.get_text())
+        doc.close()
+        return '\n\n'.join(pages)
+    except ImportError:
+        pass
+    except Exception as e:
+        logger.warning(f"pymupdf failed: {e}")
+
     # Try Docling (best quality, preserves layout)
     try:
         from docling.document_converter import DocumentConverter
