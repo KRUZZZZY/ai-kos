@@ -51,7 +51,8 @@ async def test_list_tools():
             "ai_kos_merge_candidates", "ai_kos_templates",
             "ai_kos_graph", "ai_kos_compare", "ai_kos_stats",
             "ai_kos_clean", "ai_kos_research_plan", "ai_kos_research_persist",
-            "ai_kos_migrate",
+            "ai_kos_migrate", "ai_kos_citation", "ai_kos_batch_ingest",
+            "ai_kos_compare_papers", "ai_kos_promote_ready", "ai_kos_reading_stats",
         }
         assert tool_names == expected, f"Missing tools: {expected - tool_names}"
     finally:

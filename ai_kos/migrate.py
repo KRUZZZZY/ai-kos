@@ -17,7 +17,7 @@ from ai_kos.config import get
 
 logger = logging.getLogger("ai-kos.migrate")
 
-CURRENT_SCHEMA_VERSION = 2
+CURRENT_SCHEMA_VERSION = 3
 
 # ── Migration Registry ───────────────────────────────────────────────────────
 
@@ -119,6 +119,19 @@ def _v17_migration(fm: dict, body: str) -> Tuple[dict, str]:
         fm['confidence'] = 0.8
 
     fm['schema_version'] = 2
+    return fm, body
+
+
+@register(version=3, name="v17_paper_ingestion_fields")
+def _v3_migration(fm: dict, body: str) -> Tuple[dict, str]:
+    """Migration v3: Add reading_status, doi, and paper_comparisons fields."""
+    if 'reading_status' not in fm:
+        fm['reading_status'] = 'unread'
+    if 'doi' not in fm:
+        fm['doi'] = None
+    if 'paper_comparisons' not in fm:
+        fm['paper_comparisons'] = []
+    fm['schema_version'] = 3
     return fm, body
 
 

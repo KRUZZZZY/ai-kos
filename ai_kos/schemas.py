@@ -56,6 +56,13 @@ class RelationType(str, Enum):
     CONTRADICTS = "contradicts"
     EXTENDS = "extends"
 
+class ReadingStatus(str, Enum):
+    """How thoroughly a paper has been read and processed."""
+    UNREAD = "unread"
+    SKIMMED = "skimmed"
+    ANNOTATED = "annotated"
+    SYNTHESIZED = "synthesized"
+
 
 # ── Sub-models ─────────────────────────────────────────────────
 
@@ -75,6 +82,12 @@ class VersionEntry(BaseModel):
     at: datetime
     by: str
     note: str
+
+class PaperComparison(BaseModel):
+    """Records a comparison between two papers: agreement, contradiction, or gap."""
+    other_slug: str
+    relationship: str  # "agrees", "contradicts", "extends", "gap"
+    detail: str = ""   # brief explanation of the relationship
 
 
 # ── Default review intervals per article type (days) ───────────
@@ -120,6 +133,10 @@ class _BaseFrontmatter(BaseModel):
     superseded_by: Optional[str] = Field(default=None, description="Slug of successor article")
     # v1.7: Diátaxis
     doc_type: Optional[DocType] = Field(default=None, description="Diátaxis consumption mode")
+    # v1.7: paper ingestion
+    reading_status: ReadingStatus = Field(default=ReadingStatus.UNREAD, description="How thoroughly the paper has been processed")
+    doi: Optional[str] = Field(default=None, description="DOI of the source paper")
+    paper_comparisons: List[PaperComparison] = Field(default_factory=list, description="Relationships to other papers (agrees, contradicts, extends, gap)")
     # v1.7: review cadence
     review_interval_days: Optional[int] = Field(default=None, ge=1, description="Days between reviews (defaults per type)")
     # v1.7: edit history

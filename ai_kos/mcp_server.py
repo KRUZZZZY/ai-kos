@@ -116,6 +116,31 @@ TOOLS = [
         description="Run schema migrations on all articles. Use --dry-run to preview changes without writing. v1.7: migrates to typed relations, lifecycle, provenance enum, usage signals, and review cadence.",
         input_schema={"type": "object", "properties": {"dry_run": {"type": "boolean", "description": "Preview changes without writing", "default": False}}},
     ),
+    types.Tool(
+        name="ai_kos_citation",
+        description="Extract citation metadata (DOI, title, authors, year, journal) from a PDF file using pymupdf + Crossref API.",
+        input_schema={"type": "object", "properties": {"filepath": {"type": "string", "description": "Absolute path to PDF file"}}, "required": ["filepath"]},
+    ),
+    types.Tool(
+        name="ai_kos_batch_ingest",
+        description="Run the full batch paper ingestion pipeline on inbox/: deduplicate, extract text, quality check, similarity check, citation extraction. Use --skip-similarity to skip knowledge-level dedup.",
+        input_schema={"type": "object", "properties": {"skip_similarity": {"type": "boolean", "description": "Skip similarity check", "default": False}}},
+    ),
+    types.Tool(
+        name="ai_kos_compare_papers",
+        description="Compare two research-note articles to find their relationship: agrees, contradicts, extends, gap, or unclassified.",
+        input_schema={"type": "object", "properties": {"slug_a": {"type": "string", "description": "First article slug"}, "slug_b": {"type": "string", "description": "Second article slug"}}, "required": ["slug_a", "slug_b"]},
+    ),
+    types.Tool(
+        name="ai_kos_promote_ready",
+        description="Find topics that have enough research notes (>=5) ready for synthesis into a base article.",
+        input_schema={"type": "object", "properties": {"min_notes": {"type": "integer", "description": "Minimum notes needed (default 5)", "default": 5}}},
+    ),
+    types.Tool(
+        name="ai_kos_reading_stats",
+        description="Get reading status statistics across all research-note articles: how many are unread, skimmed, annotated, synthesized.",
+        input_schema={"type": "object", "properties": {}},
+    ),
 ]
 
 
@@ -225,6 +250,27 @@ def _dispatch_tool(name: str, arguments: dict) -> dict:
     elif name == "ai_kos_migrate":
         from ai_kos.migrate import run_migrations
         return run_migrations(dry_run=arguments.get("dry_run", False))
+
+    elif name == "ai_kos_citation":
+        from ai_kos.citation import extract_citation
+        cit = extract_citation(arguments["filepath"])
+        return {"citation": cit.to_dict(), "author_year": cit.author_year_key()}
+
+    elif name == "ai_kos_batch_ingest":
+        from ai_kos.batch_ingest import ingest_batch
+        return ingest_batch(skip_similarity=arguments.get("skip_similarity", False))
+
+    elif name == "ai_kos_compare_papers":
+        from ai_kos.paper_compare import compare_papers
+        return compare_papers(arguments["slug_a"], arguments["slug_b"])
+
+    elif name == "ai_kos_promote_ready":
+        from ai_kos.paper_compare import promote_ready
+        return {"topics": promote_ready(min_notes=arguments.get("min_notes", 5))}
+
+    elif name == "ai_kos_reading_stats":
+        from ai_kos.paper_compare import reading_status_stats
+        return reading_status_stats()
 
     else:
         return {"error": f"Unknown tool: {name}"}

@@ -66,10 +66,11 @@ class _ArticleIndex:
         return sorted(results, key=lambda r: r["title"])
 
     def stats(self) -> dict:
-        """Compute stats from cached frontmatter. v1.7: link_count-based orphans."""
+        """Compute stats from cached frontmatter. v1.7: link_count-based orphans + reading_status breakdown."""
         self._ensure_built()
         by_type: Dict[str, int] = {}
         by_stability: Dict[str, int] = {}
+        by_reading_status: Dict[str, int] = {"unread": 0, "skimmed": 0, "annotated": 0, "synthesized": 0}
         buckets = {"0.0-0.3": 0, "0.3-0.6": 0, "0.6-0.8": 0, "0.8-1.0": 0}
         past_review, gaps = [], []
         total_kw, total_links = 0, 0
@@ -94,6 +95,9 @@ class _ArticleIndex:
                 gaps.append(slug)
             total_kw += len(fm.get("keywords", []))
             total_links += len(fm.get("related", []))
+            rs = fm.get("reading_status", "unread")
+            if rs in by_reading_status:
+                by_reading_status[rs] += 1
 
         # v1.7: orphans = articles with link_count==0 (no inbound links), not empty related
         orphans = [slug for slug, fm in self._frontmatter.items()
@@ -107,6 +111,7 @@ class _ArticleIndex:
             "articles_past_review": past_review,
             "gap_articles": gaps,
             "orphans": orphans,
+            "reading_status": by_reading_status,
             "total_keywords": total_kw,
             "total_links": total_links,
             "avg_keywords": round(total_kw / n, 1),
