@@ -1,4 +1,8 @@
-"""AI-KOS graph data export — generates JSON for visualization tools."""
+"""AI-KOS graph data export — generates JSON for visualization tools.
+
+v1.7: nodes include lifecycle, doc_type, superseded_by, link_count.
+Edges include relation type. Groups colored by type + lifecycle.
+"""
 
 import yaml
 from pathlib import Path
@@ -10,16 +14,26 @@ def export_graph_data(knowledge_dir: str = "knowledge") -> Dict[str, Any]:
 
     Returns:
         {"nodes": [...], "edges": [...]}
-        Each node: {id, title, type, keywords, group (type index)}
-        Each edge: {source, target, weight (shared keyword count)}
+        Each node: {id, title, type, keywords, group, lifecycle, doc_type, superseded_by, linkCount}
+        Each edge: {source, target, weight, type}
     """
     nodes: List[Dict] = []
     edges: List[Dict] = []
     slug_to_index: Dict[str, int] = {}
+
+    # v1.7: expanded type colors with lifecycle sub-groups
     type_colors = {
         "base": 0, "process": 1, "plan": 2, "help": 3,
-        "research-note": 4, "note": 5, "mission": 6
+        "research-note": 4, "note": 5, "mission": 6,
     }
+    lifecycle_color_offset = {
+        "current": 0, "superseded": 7, "historical": 14,
+    }
+
+    def _node_group(article_type: str, lifecycle: str) -> int:
+        base = type_colors.get(article_type, 0)
+        offset = lifecycle_color_offset.get(lifecycle, 0)
+        return base + offset
 
     # First pass: collect all nodes
     for md in Path(knowledge_dir).rglob("*.md"):
@@ -33,19 +47,24 @@ def export_graph_data(knowledge_dir: str = "knowledge") -> Dict[str, Any]:
             if slug not in slug_to_index:
                 idx = len(nodes)
                 slug_to_index[slug] = idx
+                atype = fm.get('type', 'base')
+                lc = fm.get('lifecycle', 'current')
                 nodes.append({
                     "id": slug,
                     "title": fm.get('title', slug),
-                    "type": fm.get('type', 'base'),
+                    "type": atype,
                     "keywords": fm.get('keywords', []),
                     "summary": fm.get('summary', ''),
-                    "group": type_colors.get(fm.get('type', 'base'), 0),
-                    "linkCount": len(fm.get('related', [])),
+                    "group": _node_group(atype, lc),
+                    "lifecycle": lc,
+                    "doc_type": fm.get('doc_type'),
+                    "superseded_by": fm.get('superseded_by'),
+                    "linkCount": fm.get('link_count', len(fm.get('related', []))),
                 })
         except Exception:
             continue
 
-    # Second pass: collect edges
+    # Second pass: collect typed edges
     for md in Path(knowledge_dir).rglob("*.md"):
         try:
             with open(md, 'r') as f:
@@ -55,22 +74,23 @@ def export_graph_data(knowledge_dir: str = "knowledge") -> Dict[str, Any]:
             fm = yaml.safe_load(content.split('---')[1]) or {}
             slug = fm.get('slug', md.stem)
             source_kw = set(fm.get('keywords', []))
-            for target in fm.get('related', []):
+            for rel in fm.get('related', []):
+                target = rel.get('slug', rel) if isinstance(rel, dict) else rel
                 if slug in slug_to_index and target in slug_to_index:
-                    # Compute edge weight = shared keyword count
-                    # We need target's keywords — look up from nodes
                     target_idx = slug_to_index[target]
                     target_kw = set(nodes[target_idx]["keywords"])
                     weight = len(source_kw & target_kw)
+                    edge_type = rel.get('type', 'see-also') if isinstance(rel, dict) else 'see-also'
                     edges.append({
                         "source": slug,
                         "target": target,
                         "weight": max(weight, 1),
+                        "type": edge_type,
                     })
         except Exception:
             continue
 
-    # Deduplicate edges (bidirectional links create duplicates)
+    # Deduplicate edges
     seen = set()
     unique_edges = []
     for e in edges:

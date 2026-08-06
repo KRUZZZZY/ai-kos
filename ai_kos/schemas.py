@@ -1,6 +1,6 @@
-"""AI-KOS schemas v1.5 — 7 article types with OKF-compliant frontmatter."""
+"""AI-KOS schemas v1.7 — 7 article types with typed relations, lifecycle, Diátaxis, and usage signals."""
 
-from datetime import date
+from datetime import date, datetime
 from typing import Optional, List
 from enum import Enum
 from pydantic import BaseModel, Field, field_validator, model_validator
@@ -27,6 +27,68 @@ class SensitivityLabel(str, Enum):
     INTERNAL = "internal"
     CONFIDENTIAL = "confidential"
 
+class DocType(str, Enum):
+    """Diátaxis framework — how a reader should consume this content. Orthogonal to ArticleType."""
+    TUTORIAL = "tutorial"
+    HOW_TO = "how-to"
+    REFERENCE = "reference"
+    EXPLANATION = "explanation"
+
+class Lifecycle(str, Enum):
+    """Article lifecycle state."""
+    CURRENT = "current"
+    SUPERSEDED = "superseded"
+    HISTORICAL = "historical"
+
+class ProvenanceSource(str, Enum):
+    """How this article was created."""
+    INGEST = "ingest"
+    RESEARCH_PIPELINE = "research-pipeline"
+    MANUAL = "manual"
+    IMPORT = "import"
+    PROMOTED_FROM_NOTE = "promoted-from-note"
+
+class RelationType(str, Enum):
+    """Typed edge between two articles."""
+    SEE_ALSO = "see-also"
+    PARENT_CHILD = "parent-child"
+    SUPERSEDES = "supersedes"
+    CONTRADICTS = "contradicts"
+    EXTENDS = "extends"
+
+
+# ── Sub-models ─────────────────────────────────────────────────
+
+class RelatedEdge(BaseModel):
+    """A typed wikilink from this article to another."""
+    slug: str
+    type: RelationType = RelationType.SEE_ALSO
+
+class Provenance(BaseModel):
+    """Structured provenance tracking."""
+    source: ProvenanceSource = ProvenanceSource.MANUAL
+    origin_ref: Optional[str] = None  # pipeline ID, source filename
+
+class VersionEntry(BaseModel):
+    """One entry in the content edit history log."""
+    v: int
+    at: datetime
+    by: str
+    note: str
+
+
+# ── Default review intervals per article type (days) ───────────
+
+DEFAULT_REVIEW_INTERVALS: dict[ArticleType, int] = {
+    ArticleType.BASE: 365,
+    ArticleType.PROCESS: 180,
+    ArticleType.PLAN: 90,
+    ArticleType.HELP: 365,
+    ArticleType.RESEARCH_NOTE: 180,
+    ArticleType.NOTE: 90,
+    ArticleType.MISSION: 365,
+}
+
 
 # ── Individual type models (frontmatter only) ──────────────────
 
@@ -45,15 +107,61 @@ class _BaseFrontmatter(BaseModel):
     confidence: float = Field(default=0.8, ge=0.0, le=1.0, description="How certain this knowledge is (0.0-1.0)")
     keywords: List[str] = Field(default_factory=list, description="3-8 lowercase keywords for auto-linking")
     summary: str = Field(..., max_length=300, description="1-2 sentence description")
-    related: List[str] = Field(default_factory=list, description="Auto-generated [[wikilinks]] — managed by linker")
-    provenance: List[str] = Field(..., min_length=1, description="Original source file(s)")
+    # v1.7: typed relations
+    related: List[RelatedEdge] = Field(default_factory=list, description="Typed wikilinks — managed by linker")
+    provenance: List[Provenance] = Field(..., min_length=1, description="Structured provenance records")
     ai_notes: Optional[str] = Field(default=None, description="Agent workspace, not shown to humans")
+    # v1.7: usage signals
     retrieval_count: int = Field(default=0, ge=0)
+    link_count: int = Field(default=0, ge=0, description="Inbound wikilink count — computed by linker")
+    last_accessed: Optional[date] = Field(default=None, description="Last time ai_kos_read was called")
+    # v1.7: lifecycle
+    lifecycle: Lifecycle = Lifecycle.CURRENT
+    superseded_by: Optional[str] = Field(default=None, description="Slug of successor article")
+    # v1.7: Diátaxis
+    doc_type: Optional[DocType] = Field(default=None, description="Diátaxis consumption mode")
+    # v1.7: review cadence
+    review_interval_days: Optional[int] = Field(default=None, ge=1, description="Days between reviews (defaults per type)")
+    # v1.7: edit history
+    version: int = Field(default=1, ge=1, description="Content edit version counter")
+    history: List[VersionEntry] = Field(default_factory=list, description="Compact edit log")
     # Gap tracking (known unknowns)
     gap: bool = Field(default=False, description="True = known unknown")
     gap_question: Optional[str] = Field(default=None, description="Required when gap=True")
     gap_priority: Optional[float] = Field(default=None, ge=0.0, le=1.0, description="Required when gap=True")
-    schema_version: int = Field(default=1, ge=1, description="Schema version for migration tracking")
+    schema_version: int = Field(default=2, ge=1, description="Schema version for migration tracking")
+
+    @field_validator('related', mode='before')
+    @classmethod
+    def _coerce_related(cls, v):
+        """Accept bare strings (v1.6 format) and upgrade to RelatedEdge."""
+        if not v:
+            return []
+        result = []
+        for item in v:
+            if isinstance(item, str):
+                result.append({"slug": item, "type": "see-also"})
+            elif isinstance(item, dict):
+                result.append(item)
+            else:
+                result.append(item)
+        return result
+
+    @field_validator('provenance', mode='before')
+    @classmethod
+    def _coerce_provenance(cls, v):
+        """Accept bare strings (v1.6 format) and upgrade to Provenance objects."""
+        if not v:
+            return []
+        result = []
+        for item in v:
+            if isinstance(item, str):
+                result.append({"source": "manual", "origin_ref": item})
+            elif isinstance(item, dict):
+                result.append(item)
+            else:
+                result.append(item)
+        return result
 
     @field_validator('keywords')
     @classmethod
@@ -144,46 +252,48 @@ Article = BaseArticle | ProcessArticle | PlanArticle | HelpArticle | ResearchNot
 
 # ── Template definitions (what the AI uses to generate articles) ─
 
+_AI_LAYER_BASE = ["id","title","slug","type","created_at","updated_at","reviewed_at","next_review_at","stability","sensitivity_label","confidence","keywords","summary","related","provenance","ai_notes","retrieval_count","link_count","last_accessed","lifecycle","superseded_by","doc_type","review_interval_days","version","history"]
+
 TEMPLATES = {
     ArticleType.BASE: {
         "description": "Factoid / Wikipedia-style concept. ~5 paragraphs.",
-        "ai_layer_fields": ["id","title","slug","type","created_at","updated_at","reviewed_at","next_review_at","stability","sensitivity_label","keywords","summary","related","provenance","ai_notes","retrieval_count"],
+        "ai_layer_fields": _AI_LAYER_BASE,
         "human_fields": ["content"],
         "prompt": "Write a concise, factual article (~5 paragraphs). No fluff. Start with a 1-sentence definition, then explain. End with why it matters.",
     },
     ArticleType.PROCESS: {
         "description": "Step-by-step procedure. Backup for rarely-used skills.",
-        "ai_layer_fields": ["id","title","slug","type","created_at","updated_at","reviewed_at","next_review_at","stability","sensitivity_label","keywords","summary","related","provenance","ai_notes","retrieval_count"],
+        "ai_layer_fields": _AI_LAYER_BASE,
         "human_fields": ["steps","outcome","prerequisites"],
         "prompt": "Write step-by-step instructions. Each step must be an imperative command. End with an outcome statement. List prerequisites if any.",
     },
     ArticleType.PLAN: {
         "description": "Planning document for a goal.",
-        "ai_layer_fields": ["id","title","slug","type","created_at","updated_at","reviewed_at","next_review_at","stability","sensitivity_label","keywords","summary","related","provenance","ai_notes","retrieval_count"],
+        "ai_layer_fields": _AI_LAYER_BASE,
         "human_fields": ["goal","phases","milestones","risks"],
         "prompt": "Write a planning document. State the goal first. List phases, milestones, and risks. Be specific, not aspirational.",
     },
     ArticleType.HELP: {
         "description": "Explains how a part of a project works.",
-        "ai_layer_fields": ["id","title","slug","type","project","component","created_at","updated_at","reviewed_at","next_review_at","stability","sensitivity_label","keywords","summary","related","provenance","ai_notes","retrieval_count"],
+        "ai_layer_fields": _AI_LAYER_BASE + ["project","component"],
         "human_fields": ["explanation","examples"],
         "prompt": "Explain how a specific component of a project works. Name the project and component. ~5 paragraphs. Include examples if helpful.",
     },
     ArticleType.RESEARCH_NOTE: {
         "description": "Key notes for larger research — feeds into a base article.",
-        "ai_layer_fields": ["id","title","slug","type","topic","created_at","updated_at","reviewed_at","next_review_at","stability","sensitivity_label","keywords","summary","related","provenance","ai_notes","retrieval_count"],
+        "ai_layer_fields": _AI_LAYER_BASE + ["topic"],
         "human_fields": ["key_notes","open_questions","sources","target_base_slug"],
         "prompt": "Extract key research notes. Use bullet points. List open questions and sources. Note if this feeds into an existing base article.",
     },
     ArticleType.NOTE: {
         "description": "Temporary note — may relate to future work.",
-        "ai_layer_fields": ["id","title","slug","type","created_at","updated_at","reviewed_at","next_review_at","stability","sensitivity_label","keywords","summary","related","provenance","ai_notes","retrieval_count"],
+        "ai_layer_fields": _AI_LAYER_BASE,
         "human_fields": ["content","related_project","actionable"],
         "prompt": "Write a brief note. ~5 paragraphs max. Flag if actionable. Note any related project. Keep it simple — this is temporary.",
     },
     ArticleType.MISSION: {
         "description": "Project building block — how a project will work.",
-        "ai_layer_fields": ["id","title","slug","type","project","created_at","updated_at","reviewed_at","next_review_at","stability","sensitivity_label","keywords","summary","related","provenance","ai_notes","retrieval_count"],
+        "ai_layer_fields": _AI_LAYER_BASE + ["project"],
         "human_fields": ["purpose","architecture","dependencies","success_criteria"],
         "prompt": "Describe a project mission. State its purpose. Explain the architecture (~5 paragraphs). List dependencies and success criteria.",
     },
@@ -207,11 +317,49 @@ def get_class(article_type: ArticleType | str) -> type:
         article_type = ArticleType(article_type)
     return ARTICLE_CLASSES[article_type]
 
+def _serialize_provenance(p_list: List) -> List[dict]:
+    """Serialize provenance to yaml-safe dicts."""
+    out = []
+    for p in p_list:
+        if isinstance(p, dict):
+            out.append(p)
+        elif hasattr(p, 'model_dump'):
+            out.append(p.model_dump(mode='json'))
+        else:
+            out.append(p)
+    return out
+
+def _serialize_related(r_list: List) -> List[dict]:
+    """Serialize related edges to yaml-safe dicts."""
+    out = []
+    for r in r_list:
+        if isinstance(r, dict):
+            out.append(r)
+        elif isinstance(r, str):
+            out.append({"slug": r, "type": "see-also"})
+        elif hasattr(r, 'model_dump'):
+            out.append(r.model_dump(mode='json'))
+        else:
+            out.append(r)
+    return out
+
 def article_to_markdown(article) -> str:
     """Serialize any article to OKF markdown (YAML frontmatter + body)."""
     import yaml
     data = article.model_dump(mode='json')
     fm = {k: v for k, v in data.items() if v is not None}
+
+    # Serialize sub-models
+    if 'provenance' in fm:
+        fm['provenance'] = _serialize_provenance(fm['provenance'])
+    if 'related' in fm:
+        fm['related'] = _serialize_related(fm['related'])
+    if 'history' in fm and isinstance(fm.get('history'), list):
+        fm['history'] = [
+            h.model_dump(mode='json') if hasattr(h, 'model_dump') else h
+            for h in fm['history']
+        ]
+
     body_fields = TEMPLATES[article.type]["human_fields"]
     body = {}
     for k in body_fields:
@@ -219,12 +367,20 @@ def article_to_markdown(article) -> str:
             body[k] = fm.pop(k)
     # Add Obsidian tags for graph coloring
     fm['tags'] = [f'type/{article.type.value}']
+    if fm.get('doc_type'):
+        fm['tags'].append(f'doc/{fm["doc_type"]}')
+    if fm.get('lifecycle') and fm['lifecycle'] != 'current':
+        fm['tags'].append(f'lifecycle/{fm["lifecycle"]}')
     yaml_str = yaml.dump(fm, default_flow_style=False, sort_keys=False, allow_unicode=True).strip()
     body_str = _format_body(body, article.type)
     # Append wikilinks section for Obsidian graph view
     related = fm.get('related', [])
     if related:
-        wikilinks = ' '.join(f'[[{r}]]' for r in related)
+        slugs = []
+        for r in related:
+            s = r.get('slug', r) if isinstance(r, dict) else r
+            slugs.append(s)
+        wikilinks = ' '.join(f'[[{s}]]' for s in slugs)
         body_str += f'\n\n## Related\n{wikilinks}'
     return f"---\n{yaml_str}\n---\n\n{body_str}".strip()
 

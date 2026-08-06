@@ -1,4 +1,4 @@
-"""Tests for AI-KOS linker — keyword overlap, merge detection, link_all."""
+"""Tests for AI-KOS linker — keyword overlap, merge detection, link_all. v1.7 typed relations."""
 
 import tempfile, os, yaml
 from pathlib import Path
@@ -9,7 +9,7 @@ from ai_kos.linker import (
 
 
 def make_article(path: str, slug: str, keywords: list[str], related: list[str] | None = None):
-    """Create a temporary markdown article with frontmatter."""
+    """Create a temporary markdown article with frontmatter (v1.7 compatible)."""
     if related is None:
         related = []
     fm = {
@@ -17,8 +17,9 @@ def make_article(path: str, slug: str, keywords: list[str], related: list[str] |
         "title": slug.replace("-", " ").title(),
         "type": "base",
         "keywords": keywords,
-        "related": related or [],
+        "related": related or [],  # list of strings → linker normalizes to [{slug, type}]
         "summary": f"Article about {slug}",
+        "schema_version": 2,
     }
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w") as f:
@@ -41,7 +42,11 @@ class TestParseArticle:
         p = tmp_path / "linked.md"
         make_article(str(p), "linked", ["x", "y", "z"], related=["a", "b"])
         meta = _parse_article(str(p))
-        assert meta.related == ["a", "b"]
+        # v1.7: related is now list of {slug, type} dicts
+        assert meta.related == [
+            {"slug": "a", "type": "see-also"},
+            {"slug": "b", "type": "see-also"},
+        ]
 
     def test_returns_none_for_no_frontmatter(self, tmp_path):
         p = tmp_path / "plain.md"
@@ -89,7 +94,6 @@ class TestCalculateLinks:
         assert links["a"] == set()
 
     def test_merge_candidate_detected(self):
-        # 4 keywords each, overlap=4, ratio=1.0 > 0.80
         articles = [
             ArticleMeta("a", "", {"a", "b", "c", "d"}, []),
             ArticleMeta("b", "", {"a", "b", "c", "d"}, []),
@@ -122,13 +126,10 @@ class TestCalculateLinks:
             ArticleMeta("a", "", {"x", "y"}, []),
             ArticleMeta("b", "", {"x", "y", "z"}, []),
         ]
-        # At min_overlap=3, 2 shared keywords → no link
         links3, _ = _calculate_links(articles, min_overlap=3)
         assert links3["a"] == set()
-        # At min_overlap=2, 2 shared keywords → link
         links2, _ = _calculate_links(articles, min_overlap=2)
         assert links2["a"] == {"b"}
-        # At min_overlap=1, even 1 shared → link
         articles2 = [
             ArticleMeta("a", "", {"x", "p"}, []),
             ArticleMeta("b", "", {"x", "q"}, []),
@@ -141,10 +142,8 @@ class TestCalculateLinks:
         kd.mkdir()
         make_article(str(kd / "a.md"), "a", ["python", "ai"])
         make_article(str(kd / "b.md"), "b", ["python", "ai", "testing"])
-        # min_overlap=3: 2 shared → no link
         r3 = link_all(str(kd), min_overlap=3)
         assert r3["total_links_created"] == 0
-        # min_overlap=2: 2 shared → link
         r2 = link_all(str(kd), min_overlap=2)
         assert r2["total_links_created"] == 2
 
@@ -158,17 +157,15 @@ class TestLinkAll:
         make_article(str(kd / "c.md"), "c", ["rust", "systems", "embedded"])
 
         result = link_all(str(kd))
-
         assert result["articles_scanned"] == 3
         assert result["total_links_created"] > 0
 
-        # Verify a.md was patched with links to b
+        # v1.7: related is now list of {slug, type} dicts
         with open(kd / "a.md") as f:
             content = f.read()
         fm = yaml.safe_load(content.split("---")[1])
-        assert "b" in fm["related"]
+        assert any(r.get("slug") == "b" for r in fm["related"])
 
-        # c should not link to anything (no overlap)
         with open(kd / "c.md") as f:
             content = f.read()
         fm = yaml.safe_load(content.split("---")[1])

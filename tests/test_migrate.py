@@ -158,9 +158,9 @@ class TestCustomMigration:
         # First apply v1 — all 3 articles get schema_version: 1
         run_migrations(knowledge_dir=kb_dir, target_version=1)
 
-        # Then apply v2 — all 3 now need v2 migration
+        # Then apply v2 — only no_version and zero need it (current is already v2)
         result = run_migrations(knowledge_dir=kb_dir, target_version=2)
-        assert result["migrated"] == 3
+        assert result["migrated"] == 2
 
         # Verify custom field was added
         import yaml
@@ -169,6 +169,9 @@ class TestCustomMigration:
         assert fm["custom_field"] == "hello"
         assert fm["schema_version"] == 2
 
-        # Clean up: remove the test migration from registry
+        # Clean up: remove only the test migration from registry
         from ai_kos import migrate
-        migrate._migrations[:] = [(v, n, f) for v, n, f in migrate._migrations if v != 2]
+        migrate._migrations[:] = [
+            (v, n, f) for v, n, f in migrate._migrations
+            if not (v == 2 and n == "add_custom_field")
+        ]

@@ -1,10 +1,14 @@
 """AI-KOS search engine — TF-IDF full-text search + similarity comparison.
 
+v1.7: doc_type ranking boost, lifecycle demotion, access filtering.
+
 Scales to thousands of articles. Pure Python, no extra deps.
 Features:
   - Full-text search with TF-IDF scoring and snippet extraction
   - Compare: find N most similar articles to a given slug
-  - Hybrid mode: combine text relevance with keyword match bonus
+  - Diátaxis boost: matching doc_type gets +50% score
+  - Lifecycle: superseded articles demoted 0.5x, historical 0.3x
+  - Access: only articles at or below requested sensitivity level
   - Cached index with automatic rebuild on article changes
 """
 
@@ -32,9 +36,35 @@ _STOP_WORDS = {
 }
 
 def tokenize(text: str) -> List[str]:
-    """Lowercase, split on word boundaries, remove stop words and short tokens."""
     tokens = re.findall(r'[a-z0-9]{2,}', text.lower())
     return [t for t in tokens if t not in _STOP_WORDS]
+
+
+# ── DocType boost heuristics ───────────────────────────────────
+
+# Maps common query intent words to likely doc_type
+_DOCTYPE_INTENT: Dict[str, str] = {
+    'how': 'how-to', 'guide': 'how-to', 'steps': 'how-to',
+    'procedure': 'how-to', 'setup': 'how-to', 'configure': 'how-to',
+    'install': 'how-to', 'fix': 'how-to', 'solve': 'how-to',
+    'tutorial': 'tutorial', 'learn': 'tutorial', 'beginner': 'tutorial',
+    'reference': 'reference', 'api': 'reference', 'spec': 'reference',
+    'schema': 'reference', 'field': 'reference',
+    'explain': 'explanation', 'why': 'explanation', 'concept': 'explanation',
+    'architecture': 'explanation', 'design': 'explanation',
+}
+
+# Demotion factors for lifecycle
+_LIFECYCLE_DEMOTION: Dict[str, float] = {
+    'current': 1.0,
+    'superseded': 0.5,
+    'historical': 0.3,
+}
+
+# Access level ordering
+_ACCESS_LEVELS: Dict[str, int] = {
+    'public': 0, 'internal': 1, 'confidential': 2,
+}
 
 
 # ── TF-IDF Index ───────────────────────────────────────────────
@@ -47,18 +77,22 @@ class DocInfo:
     keywords: List[str]
     summary: str
     filepath: str
-    mtime: float           # for cache invalidation
+    mtime: float
     tokens: List[str] = field(default_factory=list)
-    term_freqs: Dict[str, int] = field(default_factory=dict)  # term → count
+    term_freqs: Dict[str, int] = field(default_factory=dict)
+    # v1.7 fields
+    doc_type: Optional[str] = None
+    lifecycle: str = "current"
+    sensitivity_label: str = "internal"
 
 
 class SearchIndex:
     """In-memory TF-IDF index over all knowledge articles."""
 
     def __init__(self):
-        self.docs: Dict[str, DocInfo] = {}      # slug → DocInfo
-        self.inverted: Dict[str, List[str]] = defaultdict(list)  # term → [slugs]
-        self.doc_freqs: Dict[str, int] = {}      # term → document frequency
+        self.docs: Dict[str, DocInfo] = {}
+        self.inverted: Dict[str, List[str]] = defaultdict(list)
+        self.doc_freqs: Dict[str, int] = {}
         self._total_docs = 0
 
     def clear(self):
@@ -68,7 +102,6 @@ class SearchIndex:
         self._total_docs = 0
 
     def _read_doc(self, filepath: str) -> Optional[DocInfo]:
-        """Parse a markdown file into a DocInfo."""
         import yaml
         try:
             with open(filepath, 'r') as f:
@@ -78,7 +111,6 @@ class SearchIndex:
             parts = content.split('---', 2)
             fm = yaml.safe_load(parts[1]) or {}
             slug = fm.get('slug', Path(filepath).stem)
-            # Combine all text fields for indexing
             body = parts[2] if len(parts) > 2 else ""
             text = f"{fm.get('title','')} {fm.get('summary','')} {' '.join(fm.get('keywords',[]))} {body}"
             tokens = tokenize(text)
@@ -95,14 +127,15 @@ class SearchIndex:
                 mtime=Path(filepath).stat().st_mtime,
                 tokens=tokens,
                 term_freqs=tfs,
+                doc_type=fm.get('doc_type'),
+                lifecycle=fm.get('lifecycle', 'current'),
+                sensitivity_label=fm.get('sensitivity_label', 'internal'),
             )
         except Exception as e:
             logger.warning(f"Index: skip {filepath}: {e}")
             return None
 
     def build(self, knowledge_dir: str = "knowledge", force: bool = False) -> int:
-        """Build or update the index. Returns number of docs indexed."""
-        # Check cache: only re-read files with changed mtime
         if not force and self.docs:
             changed = 0
             current_slugs = set()
@@ -116,7 +149,6 @@ class SearchIndex:
                         self._remove_doc(slug)
                         self._add_doc(doc)
                         changed += 1
-            # Remove deleted articles
             for slug in list(self.docs):
                 if slug not in current_slugs:
                     self._remove_doc(slug)
@@ -125,7 +157,6 @@ class SearchIndex:
                 logger.info(f"Index updated: {changed} docs changed")
             return len(self.docs)
 
-        # Full rebuild
         self.clear()
         for md in Path(knowledge_dir).rglob("*.md"):
             doc = self._read_doc(str(md))
@@ -139,7 +170,6 @@ class SearchIndex:
         self._total_docs = len(self.docs)
         for term in doc.term_freqs:
             self.inverted[term].append(doc.slug)
-        # Recompute doc frequencies
         self.doc_freqs = {t: len(slugs) for t, slugs in self.inverted.items()}
 
     def _remove_doc(self, slug: str):
@@ -154,28 +184,48 @@ class SearchIndex:
         self._total_docs = len(self.docs)
 
     def _idf(self, term: str) -> float:
-        """Inverse document frequency."""
         df = self.doc_freqs.get(term, 0)
         if df == 0:
             return 0.0
         return math.log((self._total_docs + 1) / (df + 1)) + 1.0
 
     def _tfidf_vector(self, doc: DocInfo) -> Dict[str, float]:
-        """Sparse TF-IDF vector for a document."""
         vec = {}
         max_tf = max(doc.term_freqs.values()) if doc.term_freqs else 1
         for term, tf in doc.term_freqs.items():
             idf = self._idf(term)
-            vec[term] = (tf / max_tf) * idf  # normalized TF * IDF
+            vec[term] = (tf / max_tf) * idf
         return vec
 
-    def search(self, query: str, top_k: int = 10, article_type: Optional[str] = None) -> List[dict]:
-        """Full-text search with TF-IDF scoring + keyword match bonus. Returns ranked results with snippets."""
+    def _infer_doc_type_intent(self, query_tokens: List[str]) -> Optional[str]:
+        """Guess what doc_type the user wants from query words."""
+        for token in query_tokens:
+            if token in _DOCTYPE_INTENT:
+                return _DOCTYPE_INTENT[token]
+        return None
+
+    def _access_ok(self, doc: DocInfo, access: Optional[str]) -> bool:
+        """Check if doc passes access filter."""
+        if not access:
+            return True
+        req_level = _ACCESS_LEVELS.get(access, 1)
+        doc_level = _ACCESS_LEVELS.get(doc.sensitivity_label, 1)
+        return doc_level <= req_level
+
+    def search(
+        self,
+        query: str,
+        top_k: int = 10,
+        article_type: Optional[str] = None,
+        doc_type: Optional[str] = None,
+        lifecycle: Optional[str] = None,
+        access: Optional[str] = None,
+    ) -> List[dict]:
+        """Full-text search with v1.7 Diátaxis boost + lifecycle demotion + access filter."""
         query_tokens = tokenize(query)
         if not query_tokens or not self.docs:
             return []
 
-        # Compute query TF-IDF vector
         q_tf = {}
         for t in query_tokens:
             q_tf[t] = q_tf.get(t, 0) + 1
@@ -184,10 +234,17 @@ class SearchIndex:
         for t, tf in q_tf.items():
             q_vec[t] = (tf / max_q_tf) * self._idf(t)
 
-        # Score every document
+        inferred_dt = self._infer_doc_type_intent(query_tokens)
+
         scores: Dict[str, float] = {}
         for slug, doc in self.docs.items():
             if article_type and doc.article_type != article_type:
+                continue
+            if doc_type and doc.doc_type != doc_type:
+                continue
+            if lifecycle and doc.lifecycle != lifecycle:
+                continue
+            if not self._access_ok(doc, access):
                 continue
 
             # TF-IDF cosine similarity
@@ -197,15 +254,21 @@ class SearchIndex:
                     doc_tfidf = (doc.term_freqs[term] / max(doc.term_freqs.values())) * self._idf(term)
                     dot += q_weight * doc_tfidf
             if dot > 0:
-                # Keyword match bonus: +30% per matching keyword
+                # Keyword match bonus
                 kw_match = sum(1 for kw in doc.keywords if any(qt in kw.lower() for qt in query_tokens))
                 bonus = 1.0 + kw_match * 0.3
-                scores[slug] = dot * bonus
 
-        # Sort and take top-k
+                # v1.7: Diátaxis boost — +50% if doc_type matches inferred intent
+                if inferred_dt and doc.doc_type == inferred_dt:
+                    bonus *= 1.5
+
+                # v1.7: Lifecycle demotion
+                lc_factor = _LIFECYCLE_DEMOTION.get(doc.lifecycle, 1.0)
+
+                scores[slug] = dot * bonus * lc_factor
+
         ranked = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:top_k]
 
-        # Build results with snippets
         results = []
         for slug, score in ranked:
             doc = self.docs[slug]
@@ -218,11 +281,12 @@ class SearchIndex:
                 "keywords": doc.keywords,
                 "summary": doc.summary,
                 "snippet": snippet,
+                "doc_type": doc.doc_type,
+                "lifecycle": doc.lifecycle,
             })
         return results
 
     def compare(self, slug: str, top_k: int = 10) -> List[dict]:
-        """Find the N most similar articles to the given slug by TF-IDF cosine similarity."""
         if slug not in self.docs:
             return []
 
@@ -237,15 +301,12 @@ class SearchIndex:
             doc_vec = self._tfidf_vector(doc)
             doc_norm = math.sqrt(sum(v * v for v in doc_vec.values())) or 1.0
 
-            # Cosine similarity
             dot = 0.0
             for term, s_weight in source_vec.items():
                 if term in doc_vec:
                     dot += s_weight * doc_vec[term]
 
             similarity = dot / (source_norm * doc_norm) if source_norm * doc_norm > 0 else 0.0
-
-            # Keyword overlap bonus
             kw_overlap = len(set(source.keywords) & set(doc.keywords))
             combined = similarity * (1.0 + kw_overlap * 0.1)
 
@@ -265,7 +326,6 @@ class SearchIndex:
         } for s in scores[:top_k]]
 
     def _extract_snippet(self, doc: DocInfo, query_tokens: List[str], max_len: int = 150) -> str:
-        """Extract a relevant snippet from the document body showing query matches."""
         try:
             with open(doc.filepath, 'r') as f:
                 content = f.read()
@@ -277,7 +337,6 @@ class SearchIndex:
         if not sentences:
             return doc.summary[:max_len]
 
-        # Score each sentence by number of query token hits
         best_sentence = sentences[0]
         best_score = 0
         for sent in sentences:
@@ -304,8 +363,15 @@ def get_index() -> SearchIndex:
     _index.build()
     return _index
 
-def search(query: str, top_k: int = 10, article_type: Optional[str] = None) -> List[dict]:
-    return get_index().search(query, top_k, article_type)
+def search(
+    query: str,
+    top_k: int = 10,
+    article_type: Optional[str] = None,
+    doc_type: Optional[str] = None,
+    lifecycle: Optional[str] = None,
+    access: Optional[str] = None,
+) -> List[dict]:
+    return get_index().search(query, top_k, article_type, doc_type, lifecycle, access)
 
 def compare(slug: str, top_k: int = 10) -> List[dict]:
     return get_index().compare(slug, top_k)

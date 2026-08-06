@@ -1,20 +1,11 @@
 """AI-KOS article schema migration system.
 
-Since articles are markdown files (not a database), migrations are pure-Python
-transforms: (frontmatter, body) → (frontmatter, body). Each migration checks the
-`schema_version` field to determine if it should run.
-
-Migrations are registered in order and run idempotently — applying the same
-migration twice is safe (it skips already-migrated articles).
+v1.7: adds v2 migration for typed relations, lifecycle, provenance enum,
+usage signals, review cadence, Diátaxis, and edit history.
 
 Usage:
-    # CLI
     ai-kos migrate              # apply pending migrations
     ai-kos migrate --dry-run    # preview changes without writing
-
-    # API
-    from ai_kos.migrate import run_migrations
-    results = run_migrations(dry_run=True)
 """
 
 import logging
@@ -26,22 +17,17 @@ from ai_kos.config import get
 
 logger = logging.getLogger("ai-kos.migrate")
 
-CURRENT_SCHEMA_VERSION = 1
+CURRENT_SCHEMA_VERSION = 2
 
 # ── Migration Registry ───────────────────────────────────────────────────────
 
-# Ordered list of (version, name, transform_fn)
-# Transform signature: Callable[[dict, str], Tuple[dict, str]]
-#   - Input: (frontmatter_dict, body_text)
-#   - Output: (modified_frontmatter_dict, modified_body_text)
 _migrations: List[Tuple[int, str, Callable[[dict, str], Tuple[dict, str]]]] = []
 
 
 def register(version: int, name: str):
-    """Decorator to register a migration function."""
     def decorator(fn: Callable[[dict, str], Tuple[dict, str]]):
         _migrations.append((version, name, fn))
-        _migrations.sort(key=lambda x: x[0])  # Keep sorted by version
+        _migrations.sort(key=lambda x: x[0])
         return fn
     return decorator
 
@@ -50,21 +36,95 @@ def register(version: int, name: str):
 
 @register(version=1, name="add_schema_version")
 def _add_schema_version(fm: dict, body: str) -> Tuple[dict, str]:
-    """Migration v1: Add schema_version field to all articles.
-
-    This is the baseline migration — ensures every article has a schema_version.
-    Existing articles without the field get version 1. Future schema changes
-    will increment the version and add new migration functions.
-    """
+    """Migration v1: Add schema_version field to all articles."""
     if "schema_version" not in fm:
         fm["schema_version"] = 1
+    return fm, body
+
+
+@register(version=2, name="v17_typed_relations_plus")
+def _v17_migration(fm: dict, body: str) -> Tuple[dict, str]:
+    """Migration v2: Transform v1.6 format to v1.7 typed relations + all new fields.
+
+    Changes:
+      - related: List[str] → List[{slug, type: see-also}]
+      - provenance: List[str] → List[{source: manual, origin_ref: str}]
+      - Add lifecycle: current, superseded_by: null
+      - Add doc_type: null
+      - Add review_interval_days: computed from type
+      - Add version: 1, history: [initial entry]
+      - Add link_count: 0, last_accessed: null
+      - Bump schema_version to 2
+    """
+    # Convert related from List[str] to List[{slug, type}]
+    related = fm.get('related', [])
+    if related and isinstance(related[0] if related else None, str):
+        fm['related'] = [{"slug": r, "type": "see-also"} for r in related]
+    elif related:
+        # Already dicts, ensure type field
+        fm['related'] = [
+            dict(r, type=r.get('type', 'see-also')) if isinstance(r, dict)
+            else {"slug": r, "type": "see-also"}
+            for r in related
+        ]
+
+    # Convert provenance from List[str] to List[{source, origin_ref}]
+    provenance = fm.get('provenance', [])
+    if provenance and isinstance(provenance[0] if provenance else None, str):
+        fm['provenance'] = [{"source": "manual", "origin_ref": p} for p in provenance]
+    elif provenance:
+        fm['provenance'] = [
+            dict(p, source=p.get('source', 'manual')) if isinstance(p, dict)
+            else {"source": "manual", "origin_ref": str(p)}
+            for p in provenance
+        ]
+
+    # Lifecycle
+    if 'lifecycle' not in fm:
+        fm['lifecycle'] = 'current'
+    if 'superseded_by' not in fm:
+        fm['superseded_by'] = None
+
+    # Diátaxis
+    if 'doc_type' not in fm:
+        fm['doc_type'] = None
+
+    # Usage signals
+    if 'link_count' not in fm:
+        fm['link_count'] = 0
+    if 'last_accessed' not in fm:
+        fm['last_accessed'] = None
+
+    # Review cadence — compute from type
+    if 'review_interval_days' not in fm:
+        _DEFAULTS = {'base': 365, 'process': 180, 'plan': 90, 'help': 365,
+                     'research-note': 180, 'note': 90, 'mission': 365}
+        atype = fm.get('type', 'base')
+        fm['review_interval_days'] = _DEFAULTS.get(atype, 365)
+
+    # Edit history
+    if 'version' not in fm:
+        fm['version'] = 1
+    if 'history' not in fm:
+        from datetime import datetime, timezone
+        fm['history'] = [{
+            'v': 1,
+            'at': datetime.now(timezone.utc).isoformat(),
+            'by': 'agent:kruzzzy',
+            'note': 'Migrated to v1.7 schema',
+        }]
+
+    # Confidence
+    if 'confidence' not in fm:
+        fm['confidence'] = 0.8
+
+    fm['schema_version'] = 2
     return fm, body
 
 
 # ── Migration Engine ─────────────────────────────────────────────────────────
 
 def _parse_article(filepath: str) -> Tuple[Optional[dict], Optional[str]]:
-    """Read an article file, return (frontmatter, raw_content)."""
     import yaml
     try:
         with open(filepath) as f:
@@ -81,11 +141,9 @@ def _parse_article(filepath: str) -> Tuple[Optional[dict], Optional[str]]:
 
 
 def _write_article(filepath: str, fm: dict, body: str) -> None:
-    """Write frontmatter + body back to disk."""
     import yaml
     new_fm = yaml.dump(fm, default_flow_style=False, sort_keys=False, allow_unicode=True).strip()
     content = f"---\n{new_fm}\n---{body}"
-    # Atomic write: temp file + rename
     tmp = filepath + ".migrate_tmp"
     with open(tmp, 'w') as f:
         f.write(content)
@@ -93,7 +151,6 @@ def _write_article(filepath: str, fm: dict, body: str) -> None:
 
 
 def _article_needs_migration(fm: dict, target_version: int) -> bool:
-    """Check if an article needs migration to reach target_version."""
     current = fm.get("schema_version", 0)
     return current < target_version
 
@@ -103,21 +160,10 @@ def run_migrations(
     target_version: Optional[int] = None,
     dry_run: bool = False,
 ) -> Dict:
-    """Run pending migrations on all articles.
-
-    Args:
-        knowledge_dir: Root of the knowledge base. Default from config.
-        target_version: Migrate up to this version. Default: CURRENT_SCHEMA_VERSION.
-        dry_run: If True, preview changes without writing.
-
-    Returns:
-        Dict with 'scanned', 'migrated', 'skipped', 'errors', 'details' keys.
-    """
     kd = knowledge_dir or get("paths", "knowledge_dir", default="knowledge")
     target = target_version or CURRENT_SCHEMA_VERSION
     kb_path = Path(kd)
 
-    # Find migrations to apply
     pending = [(v, name, fn) for v, name, fn in _migrations if v > 0 and v <= target]
     if not pending:
         return {"scanned": 0, "migrated": 0, "skipped": 0, "errors": 0, "details": []}
@@ -130,9 +176,7 @@ def run_migrations(
         if fm is None:
             results["errors"] += 1
             results["details"].append({
-                "filepath": str(md),
-                "status": "error",
-                "reason": "Could not parse article",
+                "filepath": str(md), "status": "error", "reason": "Could not parse article",
             })
             continue
 
@@ -141,12 +185,10 @@ def run_migrations(
             results["skipped"] += 1
             continue
 
-        # Apply each pending migration in order
         migrated_versions = []
-        original_fm = dict(fm)
         for version, name, fn in pending:
             if version <= start_version:
-                continue  # Already at or past this version
+                continue
             try:
                 fm, body = fn(fm, body)
                 fm["schema_version"] = version
@@ -155,10 +197,8 @@ def run_migrations(
                 logger.error(f"Migration {version}:{name} failed for {md}: {e}")
                 results["errors"] += 1
                 results["details"].append({
-                    "filepath": str(md),
-                    "status": "error",
-                    "migration": f"{version}:{name}",
-                    "reason": str(e),
+                    "filepath": str(md), "status": "error",
+                    "migration": f"{version}:{name}", "reason": str(e),
                 })
                 break
 
@@ -167,8 +207,7 @@ def run_migrations(
                 _write_article(str(md), fm, body)
             results["migrated"] += 1
             results["details"].append({
-                "filepath": str(md),
-                "status": "migrated" if not dry_run else "would_migrate",
+                "filepath": str(md), "status": "migrated" if not dry_run else "would_migrate",
                 "from_version": start_version,
                 "to_version": fm.get("schema_version", start_version),
                 "migrations_applied": migrated_versions,
@@ -185,7 +224,6 @@ def run_migrations(
 
 
 def list_pending(knowledge_dir: Optional[str] = None) -> List[dict]:
-    """List articles that need migration, without applying changes."""
     kd = knowledge_dir or get("paths", "knowledge_dir", default="knowledge")
     target = CURRENT_SCHEMA_VERSION
     pending_articles = []
@@ -197,10 +235,8 @@ def list_pending(knowledge_dir: Optional[str] = None) -> List[dict]:
         current = fm.get("schema_version", 0)
         if current < target:
             pending_articles.append({
-                "filepath": str(md),
-                "slug": fm.get("slug", md.stem),
-                "current_version": current,
-                "target_version": target,
+                "filepath": str(md), "slug": fm.get("slug", md.stem),
+                "current_version": current, "target_version": target,
             })
 
     return pending_articles

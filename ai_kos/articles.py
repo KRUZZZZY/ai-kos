@@ -2,6 +2,8 @@
 
 Uses an in-memory index of slug→filepath + frontmatter cache for O(1) lookups.
 The index is built once on first access and incrementally updated on writes.
+
+v1.7: typed relations, usage signals, version history, review cadence, access filtering.
 """
 
 import os, uuid, logging, yaml
@@ -9,7 +11,10 @@ from pathlib import Path
 from datetime import date, datetime, timezone
 from typing import Optional, List, Dict
 
-from ai_kos.schemas import ArticleType, ARTICLE_CLASSES, TEMPLATES, article_to_markdown
+from ai_kos.schemas import (
+    ArticleType, ARTICLE_CLASSES, TEMPLATES, article_to_markdown,
+    DEFAULT_REVIEW_INTERVALS, VersionEntry,
+)
 from ai_kos.config import get
 
 logger = logging.getLogger("ai-kos.articles")
@@ -19,15 +24,11 @@ KNOWLEDGE_DIR = get("paths", "knowledge_dir", default="knowledge")
 # ── In-Memory Article Index ──────────────────────────────────────────────────
 
 class _ArticleIndex:
-    """Cached slug→filepath + frontmatter index. Built once, updated incrementally.
-
-    Solves the O(n) rglob/YAML-parse problem: at 71 articles it's imperceptible,
-    at 500+ it becomes noticeable. This makes all lookups O(1).
-    """
+    """Cached slug→filepath + frontmatter index. Built once, updated incrementally."""
 
     def __init__(self):
-        self._paths: Dict[str, str] = {}       # slug → absolute filepath
-        self._frontmatter: Dict[str, dict] = {} # slug → parsed frontmatter
+        self._paths: Dict[str, str] = {}
+        self._frontmatter: Dict[str, dict] = {}
         self._built = False
 
     @property
@@ -56,11 +57,16 @@ class _ArticleIndex:
                 "summary": fm.get("summary", ""),
                 "related": fm.get("related", []),
                 "filepath": self._paths[slug],
+                "doc_type": fm.get("doc_type"),
+                "lifecycle": fm.get("lifecycle", "current"),
+                "sensitivity_label": fm.get("sensitivity_label", "internal"),
+                "link_count": fm.get("link_count", 0),
+                "superseded_by": fm.get("superseded_by"),
             })
         return sorted(results, key=lambda r: r["title"])
 
     def stats(self) -> dict:
-        """Compute stats from cached frontmatter."""
+        """Compute stats from cached frontmatter. v1.7: link_count-based orphans."""
         self._ensure_built()
         by_type: Dict[str, int] = {}
         by_stability: Dict[str, int] = {}
@@ -89,7 +95,9 @@ class _ArticleIndex:
             total_kw += len(fm.get("keywords", []))
             total_links += len(fm.get("related", []))
 
-        orphans = [slug for slug, fm in self._frontmatter.items() if not fm.get("related")]
+        # v1.7: orphans = articles with link_count==0 (no inbound links), not empty related
+        orphans = [slug for slug, fm in self._frontmatter.items()
+                   if fm.get("link_count", len(fm.get("related", []))) == 0]
         n = max(1, len(self._frontmatter))
         return {
             "total_articles": len(self._frontmatter),
@@ -106,17 +114,14 @@ class _ArticleIndex:
         }
 
     def upsert(self, slug: str, filepath: str, frontmatter: dict) -> None:
-        """Add or update an entry in the index."""
         self._paths[slug] = filepath
         self._frontmatter[slug] = frontmatter
 
     def remove(self, slug: str) -> None:
-        """Remove an entry from the index."""
         self._paths.pop(slug, None)
         self._frontmatter.pop(slug, None)
 
     def invalidate(self) -> None:
-        """Force full rebuild on next access."""
         self._built = False
 
     def _ensure_built(self) -> None:
@@ -148,19 +153,45 @@ def _get_index() -> _ArticleIndex:
 
 
 def _refresh_index() -> None:
-    """Force a full index rebuild (call after external file changes)."""
     _index.invalidate()
 
 
 # ── Path Resolution ──────────────────────────────────────────────────────────
 
 def _slug_path(slug: str) -> str:
-    """O(1) lookup: return the filepath for a slug, or a fallback path for creation."""
     idx = _get_index()
     path = idx.filepath(slug)
     if path:
         return path
     return str(Path(KNOWLEDGE_DIR) / "bundles" / "general" / f"{slug}.md")
+
+
+# ── Helpers ──────────────────────────────────────────────────────────────────
+
+def _get_review_interval(article_type: str) -> int:
+    """Get review_interval_days for a type, falling back to defaults."""
+    try:
+        at = ArticleType(article_type)
+        return DEFAULT_REVIEW_INTERVALS.get(at, 365)
+    except Exception:
+        return 365
+
+
+def _compute_next_review(today: date, interval_days: Optional[int], article_type: str) -> date:
+    """Compute next_review_at from today + review_interval_days."""
+    interval = interval_days if interval_days else _get_review_interval(article_type)
+    return today.replace(year=today.year + (interval // 365), month=today.month, day=today.day) \
+        if interval >= 365 else date.fromordinal(today.toordinal() + interval)
+
+
+def _make_history_entry(version: int, note: str = "created") -> VersionEntry:
+    """Create a compact version history entry."""
+    return VersionEntry(
+        v=version,
+        at=datetime.now(timezone.utc),
+        by="agent:kruzzzy",
+        note=note,
+    )
 
 
 # ── CRUD Operations ──────────────────────────────────────────────────────────
@@ -174,11 +205,37 @@ def create_article(article_type: str, data: dict) -> dict:
     today = date.today()
     for k in ['created_at', 'updated_at', 'reviewed_at']:
         data.setdefault(k, today)
-    data.setdefault('next_review_at', today.replace(year=today.year + 1))
+
+    # v1.7: review cadence
+    interval = data.get('review_interval_days')
+    data.setdefault('next_review_at', _compute_next_review(today, interval, article_type))
+
+    # v1.7: version + history
+    ver = data.get('version', 1)
+    if 'history' not in data or not data['history']:
+        data['history'] = [_make_history_entry(ver, "created")]
+
+    # v1.7: coerce provenance to list of dicts
+    if 'provenance' in data:
+        prov = data['provenance']
+        if isinstance(prov, list):
+            data['provenance'] = [
+                {"source": "manual", "origin_ref": p} if isinstance(p, str) else p
+                for p in prov
+            ]
+
+    # v1.7: coerce related to list of {slug, type} dicts
+    if 'related' in data:
+        data['related'] = [
+            {"slug": r, "type": "see-also"} if isinstance(r, str) else r
+            for r in data['related']
+        ]
+
     try:
         article = cls(**data)
     except Exception as e:
         return {"error": f"Validation failed: {e}"}
+
     md_content = article_to_markdown(article)
     filepath = _slug_path(article.slug)
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
@@ -186,7 +243,10 @@ def create_article(article_type: str, data: dict) -> dict:
         f.write(md_content)
 
     # Update in-memory index
-    fm = yaml.safe_load(md_content.split("---")[1]) or {}
+    try:
+        fm = yaml.safe_load(md_content.split("---")[1]) or {}
+    except Exception:
+        fm = {}
     _get_index().upsert(article.slug, filepath, fm)
 
     logger.info(f"Created {article_type}: {article.slug}")
@@ -210,11 +270,26 @@ def read_article(slug: str) -> dict | None:
     parts = content.split('---', 2)
     fm = yaml.safe_load(parts[1]) or {}
     body = parts[2] if len(parts) > 2 else ""
+
+    # v1.7: bump usage signals
+    fm['retrieval_count'] = fm.get('retrieval_count', 0) + 1
+    fm['last_accessed'] = date.today().isoformat()
+
+    # Write back updated frontmatter
+    import re
+    new_fm = yaml.dump(fm, default_flow_style=False, sort_keys=False, allow_unicode=True).strip()
+    body_clean = re.sub(r'\n## Related\n.*', '', body, flags=re.DOTALL) if '## Related' in body else body
+    new_content = f"---\n{new_fm}\n---{body_clean}"
+    with open(filepath, 'w') as f:
+        f.write(new_content)
+
+    _get_index().upsert(slug, filepath, fm)
+
     return {"slug": slug, "filepath": filepath, "frontmatter": fm, "body": body.strip(), "raw": content}
 
 
 def update_article(slug: str, updates: dict) -> dict:
-    """Update an article's frontmatter. Uses EAFP (try open) instead of LBYL (exists check)."""
+    """Update an article's frontmatter. v1.7: auto-increment version, recompute review."""
     filepath = _slug_path(slug)
     try:
         with open(filepath) as f:
@@ -225,14 +300,28 @@ def update_article(slug: str, updates: dict) -> dict:
     parts = content.split('---', 2)
     fm = yaml.safe_load(parts[1]) or {}
     fm.update(updates)
-    fm['updated_at'] = date.today().isoformat()
+    today = date.today()
+    fm['updated_at'] = today.isoformat()
+
+    # v1.7: auto-increment version + append history
+    prev_version = fm.get('version', 1)
+    new_version = prev_version + 1
+    fm['version'] = new_version
+    history = fm.get('history', [])
+    history.append(_make_history_entry(new_version, "updated").model_dump(mode='json'))
+    fm['history'] = history
+
+    # v1.7: recompute next_review_at from review_interval_days
+    interval = fm.get('review_interval_days')
+    article_type = fm.get('type', 'base')
+    fm['next_review_at'] = _compute_next_review(today, interval, article_type).isoformat()
+
     new_fm = yaml.dump(fm, default_flow_style=False, sort_keys=False, allow_unicode=True).strip()
     body = parts[2] if len(parts) > 2 else ""
     new_content = f"---\n{new_fm}\n---{body}"
     with open(filepath, 'w') as f:
         f.write(new_content)
 
-    # Update in-memory index
     _get_index().upsert(slug, filepath, fm)
 
     from ai_kos.linker import link_all
@@ -258,13 +347,28 @@ def delete_article(slug: str) -> dict:
     return {"status": "deleted", "slug": slug, "moved_to": str(dest)}
 
 
-def list_articles(article_type: Optional[str] = None, keyword: Optional[str] = None) -> List[dict]:
-    """List all articles, optionally filtered. Uses in-memory index — O(1) after first call."""
+def list_articles(
+    article_type: Optional[str] = None,
+    keyword: Optional[str] = None,
+    access: Optional[str] = None,
+    doc_type: Optional[str] = None,
+    lifecycle: Optional[str] = None,
+) -> List[dict]:
+    """List all articles with optional v1.7 filters."""
     results = _get_index().list_all()
     if article_type:
         results = [r for r in results if r["type"] == article_type]
     if keyword:
         results = [r for r in results if keyword.lower() in [k.lower() for k in r.get("keywords", [])]]
+    if access:
+        # Filter: only return articles at or below the requested access level
+        levels = {"public": 0, "internal": 1, "confidential": 2}
+        req_level = levels.get(access, 1)
+        results = [r for r in results if levels.get(r.get("sensitivity_label", "internal"), 1) <= req_level]
+    if doc_type:
+        results = [r for r in results if r.get("doc_type") == doc_type]
+    if lifecycle:
+        results = [r for r in results if r.get("lifecycle") == lifecycle]
     return results
 
 
@@ -295,5 +399,4 @@ def find_merge_candidates(slug: str) -> List[dict]:
 
 
 def stats() -> dict:
-    """Health statistics from in-memory index."""
     return _get_index().stats()

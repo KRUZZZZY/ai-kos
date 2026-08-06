@@ -25,7 +25,7 @@ BASE_DATA = {
     "next_review_at": NEXT_YEAR,
     "keywords": ["test", "article", "example"],
     "summary": "A test article for validation.",
-    "provenance": ["test_source.md"],
+    "provenance": [{"source": "manual", "origin_ref": "test_source.md"}],
 }
 
 

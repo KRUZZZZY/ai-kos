@@ -1,10 +1,10 @@
 """AI-KOS MCP server — exposes full knowledge database to Hermes via MCP JSON-RPC.
 
-All blocking I/O operations (search, link, stats, list, ingest, create, etc.)
-are offloaded to a thread pool via asyncio.to_thread() so concurrent agent requests
-don't block the event loop. Lightweight ops (templates) stay on the event loop.
+v1.7: access/doc_type/lifecycle filtering, typed relations, usage signals.
 
-Tools (14 + 1 migrate):
+All blocking I/O operations are offloaded to a thread pool via asyncio.to_thread().
+
+Tools (15):
   ai_kos_ingest, ai_kos_create, ai_kos_search, ai_kos_read, ai_kos_link,
   ai_kos_list, ai_kos_merge_candidates, ai_kos_templates, ai_kos_graph,
   ai_kos_compare, ai_kos_stats, ai_kos_clean, ai_kos_research_plan,
@@ -40,23 +40,36 @@ TOOLS = [
     ),
     types.Tool(
         name="ai_kos_search",
-        description="Search knowledge base. Returns articles matching the query by keyword + semantic similarity.",
-        input_schema={"type": "object", "properties": {"query": {"type": "string", "description": "Search query"}, "article_type": {"type": "string", "description": "Optional: filter by type (base/process/plan/help/research-note/note/mission)"}, "top_k": {"type": "integer", "description": "Max results", "default": 10}}, "required": ["query"]},
+        description="Search knowledge base. Returns articles matching the query by keyword + semantic similarity. v1.7: filters by doc_type, lifecycle, and access level.",
+        input_schema={"type": "object", "properties": {
+            "query": {"type": "string", "description": "Search query"},
+            "article_type": {"type": "string", "description": "Optional: filter by type (base/process/plan/help/research-note/note/mission)"},
+            "doc_type": {"type": "string", "enum": ["tutorial", "how-to", "reference", "explanation"], "description": "Optional: Diátaxis consumption mode"},
+            "lifecycle": {"type": "string", "enum": ["current", "superseded", "historical"], "description": "Optional: filter by lifecycle state"},
+            "access": {"type": "string", "enum": ["public", "internal", "confidential"], "description": "Optional: only return articles at or below this sensitivity"},
+            "top_k": {"type": "integer", "description": "Max results", "default": 10},
+        }, "required": ["query"]},
     ),
     types.Tool(
         name="ai_kos_read",
-        description="Read a full knowledge article by slug. Returns frontmatter + body.",
+        description="Read a full knowledge article by slug. Returns frontmatter + body. v1.7: bumps retrieval_count and last_accessed on every read.",
         input_schema={"type": "object", "properties": {"slug": {"type": "string", "description": "Article slug"}}, "required": ["slug"]},
     ),
     types.Tool(
         name="ai_kos_link",
-        description="Run the auto-linker. Scans all articles and creates [[wikilinks]] between any pair sharing >=N keywords (configurable via min_overlap, default 2). Also reports merge candidates (>80% keyword overlap).",
+        description="Run the auto-linker. Scans all articles and creates typed [[wikilinks]] between any pair sharing >=N keywords. Also reports merge candidates (>80% keyword overlap) and auto-sets lifecycle=superseded on losers.",
         input_schema={"type": "object", "properties": {"min_overlap": {"type": "integer", "description": "Minimum shared keywords to create a link. Default from config (2). Higher = fewer links (thicker). Lower = more links (weaker)."}}},
     ),
     types.Tool(
         name="ai_kos_list",
-        description="List all knowledge articles. Optionally filter by type or keyword.",
-        input_schema={"type": "object", "properties": {"article_type": {"type": "string", "description": "Filter by type"}, "keyword": {"type": "string", "description": "Filter by keyword"}}},
+        description="List all knowledge articles. v1.7: filter by article_type, keyword, access, doc_type, lifecycle.",
+        input_schema={"type": "object", "properties": {
+            "article_type": {"type": "string", "description": "Filter by type"},
+            "keyword": {"type": "string", "description": "Filter by keyword"},
+            "access": {"type": "string", "enum": ["public", "internal", "confidential"], "description": "Filter by access level"},
+            "doc_type": {"type": "string", "enum": ["tutorial", "how-to", "reference", "explanation"], "description": "Filter by Diátaxis doc_type"},
+            "lifecycle": {"type": "string", "enum": ["current", "superseded", "historical"], "description": "Filter by lifecycle"},
+        }},
     ),
     types.Tool(
         name="ai_kos_merge_candidates",
@@ -70,7 +83,7 @@ TOOLS = [
     ),
     types.Tool(
         name="ai_kos_graph",
-        description="Export the knowledge graph as JSON (nodes + edges). Use for visualization or to inspect the connection structure.",
+        description="Export the knowledge graph as JSON (nodes + edges). v1.7: nodes include lifecycle, doc_type; edges include relation type.",
         input_schema={"type": "object", "properties": {}},
     ),
     types.Tool(
@@ -80,7 +93,7 @@ TOOLS = [
     ),
     types.Tool(
         name="ai_kos_stats",
-        description="Get knowledge base health stats: article counts by type, confidence distribution, articles past review, orphans, gaps.",
+        description="Get knowledge base health stats: article counts by type, confidence distribution, articles past review, orphans (link_count=0), gaps.",
         input_schema={"type": "object", "properties": {}},
     ),
     types.Tool(
@@ -90,30 +103,25 @@ TOOLS = [
     ),
     types.Tool(
         name="ai_kos_research_plan",
-        description="Generate a structured research plan from a question. Returns sub-questions, search queries, and perspectives to investigate (STORM-style). Review the plan, then execute searches for each sub-question using web_search.",
+        description="Generate a structured research plan from a question. Returns sub-questions, search queries, and perspectives to investigate (STORM-style).",
         input_schema={"type": "object", "properties": {"question": {"type": "string", "description": "The research question to investigate"}}, "required": ["question"]},
     ),
     types.Tool(
         name="ai_kos_research_persist",
-        description="Persist research findings as AI-KOS articles. After executing the research plan, structure findings and save them. Creates a research-note + base synthesis article.",
+        description="Persist research findings as AI-KOS articles. Creates a research-note + base synthesis article.",
         input_schema={"type": "object", "properties": {"question": {"type": "string"}, "sub_questions": {"type": "array", "items": {"type": "string"}}, "findings": {"type": "array", "items": {"type": "object", "properties": {"sub_question_idx": {"type": "integer"}, "url": {"type": "string"}, "title": {"type": "string"}, "key_claim": {"type": "string"}, "evidence": {"type": "string"}}}}, "synthesis": {"type": "string", "description": "Final synthesized report in markdown"}, "knowledge_gaps": {"type": "array", "items": {"type": "string"}, "description": "Things we still don't know"}}, "required": ["question", "findings"]},
     ),
     types.Tool(
         name="ai_kos_migrate",
-        description="Run schema migrations on all articles. Use --dry-run to preview changes without writing. Adds schema_version field and applies any pending transforms.",
+        description="Run schema migrations on all articles. Use --dry-run to preview changes without writing. v1.7: migrates to typed relations, lifecycle, provenance enum, usage signals, and review cadence.",
         input_schema={"type": "object", "properties": {"dry_run": {"type": "boolean", "description": "Preview changes without writing", "default": False}}},
     ),
 ]
 
 
-# ── Sync dispatch (runs in thread pool) ──────────────────────────────────────
+# ── Sync dispatch ────────────────────────────────────────────────────────────
 
 def _dispatch_tool(name: str, arguments: dict) -> dict:
-    """Synchronous tool dispatch — called via asyncio.to_thread().
-
-    All blocking I/O (file reads, YAML parsing, linking, search) happens here,
-    safely off the event loop thread.
-    """
     if name == "ai_kos_ingest":
         from ai_kos.ingestion import extract
         return extract(arguments["filepath"])
@@ -124,7 +132,14 @@ def _dispatch_tool(name: str, arguments: dict) -> dict:
 
     elif name == "ai_kos_search":
         from ai_kos.search import search
-        results = search(arguments["query"], top_k=arguments.get("top_k", 10), article_type=arguments.get("article_type"))
+        results = search(
+            arguments["query"],
+            top_k=arguments.get("top_k", 10),
+            article_type=arguments.get("article_type"),
+            doc_type=arguments.get("doc_type"),
+            lifecycle=arguments.get("lifecycle"),
+            access=arguments.get("access"),
+        )
         return {"results": results, "total": len(results)}
 
     elif name == "ai_kos_read":
@@ -138,7 +153,13 @@ def _dispatch_tool(name: str, arguments: dict) -> dict:
 
     elif name == "ai_kos_list":
         from ai_kos.articles import list_articles
-        return {"articles": list_articles(article_type=arguments.get("article_type"), keyword=arguments.get("keyword"))}
+        return {"articles": list_articles(
+            article_type=arguments.get("article_type"),
+            keyword=arguments.get("keyword"),
+            access=arguments.get("access"),
+            doc_type=arguments.get("doc_type"),
+            lifecycle=arguments.get("lifecycle"),
+        )}
 
     elif name == "ai_kos_merge_candidates":
         from ai_kos.articles import find_merge_candidates
@@ -216,12 +237,6 @@ async def handle_list_tools(_ctx, _req: types.ListToolsRequest) -> types.ListToo
 
 
 async def handle_call_tool(_ctx, req: types.CallToolRequestParams) -> types.CallToolResult:
-    """Dispatch tool call via thread pool to avoid blocking the event loop.
-
-    All sync I/O (file reads, YAML parsing, linking, search) runs in a
-    thread pool via asyncio.to_thread(). This prevents one slow article
-    from blocking all concurrent agent requests.
-    """
     name = req.name
     arguments = req.arguments or {}
 
@@ -235,13 +250,9 @@ async def handle_call_tool(_ctx, req: types.CallToolRequestParams) -> types.Call
     )
 
 
-# ── Register ─────────────────────────────────────────────────────────────────
-
 server.add_request_handler("tools/list", types.ListToolsRequest, handle_list_tools)
 server.add_request_handler("tools/call", types.CallToolRequestParams, handle_call_tool)
 
-
-# ── Entrypoint ───────────────────────────────────────────────────────────────
 
 async def main():
     async with stdio_server() as (read, write):
@@ -249,7 +260,6 @@ async def main():
 
 
 def entrypoint():
-    """Synchronous entry point for console_scripts."""
     asyncio.run(main())
 
 
