@@ -1,5 +1,6 @@
 """Config loader for AI-KOS. Reads config.yaml from project root or cwd."""
 
+import copy
 import os
 import yaml
 from pathlib import Path
@@ -34,7 +35,7 @@ def load() -> Dict[str, Any]:
     global _config
     if _config is not None:
         return _config
-    cfg = dict(_DEFAULT_CONFIG)
+    cfg = copy.deepcopy(_DEFAULT_CONFIG)
     path = _find_config()
     if path:
         with open(path) as f:
