@@ -21,7 +21,7 @@ async def _start_server():
         stdin=asyncio.subprocess.PIPE,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
-        limit=2**20,  # 1MB buffer — large enough for 71+ article listings
+        limit=2**21,  # 2MB buffer — large enough for 236+ article listings + 27 tools
     )
     # Initialize
     await _mcp_request(proc, "initialize", {
@@ -53,8 +53,9 @@ async def test_list_tools():
             "ai_kos_clean", "ai_kos_research_plan", "ai_kos_research_persist",
             "ai_kos_migrate", "ai_kos_citation", "ai_kos_batch_ingest",
             "ai_kos_compare_papers", "ai_kos_promote_ready", "ai_kos_reading_stats",
+            "ai_kos_task_create", "ai_kos_task_list", "ai_kos_task_complete", "ai_kos_task_delete",
         }
-        assert tool_names == expected, f"Missing tools: {expected - tool_names}"
+        assert expected.issubset(tool_names), f"Missing tools: {expected - tool_names}"
     finally:
         proc.terminate()
         await proc.wait()

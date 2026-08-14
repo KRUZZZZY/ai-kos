@@ -1,0 +1,18 @@
+backends:
+- md
+- sql
+- blob
+- json
+- graph
+embedding:
+  dim: 768
+  model: nomic-embed-text
+limits:
+  max_file_mb: 100
+  max_rows_per_query: 500
+paths:
+  datasets_dir: datasets
+  knowledge_dir: knowledge
+qdrant:
+  host: localhost
+  port: 6333

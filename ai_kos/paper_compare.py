@@ -85,12 +85,13 @@ def promote_ready(min_notes: int = 5) -> List[dict]:
     Returns topics sorted by note count, with details about which notes are ready.
     """
     idx = _get_index()
+    idx._ensure_built()
     topics: Dict[str, List[str]] = {}
 
     for slug, fm in idx._frontmatter.items():
         if fm.get("type") != "research-note":
             continue
-        target = fm.get("target_base_slug")
+        target = fm.get("target_base_slug") or fm.get("topic")
         if not target:
             continue
         topics.setdefault(target, []).append(slug)
@@ -115,6 +116,7 @@ def promote_ready(min_notes: int = 5) -> List[dict]:
 def reading_status_stats() -> dict:
     """Get statistics on reading status across all research-note articles."""
     idx = _get_index()
+    idx._ensure_built()
     counts = {"unread": 0, "skimmed": 0, "annotated": 0, "synthesized": 0}
     by_status: Dict[str, List[str]] = {k: [] for k in counts}
 

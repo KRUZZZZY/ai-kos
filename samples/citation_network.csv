@@ -1,0 +1,11 @@
+source,target,year,citation_type
+Carriere2020,Hofer2017,2020,extends
+Carriere2020,Adams2017,2020,cites
+Hofer2017,Bubenik2015,2017,extends
+Perea2022,Bubenik2015,2022,cites
+Perea2022,Carriere2020,2022,compares
+Conti2022,Hofer2017,2022,cites
+Conti2022,Carriere2020,2022,compares
+Conti2022,Perea2022,2022,cites
+Telyatnikov2024,Carriere2020,2024,extends
+Telyatnikov2024,Conti2022,2024,compares

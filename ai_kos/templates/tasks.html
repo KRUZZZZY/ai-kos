@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="section-header">
+  <h1 class="section-title">Tasks</h1>
+  <span style="color:var(--text-dim)">{{ tasks|length }} tasks{% if project_filter %} in project{% endif %}</span>
+</div>
+
+<!-- Projects Summary (only when no project filter) -->
+{% if projects and not project_filter %}
+<div class="card" style="margin-bottom:20px">
+  <div class="card-header">Projects</div>
+  <table>
+    <thead><tr>
+      <th>Project</th><th>Tasks</th><th>Done</th><th>Blocked</th><th>🔴</th><th>🟡</th><th>Progress</th>
+    </tr></thead>
+    <tbody>
+    {% for p in projects %}
+    <tr>
+      <td><a href="/tasks?project={{ p.slug }}" class="project-link"><strong>{{ p.title }}</strong></a></td>
+      <td>{{ p.total }}</td>
+      <td><span style="color:var(--success)">{{ p.done }}</span></td>
+      <td><span style="color:var(--danger)">{{ p.blocked }}</span></td>
+      <td>{{ p.red }}</td>
+      <td>{{ p.yellow }}</td>
+      <td>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:{{ p.completion_pct }}%"></div>
+        </div>
+        <small style="color:var(--text-dim)">{{ p.completion_pct }}%</small>
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+<!-- Create Task Form -->
+<div class="card">
+  <div class="card-header">New Task</div>
+  <form method="POST" action="/tasks">
+    <input type="hidden" name="action" value="create">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+      <div class="form-group">
+        <label>Title *</label>
+        <input type="text" name="title" placeholder="What needs to be done?" required>
+      </div>
+      <div class="form-group">
+        <label>Urgency</label>
+        <select name="urgency">
+          <option value="red">🔴 Red — Blocking</option>
+          <option value="yellow">🟡 Yellow — Hindering</option>
+          <option value="green" selected>🟢 Green — Normal</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Project (mission slug)</label>
+        <input type="text" name="project_slug" placeholder="ai-kos-dashboard-mission" value="{{ project_filter or '' }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea name="description" placeholder="Optional context or notes..."></textarea>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group">
+        <label>Tags (comma-separated)</label>
+        <input type="text" name="tags" placeholder="benchmark, tda, urgent">
+      </div>
+      <div class="form-group">
+        <label>Article Slugs * (at least one required)</label>
+        <input type="text" name="article_slugs" placeholder="persistent-homology, tda-intro" required>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Create Task</button>
+  </form>
+</div>
+
+<!-- Filters -->
+<div class="filters">
+  <a href="/tasks" class="filter-btn {% if not status and not urgency_filter and not project_filter %}active{% endif %}">All</a>
+  <a href="/tasks?status=research" class="filter-btn {% if status == 'research' %}active{% endif %}">🔬 Research</a>
+  <a href="/tasks?status=ready" class="filter-btn {% if status == 'ready' %}active{% endif %}">✅ Ready</a>
+  <a href="/tasks?status=in_progress" class="filter-btn {% if status == 'in_progress' %}active{% endif %}">🏗 In Progress</a>
+  <a href="/tasks?status=qa" class="filter-btn {% if status == 'qa' %}active{% endif %}">👁 QA</a>
+  <a href="/tasks?status=qa_passed" class="filter-btn {% if status == 'qa_passed' %}active{% endif %}">✔ Done</a>
+  <a href="/tasks?status=blocked" class="filter-btn {% if status == 'blocked' %}active{% endif %}">🚫 Blocked</a>
+  <span style="margin:0 8px;color:var(--border)">|</span>
+  <a href="/tasks?urgency=red" class="filter-btn urgency-red {% if urgency_filter == 'red' %}active{% endif %}">🔴</a>
+  <a href="/tasks?urgency=yellow" class="filter-btn urgency-yellow {% if urgency_filter == 'yellow' %}active{% endif %}">🟡</a>
+  <a href="/tasks?urgency=green" class="filter-btn urgency-green {% if urgency_filter == 'green' %}active{% endif %}">🟢</a>
+</div>
+
+<!-- Task List -->
+{% if tasks %}
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Project</th>
+        <th>Urgency</th>
+        <th>Status</th>
+        <th>Tags</th>
+        <th>Articles</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in tasks %}
+      <tr class="task-row urgency-{{ t.urgency }}">
+        <td style="color:var(--text-dim)">#{{ t.id }}</td>
+        <td>
+          <strong>{{ t.title }}</strong>
+          {% if t.description %}<br><small style="color:var(--text-dim)">{{ t.description[:120] }}</small>{% endif %}
+          {% if t.data_summary %}<br><small style="color:var(--accent)">📋 {{ t.data_summary[:80] }}</small>{% endif %}
+        </td>
+        <td>
+          {% if t.project_slug %}
+          <a href="/tasks?project={{ t.project_slug }}" class="task-article-tag" style="font-weight:600">{{ t.project_slug }}</a>
+          {% else %}<span style="color:var(--text-dim)">—</span>{% endif %}
+        </td>
+        <td><span class="badge urgency-badge-{{ t.urgency }}">{{ t.urgency }}</span></td>
+        <td><span class="badge status-badge-{{ t.status }}">{{ t.status }}</span></td>
+        <td>
+          {% if t.tags %}
+          <div class="task-tags">
+            {% for tag in t.tags %}
+            <span class="tag-pill">{{ tag }}</span>
+            {% endfor %}
+          </div>
+          {% else %}<span style="color:var(--text-dim)">—</span>{% endif %}
+        </td>
+        <td>
+          {% if t.article_slugs %}
+          <div class="task-articles">
+            {% for s in t.article_slugs[:3] %}
+            <a href="/articles/{{ s }}" class="task-article-tag">{{ s }}</a>
+            {% endfor %}
+          </div>
+          {% else %}<span style="color:var(--text-dim)">—</span>{% endif %}
+        </td>
+        <td>
+          <div class="task-actions">
+            {% if t.status != 'qa_passed' and t.status != 'blocked' %}
+            <form method="POST" action="/tasks" style="display:inline">
+              <input type="hidden" name="action" value="advance">
+              <input type="hidden" name="task_id" value="{{ t.id }}">
+              <button class="btn btn-success btn-sm" title="Advance">▶</button>
+            </form>
+            {% endif %}
+            {% if t.status != 'blocked' and t.status != 'qa_passed' %}
+            <form method="POST" action="/tasks" style="display:inline">
+              <input type="hidden" name="action" value="block">
+              <input type="hidden" name="task_id" value="{{ t.id }}">
+              <button class="btn btn-warning btn-sm" title="Block">🚫</button>
+            </form>
+            {% endif %}
+            {% if t.status == 'blocked' %}
+            <form method="POST" action="/tasks" style="display:inline">
+              <input type="hidden" name="action" value="unblock">
+              <input type="hidden" name="task_id" value="{{ t.id }}">
+              <button class="btn btn-ghost btn-sm" title="Unblock">🔓</button>
+            </form>
+            {% endif %}
+            <form method="POST" action="/tasks" style="display:inline" onsubmit="return confirm('Delete task #{{ t.id }}?')">
+              <input type="hidden" name="action" value="delete">
+              <input type="hidden" name="task_id" value="{{ t.id }}">
+              <button class="btn btn-danger btn-sm">✕</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty">
+  <div class="empty-icon">✓</div>
+  <p>{% if status or urgency_filter or project_filter %}No matching tasks{% else %}No tasks yet — create one above{% endif %}</p>
+</div>
+{% endif %}
+{% endblock %}

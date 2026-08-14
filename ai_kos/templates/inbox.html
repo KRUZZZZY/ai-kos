@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="section-header">
+  <h1 class="section-title">Inbox</h1>
+  <span style="color:var(--text-dim)">{{ inbox_path }}</span>
+</div>
+
+<div class="card">
+  <div class="card-header">Files ({{ files|length }})</div>
+  {% if files %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>File</th>
+          <th>Type</th>
+          <th>Size</th>
+          <th>Modified</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in files %}
+        <tr>
+          <td>{{ f.name }}</td>
+          <td><span class="file-ext">{{ f.ext }}</span></td>
+          <td>{{ f.size_human }}</td>
+          <td style="color:var(--text-dim);font-size:13px">{{ f.modified[:10] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty">
+    <div class="empty-icon">📥</div>
+    <p>Inbox is empty. Drop files in {{ inbox_path }} to see them here.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -30,6 +30,8 @@ classifiers = [
 [project.scripts]
 ai-kos = "ai_kos.cli:main"
 ai-kos-mcp = "ai_kos.mcp_server:entrypoint"
+ai-kos-serve = "ai_kos.server:main"
+ai-kos-vscode-bridge = "ai_kos.vscode_bridge:entrypoint"
 
 [project.optional-dependencies]
 pdf = ["docling>=2.0", "PyPDF2>=3.0"]

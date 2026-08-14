@@ -1,0 +1,180 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "California",
+        "abbrev": "CA",
+        "population": 39538223
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -124.4,
+              32.5
+            ],
+            [
+              -114.1,
+              32.5
+            ],
+            [
+              -114.1,
+              42.0
+            ],
+            [
+              -124.4,
+              42.0
+            ],
+            [
+              -124.4,
+              32.5
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Texas",
+        "abbrev": "TX",
+        "population": 29145505
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -106.6,
+              25.8
+            ],
+            [
+              -93.5,
+              25.8
+            ],
+            [
+              -93.5,
+              36.5
+            ],
+            [
+              -106.6,
+              36.5
+            ],
+            [
+              -106.6,
+              25.8
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "New York",
+        "abbrev": "NY",
+        "population": 20201249
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.8,
+              40.5
+            ],
+            [
+              -71.9,
+              40.5
+            ],
+            [
+              -71.9,
+              45.0
+            ],
+            [
+              -79.8,
+              45.0
+            ],
+            [
+              -79.8,
+              40.5
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Washington",
+        "abbrev": "WA",
+        "population": 7705281
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -124.8,
+              45.5
+            ],
+            [
+              -116.9,
+              45.5
+            ],
+            [
+              -116.9,
+              49.0
+            ],
+            [
+              -124.8,
+              49.0
+            ],
+            [
+              -124.8,
+              45.5
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Colorado",
+        "abbrev": "CO",
+        "population": 5773714
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -109.1,
+              37.0
+            ],
+            [
+              -102.0,
+              37.0
+            ],
+            [
+              -102.0,
+              41.0
+            ],
+            [
+              -109.1,
+              41.0
+            ],
+            [
+              -109.1,
+              37.0
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

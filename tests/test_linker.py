@@ -1,11 +1,13 @@
-"""Tests for AI-KOS linker — keyword overlap, merge detection, link_all. v1.7 typed relations."""
-
+"""Tests for AI-KOS linker — keyword overlap, merge detection, link_all. v1.8 IDF-weighted."""
 import tempfile, os, yaml
 from pathlib import Path
 from ai_kos.linker import (
     _parse_article, _calculate_links, link_all, ArticleMeta,
     MERGE_THRESHOLD,
 )
+
+# All tests use count-based mode (idf_threshold=0) for deterministic behavior
+IDF_OFF = 0
 
 
 def make_article(path: str, slug: str, keywords: list[str], related: list[str] | None = None):
@@ -17,7 +19,7 @@ def make_article(path: str, slug: str, keywords: list[str], related: list[str] |
         "title": slug.replace("-", " ").title(),
         "type": "base",
         "keywords": keywords,
-        "related": related or [],  # list of strings → linker normalizes to [{slug, type}]
+        "related": related or [],
         "summary": f"Article about {slug}",
         "schema_version": 2,
     }
@@ -42,7 +44,6 @@ class TestParseArticle:
         p = tmp_path / "linked.md"
         make_article(str(p), "linked", ["x", "y", "z"], related=["a", "b"])
         meta = _parse_article(str(p))
-        # v1.7: related is now list of {slug, type} dicts
         assert meta.related == [
             {"slug": "a", "type": "see-also"},
             {"slug": "b", "type": "see-also"},
@@ -63,7 +64,7 @@ class TestCalculateLinks:
             ArticleMeta("a", "", {"x", "y", "z"}, []),
             ArticleMeta("b", "", {"p", "q", "r"}, []),
         ]
-        links, merges = _calculate_links(articles)
+        links, merges = _calculate_links(articles, idf_threshold=IDF_OFF)
         assert links["a"] == set()
         assert links["b"] == set()
         assert merges == []
@@ -73,7 +74,7 @@ class TestCalculateLinks:
             ArticleMeta("a", "", {"x", "y", "z"}, []),
             ArticleMeta("b", "", {"x", "y", "z", "w"}, []),
         ]
-        links, merges = _calculate_links(articles)
+        links, merges = _calculate_links(articles, idf_threshold=IDF_OFF)
         assert links["a"] == {"b"}
         assert links["b"] == {"a"}
 
@@ -82,7 +83,7 @@ class TestCalculateLinks:
             ArticleMeta("a", "", {"x", "y"}, []),
             ArticleMeta("b", "", {"x", "y", "z"}, []),
         ]
-        links, merges = _calculate_links(articles)
+        links, merges = _calculate_links(articles, idf_threshold=IDF_OFF)
         assert links["a"] == {"b"}
 
     def test_one_shared_no_link(self):
@@ -90,7 +91,7 @@ class TestCalculateLinks:
             ArticleMeta("a", "", {"x", "p"}, []),
             ArticleMeta("b", "", {"x", "q", "r"}, []),
         ]
-        links, merges = _calculate_links(articles)
+        links, merges = _calculate_links(articles, idf_threshold=IDF_OFF)
         assert links["a"] == set()
 
     def test_merge_candidate_detected(self):
@@ -98,7 +99,7 @@ class TestCalculateLinks:
             ArticleMeta("a", "", {"a", "b", "c", "d"}, []),
             ArticleMeta("b", "", {"a", "b", "c", "d"}, []),
         ]
-        links, merges = _calculate_links(articles)
+        links, merges = _calculate_links(articles, idf_threshold=IDF_OFF)
         assert len(merges) == 1
         assert merges[0][2] >= MERGE_THRESHOLD
 
@@ -107,7 +108,7 @@ class TestCalculateLinks:
             ArticleMeta("a", "", {"a", "b", "c", "d", "e"}, []),
             ArticleMeta("b", "", {"a", "b", "f", "g", "h"}, []),
         ]
-        links, merges = _calculate_links(articles)
+        links, merges = _calculate_links(articles, idf_threshold=IDF_OFF)
         assert merges == []
 
     def test_bidirectional_links(self):
@@ -116,7 +117,7 @@ class TestCalculateLinks:
             ArticleMeta("b", "", {"1", "2", "3", "4"}, []),
             ArticleMeta("c", "", {"1", "2", "3", "5"}, []),
         ]
-        links, merges = _calculate_links(articles)
+        links, merges = _calculate_links(articles, idf_threshold=IDF_OFF)
         assert links["a"] == {"b", "c"}
         assert links["b"] == {"a", "c"}
         assert links["c"] == {"a", "b"}
@@ -126,15 +127,15 @@ class TestCalculateLinks:
             ArticleMeta("a", "", {"x", "y"}, []),
             ArticleMeta("b", "", {"x", "y", "z"}, []),
         ]
-        links3, _ = _calculate_links(articles, min_overlap=3)
+        links3, _ = _calculate_links(articles, min_overlap=3, idf_threshold=IDF_OFF)
         assert links3["a"] == set()
-        links2, _ = _calculate_links(articles, min_overlap=2)
+        links2, _ = _calculate_links(articles, min_overlap=2, idf_threshold=IDF_OFF)
         assert links2["a"] == {"b"}
         articles2 = [
             ArticleMeta("a", "", {"x", "p"}, []),
             ArticleMeta("b", "", {"x", "q"}, []),
         ]
-        links1, _ = _calculate_links(articles2, min_overlap=1)
+        links1, _ = _calculate_links(articles2, min_overlap=1, idf_threshold=IDF_OFF)
         assert links1["a"] == {"b"}
 
     def test_link_all_with_explicit_overlap(self, tmp_path):
@@ -142,9 +143,9 @@ class TestCalculateLinks:
         kd.mkdir()
         make_article(str(kd / "a.md"), "a", ["python", "ai"])
         make_article(str(kd / "b.md"), "b", ["python", "ai", "testing"])
-        r3 = link_all(str(kd), min_overlap=3)
+        r3 = link_all(str(kd), min_overlap=3, idf_threshold=IDF_OFF)
         assert r3["total_links_created"] == 0
-        r2 = link_all(str(kd), min_overlap=2)
+        r2 = link_all(str(kd), min_overlap=2, idf_threshold=IDF_OFF)
         assert r2["total_links_created"] == 2
 
 
@@ -156,11 +157,10 @@ class TestLinkAll:
         make_article(str(kd / "b.md"), "b", ["python", "testing", "ai"])
         make_article(str(kd / "c.md"), "c", ["rust", "systems", "embedded"])
 
-        result = link_all(str(kd))
+        result = link_all(str(kd), idf_threshold=IDF_OFF)
         assert result["articles_scanned"] == 3
         assert result["total_links_created"] > 0
 
-        # v1.7: related is now list of {slug, type} dicts
         with open(kd / "a.md") as f:
             content = f.read()
         fm = yaml.safe_load(content.split("---")[1])
@@ -186,5 +186,5 @@ class TestLinkAll:
     def test_link_all_empty_dir(self, tmp_path):
         kd = tmp_path / "empty"
         kd.mkdir()
-        result = link_all(str(kd))
+        result = link_all(str(kd), idf_threshold=IDF_OFF)
         assert result["status"] == "no_articles"

@@ -16,6 +16,7 @@ from ai_kos.schemas import (
     DEFAULT_REVIEW_INTERVALS, VersionEntry,
 )
 from ai_kos.config import get
+from ai_kos import db as _db
 
 logger = logging.getLogger("ai-kos.articles")
 KNOWLEDGE_DIR = get("paths", "knowledge_dir", default="knowledge")
@@ -62,6 +63,15 @@ class _ArticleIndex:
                 "sensitivity_label": fm.get("sensitivity_label", "internal"),
                 "link_count": fm.get("link_count", 0),
                 "superseded_by": fm.get("superseded_by"),
+                "updated_at": str(fm.get("updated_at", "")),
+                "created_at": str(fm.get("created_at", "")),
+                "retrieval_count": fm.get("retrieval_count", 0),
+                "next_review_at": str(fm.get("next_review_at", "")),
+                "doi": fm.get("doi"),
+                "backend": fm.get("backend", "md"),
+                "dataset": fm.get("dataset"),
+                "blob": fm.get("blob"),
+                "graph": fm.get("graph"),
             })
         return sorted(results, key=lambda r: r["title"])
 
@@ -134,6 +144,7 @@ class _ArticleIndex:
             return
         self._paths.clear()
         self._frontmatter.clear()
+        # Scan .md files (markdown articles)
         for md in Path(KNOWLEDGE_DIR).rglob("*.md"):
             try:
                 with open(md) as f:
@@ -143,6 +154,16 @@ class _ArticleIndex:
                 fm = yaml.safe_load(content.split("---")[1]) or {}
                 slug = fm.get("slug", md.stem)
                 self._paths[slug] = str(md)
+                self._frontmatter[slug] = fm
+            except Exception:
+                continue
+        # Scan .yaml files (SQL-backed dataset articles)
+        for yf in Path(KNOWLEDGE_DIR).rglob("*.yaml"):
+            try:
+                with open(yf) as f:
+                    fm = yaml.safe_load(f) or {}
+                slug = fm.get("slug", yf.stem)
+                self._paths[slug] = str(yf)
                 self._frontmatter[slug] = fm
             except Exception:
                 continue
@@ -168,7 +189,14 @@ def _slug_path(slug: str) -> str:
     path = idx.filepath(slug)
     if path:
         return path
-    return str(Path(KNOWLEDGE_DIR) / "bundles" / "general" / f"{slug}.md")
+    # Default: .md for markdown articles
+    md_path = Path(KNOWLEDGE_DIR) / "bundles" / "general" / f"{slug}.md"
+    if md_path.exists():
+        return str(md_path)
+    # Default: .md for new articles. For reads, also check .yaml
+    # for pre-existing SQL/blob/json/graph stubs (frontmatter-only).
+    yaml_path = Path(KNOWLEDGE_DIR) / "bundles" / "general" / f"{slug}.yaml"
+    return str(yaml_path) if yaml_path.exists() else str(md_path.parent / f"{slug}.md")
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
@@ -197,6 +225,42 @@ def _make_history_entry(version: int, note: str = "created") -> VersionEntry:
         by="agent:kruzzzy",
         note=note,
     )
+
+
+def _extract_body_for_db(article) -> str:
+    """Extract human-readable body content from a Pydantic article for SQLite storage."""
+    atype = article.type
+    if atype == ArticleType.BASE or atype == ArticleType.NOTE:
+        return getattr(article, 'content', '')
+    elif atype == ArticleType.HELP:
+        return getattr(article, 'explanation', '')
+    elif atype == ArticleType.MISSION:
+        return getattr(article, 'architecture', '')
+    else:
+        # PROCESS, PLAN, RESEARCH_NOTE — serialize via formatter
+        return article_to_markdown(article).split('---', 2)[-1].strip()
+
+
+def _inject_sql_placeholders(article_type: str, data: dict) -> None:
+    """Set required body fields to empty placeholders for SQL-backed articles."""
+    if article_type in ("base", "note"):
+        data.setdefault("content", "[SQL-backed dataset — see table data]")
+    elif article_type == "help":
+        data.setdefault("explanation", "[SQL-backed dataset — see table data]")
+        data.setdefault("project", "datasets")
+        data.setdefault("component", data.get("dataset", {}).get("table", ""))
+    elif article_type == "mission":
+        data.setdefault("architecture", "[SQL-backed dataset — see table data]")
+        data.setdefault("purpose", data.get("summary", ""))
+        data.setdefault("project", "datasets")
+    elif article_type == "process":
+        data.setdefault("steps", ["[SQL-backed dataset — see table data]"])
+        data.setdefault("outcome", data.get("summary", ""))
+    elif article_type == "plan":
+        data.setdefault("goal", data.get("summary", ""))
+    elif article_type == "research-note":
+        data.setdefault("topic", data.get("summary", ""))
+        data.setdefault("key_notes", ["[SQL-backed dataset — see table data]"])
 
 
 # ── CRUD Operations ──────────────────────────────────────────────────────────
@@ -236,12 +300,31 @@ def create_article(article_type: str, data: dict) -> dict:
             for r in data['related']
         ]
 
+    # SQL-backed articles don't need markdown body — inject placeholders
+    if data.get("backend") in ("sql", "json", "blob", "graph"):
+        _inject_sql_placeholders(article_type, data)
+
     try:
         article = cls(**data)
     except Exception as e:
         return {"error": f"Validation failed: {e}"}
 
+    backend = data.get("backend", "md")
+
+    if backend == "sql":
+        return _create_sql_article(article, article_type)
+    elif backend in ("blob", "json", "graph"):
+        return _create_yaml_only_article(article, article_type, backend)
+    else:
+        return _create_md_article(article, article_type)
+
+
+def _create_md_article(article, article_type: str) -> dict:
+    """Create a standard markdown-backed article."""
     md_content = article_to_markdown(article)
+
+    # Also store body in SQLite as an additional backend
+    _db.set_body(article.slug, _extract_body_for_db(article))
     filepath = _slug_path(article.slug)
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
     with open(filepath, 'w') as f:
@@ -263,6 +346,113 @@ def create_article(article_type: str, data: dict) -> dict:
     }
 
 
+def _create_sql_article(article, article_type: str) -> dict:
+    """Create a SQL-backed dataset article with .yaml stub + SQL table."""
+    from ai_kos import datasets
+
+    dataset = article.dataset
+    if not dataset:
+        return {"error": "dataset is required when backend=sql"}
+
+    # Create the SQL table
+    col_dicts = [{"name": c.name, "type": c.type} for c in dataset.columns]
+    datasets.create_table(dataset.db, dataset.table, col_dicts)
+
+    # Write a .yaml stub (frontmatter only, no markdown body)
+    filepath = _slug_path(article.slug)
+    if filepath.endswith('.md'):
+        filepath = filepath[:-3] + '.yaml'
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+
+    yaml_content = _article_to_yaml_stub(article)
+    with open(filepath, 'w') as f:
+        f.write(yaml_content)
+
+    # Update in-memory index
+    try:
+        fm = yaml.safe_load(yaml_content) or {}
+    except Exception:
+        fm = {}
+    _get_index().upsert(article.slug, filepath, fm)
+
+    logger.info(f"Created SQL-backed {article_type}: {article.slug} → {dataset.db}/{dataset.table}")
+    from ai_kos.linker import link_all
+    link_result = link_all(KNOWLEDGE_DIR)
+    return {
+        "status": "created", "slug": article.slug, "type": article_type,
+        "filepath": filepath, "backend": "sql",
+        "database": dataset.db, "table": dataset.table,
+        "keywords": article.keywords, "linking": link_result,
+    }
+
+
+def _create_yaml_only_article(article, article_type: str, backend_label: str) -> dict:
+    """Create an article with a .yaml stub only (no markdown, no SQL table).
+
+    Used by blob, json, and graph backends where data is stored externally.
+    """
+    filepath = _slug_path(article.slug)
+    if filepath.endswith('.md'):
+        filepath = filepath[:-3] + '.yaml'
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+
+    yaml_content = _article_to_yaml_stub(article)
+    with open(filepath, 'w') as f:
+        f.write(yaml_content)
+
+    try:
+        fm = yaml.safe_load(yaml_content) or {}
+    except Exception:
+        fm = {}
+    _get_index().upsert(article.slug, filepath, fm)
+
+    logger.info(f"Created {backend_label}-backed {article_type}: {article.slug}")
+    from ai_kos.linker import link_all
+    link_result = link_all(KNOWLEDGE_DIR)
+    return {
+        "status": "created", "slug": article.slug, "type": article_type,
+        "filepath": filepath, "backend": backend_label,
+        "keywords": article.keywords, "linking": link_result,
+    }
+
+
+def _article_to_yaml_stub(article) -> str:
+    """Serialize frontmatter as a clean YAML file (for SQL-backed articles)."""
+    data = article.model_dump(mode='json')
+    fm = {k: v for k, v in data.items() if v is not None}
+
+    from ai_kos.schemas import _serialize_provenance, _serialize_related
+    if 'provenance' in fm:
+        fm['provenance'] = _serialize_provenance(fm['provenance'])
+    if 'related' in fm:
+        fm['related'] = _serialize_related(fm['related'])
+    if 'history' in fm and isinstance(fm.get('history'), list):
+        fm['history'] = [
+            h.model_dump(mode='json') if hasattr(h, 'model_dump') else h
+            for h in fm['history']
+        ]
+    if 'dataset' in fm and isinstance(fm['dataset'], dict):
+        # Serialize DatasetRef columns
+        if 'columns' in fm['dataset']:
+            fm['dataset']['columns'] = [
+                c.model_dump(mode='json') if hasattr(c, 'model_dump') else c
+                for c in fm['dataset']['columns']
+            ]
+
+    # Remove markdown body fields (not relevant for SQL articles)
+    body_fields = set(TEMPLATES[article.type]["human_fields"])
+    for k in list(fm.keys()):
+        if k in body_fields:
+            del fm[k]
+
+    # Add tags
+    fm['tags'] = [f'type/{article.type.value}', 'backend/sql']
+    if fm.get('doc_type'):
+        fm['tags'].append(f'doc/{fm["doc_type"]}')
+
+    return yaml.dump(fm, default_flow_style=False, sort_keys=False, allow_unicode=True).strip()
+
+
 def read_article(slug: str) -> dict | None:
     filepath = _slug_path(slug)
     try:
@@ -270,11 +460,17 @@ def read_article(slug: str) -> dict | None:
             content = f.read()
     except FileNotFoundError:
         return None
-    if not content.startswith('---'):
+
+    # .yaml files: SQL-backed articles — frontmatter only, no body
+    if filepath.endswith('.yaml'):
+        fm = yaml.safe_load(content) or {}
+        body = ""
+    elif not content.startswith('---'):
         return {"slug": slug, "error": "No frontmatter"}
-    parts = content.split('---', 2)
-    fm = yaml.safe_load(parts[1]) or {}
-    body = parts[2] if len(parts) > 2 else ""
+    else:
+        parts = content.split('---', 2)
+        fm = yaml.safe_load(parts[1]) or {}
+        body = parts[2] if len(parts) > 2 else ""
 
     # v1.7: bump usage signals
     fm['retrieval_count'] = fm.get('retrieval_count', 0) + 1
@@ -283,12 +479,69 @@ def read_article(slug: str) -> dict | None:
     # Write back updated frontmatter
     import re
     new_fm = yaml.dump(fm, default_flow_style=False, sort_keys=False, allow_unicode=True).strip()
-    body_clean = re.sub(r'\n## Related\n.*', '', body, flags=re.DOTALL) if '## Related' in body else body
-    new_content = f"---\n{new_fm}\n---{body_clean}"
+    if filepath.endswith('.yaml'):
+        new_content = new_fm
+    else:
+        body_clean = re.sub(r'\n## Related\n.*', '', body, flags=re.DOTALL) if '## Related' in body else body
+        new_content = f"---\n{new_fm}\n---{body_clean}"
     with open(filepath, 'w') as f:
         f.write(new_content)
 
     _get_index().upsert(slug, filepath, fm)
+
+    # SQL-backed articles: return table preview instead of markdown body
+    if fm.get("backend") == "sql" and fm.get("dataset"):
+        from ai_kos import datasets
+        ds = fm["dataset"]
+        table_data = datasets.query_table(
+            ds["db"], f'SELECT * FROM "{ds["table"]}" LIMIT 50'
+        )
+        stats = datasets.table_stats(ds["db"], ds["table"])
+        return {
+            "slug": slug, "filepath": filepath, "frontmatter": fm,
+            "backend": "sql", "dataset": ds,
+            "row_count": stats["row_count"] if stats else 0,
+            "columns": stats["columns"] if stats else [],
+            "preview": table_data,
+            "raw": content,
+        }
+
+    # Blob-backed articles: return file metadata + extracted text
+    if fm.get("backend") == "blob" and fm.get("blob"):
+        blob = fm["blob"]
+        return {
+            "slug": slug, "filepath": filepath, "frontmatter": fm,
+            "backend": "blob", "blob": blob,
+            "file_exists": os.path.exists(blob.get("path", "")),
+            "body": blob.get("extracted_text", ""),
+            "raw": content,
+        }
+
+    # JSON-backed articles: return full document + stats
+    if fm.get("backend") == "json" and fm.get("dataset"):
+        from ai_kos import datasets
+        ds = fm["dataset"]
+        doc = datasets.get_json_doc(ds["db"], ds["table"], slug)
+        stats = datasets.json_stats(ds["db"], ds["table"], slug)
+        return {
+            "slug": slug, "filepath": filepath, "frontmatter": fm,
+            "backend": "json", "dataset": ds,
+            "data": doc, "stats": stats,
+            "raw": content,
+        }
+
+    # Graph-backed articles: return stats + sample nodes
+    if fm.get("backend") == "graph" and fm.get("graph"):
+        from ai_kos import graphs
+        ds = fm.get("dataset", {})
+        g = fm["graph"]
+        gstats = graphs.graph_stats(ds["db"], ds["table"])
+        return {
+            "slug": slug, "filepath": filepath, "frontmatter": fm,
+            "backend": "graph", "graph": g,
+            "stats": gstats,
+            "raw": content,
+        }
 
     return {"slug": slug, "filepath": filepath, "frontmatter": fm, "body": body.strip(), "raw": content}
 
@@ -339,12 +592,34 @@ def delete_article(slug: str) -> dict:
     filepath = _slug_path(slug)
     if not os.path.exists(filepath):
         return {"error": f"Article not found: {slug}"}
+
+    # Check if SQL-backed and drop the table
+    fm = _get_index().frontmatter(slug) or {}
+    if fm.get("backend") == "sql" and fm.get("dataset"):
+        from ai_kos import datasets
+        ds = fm["dataset"]
+        datasets.drop_table(ds["db"], ds["table"])
+    elif fm.get("backend") == "blob" and fm.get("blob"):
+        from ai_kos.blobs import delete_blob
+        delete_blob(fm["blob"]["path"])
+    elif fm.get("backend") == "json" and fm.get("dataset"):
+        import sqlite3
+        ds = fm["dataset"]
+        conn = sqlite3.connect(ds["db"])
+        conn.execute(f'DELETE FROM "{ds["table"]}" WHERE slug = ?', (slug,))
+        conn.commit()
+        conn.close()
+    elif fm.get("backend") == "graph" and fm.get("dataset"):
+        from ai_kos.graphs import drop_graph
+        drop_graph(fm["dataset"]["db"], fm["dataset"]["table"])
+
     archive_dir = Path(get("paths", "archive_dir", default="archive"))
     archive_dir.mkdir(exist_ok=True)
     dest = archive_dir / Path(filepath).name
     shutil.move(filepath, str(dest))
 
     _get_index().remove(slug)
+    _db.delete_body(slug)
 
     logger.info(f"Deleted {slug} → {dest}")
     from ai_kos.linker import link_all

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+{% if not article %}
+<div class="empty">
+  <div class="empty-icon">📄</div>
+  <h2>Article not found</h2>
+  <p>No article with slug "{{ slug }}". <a href="/articles">Browse all articles</a></p>
+</div>
+{% else %}
+{% set fm = article.frontmatter %}
+<div class="section-header">
+  <h1 class="section-title">{{ fm.title }}</h1>
+  <a href="/articles" class="btn btn-ghost btn-sm">← Back</a>
+</div>
+
+<div class="card">
+  <div class="article-meta">
+    <div class="article-meta-item"><strong>Type</strong> <span class="badge badge-{{ fm.type }}">{{ fm.type }}</span></div>
+    {% if fm.doc_type %}<div class="article-meta-item"><strong>Doc Type</strong> {{ fm.doc_type }}</div>{% endif %}
+    <div class="article-meta-item"><strong>Lifecycle</strong> {{ fm.lifecycle }}</div>
+    <div class="article-meta-item"><strong>Confidence</strong> {{ (fm.confidence * 100)|int }}%</div>
+    <div class="article-meta-item"><strong>Updated</strong> {{ fm.updated_at }}</div>
+    <div class="article-meta-item"><strong>Reads</strong> {{ fm.retrieval_count }}</div>
+    {% if fm.link_count %}<div class="article-meta-item"><strong>Links</strong> {{ fm.link_count }}</div>{% endif %}
+    {% if fm.superseded_by %}<div class="article-meta-item"><strong>Superseded by</strong> <a href="/articles/{{ fm.superseded_by }}">{{ fm.superseded_by }}</a></div>{% endif %}
+  </div>
+
+  {% if fm.keywords %}
+  <div class="task-articles" style="margin-bottom:16px">
+    {% for kw in fm.keywords %}
+    <span class="badge" style="background:var(--surface-active);color:var(--text-muted);font-size:12px">{{ kw }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if fm.summary %}
+  <p style="color:var(--text-muted);font-style:italic;margin-bottom:16px">{{ fm.summary }}</p>
+  {% endif %}
+
+  <div class="article-body">
+    {{ article.body_html|safe }}
+  </div>
+</div>
+
+{% if fm.related %}
+<div class="card">
+  <div class="card-header">Related Articles</div>
+  <div class="task-articles">
+    {% for rel in fm.related %}
+    <a href="/articles/{{ rel.slug }}" class="task-article-tag">{{ rel.slug }}{% if rel.type != 'see-also' %} ({{ rel.type }}){% endif %}</a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+{% if fm.provenance %}
+<div class="card">
+  <div class="card-header">Provenance</div>
+  {% for p in fm.provenance %}
+  <div style="font-size:13px;color:var(--text-muted);margin-bottom:4px">
+    <strong>{{ p.source }}</strong>{% if p.origin_ref %} — {{ p.origin_ref }}{% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% endif %}
+{% endblock %}

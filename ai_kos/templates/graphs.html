@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="section-header">
+  <h1 class="section-title">Graphs</h1>
+  <span class="section-subtitle">{{ graphs|length }} graph-backed articles</span>
+</div>
+
+{% if graphs %}
+<div class="card">
+  <table>
+    <thead><tr>
+      <th>Title</th>
+      <th>Nodes</th>
+      <th>Edges</th>
+      <th>Directed</th>
+    </tr></thead>
+    <tbody>
+    {% for g in graphs %}
+    <tr>
+      <td><a href="/graphs/{{ g.slug }}"><strong>{{ g.title }}</strong></a></td>
+      <td><span class="stat-value-sm">{{ g.node_count }}</span></td>
+      <td><span class="stat-value-sm">{{ g.edge_count }}</span></td>
+      <td>{% if g.directed %}→{% else %}—{% endif %}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty">
+  <div class="empty-icon">◎</div>
+  <p>No graph articles yet. Use <code>ai_kos_ingest_graph</code> to create one.</p>
+</div>
+{% endif %}
+{% endblock %}

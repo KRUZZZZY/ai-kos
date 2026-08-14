@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="graph-container"></div>
+<div id="graph-tooltip" style="position:absolute;background:rgba(24,24,37,0.97);color:#cdd6f4;padding:8px 12px;border-radius:6px;font-size:13px;pointer-events:none;opacity:0;max-width:260px;box-shadow:0 4px 16px rgba(0,0,0,0.5);z-index:9999;transition:opacity 0.1s;display:none"></div>
+{% endblock %}
+{% block scripts %}
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<script>
+fetch('/api/graph-data')
+  .then(r => r.json())
+  .then(data => buildGraph(data.nodes, data.edges))
+  .catch(err => {
+    document.getElementById('graph-container').innerHTML =
+      '<div class="empty"><div class="empty-icon">⚠</div><p>Failed to load graph data</p></div>';
+  });
+
+function buildGraph(nodesData, edgesData) {
+
+const TYPE_COLORS = {
+  "base": { bg: "#89b4fa", border: "#6a9adc", hl: "#a8cdfc" },
+  "process": { bg: "#a6e3a1", border: "#85c980", hl: "#c2f0be" },
+  "plan": { bg: "#f9e2af", border: "#d4be8f", hl: "#fcecc8" },
+  "help": { bg: "#cba6f7", border: "#a98ad4", hl: "#dec4fa" },
+  "research-note": { bg: "#f38ba8", border: "#d06f8b", hl: "#f7aac0" },
+  "note": { bg: "#94e2d5", border: "#72bfb3", hl: "#b2f0e6" },
+  "mission": { bg: "#fab387", border: "#d6936a", hl: "#fcc9a7" },
+};
+const D = { bg: "#89b4fa", border: "#6a9adc", hl: "#a8cdfc" };
+
+const activeNodes = nodesData.filter(n => n.lifecycle !== 'superseded' && n.lifecycle !== 'historical');
+const activeSlugs = new Set(activeNodes.map(n => n.id));
+const activeEdges = edgesData.filter(e => activeSlugs.has(e.source) && activeSlugs.has(e.target));
+
+const degree = {};
+activeEdges.forEach(e => {
+  degree[e.source] = (degree[e.source] || 0) + 1;
+  degree[e.target] = (degree[e.target] || 0) + 1;
+});
+const maxDeg = Math.max(1, ...Object.values(degree));
+
+// Store metadata for tooltip
+const meta = {};
+activeNodes.forEach(n => { meta[n.id] = n; });
+
+const visNodes = new vis.DataSet(activeNodes.map(n => {
+  const c = TYPE_COLORS[n.type] || D;
+  const deg = degree[n.id] || 0;
+  return {
+    id: n.id,
+    label: n.title.length > 22 ? n.title.slice(0, 20) + '…' : n.title,
+    color: { background: c.bg, border: c.border, highlight: { background: c.hl, border: c.border } },
+    size: 6 + Math.round((deg / maxDeg) * 28),
+    font: { color: '#a6adc8', size: 10, face: 'Inter, sans-serif', strokeWidth: 0 },
+  };
+}));
+
+const visEdges = new vis.DataSet(activeEdges.map(e => ({
+  from: e.source, to: e.target,
+  color: { color: 'rgba(137, 180, 250, 0.15)', highlight: 'rgba(137, 180, 250, 0.4)' },
+  width: Math.max(0.3, (e.weight || 1) * 0.3),
+  smooth: { type: 'continuous', roundness: 0.3 },
+  arrows: { to: { enabled: true, scaleFactor: 0.4 } },
+})));
+
+const container = document.getElementById('graph-container');
+const tooltip = document.getElementById('graph-tooltip');
+
+const network = new vis.Network(container, { nodes: visNodes, edges: visEdges }, {
+  physics: {
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: {
+      gravitationalConstant: -35,
+      centralGravity: 0.008,
+      springLength: 100,
+      springConstant: 0.05,
+      damping: 0.55,
+      avoidOverlap: 0.6,
+    },
+    stabilization: { enabled: true, iterations: 300, updateInterval: 10, fit: true },
+    minVelocity: 0.5,
+    maxVelocity: 20,
+  },
+  interaction: { hover: true, navigationButtons: false, keyboard: false },
+  nodes: { shape: 'dot', borderWidth: 2, scaling: { min: 6, max: 34 } },
+});
+
+// ── Custom tooltip (not the broken browser title popup) ──
+network.on('hoverNode', params => {
+  const n = meta[params.node];
+  if (!n) { tooltip.style.display = 'none'; return; }
+  const deg = degree[n.id] || 0;
+  tooltip.innerHTML = `<b>${n.title.replace(/</g,'&lt;')}</b><br><span style="color:#a6adc8">${n.type} · ${deg} connections</span><br><small style="color:#6c7086">${(n.summary||'').slice(0,100)}</small>`;
+  tooltip.style.display = 'block';
+  tooltip.style.opacity = '1';
+});
+
+network.on('blurNode', () => {
+  tooltip.style.opacity = '0';
+  setTimeout(() => { if (tooltip.style.opacity === '0') tooltip.style.display = 'none'; }, 100);
+});
+
+document.addEventListener('mousemove', e => {
+  if (tooltip.style.display === 'block') {
+    tooltip.style.left = (e.pageX + 16) + 'px';
+    tooltip.style.top = (e.pageY - 20) + 'px';
+  }
+});
+
+// Click → navigate
+network.on('click', params => {
+  if (params.nodes.length === 1) {
+    window.location.href = '/articles/' + params.nodes[0];
+  }
+});
+
+// Search (press f)
+document.addEventListener('keydown', event => {
+  if (event.key === 'f' && !event.ctrlKey && !event.metaKey && event.target === document.body) {
+    const query = prompt('Search graph:').toLowerCase().trim();
+    if (!query) { visNodes.forEach(n => visNodes.update({ id: n.id, opacity: 1 })); return; }
+    const matched = new Set();
+    visNodes.forEach(n => { if ((n.label + ' ' + n.id).toLowerCase().includes(query)) matched.add(n.id); });
+    visNodes.forEach(n => { visNodes.update({ id: n.id, opacity: matched.has(n.id) ? 1 : 0.06 }); });
+    if (matched.size > 0) network.fit({ nodes: [...matched], animation: true });
+  }
+});
+
+}
+</script>
+{% endblock %}

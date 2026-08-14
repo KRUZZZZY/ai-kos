@@ -1,0 +1,37 @@
+{
+  "repository": "ai-kos",
+  "owner": "KRUZZZZY",
+  "stats": {
+    "stars": 12,
+    "forks": 3,
+    "open_issues": 1
+  },
+  "contributors": [
+    {
+      "login": "KRUZZZZY",
+      "contributions": 245
+    },
+    {
+      "login": "zachariah-markusson",
+      "contributions": 8
+    }
+  ],
+  "languages": {
+    "Python": 89.5,
+    "JavaScript": 6.2,
+    "HTML": 3.1,
+    "CSS": 1.2
+  },
+  "releases": [
+    {
+      "tag": "v1.7",
+      "date": "2026-08-04",
+      "features": 8
+    },
+    {
+      "tag": "v1.8",
+      "date": "2026-08-08",
+      "features": 4
+    }
+  ]
+}

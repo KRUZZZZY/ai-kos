@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="section-header">
+  <h1 class="section-title">Dashboard</h1>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-value">{{ stats.total_articles }}</div>
+    <div class="stat-label">Articles</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{ stats.total_links }}</div>
+    <div class="stat-label">Links</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{ pending_tasks|length }}</div>
+    <div class="stat-label">Pending Tasks</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{ stats.articles_past_review|length }}</div>
+    <div class="stat-label">Past Review</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{ stats.gap_articles|length }}</div>
+    <div class="stat-label">Knowledge Gaps</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{ stats.orphans|length }}</div>
+    <div class="stat-label">Orphans</div>
+  </div>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-header">By Type</div>
+    {% for type, count in stats.by_type.items()|sort %}
+    <div class="type-row">
+      <span class="badge badge-{{ type }}">{{ type }}</span>
+      <span class="type-row-count">{{ count }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="card">
+    <div class="card-header">Recent Articles</div>
+    {% if recent_articles %}
+    <table>
+      <thead><tr><th>Title</th><th>Type</th></tr></thead>
+      <tbody>
+      {% for a in recent_articles[:8] %}
+      <tr>
+        <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+          <a href="/articles/{{ a.slug }}">{{ a.title }}</a>
+        </td>
+        <td><span class="badge badge-{{ a.type }}">{{ a.type }}</span></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty"><p>No articles yet</p></div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="two-col" style="margin-top:20px">
+  <div class="card">
+    <div class="card-header">Backend Distribution</div>
+    {% if backends %}
+    {% for be, cnt in backends.items()|sort %}
+    <div class="type-row">
+      <span class="badge badge-note">{{ be }}</span>
+      <span class="type-row-count">{{ cnt }}</span>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="empty"><p>All articles use markdown backend</p></div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <div class="card-header">Pending Tasks</div>
+    {% if pending_tasks %}
+    <table>
+      <thead><tr><th>Task</th><th>Articles</th></tr></thead>
+      <tbody>
+      {% for t in pending_tasks[:5] %}
+      <tr>
+        <td><strong>{{ t.title }}</strong></td>
+        <td>
+          {% if t.article_slugs %}
+          {% for s in t.article_slugs[:3] %}
+          <a href="/articles/{{ s }}" class="task-article-tag">{{ s }}</a>
+          {% endfor %}
+          {% else %}<span style="color:var(--text-dim)">—</span>{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty"><p>No pending tasks</p></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

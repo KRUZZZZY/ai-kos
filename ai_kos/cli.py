@@ -141,6 +141,84 @@ def cmd_migrate(args):
     result = run_migrations(dry_run=args.dry_run)
     print(json.dumps(result, indent=2, default=str))
 
+
+def cmd_task_create(args):
+    """Create a future task."""
+    from ai_kos.tasks import TaskManager
+    from dataclasses import asdict
+    tm = TaskManager()
+    task = tm.create(
+        title=args.title,
+        description=args.description or "",
+        priority=args.priority,
+        due_date=args.due,
+        article_slugs=args.articles.split(",") if args.articles else None,
+    )
+    print(json.dumps(asdict(task), indent=2, default=str))
+
+
+def cmd_task_list(args):
+    """List future tasks."""
+    from ai_kos.tasks import TaskManager
+    from dataclasses import asdict
+    tm = TaskManager()
+    tasks = tm.list_tasks(status=args.status, limit=args.limit)
+    print(json.dumps({"tasks": [asdict(t) for t in tasks], "total": len(tasks)}, indent=2, default=str))
+
+
+def cmd_task_complete(args):
+    """Mark a future task as completed."""
+    from ai_kos.tasks import TaskManager
+    from dataclasses import asdict
+    tm = TaskManager()
+    try:
+        task = tm.complete(args.task_id)
+        print(json.dumps(asdict(task), indent=2, default=str))
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+def cmd_task_delete(args):
+    """Delete a future task."""
+    from ai_kos.tasks import TaskManager
+    tm = TaskManager()
+    tm.delete(args.task_id)
+    print(json.dumps({"status": "deleted", "task_id": args.task_id}))
+
+
+def cmd_atq(args):
+    """Agent Task Queue bridge: submit/tick/status/report."""
+    from ai_kos.atq import main as atq_main
+    import sys as _sys
+
+    _sys.exit(atq_main([args.atq_cmd] + (args.atq_args or [])))
+
+
+def cmd_serve(args):
+    """Start the AI-KOS web dashboard."""
+    from ai_kos.server import main
+    main()
+
+
+def cmd_docaudit(args):
+    """Audit module-by-module KB documentation coverage."""
+    from ai_kos.docaudit import audit, render_report
+    result = audit()
+    print(render_report(result, json_out=args.json))
+
+
+def cmd_new_project(args):
+    """Scaffold a repo skeleton from a mission article + create per-criterion tasks."""
+    from ai_kos.new_project import scaffold
+    try:
+        result = scaffold(args.mission_slug, force=args.force)
+    except (ValueError, FileExistsError) as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+    print(json.dumps(result, indent=2, default=str))
+
+
 def main():
     p = argparse.ArgumentParser("ai-kos", description="AI Knowledge Operating System")
     sub = p.add_subparsers(dest="cmd")
@@ -186,8 +264,66 @@ def main():
     pm.add_argument("--dry-run", action="store_true", help="Preview changes without writing")
     pm.set_defaults(func=cmd_migrate)
 
+    pt = sub.add_parser("task", help="Manage future tasks")
+    task_sub = pt.add_subparsers(dest="task_cmd")
+
+    ptc = task_sub.add_parser("create", help="Create a future task")
+    ptc.add_argument("title", help="Task title")
+    ptc.add_argument("-d", "--description", help="Task description")
+    ptc.add_argument("-p", "--priority", type=int, default=0, help="Priority (lower=higher, 0 is default)")
+    ptc.add_argument("--due", help="Due date (YYYY-MM-DD)")
+    ptc.add_argument("-a", "--articles", help="Comma-separated article slugs to attach")
+    ptc.set_defaults(func=cmd_task_create)
+
+    ptl = task_sub.add_parser("list", help="List tasks")
+    ptl.add_argument("-s", "--status", choices=["pending", "in_progress", "completed", "cancelled"])
+    ptl.add_argument("-n", "--limit", type=int, default=50)
+    ptl.set_defaults(func=cmd_task_list)
+
+    ptcomp = task_sub.add_parser("complete", help="Mark a task as completed")
+    ptcomp.add_argument("task_id", type=int, help="Task ID")
+    ptcomp.set_defaults(func=cmd_task_complete)
+
+    ptdel = task_sub.add_parser("delete", help="Delete a task")
+    ptdel.add_argument("task_id", type=int, help="Task ID")
+    ptdel.set_defaults(func=cmd_task_delete)
+
+    psv = sub.add_parser("serve", help="Start the AI-KOS dashboard")
+    psv.set_defaults(func=cmd_serve)
+
+    pa = sub.add_parser("atq", help="Agent Task Queue bridge (submit/tick/status/report)")
+    pa.add_argument("atq_cmd", choices=["submit", "tick", "status", "report"],
+                    help="atq subcommand")
+    pa.add_argument("atq_args", nargs=argparse.REMAINDER,
+                    help="args passed to the atq subcommand")
+    pa.set_defaults(func=cmd_atq)
+
+    pda = sub.add_parser("doc-audit", help="Audit module-by-module KB documentation coverage")
+    pda.add_argument("--json", action="store_true", help="Emit JSON instead of a text report")
+    pda.set_defaults(func=cmd_docaudit)
+
+    pnp = sub.add_parser("new-project", help="Scaffold a repo skeleton from a mission article")
+    pnp.add_argument("mission_slug", help="Mission article slug")
+    pnp.add_argument("--force", action="store_true", help="Overwrite an existing scaffold")
+    pnp.set_defaults(func=cmd_new_project)
+
     args = p.parse_args()
-    if not args.cmd: p.print_help(); sys.exit(1)
-    args.func(args)
+    if not args.cmd:
+        p.print_help()
+        sys.exit(1)
+    # Handle nested task subcommands
+    if args.cmd == "task":
+        if hasattr(args, "task_cmd") and args.task_cmd:
+            args.func(args)
+        else:
+            pt.print_help()
+            sys.exit(1)
+    elif args.cmd == "atq":
+        if not args.atq_cmd:
+            pa.print_help()
+            sys.exit(1)
+        args.func(args)
+    else:
+        args.func(args)
 
 if __name__ == "__main__": main()

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-KOS Dashboard</title>
+<link rel="stylesheet" href="/static/css/style.css">
+{% block head %}{% endblock %}
+</head>
+<body>
+<nav id="sidebar">
+  <a href="/" class="sidebar-brand">AI-KOS</a>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Navigate</div>
+    <a href="/" class="sidebar-link {% if page == 'dashboard' %}active{% endif %}">
+      <span class="sidebar-icon">◫</span> Dashboard
+    </a>
+    <a href="/articles" class="sidebar-link {% if page == 'articles' %}active{% endif %}">
+      <span class="sidebar-icon">≡</span> Articles
+    </a>
+    <a href="/tasks" class="sidebar-link {% if page == 'tasks' %}active{% endif %}">
+      <span class="sidebar-icon">☐</span> Tasks
+    </a>
+    <a href="/files" class="sidebar-link {% if page == 'files' %}active{% endif %}">
+      <span class="sidebar-icon">▤</span> Files
+    </a>
+    <a href="/graph" class="sidebar-link {% if page == 'graph' %}active{% endif %}">
+      <span class="sidebar-icon">◎</span> Graph
+    </a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Backends</div>
+    <a href="/datasets" class="sidebar-link {% if page == 'datasets' %}active{% endif %}">
+      <span class="sidebar-icon">⊞</span> Datasets
+    </a>
+    <a href="/graphs" class="sidebar-link {% if page == 'graphs' %}active{% endif %}">
+      <span class="sidebar-icon">◉</span> Graphs
+    </a>
+    <a href="/blobs" class="sidebar-link {% if page == 'blobs' %}active{% endif %}">
+      <span class="sidebar-icon">⬡</span> Blobs
+    </a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Quick Stats</div>
+    <div class="sidebar-stat">
+      <span>{{ article_count if article_count is defined else '—' }}</span>
+      <span class="sidebar-stat-label">articles</span>
+    </div>
+    <div style="font-size:12px;color:var(--text-dim);padding:0 16px">
+      {% if stats is defined and stats %}
+      <div style="margin-bottom:3px">{{ stats.articles_past_review|length }} past review</div>
+      <div style="margin-bottom:3px">{{ stats.orphans|length }} orphans</div>
+      <div>{{ stats.gap_articles|length }} gaps</div>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+<main id="content">
+{% block content %}{% endblock %}
+</main>
+
+<script>
+document.querySelectorAll('.flash').forEach(el => {
+  setTimeout(() => el.style.display = 'none', 3000);
+});
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

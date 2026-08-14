@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block head %}
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<style>
+#singlegraph { width: 100%; height: 500px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-top: 16px; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="section-header">
+  <div>
+    <h1 class="section-title">{{ graph_meta.title }}</h1>
+    <span class="section-subtitle">{{ graph_meta.summary }}</span>
+  </div>
+  <a href="/graphs" class="btn btn-ghost">← Back to Graphs</a>
+</div>
+
+<div class="card">
+  <div class="card-header">Graph Visualization</div>
+  <div id="singlegraph"></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+const container = document.getElementById('singlegraph');
+fetch('/api/graph/{{ graph_meta.slug }}')
+  .then(r => r.json())
+  .then(data => {
+    const nodes = new vis.DataSet(data.nodes.map(n => ({
+      id: n.id, label: n.label,
+      title: n.title || n.label,
+      color: { background: '#89b4fa', border: '#45475a', highlight: { background: '#a6e3a1' } },
+      font: { color: '#cdd6f4', size: 12 }
+    })));
+    const edges = new vis.DataSet(data.edges.map(e => ({
+      from: e.from, to: e.to,
+      arrows: 'to',
+      color: { color: 'rgba(137,180,250,0.3)' },
+      width: 0.5
+    })));
+    new vis.Network(container, { nodes, edges }, {
+      physics: { solver: 'forceAtlas2Based',
+        forceAtlas2Based: { gravitationalConstant: -25, centralGravity: 0.005, damping: 0.4 },
+        stabilization: { iterations: 200 }
+      },
+      interaction: { hover: true, tooltipDelay: 100 },
+      nodes: { shape: 'dot', size: 12 }
+    });
+  });
+</script>
+{% endblock %}

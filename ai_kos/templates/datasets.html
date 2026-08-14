@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="section-header">
+  <h1 class="section-title">Datasets</h1>
+  <span class="section-subtitle">{{ datasets|length }} SQL/JSON-backed articles</span>
+</div>
+
+{% if datasets %}
+<div class="card">
+  <table>
+    <thead><tr>
+      <th data-sort="title">Title</th>
+      <th data-sort="backend">Backend</th>
+      <th data-sort="table">Table</th>
+      <th data-sort="rows">Rows</th>
+      <th>Columns</th>
+    </tr></thead>
+    <tbody>
+    {% for ds in datasets %}
+    <tr>
+      <td><a href="/datasets/{{ ds.slug }}"><strong>{{ ds.title }}</strong></a></td>
+      <td><span class="badge badge-{{ ds.type }}">{{ ds.backend }}</span></td>
+      <td><code>{{ ds.table }}</code></td>
+      <td>{{ ds.row_count }}</td>
+      <td>
+        {% for col in ds.columns[:6] %}
+        <span class="col-tag">{{ col.name }} <span class="col-type">{{ col.type }}</span></span>
+        {% endfor %}
+        {% if ds.columns|length > 6 %}
+        <span class="col-tag">+{{ ds.columns|length - 6 }} more</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty">
+  <div class="empty-icon">⊞</div>
+  <p>No dataset articles yet. Use <code>ai_kos_ingest_csv</code> to create one.</p>
+</div>
+{% endif %}
+{% endblock %}

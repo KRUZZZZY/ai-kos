@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+  .sort-indicator { font-size: 10px; margin-left: 4px; visibility: hidden; }
+  th.sorted .sort-indicator { visibility: visible; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="section-header">
+  <h1 class="section-title">Articles</h1>
+  <span style="color:var(--text-dim)">{{ articles|length }} total</span>
+</div>
+
+<div class="search-bar">
+  <input type="text" id="search" placeholder="Search by title, slug, or keyword..." autofocus>
+  <select id="type-filter">
+    <option value="">All types</option>
+    <option value="base" {% if article_type == 'base' %}selected{% endif %}>Base</option>
+    <option value="process" {% if article_type == 'process' %}selected{% endif %}>Process</option>
+    <option value="plan" {% if article_type == 'plan' %}selected{% endif %}>Plan</option>
+    <option value="help" {% if article_type == 'help' %}selected{% endif %}>Help</option>
+    <option value="research-note" {% if article_type == 'research-note' %}selected{% endif %}>Research Note</option>
+    <option value="note" {% if article_type == 'note' %}selected{% endif %}>Note</option>
+    <option value="mission" {% if article_type == 'mission' %}selected{% endif %}>Mission</option>
+  </select>
+  <select id="lifecycle-filter">
+    <option value="">All lifecycles</option>
+    <option value="current">Current</option>
+    <option value="superseded">Superseded</option>
+    <option value="historical">Historical</option>
+  </select>
+  <select id="doc-filter">
+    <option value="">All doc types</option>
+    <option value="tutorial">Tutorial</option>
+    <option value="how-to">How-to</option>
+    <option value="reference">Reference</option>
+    <option value="explanation">Explanation</option>
+  </select>
+</div>
+
+<div class="table-wrap">
+  <table id="article-table">
+    <thead>
+      <tr>
+        <th data-sort="title">Title <span class="sort-indicator">▲</span></th>
+        <th data-sort="type">Type <span class="sort-indicator">▲</span></th>
+        <th data-sort="lifecycle">Lifecycle <span class="sort-indicator">▲</span></th>
+        <th data-sort="updated">Updated <span class="sort-indicator">▲</span></th>
+        <th>Keywords</th>
+        <th data-sort="links">Links <span class="sort-indicator">▲</span></th>
+        <th data-sort="reads">Reads <span class="sort-indicator">▲</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in articles %}
+      <tr data-type="{{ a.type }}" data-lifecycle="{{ a.lifecycle }}" data-doc="{{ a.doc_type or '' }}"
+          data-keywords="{{ a.keywords|join(' ') }}" data-title="{{ a.title|lower }}" data-slug="{{ a.slug }}"
+          data-updated="{{ a.updated_at }}" data-created="{{ a.created_at or '' }}"
+          data-reads="{{ a.retrieval_count or 0 }}" data-links="{{ a.link_count }}"
+          data-review="{{ a.next_review_at or '' }}">
+        <td>
+          <a href="/articles/{{ a.slug }}">{{ a.title }}</a>
+          {% if a.summary %}<br><small style="color:var(--text-dim)">{{ a.summary[:100] }}{% if a.summary|length > 100 %}...{% endif %}</small>{% endif %}
+        </td>
+        <td><span class="badge badge-{{ a.type }}">{{ a.type }}</span></td>
+        <td><span class="badge badge-{{ a.lifecycle }}">{{ a.lifecycle }}</span></td>
+        <td style="color:var(--text-dim);font-size:13px;white-space:nowrap">{{ a.updated_at[:10] if a.updated_at else '—' }}</td>
+        <td>
+          <div class="task-articles">
+            {% for kw in a.keywords[:4] %}
+            <span class="badge" style="background:var(--surface-active);color:var(--text-muted);font-size:11px">{{ kw }}</span>
+            {% endfor %}
+          </div>
+        </td>
+        <td>{{ a.link_count }}</td>
+        <td>{{ a.retrieval_count or 0 }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if not articles %}
+<div class="empty">
+  <div class="empty-icon">📚</div>
+  <p>No articles found</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/articles.js"></script>
+{% endblock %}

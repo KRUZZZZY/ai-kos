@@ -16,10 +16,13 @@ paths:
   rejected_dir: /home/kruzzzzy/Documents/AI_KOS_PROJECT/rejected
   projects_dir: /home/kruzzzzy/Documents/AI_KOS_PROJECT/projects
   templates_dir: /home/kruzzzzy/Documents/AI_KOS_PROJECT/templates
+  db_path: datasets/ai-kos.db
 
 linking:
-  min_keyword_overlap: 3
+  min_keyword_overlap: 2
   merge_threshold: 0.80
+  bridge_threshold: 0.20
+  idf_link_threshold: 5.5
 
 article:
   max_paragraphs: 5

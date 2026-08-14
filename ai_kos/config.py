@@ -17,6 +17,7 @@ _DEFAULT_CONFIG = {
     "paths": {
         "inbox_dir": "inbox", "knowledge_dir": "knowledge", "templates_dir": "templates",
         "archive_dir": "archive", "rejected_dir": "rejected", "projects_dir": "projects",
+        "db_path": "datasets/ai-kos.db",
     },
 }
 

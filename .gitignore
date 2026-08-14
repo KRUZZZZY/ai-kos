@@ -9,9 +9,17 @@ build/
 
 # Virtual environments
 .venv/
+.venv-*/
 venv/
 env/
 .env
+
+# Hermes agent state
+.hermes/
+
+# Local/generated data (regenerable, too large for git)
+data/
+datasets/
 
 # IDE
 .vscode/

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="section-header">
+  <h1 class="section-title">Files</h1>
+  <span style="color:var(--text-dim)">{{ current_path }}</span>
+</div>
+
+<div class="tab-bar">
+  <a href="/files?tab=inbox" class="tab-btn {% if tab == 'inbox' %}active{% endif %}">Inbox</a>
+  <a href="/files?tab=archive" class="tab-btn {% if tab == 'archive' %}active{% endif %}">Archive</a>
+  <a href="/files?tab=projects" class="tab-btn {% if tab == 'projects' %}active{% endif %}">Projects</a>
+  <a href="/files?tab=rejected" class="tab-btn {% if tab == 'rejected' %}active{% endif %}">Rejected</a>
+</div>
+
+<div class="card">
+  <div class="card-header">{{ tab|title }} ({{ files|length }} files)</div>
+  {% if files %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>File</th>
+          <th>Type</th>
+          <th>Size</th>
+          <th>Modified</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in files %}
+        <tr>
+          <td>{{ f.name }}</td>
+          <td><span class="file-ext">{{ f.ext }}</span></td>
+          <td>{{ f.size_human }}</td>
+          <td style="color:var(--text-dim);font-size:13px">{{ f.modified[:10] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty">
+    <div class="empty-icon">📂</div>
+    <p>{{ tab|title }} directory is empty</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

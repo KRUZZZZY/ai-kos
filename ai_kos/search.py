@@ -106,13 +106,35 @@ class SearchIndex:
         try:
             with open(filepath, 'r') as f:
                 content = f.read()
-            if not content.startswith('---'):
-                return None
-            parts = content.split('---', 2)
-            fm = yaml.safe_load(parts[1]) or {}
-            slug = fm.get('slug', Path(filepath).stem)
-            body = parts[2] if len(parts) > 2 else ""
-            text = f"{fm.get('title','')} {fm.get('summary','')} {' '.join(fm.get('keywords',[]))} {body}"
+
+            # .yaml files (SQL-backed articles): frontmatter only, no body marker
+            if filepath.endswith('.yaml'):
+                fm = yaml.safe_load(content) or {}
+                slug = fm.get('slug', Path(filepath).stem)
+                # Build text for TF-IDF indexing based on backend type
+                backend = fm.get("backend", "sql")
+                col_names = ""
+                if backend == "blob":
+                    blob = fm.get("blob", {})
+                    body = blob.get("extracted_text", "")
+                elif backend == "json":
+                    ds = fm.get("dataset", {})
+                    from ai_kos import datasets
+                    doc = datasets.get_json_doc(ds.get("db", ""), ds.get("table", ""), slug)
+                    body = _flatten_json_for_index(doc) if doc else ""
+                else:
+                    ds = fm.get('dataset', {})
+                    col_names = ' '.join(c['name'] for c in ds.get('columns', []))
+                    body = ""
+                text = f"{fm.get('title','')} {fm.get('summary','')} {' '.join(fm.get('keywords',[]))} {col_names if backend == 'sql' else ''} {body}"
+            else:
+                if not content.startswith('---'):
+                    return None
+                parts = content.split('---', 2)
+                fm = yaml.safe_load(parts[1]) or {}
+                slug = fm.get('slug', Path(filepath).stem)
+                body = parts[2] if len(parts) > 2 else ""
+                text = f"{fm.get('title','')} {fm.get('summary','')} {' '.join(fm.get('keywords',[]))} {body}"
             tokens = tokenize(text)
             tfs = {}
             for t in tokens:
@@ -139,16 +161,17 @@ class SearchIndex:
         if not force and self.docs:
             changed = 0
             current_slugs = set()
-            for md in Path(knowledge_dir).rglob("*.md"):
-                slug = md.stem
-                current_slugs.add(slug)
-                mtime = md.stat().st_mtime
-                if slug not in self.docs or self.docs[slug].mtime != mtime:
-                    doc = self._read_doc(str(md))
-                    if doc:
-                        self._remove_doc(slug)
-                        self._add_doc(doc)
-                        changed += 1
+            for ext in ("*.md", "*.yaml"):
+                for f in Path(knowledge_dir).rglob(ext):
+                    slug = f.stem
+                    current_slugs.add(slug)
+                    mtime = f.stat().st_mtime
+                    if slug not in self.docs or self.docs[slug].mtime != mtime:
+                        doc = self._read_doc(str(f))
+                        if doc:
+                            self._remove_doc(slug)
+                            self._add_doc(doc)
+                            changed += 1
             for slug in list(self.docs):
                 if slug not in current_slugs:
                     self._remove_doc(slug)
@@ -158,10 +181,11 @@ class SearchIndex:
             return len(self.docs)
 
         self.clear()
-        for md in Path(knowledge_dir).rglob("*.md"):
-            doc = self._read_doc(str(md))
-            if doc:
-                self._add_doc(doc)
+        for ext in ("*.md", "*.yaml"):
+            for f in Path(knowledge_dir).rglob(ext):
+                doc = self._read_doc(str(f))
+                if doc:
+                    self._add_doc(doc)
         logger.info(f"Index built: {self._total_docs} documents, {len(self.doc_freqs)} unique terms")
         return self._total_docs
 
@@ -326,6 +350,9 @@ class SearchIndex:
         } for s in scores[:top_k]]
 
     def _extract_snippet(self, doc: DocInfo, query_tokens: List[str], max_len: int = 150) -> str:
+        # SQL-backed articles use summary as snippet
+        if doc.filepath.endswith('.yaml'):
+            return doc.summary[:max_len]
         try:
             with open(doc.filepath, 'r') as f:
                 content = f.read()
@@ -380,3 +407,24 @@ def rebuild():
     global _index
     _index = SearchIndex()
     return _index.build(force=True)
+
+
+def _flatten_json_for_index(data, max_depth: int = 3, max_chars: int = 2000) -> str:
+    """Extract all keys + leaf values from a JSON object for TF-IDF indexing."""
+    parts = []
+
+    def walk(obj, depth=0):
+        if depth > max_depth:
+            return
+        if isinstance(obj, dict):
+            for k, v in obj.items():
+                parts.append(k)
+                walk(v, depth + 1)
+        elif isinstance(obj, list):
+            for item in obj[:10]:
+                walk(item, depth + 1)
+        elif isinstance(obj, (str, int, float, bool)):
+            parts.append(str(obj))
+
+    walk(data)
+    return ' '.join(parts)[:max_chars]

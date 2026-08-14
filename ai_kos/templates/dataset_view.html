@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+{% if dataset %}
+<div class="section-header">
+  <div>
+    <h1 class="section-title">{{ dataset.title }}</h1>
+    <span class="section-subtitle">{{ dataset.row_count }} rows in <code>{{ dataset.table }}</code></span>
+  </div>
+  <a href="/datasets" class="btn btn-ghost">← Back to Datasets</a>
+</div>
+
+<div class="table-wrap">
+<table>
+  <thead><tr>
+    {% for col in dataset.columns %}
+    <th>{{ col.name }} <span class="col-type">{{ col.type }}</span></th>
+    {% endfor %}
+  </tr></thead>
+  <tbody>
+  {% for row in rows %}
+  <tr>
+    {% for col in dataset.columns %}
+    <td>{{ row[col.name] }}</td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+
+<div class="pagination">
+  {% if page_num > 1 %}
+  <a href="?page={{ page_num - 1 }}" class="btn btn-ghost btn-sm">← Prev</a>
+  {% endif %}
+  <span class="page-info">Page {{ page_num }} of {{ total_pages }}</span>
+  {% if page_num < total_pages %}
+  <a href="?page={{ page_num + 1 }}" class="btn btn-ghost btn-sm">Next →</a>
+  {% endif %}
+</div>
+{% else %}
+<div class="section-header">
+  <h1 class="section-title">Dataset Not Found</h1>
+  <a href="/datasets" class="btn btn-ghost">← Back to Datasets</a>
+</div>
+<div class="empty">
+  <p>Dataset "{{ slug }}" not found.</p>
+</div>
+{% endif %}
+{% endblock %}

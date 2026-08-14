@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="section-header">
+  <h1 class="section-title">Blobs</h1>
+  <span class="section-subtitle">{{ blobs|length }} blob-backed articles</span>
+</div>
+
+{% if blobs %}
+<div class="card">
+  <table>
+    <thead><tr>
+      <th>Title</th>
+      <th>MIME Type</th>
+      <th>Size</th>
+      <th>Path</th>
+    </tr></thead>
+    <tbody>
+    {% for b in blobs %}
+    <tr>
+      <td><strong>{{ b.title }}</strong></td>
+      <td><span class="badge badge-note">{{ b.mime_type }}</span></td>
+      <td>{{ b.size_human }}</td>
+      <td><code style="font-size:11px">{{ b.path }}</code></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty">
+  <div class="empty-icon">▤</div>
+  <p>No blob articles yet. Use <code>ai_kos_ingest_blob</code> to create one.</p>
+</div>
+{% endif %}
+{% endblock %}

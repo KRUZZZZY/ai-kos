@@ -16,6 +16,7 @@ class ArticleType(str, Enum):
     RESEARCH_NOTE = "research-note"  # notes for larger research
     NOTE = "note"               # temporary, may relate to future work
     MISSION = "mission"         # project building block
+    PROCEDURE = "procedure"     # task-specific implementation guide
 
 class Stability(str, Enum):
     STABLE = "stable"
@@ -63,6 +64,14 @@ class ReadingStatus(str, Enum):
     ANNOTATED = "annotated"
     SYNTHESIZED = "synthesized"
 
+class Backend(str, Enum):
+    """Where article body/content is stored."""
+    MD = "md"       # markdown in .md file (default)
+    SQL = "sql"     # SQL table in datasets/ database
+    BLOB = "blob"   # binary file in datasets/blobs/
+    JSON = "json"   # JSON document in datasets/
+    GRAPH = "graph" # node/edge tables in datasets/
+
 
 # ── Sub-models ─────────────────────────────────────────────────
 
@@ -88,6 +97,35 @@ class PaperComparison(BaseModel):
     other_slug: str
     relationship: str  # "agrees", "contradicts", "extends", "gap"
     detail: str = ""   # brief explanation of the relationship
+
+class DatasetColumn(BaseModel):
+    """A single column definition for a SQL-backed dataset."""
+    name: str
+    type: str = "TEXT"  # TEXT, INTEGER, REAL, BLOB
+
+class DatasetRef(BaseModel):
+    """Reference to a SQL table that holds this article's body/content."""
+    db: str = Field(..., description="Path to the SQLite database file, e.g. datasets/wildlife.db")
+    table: str = Field(..., description="Table name, e.g. bird_species")
+    columns: List[DatasetColumn] = Field(default_factory=list, description="Column definitions")
+    time_column: Optional[str] = Field(default=None, description="Column holding timestamps for time-series data")
+    time_resolution: Optional[str] = Field(default=None, description="Expected interval: '5s', '1m', '1h', '1d'")
+    json_schema: Optional[dict] = Field(default=None, description="Expected JSON schema shape for documentation")
+
+class BlobRef(BaseModel):
+    """Reference to a binary file stored in datasets/blobs/."""
+    path: str = Field(..., description="Path to the blob file, e.g. datasets/blobs/screenshot.png")
+    mime_type: str = Field(default="application/octet-stream", description="MIME type")
+    size_bytes: int = Field(default=0, ge=0, description="File size in bytes")
+    extracted_text: str = Field(default="", description="OCR/STT extracted text for search indexing")
+
+class GraphRef(BaseModel):
+    """Metadata about a graph dataset stored in SQLite node/edge tables."""
+    directed: bool = Field(default=True, description="True for directed graphs")
+    node_count: int = Field(default=0, ge=0)
+    edge_count: int = Field(default=0, ge=0)
+    node_attributes: List[str] = Field(default_factory=list, description="Column names in nodes table besides node_id")
+    edge_attributes: List[str] = Field(default_factory=list, description="Column names in edges table besides source/target")
 
 
 # ── Default review intervals per article type (days) ───────────
@@ -147,6 +185,11 @@ class _BaseFrontmatter(BaseModel):
     gap_question: Optional[str] = Field(default=None, description="Required when gap=True")
     gap_priority: Optional[float] = Field(default=None, ge=0.0, le=1.0, description="Required when gap=True")
     schema_version: int = Field(default=2, ge=1, description="Schema version for migration tracking")
+    # v1.8: backend storage
+    backend: Backend = Field(default=Backend.MD, description="Where content is stored — md file or sql table")
+    dataset: Optional[DatasetRef] = Field(default=None, description="SQL table reference when backend=sql")
+    blob: Optional[BlobRef] = Field(default=None, description="Binary file reference when backend=blob")
+    graph: Optional[GraphRef] = Field(default=None, description="Graph metadata when backend=graph")
 
     @field_validator('related', mode='before')
     @classmethod
@@ -253,7 +296,7 @@ class NoteArticle(_BaseFrontmatter):
     actionable: bool = Field(default=False, description="Whether this needs follow-up")
 
 class MissionArticle(_BaseFrontmatter):
-    """Project building block — explains how a project will work."""
+    """Project building block — how a project will work."""
     type: ArticleType = ArticleType.MISSION
     project: str = Field(..., description="The project name")
     purpose: str = Field(..., description="Why this project exists")
@@ -262,9 +305,18 @@ class MissionArticle(_BaseFrontmatter):
     success_criteria: List[str] = Field(default_factory=list)
 
 
+class ProcedureArticle(_BaseFrontmatter):
+    """Task-specific implementation guide — the 'how' for a single task."""
+    type: ArticleType = ArticleType.PROCEDURE
+    task_id: int = Field(..., description="The task this procedure implements")
+    objective: str = Field(..., description="What this task needs to achieve, 1-2 sentences")
+    approach: str = Field(..., description="How to accomplish it, step-by-step methodology")
+    verification: str = Field(..., description="How to confirm the task is complete and correct")
+
+
 # ── Union type for dispatch ────────────────────────────────────
 
-Article = BaseArticle | ProcessArticle | PlanArticle | HelpArticle | ResearchNoteArticle | NoteArticle | MissionArticle
+Article = BaseArticle | ProcessArticle | PlanArticle | HelpArticle | ResearchNoteArticle | NoteArticle | MissionArticle | ProcedureArticle
 
 
 # ── Template definitions (what the AI uses to generate articles) ─
@@ -314,6 +366,12 @@ TEMPLATES = {
         "human_fields": ["purpose","architecture","dependencies","success_criteria"],
         "prompt": "Describe a project mission. State its purpose. Explain the architecture (~5 paragraphs). List dependencies and success criteria.",
     },
+    ArticleType.PROCEDURE: {
+        "description": "Task-specific implementation guide — the 'how' for a single task.",
+        "ai_layer_fields": _AI_LAYER_BASE + ["task_id"],
+        "human_fields": ["objective","approach","verification"],
+        "prompt": "Write a task implementation guide. State the objective clearly. Describe the approach step by step. Specify how to verify completion.",
+    },
 }
 
 
@@ -327,6 +385,7 @@ ARTICLE_CLASSES: dict[ArticleType, type] = {
     ArticleType.RESEARCH_NOTE: ResearchNoteArticle,
     ArticleType.NOTE: NoteArticle,
     ArticleType.MISSION: MissionArticle,
+    ArticleType.PROCEDURE: ProcedureArticle,
 }
 
 def get_class(article_type: ArticleType | str) -> type:
