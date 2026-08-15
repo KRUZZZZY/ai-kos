@@ -126,16 +126,40 @@ def _generate_perspectives(question: str) -> List[str]:
     ]
 
 
+def spill_if_large(text: str, name: str, max_chars: int = 4000,
+                   spill_dir: Optional[str] = None,
+                   session_id: str = "deep-research") -> Any:
+    """Spill oversized raw extraction text to the spill store.
+
+    Returns the text unchanged when ``len(text) <= max_chars``; otherwise
+    returns a :class:`ai_kos.spill.SpillRef` whose ``locator`` replaces the
+    full text in extraction results. Additive — never truncates existing
+    behavior for small text.
+    """
+    from ai_kos.spill import apply_spill_policy
+    return apply_spill_policy(text, name, max_chars=max_chars,
+                              spill_dir=spill_dir, session_id=session_id)
+
+
 def structure_findings(raw_findings: List[Dict[str, Any]]) -> List[SourceFinding]:
-    """Structure raw search results into typed findings."""
+    """Structure raw search results into typed findings.
+
+    Oversized raw extraction text (>4000 chars) is spilled to a session-scoped
+    file and the locator is kept in the result dict in place of the full text.
+    """
     structured = []
     for f in raw_findings:
+        content = f.get("content", "")
+        evidence = f.get("evidence", content[:300])
+        if len(content) > 4000:
+            ref = spill_if_large(content, f"extract-{f.get('sub_question_idx', 0)}")
+            f["content"] = ref.locator  # locator kept in place of the full text
         structured.append(SourceFinding(
             sub_question_idx=f.get("sub_question_idx", 0),
             source_url=f.get("url", ""),
             source_title=f.get("title", ""),
             key_claim=f.get("key_claim", f.get("description", "")),
-            evidence=f.get("evidence", f.get("content", "")[:300]),
+            evidence=evidence,
             confidence=f.get("confidence", "medium"),
         ))
     return structured
