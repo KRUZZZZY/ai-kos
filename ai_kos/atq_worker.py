@@ -31,6 +31,7 @@ import sys
 import time
 from pathlib import Path
 
+from ai_kos.atq_ralph import RalphReport
 from ai_kos.atq_safety import RiskTier, classify
 
 TASK_ID_RE = re.compile(r"\b(t_[a-z0-9]+)\b")
@@ -183,6 +184,59 @@ class Worker:
             results.append({"child": cid, "status": "timeout"})
         return results
 
+    # ── Ralph envelope ────────────────────────────────────────────────────
+
+    def complete_report(self, report: RalphReport) -> str:
+        """Persist a Ralph report artifact, then complete() with a rendered summary.
+
+        Writes ``<task_id>-report.json`` (the ``RalphReport`` envelope) and
+        calls ``complete()`` with ``status + summary + evidence[:300]``.
+        """
+        self.write_artifact("report.json", report.to_json())
+        rendered = f"[{report.status}] {report.summary}"
+        if report.evidence:
+            rendered += f" — {report.evidence[:300]}"
+        return self.complete(rendered)
+
+    def block_report(self, report: RalphReport) -> str:
+        """Persist a Ralph report artifact, then block() with a rendered summary."""
+        self.write_artifact("report.json", report.to_json())
+        rendered = f"[{report.status}] {report.summary}"
+        if report.evidence:
+            rendered += f" — {report.evidence[:300]}"
+        return self.block(rendered)
+
+    def read_child_report(self, child_id: str) -> RalphReport | None:
+        """Read a child's ``<child_id>-report.json`` from the workspace."""
+        p = self.workdir / f"{child_id}-report.json"
+        if not p.exists():
+            return None
+        try:
+            return RalphReport.from_json(p.read_text())
+        except (json.JSONDecodeError, TypeError, KeyError):
+            return None
+
+    def ralph_spawn(self, title: str, objective: str, handoff: str,
+                    assignee: str, parent: str | None = None) -> str | None:
+        """Subdelegate one Ralph round, embedding the handoff in the child body.
+
+        Thin wrapper over ``subdelegate()``: the child receives the immutable
+        objective + per-round handoff as its body and is expected to report
+        via ``complete_report()``/``block_report()`` (which writes
+        ``<child_id>-report.json``). The child's report is read back
+        best-effort — the child may still be running at this point.
+        """
+        body = (f"Objective: {objective}\n\n{handoff}\n\n"
+                "Report your outcome via the Ralph envelope "
+                "(complete_report / block_report).")
+        child_id = self.subdelegate(title, body, assignee, parent=parent)
+        if not child_id:
+            return None
+        report = self.read_child_report(child_id)
+        if report is not None:
+            self.comment(f"child {child_id} report: [{report.status}] {report.summary}")
+        return child_id
+
     # ── runner ────────────────────────────────────────────────────────────
 
     def run(self, cmd: str | None = None,
@@ -192,6 +246,18 @@ class Worker:
             self.block("refusing to execute without a successful claim (the claim IS the lock)")
             return 1
         self.comment("worker start (claim held)")
+        # Audit invariant (model-visible ⟺ logged): record the objective handed
+        # to this worker so every model-visible input is reconstructable.
+        try:
+            from ai_kos.audit import log_model_visible
+            log_model_visible(
+                source="atq-worker",
+                content=cmd or f"subdelegates={json.dumps(subdelegates or [])}",
+                meta={"task_id": self.task_id,
+                      "lane": "shell" if cmd else "subdelegate"},
+            )
+        except Exception:  # noqa: BLE001 — audit must never break the worker
+            pass
         if cmd:
             if self.already_applied("execute", cmd):
                 self.comment("skipping already-applied execute (idempotent retry)")

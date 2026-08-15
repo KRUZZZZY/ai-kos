@@ -21,6 +21,7 @@ Usage (CLI):
     ai-kos atq tick [--board <slug>] [--max-dispatch 3] [--daily-cap 30]
     ai-kos atq status [--board <slug>]
     ai-kos atq report <mission-slug> [--board <slug>]
+    ai-kos atq lanes [--spawn <lane> --cmd "<shell>"]
 
 Or as a module:
     from ai_kos.atq import submit, tick, status, report
@@ -350,6 +351,36 @@ def report(mission_slug: str, board: Optional[str] = None) -> str:
     return str(path)
 
 
+# ── lanes ─────────────────────────────────────────────────────────────────
+
+def lanes(spawn_lane: Optional[str] = None, cmd: Optional[str] = None) -> dict:
+    """List registered ATQ worker lanes + statuses, or spawn one on demand.
+
+    With no ``spawn_lane``, returns ``{"lanes": [...], "statuses": [...]}``.
+    With ``spawn_lane``, runs ``cmd`` through that lane (the shell lane is the
+    default and runs ``bash -c <cmd>``; external CLI lanes receive ``cmd`` as
+    a single prompt argument) and returns the LaneResult.
+    """
+    import dataclasses
+
+    from ai_kos.atq_lanes import (LaneRegistry, LaneSpec, lane_status_all,
+                                  register_default_lanes)
+
+    registry = LaneRegistry()
+    register_default_lanes(registry)
+    if spawn_lane:
+        if spawn_lane == "shell":
+            spec_cmd = ["bash", "-c", cmd or ""]
+        else:
+            spec_cmd = [cmd or ""]
+        spec = LaneSpec(name=spawn_lane, cmd=spec_cmd)
+        result = registry.spawn(spawn_lane, spec)
+        return {"lane": spawn_lane, "result": dataclasses.asdict(result)}
+    statuses = lane_status_all(registry)
+    return {"lanes": registry.list(),
+            "statuses": [dataclasses.asdict(s) for s in statuses]}
+
+
 # ── CLI ───────────────────────────────────────────────────────────────────
 
 def main(argv: Optional[List[str]] = None) -> int:
@@ -374,6 +405,11 @@ def main(argv: Optional[List[str]] = None) -> int:
     pr.add_argument("mission_slug")
     pr.add_argument("--board")
 
+    pl = sub.add_parser("lanes", help="List ATQ worker lanes + statuses, or spawn one")
+    pl.add_argument("--spawn", default=None, help="lane to spawn (default: shell)")
+    pl.add_argument("--cmd", dest="lane_cmd", default=None,
+                    help="shell command / prompt to run via --spawn")
+
     args = p.parse_args(argv)
     try:
         if args.cmd == "submit":
@@ -384,6 +420,8 @@ def main(argv: Optional[List[str]] = None) -> int:
             print(status(args.board))
         elif args.cmd == "report":
             print(report(args.mission_slug, args.board))
+        elif args.cmd == "lanes":
+            print(json.dumps(lanes(args.spawn, args.lane_cmd), default=str))
     except Exception as exc:  # noqa: BLE001 — CLI boundary
         print(f"error: {exc}", file=sys.stderr)
         return 1
