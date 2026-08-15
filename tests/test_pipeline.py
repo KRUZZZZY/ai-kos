@@ -419,3 +419,88 @@ class TestDefaultDir:
         d = _default_pipelines_dir()
         assert isinstance(d, Path)
         assert d.name == "pipelines"
+
+
+class TestEventLogIntegration:
+    """Feature 3: event log is source of truth, {id}.json is a projection."""
+
+    def test_run_produces_event_log_and_projection(self, tmp_path):
+        from ai_kos.pipeline_log import PipelineEventLog
+
+        search_fn = MagicMock(return_value=[
+            {"title": "T", "url": "https://x", "key_claim": "C"},
+        ])
+        p = ResearchPipeline.create("Q?", pipelines_dir=str(tmp_path))
+        result = p.run(search_fn=search_fn)
+        assert result.status == "completed"
+        pid = p.state.id
+
+        log_path = tmp_path / f"{pid}.events.jsonl"
+        assert log_path.exists()
+        events = PipelineEventLog(log_path).read()
+        assert events[0].type == "seeded"
+        types = {e.type for e in events}
+        assert "step_completed" in types
+
+        # projection is {id}.json with a ver field (seq of last applied event);
+        # the final status_changed is throttled, so ver may trail the tail.
+        proj = json.loads((tmp_path / f"{pid}.json").read_text())
+        assert "ver" in proj
+        assert proj["ver"] <= events[-1].seq
+
+        # reload reconstructs the completed state (fast path or replay)
+        p2 = ResearchPipeline.load(str(tmp_path / f"{pid}.json"))
+        assert p2.state.status == "completed"
+        assert p2.state.question == "Q?"
+
+    def test_crash_delete_projection_rebuilds_from_log(self, tmp_path):
+        search_fn = MagicMock(return_value=[
+            {"title": "T", "url": "https://x", "key_claim": "C"},
+        ])
+        p = ResearchPipeline.create("Crash?", pipelines_dir=str(tmp_path))
+        p.run(search_fn=search_fn)
+        pid = p.state.id
+
+        # "crash": lose the projection, keep the log
+        (tmp_path / f"{pid}.json").unlink()
+
+        p2 = ResearchPipeline.load(str(tmp_path / f"{pid}.json"))
+        assert p2.state.id == pid
+        assert p2.state.question == "Crash?"
+        assert p2.state.status == "completed"
+
+    def test_legacy_json_without_log_seeds_on_load(self, tmp_path):
+        from dataclasses import asdict
+
+        from ai_kos.pipeline_log import PipelineEventLog
+
+        p = ResearchPipeline.create("Legacy", pipelines_dir=str(tmp_path))
+        p.state.status = "running"
+        json_path = tmp_path / f"{p.state.id}.json"
+        # write a legacy snapshot (no ver, no log) as the old code did
+        json_path.write_text(json.dumps(asdict(p.state), indent=2, default=str))
+        log_path = tmp_path / f"{p.state.id}.events.jsonl"
+        assert not log_path.exists()
+
+        p2 = ResearchPipeline.load(str(json_path))
+        assert p2.state.id == p.state.id
+        assert p2.state.question == "Legacy"
+
+        # log was seeded on load (additive migration)
+        assert log_path.exists()
+        events = PipelineEventLog(log_path).read()
+        assert [e.type for e in events] == ["seeded"]
+
+    def test_interrupted_step_gets_synthetic_closer(self, tmp_path):
+        p = ResearchPipeline.create("Crash mid-step", pipelines_dir=str(tmp_path))
+        p.state.status = "running"
+        p._save_state()  # seed (status running, all steps pending)
+        p.state.steps["plan"].status = "running"
+        p.state.steps["plan"].started_at = "t"
+        p.state.steps["plan"].attempts = 1
+        p._save_state()  # step_started(plan) — then "crash" before completion
+        pid = p.state.id
+
+        p2 = ResearchPipeline.load(str(tmp_path / f"{pid}.json"))
+        assert p2.state.steps["plan"].status == "failed"
+        assert p2.state.steps["plan"].last_error == "interrupted by crash"

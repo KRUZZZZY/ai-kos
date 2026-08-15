@@ -6,7 +6,12 @@ Adopts Cloudflare Workflows' step-based durable execution pattern:
 - Pause/resume across Hermes sessions
 - Human review gate before article creation
 
-Built with zero external dependencies (json + pathlib only).
+Persistence model (dsh session-persistence port):
+- ``{id}.events.jsonl`` is the append-only *source of truth*.
+- ``{id}.json`` is a *write-behind projection* (``ver`` = seq of last applied
+  event); a ``ver`` mismatch on load discards it and replays the log.
+
+Built with zero external dependencies (json + pathlib + stdlib).
 """
 
 import json
@@ -19,12 +24,16 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set
 
 from ai_kos.config import get
+from ai_kos.pipeline_log import PipelineEventLog, ProjectionCache, project_state
 
 logger = logging.getLogger("ai-kos.pipeline")
 
 PIPELINE_DIR_NAME = "pipelines"
 MAX_RETRIES = 3
 BASE_DELAY = 2  # seconds, doubles each retry
+
+# Event types whose projection write is mandatory (flushed immediately).
+_MANDATORY_EVENT_TYPES = ("step_completed", "step_failed", "step_paused")
 
 
 # ── Exceptions ──────────────────────────────────────────────────────────────
@@ -70,6 +79,7 @@ class PipelineState:
     @classmethod
     def from_json(cls, data: str) -> "PipelineState":
         raw = json.loads(data)
+        raw.pop("ver", None)  # projection cache marker — not part of the state
         steps = {}
         for name, s in raw.get("steps", {}).items():
             steps[name] = StepState(**s)
@@ -80,6 +90,95 @@ class PipelineState:
 def _default_pipelines_dir() -> Path:
     knowledge_dir = get("paths", "knowledge_dir", default="knowledge")
     return Path(knowledge_dir) / PIPELINE_DIR_NAME
+
+
+# ── Event-log helpers (source-of-truth fold) ───────────────────────────────
+
+def _snapshot_dict(state: PipelineState) -> dict:
+    """A JSON-friendly snapshot of ``state``, minus the volatile ``updated_at``."""
+    d = asdict(state)
+    d.pop("updated_at", None)
+    return d
+
+
+def _diff_events(prev: Optional[dict], curr: dict) -> List[tuple]:
+    """Derive the event(s) that transform snapshot ``prev`` into ``curr``.
+
+    Returns a list of ``(event_type, payload)`` tuples in fold order.  A step
+    status transition emits the matching step event; overall status and context
+    changes emit ``status_changed`` / ``context_updated`` respectively.
+    """
+    events: List[tuple] = []
+    if prev is None:
+        return events
+
+    if prev.get("status") != curr.get("status"):
+        events.append(("status_changed", {"status": curr.get("status")}))
+
+    prev_steps = prev.get("steps", {})
+    curr_steps = curr.get("steps", {})
+    for name, st in curr_steps.items():
+        pst = prev_steps.get(name)
+        if pst is None:
+            continue
+        if pst.get("status") == st.get("status"):
+            continue
+        new_status = st.get("status")
+        if new_status == "running":
+            events.append(("step_started", {
+                "step": name,
+                "started_at": st.get("started_at"),
+                "attempts": st.get("attempts"),
+            }))
+        elif new_status == "completed":
+            events.append(("step_completed", {
+                "step": name,
+                "result": st.get("result"),
+                "completed_at": st.get("completed_at"),
+            }))
+        elif new_status == "failed":
+            events.append(("step_failed", {
+                "step": name,
+                "last_error": st.get("last_error"),
+            }))
+        elif new_status == "paused":
+            events.append(("step_paused", {"step": name}))
+
+    if prev.get("context") != curr.get("context"):
+        events.append(("context_updated", {"context": curr.get("context", {})}))
+
+    return events
+
+
+def _repair_crash_tail(log: PipelineEventLog, events: List[Any]) -> None:
+    """Append a synthetic ``interrupted`` closer for a step left running.
+
+    dsh's crash-tail repair: if the most recent ``step_started`` has no matching
+    terminal (``step_completed``/``step_failed``/``step_paused``) after it, the
+    pipeline crashed mid-step — close it (step → failed) rather than truncate.
+    """
+    if not events:
+        return
+    last_started_idx = -1
+    last_started = None
+    for i, e in enumerate(events):
+        if e.type == "step_started":
+            last_started = e
+            last_started_idx = i
+    if last_started is None:
+        return
+    step_name = last_started.payload.get("step")
+    terminal_after = any(
+        e.type in ("step_completed", "step_failed", "step_paused")
+        and e.payload.get("step") == step_name
+        for e in events[last_started_idx + 1:]
+    )
+    if not terminal_after:
+        log.append("interrupted", {
+            "step": step_name,
+            "status": "failed",
+            "last_error": "interrupted by crash",
+        })
 
 
 # ── Pipeline Engine ─────────────────────────────────────────────────────────
@@ -119,6 +218,11 @@ class ResearchPipeline:
     def __init__(self, state: PipelineState, pipelines_dir: Optional[str] = None):
         self.state = state
         self._dir = Path(pipelines_dir) if pipelines_dir else self._default_dir()
+        # Event log (append-only source of truth) + write-behind projection.
+        # Both materialize lazily on the first save.
+        self._log: Optional[PipelineEventLog] = None
+        self._projection: Optional[ProjectionCache] = None
+        self._last_snapshot: Optional[dict] = None
 
     @classmethod
     def create(cls, question: str, pipelines_dir: Optional[str] = None) -> "ResearchPipeline":
@@ -133,13 +237,63 @@ class ResearchPipeline:
 
     @classmethod
     def load(cls, filepath: str) -> "ResearchPipeline":
-        """Resume a pipeline from its JSON state file."""
+        """Resume a pipeline from its JSON state file (+ event log if present).
+
+        The ``{id}.json`` file is a write-behind projection: when the event log
+        exists, a matching ``ver`` is a fast path; otherwise the state is
+        replayed from the log (fold). Crash-tail repair closes any step left
+        running. Legacy pipelines (no event log) load as-is and seed the log.
+        """
         path = Path(filepath)
+        log_path = path.with_suffix(".events.jsonl")
+
         if not path.exists():
+            # Projection lost (crash): rebuild from the event log if present.
+            if log_path.exists():
+                log = PipelineEventLog(log_path)
+                events = log.read()
+                if events:
+                    _repair_crash_tail(log, events)
+                    events = log.read()
+                    state = project_state(events)
+                    pipeline = cls(state, pipelines_dir=str(path.parent))
+                    pipeline._log = log
+                    pipeline._last_snapshot = _snapshot_dict(state)
+                    pipeline._projection = ProjectionCache(path)
+                    return pipeline
             raise PipelineError(f"Pipeline state file not found: {filepath}")
+
         data = path.read_text()
         state = PipelineState.from_json(data)
-        return cls(state, pipelines_dir=str(path.parent))
+        pipelines_dir = str(path.parent)
+
+        log = PipelineEventLog(log_path)
+        events = log.read()
+
+        if not events:
+            # Backward-compat: seed the log from the existing projection (additive).
+            snapshot = _snapshot_dict(state)
+            ev = log.append("seeded", {"state": snapshot})
+            pipeline = cls(state, pipelines_dir=pipelines_dir)
+            pipeline._log = log
+            pipeline._last_snapshot = snapshot
+            pipeline._projection = ProjectionCache(path)
+            pipeline._projection.write(state, ev.seq, mandatory=True)
+            return pipeline
+
+        _repair_crash_tail(log, events)
+        events = log.read()
+
+        projection = ProjectionCache(path)
+        proj_state = projection.read(events)
+        if proj_state is None:
+            proj_state = project_state(events)
+
+        pipeline = cls(proj_state, pipelines_dir=pipelines_dir)
+        pipeline._log = log
+        pipeline._last_snapshot = _snapshot_dict(proj_state)
+        pipeline._projection = projection
+        return pipeline
 
     def _default_dir(self) -> Path:
         return _default_pipelines_dir()
@@ -147,13 +301,55 @@ class ResearchPipeline:
     def _state_path(self) -> Path:
         return self._dir / f"{self.state.id}.json"
 
+    def _log_path(self) -> Path:
+        return self._dir / f"{self.state.id}.events.jsonl"
+
+    def _get_log(self) -> PipelineEventLog:
+        if self._log is None:
+            self._log = PipelineEventLog(self._log_path())
+        return self._log
+
+    def _get_projection(self) -> ProjectionCache:
+        if self._projection is None:
+            self._projection = ProjectionCache(self._state_path())
+        return self._projection
+
     def _save_state(self) -> None:
-        """Persist pipeline state to disk atomically."""
+        """Persist state: append derived event(s) to the log + write projection.
+
+        The event log is the source of truth. Each save diffs the current state
+        against the last snapshot and appends the resulting step/status/context
+        events; the projection (``{id}.json``) is flushed immediately on
+        mandatory events (step_completed/failed/paused) and throttled otherwise.
+        The first save seeds the log with a full snapshot so the fold can
+        reconstruct identity (additive migration for legacy pipelines).
+        """
         self.state.updated_at = datetime.now(timezone.utc).isoformat()
         self._dir.mkdir(parents=True, exist_ok=True)
-        tmp = self._state_path().with_suffix(".tmp")
-        tmp.write_text(self.state.to_json())
-        tmp.replace(self._state_path())
+
+        log = self._get_log()
+        current = _snapshot_dict(self.state)
+
+        if log.tail() is None or self._last_snapshot is None:
+            ev = log.append("seeded", {"state": current})
+            self._last_snapshot = current
+            self._get_projection().write(self.state, ev.seq, mandatory=True)
+            return
+
+        mandatory = False
+        for event_type, payload in _diff_events(self._last_snapshot, current):
+            log.append(event_type, payload)
+            if event_type in _MANDATORY_EVENT_TYPES:
+                mandatory = True
+        self._last_snapshot = current
+        tail = log.tail()
+        last_seq = tail.seq if tail is not None else 0
+        self._get_projection().write(self.state, last_seq, mandatory=mandatory)
+
+    def close(self) -> None:
+        """Flush + close the underlying event log (idempotent)."""
+        if self._log is not None:
+            self._log.close()
 
     def _next_pending_step(self) -> Optional[str]:
         """Return the first step still pending or failed."""
