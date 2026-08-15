@@ -219,6 +219,18 @@ def cmd_new_project(args):
     print(json.dumps(result, indent=2, default=str))
 
 
+def cmd_repo_sync(args):
+    """Stage, commit, push + verify the GitHub repos (code + knowledge [+ help-guides])."""
+    from ai_kos.repo_sync import RepoSyncError, repo_sync
+    try:
+        result = repo_sync(code_dir=args.code_dir, message=args.message,
+                           include_help_guides=args.help_guides, dry_run=args.dry_run)
+    except RepoSyncError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+    print(json.dumps(result, indent=2, default=str))
+
+
 def main():
     p = argparse.ArgumentParser("ai-kos", description="AI Knowledge Operating System")
     sub = p.add_subparsers(dest="cmd")
@@ -306,6 +318,14 @@ def main():
     pnp.add_argument("mission_slug", help="Mission article slug")
     pnp.add_argument("--force", action="store_true", help="Overwrite an existing scaffold")
     pnp.set_defaults(func=cmd_new_project)
+
+    prs = sub.add_parser("repo-sync", help="Stage, commit, push + verify the GitHub repos (code + knowledge [+ help-guides])")
+    prs.add_argument("--dry-run", action="store_true", help="Preview every command without executing")
+    prs.add_argument("-m", "--message", default=None, help="Commit message (applies to all repos)")
+    prs.add_argument("--help-guides", action="store_true",
+                     help="Also rebuild + push the ai-kos-help-guides subset repo")
+    prs.add_argument("--code-dir", default=None, help="Code repo dir (default: cwd)")
+    prs.set_defaults(func=cmd_repo_sync)
 
     args = p.parse_args()
     if not args.cmd:
