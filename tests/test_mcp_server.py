@@ -190,3 +190,35 @@ async def test_call_compare():
     finally:
         proc.terminate()
         await proc.wait()
+
+
+# ── dsh integration: skill catalog + loader (direct dispatch, no subprocess) ──
+
+def test_dispatch_skill_catalog():
+    from ai_kos.mcp_server import _dispatch_tool
+    out = _dispatch_tool("ai_kos_skill_catalog", {})
+    assert out["total"] > 0
+    assert "skills" in out
+    first = out["skills"][0]
+    assert {"name", "description", "rank", "provider", "slug"} <= set(first)
+
+
+def test_dispatch_skill_load():
+    from ai_kos.mcp_server import _dispatch_tool
+    catalog = _dispatch_tool("ai_kos_skill_catalog", {})
+    out = _dispatch_tool("ai_kos_skill_load", {"name": catalog["skills"][0]["name"]})
+    assert "skill" in out
+    assert out["skill"]["body"] != ""
+
+
+def test_dispatch_skill_load_missing():
+    from ai_kos.mcp_server import _dispatch_tool
+    out = _dispatch_tool("ai_kos_skill_load", {"name": "no-such-skill-xyz"})
+    assert "error" in out
+
+
+def test_tools_list_contains_skill_tools():
+    from ai_kos.mcp_server import TOOLS
+    names = {t.name for t in TOOLS}
+    assert "ai_kos_skill_catalog" in names
+    assert "ai_kos_skill_load" in names

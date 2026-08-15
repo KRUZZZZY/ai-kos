@@ -321,6 +321,16 @@ TOOLS = [
             "pdf_dir": {"type": "string", "description": "PDF directory for backfill (default: rejected/)"},
         }, "required": []},
     ),
+    types.Tool(
+        name="ai_kos_skill_catalog",
+        description="Catalog AI-KOS articles as loadable skills (dsh skill-family pattern): rank-ordered candidates (procedure=100, process=80, help=60, base=40, research-note=20) with slug, summary, and provider. Use before loading a skill.",
+        input_schema={"type": "object", "properties": {}},
+    ),
+    types.Tool(
+        name="ai_kos_skill_load",
+        description="Load one KB article as a skill definition (full body + meta) by slug. Use the name from ai_kos_skill_catalog.",
+        input_schema={"type": "object", "properties": {"name": {"type": "string", "description": "Article slug / skill name"}}, "required": ["name"]},
+    ),
 ]
 
 
@@ -454,6 +464,24 @@ def _dispatch_tool(name: str, arguments: dict) -> dict:
     elif name == "ai_kos_reading_stats":
         from ai_kos.paper_compare import reading_status_stats
         return reading_status_stats()
+
+    elif name == "ai_kos_skill_catalog":
+        from ai_kos.skills import skill_catalog, catalog_version
+        skills = skill_catalog()
+        return {
+            "skills": [{"name": s.name, "description": s.description,
+                        "rank": s.rank, "provider": s.provider, "slug": s.slug}
+                       for s in skills],
+            "total": len(skills),
+            "version": catalog_version(),
+        }
+
+    elif name == "ai_kos_skill_load":
+        from ai_kos.skills import skill_load
+        skill = skill_load(arguments["name"])
+        if skill is None:
+            return {"error": "skill not found"}
+        return {"skill": {"name": skill.name, "body": skill.body, "meta": skill.meta}}
 
     elif name == "ai_kos_task_create":
         from ai_kos.tasks import TaskManager
