@@ -31,6 +31,7 @@ import sys
 import time
 from pathlib import Path
 
+from ai_kos.atq import record_spawn, spawn_gate
 from ai_kos.atq_ralph import RalphReport
 from ai_kos.atq_safety import RiskTier, classify
 
@@ -71,6 +72,11 @@ class Worker:
         self.workdir = workdir or Path.cwd()
         self.author = author
         self.side_effect_log: list[dict] = []
+        # Persisted side-effect log (audit finding: in-memory only). Task-
+        # scoped file in the claim workspace, so a crash + re-claim skips
+        # already-applied effects instead of re-running them.
+        self._effects_path = self.workdir / f"{self.task_id}-side-effects.json"
+        self._load_effects()
 
     # ── protocol steps ────────────────────────────────────────────────────
 
@@ -122,6 +128,27 @@ class Worker:
 
     def _log_effect(self, kind: str, detail: str) -> None:
         self.side_effect_log.append({"kind": kind, "detail": detail, "at": time.time()})
+        self._persist_effects()
+
+    def _load_effects(self) -> None:
+        """Restore the persisted side-effect log (crash/retry idempotency)."""
+        try:
+            if self._effects_path.exists():
+                data = json.loads(self._effects_path.read_text())
+                if isinstance(data, list):
+                    self.side_effect_log = [e for e in data if isinstance(e, dict)]
+        except (json.JSONDecodeError, OSError):
+            self.side_effect_log = []
+
+    def _persist_effects(self) -> None:
+        """Write the side-effect log to the claim workspace (task-scoped,
+        no-clobber naming) so a re-claimed/re-dispatched task skips effects
+        already applied. Best-effort: persistence must never break the worker."""
+        try:
+            self.workdir.mkdir(parents=True, exist_ok=True)
+            self._effects_path.write_text(json.dumps(self.side_effect_log, default=str))
+        except OSError:
+            pass
 
     def already_applied(self, kind: str, detail: str) -> bool:
         """Idempotency check: skip side effects already applied on a retry."""
@@ -134,8 +161,13 @@ class Worker:
         """Create + dispatch a child card for another worker (profile).
 
         Mirrors the atq-director MCP tool atq_spawn_worker. Returns the child
-        task id, or None on failure.
+        task id, or None on failure. Refuses (no card created) when the spawn
+        gate is closed — paused kill-switch or daily cap (audit finding #5).
         """
+        allowed, reason = spawn_gate(self.board)
+        if not allowed:
+            self.comment(f"subdelegate refused: {reason}")
+            return None
         args = ["--body", body, "--assignee", assignee]
         if parent:
             args += ["--parent", parent]
@@ -149,6 +181,8 @@ class Worker:
         # --max is a live concurrency cap (running + spawns) — use 2 so the
         # new card can spawn even with one card already running on the board.
         disp = _kanban(self.board, "dispatch", "--max", "2", "--json", timeout=180)
+        if disp["exit_code"] == 0:
+            record_spawn(self.board)
         self.comment(f"subdelegated -> {child_id} (assignee={assignee})\ndispatch: "
                      f"{disp['stdout'][:200] or disp['stderr'][:200]}")
         self._log_effect("subdelegate", child_id)
@@ -167,6 +201,11 @@ class Worker:
         deadline = time.time() + max_wait_seconds
         pending = list(child_ids)
         while pending and time.time() < deadline:
+            # Heartbeat each poll iteration (audit finding #7): aggregation is
+            # the longest-running phase; without a lease keep-alive a slow
+            # aggregate is reclaimed and the parent re-dispatched (double-run).
+            if not self.heartbeat():
+                break  # lease lost — stop polling; caller sees pending as timeout
             for cid in list(pending):
                 r = _kanban(self.board, "show", cid)
                 text = r["stdout"]
@@ -258,6 +297,13 @@ class Worker:
             )
         except Exception:  # noqa: BLE001 — audit must never break the worker
             pass
+        # Heartbeat at run start (audit finding #7): long-running work must
+        # keep the lease alive or it is reclaimed and re-dispatched (double
+        # execution). A failed heartbeat means the lease is no longer ours —
+        # abort rather than clobber the run that took over.
+        if not self.heartbeat():
+            self.block("lease lost at run start — aborting to avoid double-run")
+            return 1
         if cmd:
             if self.already_applied("execute", cmd):
                 self.comment("skipping already-applied execute (idempotent retry)")
@@ -268,12 +314,22 @@ class Worker:
                     # commands — park the card and escalate instead.
                     self.block(f"refusing T{tier.value} command (least-risk gate): {cmd[:120]}")
                     return 1
+                if not self.heartbeat():
+                    self.block("lease lost before execute — aborting to avoid double-run")
+                    return 1
                 out = _run(["bash", "-c", cmd], timeout=600)
+                if not self.heartbeat():
+                    self.block("lease lost after execute — aborting")
+                    return 1
                 evidence = self.write_artifact("output.txt", out["stdout"][:2000])
                 self.comment(f"executed: {cmd}\nexit={out['exit_code']}\nevidence: {evidence}")
                 if out["exit_code"] != 0:
                     self.block(f"command failed (exit={out['exit_code']}): {out['stderr'][:300]}")
                     return 1
+                # Idempotency (audit finding: decorative log): record the
+                # executed command so a re-claimed/re-dispatched task does not
+                # re-run an already-applied side effect.
+                self._log_effect("execute", cmd)
         children = []
         for title, body, assignee in (subdelegates or []):
             cid = self.subdelegate(title, body, assignee, parent=self.task_id)

@@ -6,7 +6,7 @@ The index is built once on first access and incrementally updated on writes.
 v1.7: typed relations, usage signals, version history, review cadence, access filtering.
 """
 
-import os, uuid, logging, yaml
+import os, time, uuid, logging, yaml
 from pathlib import Path
 from datetime import date, datetime, timezone
 from typing import Optional, List, Dict
@@ -31,6 +31,7 @@ class _ArticleIndex:
         self._paths: Dict[str, str] = {}
         self._frontmatter: Dict[str, dict] = {}
         self._built = False
+        self._built_at = 0.0
 
     @property
     def slugs(self) -> List[str]:
@@ -55,6 +56,7 @@ class _ArticleIndex:
                 "title": fm.get("title", slug),
                 "type": fm.get("type", ""),
                 "keywords": fm.get("keywords", []),
+                "subject_keywords": fm.get("subject_keywords", []),
                 "summary": fm.get("summary", ""),
                 "related": fm.get("related", []),
                 "filepath": self._paths[slug],
@@ -141,7 +143,26 @@ class _ArticleIndex:
 
     def _ensure_built(self) -> None:
         if self._built:
-            return
+            # Staleness check: rebuild if any source file changed since the
+            # index was built (audit 2026-08-15 — the MCP daemon cached 337
+            # articles while disk held 382; writers from other processes
+            # must become visible on the next read).
+            try:
+                newest = max(
+                    (p.stat().st_mtime for p in Path(KNOWLEDGE_DIR).rglob("*.md")),
+                    default=0.0,
+                )
+                newest = max(
+                    newest,
+                    max(
+                        (p.stat().st_mtime for p in Path(KNOWLEDGE_DIR).rglob("*.yaml")),
+                        default=0.0,
+                    ),
+                )
+                if newest <= self._built_at:
+                    return
+            except OSError:
+                return
         self._paths.clear()
         self._frontmatter.clear()
         # Scan .md files (markdown articles)
@@ -168,6 +189,7 @@ class _ArticleIndex:
             except Exception:
                 continue
         self._built = True
+        self._built_at = time.time()
         logger.debug(f"ArticleIndex built: {len(self._paths)} articles")
 
 
@@ -208,6 +230,43 @@ def _get_review_interval(article_type: str) -> int:
         return DEFAULT_REVIEW_INTERVALS.get(at, 365)
     except Exception:
         return 365
+
+
+def _warn_keyword_counts(article) -> None:
+    """Advisory tier-count warnings for create_article (§2.8) — mirrors the schema's
+    loose enforcement: warn on out-of-bounds counts, never fail.
+
+    `subject_keywords` is optional, so an absent (empty) list does not warn; a
+    present-but-out-of-bounds list does.
+
+    Audit fix 2026-08-18: the `target_keywords` / `target_subject_keywords`
+    config keys were dead (read nowhere) — they now drive a below-target
+    advisory so authors learn the ideal count even when within the hard bounds.
+    """
+    n_kw = len(article.keywords)
+    min_kw = get("article", "min_keywords", default=3)
+    max_kw = get("article", "max_keywords", default=15)
+    if n_kw < min_kw or n_kw > max_kw:
+        logger.warning(
+            f"Article {article.slug}: {n_kw} keywords outside advisory bounds [{min_kw}, {max_kw}]"
+        )
+    target_kw = get("article", "target_keywords", default=10)
+    if n_kw < target_kw:
+        logger.warning(
+            f"Article {article.slug}: {n_kw} keywords below target {target_kw} (advisory)"
+        )
+    n_sk = len(article.subject_keywords)
+    min_sk = get("article", "min_subject_keywords", default=2)
+    max_sk = get("article", "max_subject_keywords", default=8)
+    if n_sk and (n_sk < min_sk or n_sk > max_sk):
+        logger.warning(
+            f"Article {article.slug}: {n_sk} subject_keywords outside advisory bounds [{min_sk}, {max_sk}]"
+        )
+    target_sk = get("article", "target_subject_keywords", default=5)
+    if n_sk and n_sk < target_sk:
+        logger.warning(
+            f"Article {article.slug}: {n_sk} subject_keywords below target {target_sk} (advisory)"
+        )
 
 
 def _compute_next_review(today: date, interval_days: Optional[int], article_type: str) -> date:
@@ -265,10 +324,22 @@ def _inject_sql_placeholders(article_type: str, data: dict) -> None:
 
 # ── CRUD Operations ──────────────────────────────────────────────────────────
 
-def create_article(article_type: str, data: dict) -> dict:
+def create_article(article_type: str, data: dict, overwrite: bool = False) -> dict:
     cls = ARTICLE_CLASSES.get(ArticleType(article_type))
     if not cls:
         return {"error": f"Unknown article type: {article_type}"}
+
+    # Audit fix 2026-08-18: slug-collision guard. A duplicate slug used to
+    # silently truncate the existing article (open(..., 'w')), and could even
+    # write markdown INTO an existing .yaml backend stub. Refuse unless the
+    # caller explicitly passes overwrite=True.
+    if not overwrite:
+        slug = data.get("slug")
+        if slug:
+            existing = _slug_path(slug)
+            if existing and os.path.exists(existing):
+                return {"error": f"article already exists: {slug}"}
+
     if 'id' not in data:
         data['id'] = str(uuid.uuid4())
     today = date.today()
@@ -304,10 +375,31 @@ def create_article(article_type: str, data: dict) -> dict:
     if data.get("backend") in ("sql", "json", "blob", "graph"):
         _inject_sql_placeholders(article_type, data)
 
+    # Audit fix 2026-08-18: summary_max_chars is the effective summary bound
+    # (configurable; the schema's pydantic max_length=300 is the hard ceiling).
+    summary_max = get("article", "summary_max_chars", default=300)
+    summary_text = data.get("summary")
+    if isinstance(summary_text, str) and len(summary_text) > summary_max:
+        return {"error": f"Summary too long: {len(summary_text)} chars exceeds summary_max_chars={summary_max}"}
+
     try:
         article = cls(**data)
     except Exception as e:
         return {"error": f"Validation failed: {e}"}
+
+    # Advisory keyword-count warnings (never hard-fail) — v2 tier bounds, §1.8
+    _warn_keyword_counts(article)
+
+    # Audit fix 2026-08-18: max_paragraphs (dead config key) now drives the
+    # base/note paragraph guidance — advisory only, never a hard fail (§2.8).
+    max_par = get("article", "max_paragraphs", default=5)
+    if article.type in (ArticleType.BASE, ArticleType.NOTE):
+        body_text = getattr(article, "content", "") or ""
+        n_par = len([p for p in str(body_text).split("\n\n") if p.strip()])
+        if n_par > max_par:
+            logger.warning(
+                f"Article {article.slug}: {n_par} paragraphs exceeds max_paragraphs={max_par} (advisory)"
+            )
 
     backend = data.get("backend", "md")
 
@@ -476,14 +568,16 @@ def read_article(slug: str) -> dict | None:
     fm['retrieval_count'] = fm.get('retrieval_count', 0) + 1
     fm['last_accessed'] = date.today().isoformat()
 
-    # Write back updated frontmatter
-    import re
+    # Write back updated frontmatter ONLY — never rewrite the body.
+    # (Audit fix 2026-08-18: the old path re.sub'd everything below
+    # `## Related` out of the body on every read, permanently destroying
+    # any manual content placed after that heading. The body must
+    # round-trip byte-identical; only the two usage counters may change.)
     new_fm = yaml.dump(fm, default_flow_style=False, sort_keys=False, allow_unicode=True).strip()
     if filepath.endswith('.yaml'):
         new_content = new_fm
     else:
-        body_clean = re.sub(r'\n## Related\n.*', '', body, flags=re.DOTALL) if '## Related' in body else body
-        new_content = f"---\n{new_fm}\n---{body_clean}"
+        new_content = f"---\n{new_fm}\n---{body}"
     with open(filepath, 'w') as f:
         f.write(new_content)
 
@@ -547,7 +641,13 @@ def read_article(slug: str) -> dict | None:
 
 
 def update_article(slug: str, updates: dict) -> dict:
-    """Update an article's frontmatter. v1.7: auto-increment version, recompute review."""
+    """Update an article's frontmatter. v1.7: auto-increment version, recompute review.
+
+    Audit fix 2026-08-18: .yaml backend stubs are whole-dict files — the old
+    `content.split('---', 2)` raised IndexError on them. Load the whole dict as
+    frontmatter with an empty body (mirrors migrate._load_fm) and write the
+    whole dict back, exactly like read_article already does.
+    """
     filepath = _slug_path(slug)
     try:
         with open(filepath) as f:
@@ -555,8 +655,16 @@ def update_article(slug: str, updates: dict) -> dict:
     except FileNotFoundError:
         return {"error": f"Article not found: {slug}"}
 
-    parts = content.split('---', 2)
-    fm = yaml.safe_load(parts[1]) or {}
+    is_yaml = filepath.endswith('.yaml')
+    if is_yaml:
+        fm = yaml.safe_load(content) or {}
+        body = ""
+    elif not content.startswith('---'):
+        return {"error": f"No frontmatter in {filepath}"}
+    else:
+        parts = content.split('---', 2)
+        fm = yaml.safe_load(parts[1]) or {}
+        body = parts[2] if len(parts) > 2 else ""
     fm.update(updates)
     today = date.today()
     fm['updated_at'] = today.isoformat()
@@ -575,8 +683,10 @@ def update_article(slug: str, updates: dict) -> dict:
     fm['next_review_at'] = _compute_next_review(today, interval, article_type).isoformat()
 
     new_fm = yaml.dump(fm, default_flow_style=False, sort_keys=False, allow_unicode=True).strip()
-    body = parts[2] if len(parts) > 2 else ""
-    new_content = f"---\n{new_fm}\n---{body}"
+    if is_yaml:
+        new_content = new_fm
+    else:
+        new_content = f"---\n{new_fm}\n---{body}"
     with open(filepath, 'w') as f:
         f.write(new_content)
 
@@ -591,10 +701,34 @@ def delete_article(slug: str) -> dict:
     import shutil
     filepath = _slug_path(slug)
     if not os.path.exists(filepath):
+        # Audit fix 2026-08-18: a cold/stale index (or a .yaml stub outside
+        # bundles/general) used to make deletion report "not found" even though
+        # the article existed on disk. Fall back to a direct filesystem search
+        # (prefer .md, then .yaml — mirrors _slug_path's precedence).
+        for ext in (".md", ".yaml"):
+            hits = [str(p) for p in Path(KNOWLEDGE_DIR).rglob(f"{slug}{ext}")]
+            if hits:
+                filepath = hits[0]
+                break
+    if not os.path.exists(filepath):
         return {"error": f"Article not found: {slug}"}
 
-    # Check if SQL-backed and drop the table
+    # Check if SQL-backed and drop the table. Audit fix 2026-08-18: read the
+    # frontmatter extension-aware (whole-dict for .yaml) instead of relying
+    # solely on the index, which may be stale/not built — backend cleanup must
+    # still run (and must never crash) on a .yaml stub.
     fm = _get_index().frontmatter(slug) or {}
+    if not fm:
+        try:
+            with open(filepath) as f:
+                content = f.read()
+            if filepath.endswith('.yaml'):
+                fm = yaml.safe_load(content) or {}
+            elif content.startswith('---'):
+                parts = content.split('---', 2)
+                fm = yaml.safe_load(parts[1]) or {}
+        except Exception:
+            fm = {}
     if fm.get("backend") == "sql" and fm.get("dataset"):
         from ai_kos import datasets
         ds = fm["dataset"]

@@ -34,9 +34,16 @@ import logging
 import os
 import subprocess
 import sys
+import tempfile
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterator, List, Optional
+
+try:
+    import fcntl  # POSIX advisory file locks (Linux/macOS)
+except ImportError:  # pragma: no cover — non-POSIX fallback
+    fcntl = None
 
 from ai_kos.config import get
 
@@ -101,9 +108,51 @@ def _load_state(board: str) -> dict:
             "needs_human": [], "created_at": _now()}
 
 
-def _save_state(board: str, state: dict) -> None:
+@contextmanager
+def _state_lock(board: str) -> Iterator[None]:
+    """Exclusive advisory lock around a state read-modify-write (audit MED).
+
+    Locks a dedicated ``<state>.lock`` file (never the state file itself) so
+    the atomic ``os.replace`` of the state file cannot swap the inode out from
+    under a concurrent locker. Serializes concurrent ``record_spawn``/``tick``
+    writers so spawn counts are never lost to a read-modify-write race. Falls
+    back to a no-op on platforms without ``flock`` (the atomic replace still
+    prevents torn/corrupt files there).
+    """
     STATE_DIR.mkdir(parents=True, exist_ok=True)
-    _state_path(board).write_text(json.dumps(state, indent=2, default=str))
+    lock_path = _state_path(board).with_suffix(".lock")
+    fh = open(lock_path, "w")
+    try:
+        if fcntl is not None:
+            fcntl.flock(fh, fcntl.LOCK_EX)
+        yield
+    finally:
+        if fcntl is not None:
+            fcntl.flock(fh, fcntl.LOCK_UN)
+        fh.close()
+
+
+def _save_state(board: str, state: dict) -> None:
+    """Persist state atomically: write a temp file, then ``os.replace``.
+
+    Readers can never observe a torn/partial JSON document (concurrent ticks
+    used to corrupt the file via read-modify-write); callers that also mutate
+    should hold ``_state_lock`` around the whole read-modify-write.
+    """
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    p = _state_path(board)
+    fd, tmp_name = tempfile.mkstemp(dir=str(STATE_DIR), prefix=p.name + ".",
+                                    suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w") as fh:
+            json.dump(state, fh, indent=2, default=str)
+        os.replace(tmp_name, p)
+    except BaseException:
+        try:
+            os.unlink(tmp_name)
+        except OSError:
+            pass
+        raise
 
 
 def _day_key() -> str:
@@ -112,6 +161,39 @@ def _day_key() -> str:
 
 def _board_flag(board: Optional[str]) -> List[str]:
     return ["--board", board] if board else []
+
+
+def spawn_gate(board: str = "default", daily_cap: int = DEFAULT_DAILY_CAP) -> tuple:
+    """Single gate every spawn path must pass (audit finding #5).
+
+    ``tick``, ``atq_spawn_worker``, ``atq_dispatch`` and
+    ``Worker.subdelegate`` all route their spawns through this check so the
+    paused kill-switch and the daily spawn cap cannot be bypassed by a direct
+    dispatch path. Returns ``(allowed: bool, reason: str)``.
+    """
+    state = _load_state(board)
+    if state.get("paused"):
+        return False, "queue paused (kill-switch) — spawn refused"
+    day = _day_key()
+    used = int(state.get("spawns_today", {}).get(day, 0) or 0)
+    if used >= daily_cap:
+        return False, f"daily spawn cap reached ({used}/{daily_cap})"
+    return True, f"{used}/{daily_cap} spawns used today"
+
+
+def record_spawn(board: str = "default", n: int = 1) -> None:
+    """Account n spawns against the daily cap (persisted in the state file).
+
+    Called by every successful spawn so the cap is enforced across ALL paths,
+    not just the tick loop. The read-modify-write runs under ``_state_lock``
+    so concurrent ticks cannot lose spawn counts.
+    """
+    with _state_lock(board):
+        state = _load_state(board)
+        day = _day_key()
+        used = int(state.setdefault("spawns_today", {}).get(day, 0) or 0)
+        state["spawns_today"][day] = used + n
+        _save_state(board, state)
 
 
 def ensure_board(board: str, description: str = "") -> None:
@@ -224,8 +306,6 @@ def tick(board: str = "default", max_dispatch: int = DEFAULT_MAX_DISPATCH,
     4. Persist state (crash-safe: everything else lives in kanban DB).
     """
     state = _load_state(board)
-    state["tick_count"] += 1
-    state["last_tick"] = _now()
     result: Dict[str, Any] = {"board": board, "decomposed": [], "spawned": 0,
                               "needs_human": [], "paused": state.get("paused", False)}
 
@@ -255,25 +335,41 @@ def tick(board: str = "default", max_dispatch: int = DEFAULT_MAX_DISPATCH,
         if task.get("status") == "blocked":
             result["needs_human"].append({"id": task["id"], "title": task.get("title")})
 
-    # 3) Budget check before dispatch
-    day = _day_key()
-    spawns_today = state.setdefault("spawns_today", {})
-    if not state.get("paused") and spawns_today.get(day, 0) < daily_cap:
-        allowed = min(max_dispatch, daily_cap - spawns_today.get(day, 0))
+    # 3) Budget check before dispatch — through the same gate ALL spawn paths
+    #    use (paused kill-switch + daily cap), so direct dispatch cannot
+    #    bypass the limits tick enforces.
+    allowed, reason = spawn_gate(board, daily_cap=daily_cap)
+    if not allowed:
+        if state.get("paused"):
+            result["paused"] = True
+            logger.info("queue paused — no dispatch this tick")
+        else:
+            logger.info("spawn gate: %s", reason)
+    else:
+        day = _day_key()
+        used = int(state.get("spawns_today", {}).get(day, 0) or 0)
+        allowed_n = min(max_dispatch, daily_cap - used)
         try:
-            proc = _kanban(["dispatch", "--max", str(allowed)], board=board)
+            proc = _kanban(["dispatch", "--max", str(allowed_n)], board=board)
+            spawned = 0
             for line in proc.stdout.splitlines():
                 if line.strip().startswith("Spawned:"):
-                    result["spawned"] = int(line.split(":")[1].strip() or 0)
-            spawns_today[day] = spawns_today.get(day, 0) + result["spawned"]
+                    spawned = int(line.split(":")[1].strip() or 0)
+            result["spawned"] = spawned
+            if spawned:
+                record_spawn(board, spawned)
         except RuntimeError as exc:
             logger.warning("dispatch failed: %s", exc)
-    elif state.get("paused"):
-        result["paused"] = True
-        logger.info("queue paused — no dispatch this tick")
 
-    state["needs_human"] = result["needs_human"]
-    _save_state(board, state)
+    # Persist state under the lock, re-loading fresh so a concurrent tick's
+    # spawn counts / pause flag are never clobbered by our stale snapshot
+    # (audit MED: non-atomic read-modify-write lost spawn counts).
+    with _state_lock(board):
+        fresh = _load_state(board)
+        fresh["tick_count"] = int(fresh.get("tick_count", 0) or 0) + 1
+        fresh["last_tick"] = _now()
+        fresh["needs_human"] = result["needs_human"]
+        _save_state(board, fresh)
     return result
 
 
@@ -360,11 +456,18 @@ def lanes(spawn_lane: Optional[str] = None, cmd: Optional[str] = None) -> dict:
     With ``spawn_lane``, runs ``cmd`` through that lane (the shell lane is the
     default and runs ``bash -c <cmd>``; external CLI lanes receive ``cmd`` as
     a single prompt argument) and returns the LaneResult.
+
+    Safety gate (audit MED): every spawn command is routed through the
+    ``classify()`` risk classifier BEFORE execution. A command classified
+    >=T2 (irreversible/destructive) is refused — returned as ``gated`` with
+    the tier — and never executed, neither via ``bash -c`` nor as a prompt
+    that an external agent CLI could act on.
     """
     import dataclasses
 
     from ai_kos.atq_lanes import (LaneRegistry, LaneSpec, lane_status_all,
                                   register_default_lanes)
+    from ai_kos.atq_safety import RiskTier, classify
 
     registry = LaneRegistry()
     register_default_lanes(registry)
@@ -373,6 +476,15 @@ def lanes(spawn_lane: Optional[str] = None, cmd: Optional[str] = None) -> dict:
             spec_cmd = ["bash", "-c", cmd or ""]
         else:
             spec_cmd = [cmd or ""]
+        tier = classify(cmd or "")
+        if tier >= RiskTier.T2_IRREVERSIBLE:
+            logger.warning("lanes spawn %s refused: command classified %s",
+                           spawn_lane, tier.name)
+            return {"lane": spawn_lane, "gated": True, "tier": tier.name,
+                    "refused": f"command classified {tier.name} — "
+                               f"destructive/irreversible commands are not "
+                               f"auto-executed",
+                    "cmd": cmd}
         spec = LaneSpec(name=spawn_lane, cmd=spec_cmd)
         result = registry.spawn(spawn_lane, spec)
         return {"lane": spawn_lane, "result": dataclasses.asdict(result)}

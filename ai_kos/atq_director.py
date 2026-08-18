@@ -33,6 +33,8 @@ from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp import types
 
+from ai_kos.atq import record_spawn, spawn_gate
+
 server = Server("atq-director")
 
 TASK_ID_RE = re.compile(r"\b(t_[a-z0-9]+)\b")
@@ -201,6 +203,11 @@ def atq_workers(board: str = "default") -> str:
 
 def atq_spawn_worker(board: str, title: str, body: str, assignee: str,
                      parent: str | None = None, priority: int = 0) -> str:
+    # Spawn gate (audit finding #5): the paused kill-switch and the daily cap
+    # apply to direct spawns too, not just the tick loop.
+    allowed, reason = spawn_gate(board)
+    if not allowed:
+        return f"spawn refused: {reason}"
     args = ["--body", body, "--assignee", assignee, "--priority", str(priority)]
     if parent:
         args += ["--parent", parent]
@@ -213,14 +220,23 @@ def atq_spawn_worker(board: str, title: str, body: str, assignee: str,
     # NOTE: dispatch --max is a LIVE CONCURRENCY CAP (running tasks + spawns),
     # not a per-tick budget — a board with 1 running task needs --max >= 2.
     disp = _kanban(board, "dispatch", "--max", "2", "--json", timeout=180)
+    if disp["exit_code"] == 0:
+        record_spawn(board)
     return f"created {task_id} (assignee={assignee})\ndispatch: {_fmt(disp)}"
 
 
 def atq_dispatch(board: str = "default", max_n: int = 2, dry_run: bool = False) -> str:
-    args = ["--max", str(max_n)]
     if dry_run:
-        args.append("--dry-run")
-    return _fmt(_kanban(board, "dispatch", "--json", *args, timeout=300))
+        return _fmt(_kanban(board, "dispatch", "--json", "--max", str(max_n),
+                            "--dry-run", timeout=300))
+    allowed, reason = spawn_gate(board)
+    if not allowed:
+        return f"dispatch refused: {reason}"
+    r = _kanban(board, "dispatch", "--json", "--max", str(max_n), timeout=300)
+    if r["exit_code"] == 0:
+        m = re.search(r"(?i)spawned[:\s]+(\d+)", r["stdout"])
+        record_spawn(board, n=int(m.group(1)) if m else max_n)
+    return _fmt(r)
 
 
 def atq_comment(task_id: str, body: str, board: str = "default", author: str = "atq-director") -> str:

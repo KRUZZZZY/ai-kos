@@ -175,7 +175,11 @@ class QueueManager:
         ``stale_timeout`` when a heartbeat was expected (a task that was never
         heartbeated is only reclaimed on lease expiry). Reaped tasks return to
         ``ready``, their consecutive-failure counter is incremented, and a
-        ``reclaimed`` event is recorded.
+        ``reclaimed`` event is recorded — UNLESS the counter has reached
+        ``max_attempts``, in which case the task is dead-lettered instead
+        (audit MED: a task that keeps failing must not be retried forever).
+        Returns the re-queued (still retryable) task ids; dead-lettered tasks
+        are NOT included.
         """
         now = self._now()
         stale_floor = now - self.config.stale_timeout
@@ -194,8 +198,10 @@ class QueueManager:
                 reaped = []
                 for row in rows:
                     task_id = row["id"]
+                    # Increment the failure counter and clear the claim (the
+                    # task must not stay running under a dead worker).
                     conn.execute(
-                        "UPDATE tasks SET status = 'ready', claim_lock = NULL, "
+                        "UPDATE tasks SET claim_lock = NULL, "
                         "  claim_expires = NULL, current_run_id = NULL, "
                         "  consecutive_failures = consecutive_failures + 1 "
                         "WHERE id = ?",
@@ -208,9 +214,34 @@ class QueueManager:
                         "WHERE task_id = ? AND ended_at IS NULL",
                         (OUTCOME_RECLAIMED, now, task_id),
                     )
-                    self._record_event(conn, task_id, EVENT_RECLAIMED,
-                                       payload={"reason": "lease_expired_or_stale"})
-                    reaped.append(task_id)
+                    failures = conn.execute(
+                        "SELECT consecutive_failures FROM tasks WHERE id = ?",
+                        (task_id,),
+                    ).fetchone()["consecutive_failures"]
+
+                    if failures >= self.config.max_attempts:
+                        # Dead-letter: terminal state, never re-enqueued.
+                        conn.execute(
+                            "UPDATE tasks SET status = 'dead-lettered', "
+                            "  last_failure_error = ? WHERE id = ?",
+                            (f"reaped {failures} times "
+                             f"(max_attempts={self.config.max_attempts})",
+                             task_id),
+                        )
+                        self._record_event(conn, task_id, EVENT_DEAD_LETTERED,
+                                           payload={"reason": "reaped_max_attempts",
+                                                    "failures": failures})
+                        logger.error("dead-lettered task %s after %d reaps "
+                                     "(max_attempts=%d)", task_id, failures,
+                                     self.config.max_attempts)
+                    else:
+                        conn.execute(
+                            "UPDATE tasks SET status = 'ready' WHERE id = ?",
+                            (task_id,),
+                        )
+                        self._record_event(conn, task_id, EVENT_RECLAIMED,
+                                           payload={"reason": "lease_expired_or_stale"})
+                        reaped.append(task_id)
 
                 conn.commit()
                 for task_id in reaped:
@@ -471,8 +502,11 @@ class QueueManager:
     def heartbeat(self, task_id: str, run_id: int) -> bool:
         """Worker check-in: extend the lease and update heartbeat timestamp.
 
-        Returns True if the heartbeat was accepted (task is running and the
-        run id is the task's current run), False otherwise.
+        Returns True if the heartbeat was accepted (task is running, the run
+        id is the task's current run, and the lease has NOT yet expired),
+        False otherwise. An already-expired lease is never extended — a dead
+        worker's zombie heartbeat must not hold its task forever; the task
+        belongs to the reaper once ``claim_expires`` has passed.
         """
         now = self._now()
         expires = now + self.config.lease_duration
@@ -481,8 +515,9 @@ class QueueManager:
             try:
                 cur = conn.execute(
                     "UPDATE tasks SET claim_expires = ?, last_heartbeat_at = ? "
-                    "WHERE id = ? AND status = 'running' AND current_run_id = ?",
-                    (expires, now, task_id, run_id),
+                    "WHERE id = ? AND status = 'running' AND current_run_id = ? "
+                    "AND claim_expires IS NOT NULL AND claim_expires >= ?",
+                    (expires, now, task_id, run_id, now),
                 )
                 if cur.rowcount == 0:
                     return False

@@ -19,15 +19,54 @@ paths:
   db_path: datasets/ai-kos.db
 
 linking:
+  mode: similarity             # similarity | idf | count (recalibrated: similarity_threshold 0.10)
   min_keyword_overlap: 2
   merge_threshold: 0.80
   bridge_threshold: 0.20
   idf_link_threshold: 5.5
+  # ── NEW: similarity mode ──
+  similarity_threshold: 0.10   # recalibrated on live corpus (2026-08-18): 838 undirected edges, orphans 18, max deg 15 — §3.6 window
+  tier_weights:
+    subject: 0.6
+    article: 1.4
+  min_evidence:
+    shared_article_keywords: 1
+    shared_subject_keywords: 3
+  subject_df_floor: 0          # 0 = auto (ceil(sqrt(N))); positive int = explicit df floor
+  subject_seed_lexicon: [tda, ai-kos, persistent-homology, vectorization, benchmark, pipeline, persistence-diagram, deep-learning, mcp, hermes, atq, sqlite]  # curated subject terms, additive with the df rule (plan §1.8)
+  orphan_rescue: true
+  orphan_rescue_floor: 0.10
+  link_budget:
+    min_cap: 3
+    max_cap: 20
+    type_base:
+      mission: 12
+      base: 10
+      help: 8
+      process: 8
+      plan: 6
+      procedure: 6
+      research-note: 5
+      note: 4
+    length_factor:
+      floor: 0.5
+      ceiling: 1.25
+      words_per_unit: 600
+    importance:
+      explicit_field: importance
+      derived: true
+  merge:
+    article_tier_jaccard_threshold: 0.70
+    legacy_overlap_threshold: 0.80
 
 article:
   max_paragraphs: 5
   min_keywords: 3
-  max_keywords: 8
+  target_keywords: 10
+  max_keywords: 15
+  min_subject_keywords: 2
+  target_subject_keywords: 5
+  max_subject_keywords: 8
   summary_max_chars: 300
 
 logging:
