@@ -312,7 +312,8 @@ class TaskManager:
         import uuid as _uuid, re
 
         # Sanitize slug
-        proc_slug = re.sub(r'[^a-z0-9-]', '', f"proc-{title.lower().replace(' ', '-')[:60]}")[:80]
+        base_slug = re.sub(r'[^a-z0-9-]', '', f"proc-{title.lower().replace(' ', '-')[:60]}")[:80]
+        proc_slug = base_slug
         tag_list = (tags or []) + ["procedure", "task"]
 
         # Create the task FIRST to get a real ID, then create the procedure
@@ -320,7 +321,7 @@ class TaskManager:
         today = _date.today()
 
         # Step 1: Create procedure article with placeholder task_id
-        result = create_article("procedure", {
+        proc_data = {
             "id": str(_uuid.uuid4()),
             "title": f"Procedure: {title}",
             "slug": proc_slug,
@@ -336,7 +337,16 @@ class TaskManager:
             "verification": verification,
             "provenance": [{"source": "manual", "origin_ref": "task-manager"}],
             "confidence": 0.9,
-        })
+        }
+        result = create_article("procedure", proc_data)
+        # Audit fix 2026-08-18: create_article now refuses duplicate slugs
+        # (it used to silently overwrite the first procedure). Two tasks with
+        # the same title must not clobber each other — uniquify the slug and
+        # retry once instead.
+        if isinstance(result, dict) and "already exists" in str(result.get("error", "")):
+            proc_slug = f"{base_slug[:60]}-{_uuid.uuid4().hex[:8]}"
+            proc_data["slug"] = proc_slug
+            result = create_article("procedure", proc_data)
 
         proc_slug_real = result.get("slug", proc_slug)
 

@@ -90,7 +90,15 @@ def _read_article_markdown(slug):
         return None
     fm = article.get("frontmatter", {})
     body = article.get("body", "")
-    # Convert wikilinks [[slug]] to links
+
+    # Escape ALL article-controlled text FIRST so nothing in the body can
+    # inject HTML/JS. Only the structural tags we generate below (and the
+    # hrefs built from already-escaped slugs/URLs) are added afterwards,
+    # which keeps `body_html|safe` in the template safe.
+    from markupsafe import escape
+    body = escape(body)
+
+    # Convert wikilinks [[slug]] to links (slug text is already escaped)
     import re
     body = re.sub(r'\[\[([^\]]+)\]\]', r'<a href="/articles/\1">\1</a>', body)
     body = re.sub(r'(https?://\S+)', r'<a href="\1" target="_blank">\1</a>', body)

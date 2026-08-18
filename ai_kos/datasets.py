@@ -11,6 +11,7 @@ import sqlite3
 import csv
 import json
 import logging
+import re
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import List, Dict, Optional, Any
@@ -91,14 +92,44 @@ def insert_rows(db_path: str, table_name: str, rows: List[Dict[str, Any]]) -> in
         conn.close()
 
 
+def _assert_select_only(sql: str) -> None:
+    """Refuse anything that is not a single read-only SELECT statement.
+
+    Guards the arbitrary-SQL surface of ai_kos_query. Comments and string
+    literals are stripped first so the structural checks can't be fooled by
+    `SELECT 1; DROP TABLE x` or by a semicolon hidden inside a literal.
+    """
+    if not sql or not sql.strip():
+        raise ValueError("query must be a non-empty SELECT statement")
+
+    # Neutralize literals/identifiers so `;` inside them doesn't count.
+    cleaned = re.sub(r"'(?:[^']|'')*'", "''", sql)          # 'single quoted'
+    cleaned = re.sub(r'"(?:[^"]|"")*"', '""', cleaned)      # "double quoted"
+    cleaned = re.sub(r"`[^`]*`", "``", cleaned)             # `backtick`
+    cleaned = re.sub(r"\[[^\]]*\]", "[]", cleaned)          # [bracketed]
+    cleaned = re.sub(r"/\*.*?\*/", "", cleaned, flags=re.DOTALL)  # /* block */
+    cleaned = re.sub(r"--[^\n]*", "", cleaned)              # -- line comment
+    cleaned = cleaned.strip().rstrip(";").strip()
+
+    if ";" in cleaned:
+        raise ValueError("query must be a single statement (multi-statement SQL is refused)")
+    if not re.match(r"^SELECT\b", cleaned, re.IGNORECASE):
+        raise ValueError("query must be a SELECT statement")
+
+
 def query_table(db_path: str, sql: str, params: Optional[tuple] = None,
                 limit: int = 500) -> List[Dict[str, Any]]:
     """Run a SELECT query and return rows as list of dicts.
 
+    Read-only by construction: refuses any statement that is not a single
+    SELECT and pins the connection with PRAGMA query_only=ON so no write
+    (INSERT/UPDATE/DELETE/DROP/DDL) can slip through. Never auto-commits.
     Capped at `limit` rows for safety. Returns column names + row data.
     """
+    _assert_select_only(sql)
     conn = _connect(db_path)
     try:
+        conn.execute("PRAGMA query_only=ON")
         cursor = conn.execute(sql, params or ())
         rows = cursor.fetchmany(limit)
         return [dict(r) for r in rows]
@@ -533,6 +564,8 @@ def import_sqlite_db(source_db: str, target_db: str, table_filter: str = None) -
 
     Copies schema and data for each table. Returns list of imported tables.
     """
+    if not Path(source_db).exists():
+        return {"error": f"source database not found: {source_db}", "source": source_db}
     import sqlite3
     src = sqlite3.connect(source_db)
     src.row_factory = sqlite3.Row

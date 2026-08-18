@@ -45,3 +45,6 @@ include = ["ai_kos*"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+markers = [
+    "slow: corpus-calibration smoke tests (plan §4.2.13) — opt out with -m 'not slow'",
+]

@@ -59,7 +59,7 @@ def test_atq_workers_lists_only_running():
     assert "t_1" in out and "t_2" not in out
 
 
-def test_spawn_worker_creates_then_dispatches_with_cap2():
+def test_spawn_worker_creates_then_dispatches_with_cap2(tmp_path):
     """spawn_worker must dispatch with --max 2 (live concurrency cap — a board
     with one running card spawns nothing under --max 1)."""
     calls = []
@@ -70,8 +70,9 @@ def test_spawn_worker_creates_then_dispatches_with_cap2():
             return {"exit_code": 0, "stdout": '{"id": "t_child1"}', "stderr": ""}
         return {"exit_code": 0, "stdout": "spawned 1", "stderr": ""}
 
-    with patch.object(atq_director, "_run", side_effect=fake_run):
-        out = atq_director.atq_spawn_worker("board-x", "Title", "Body", "delegtest")
+    with patch("ai_kos.atq.STATE_DIR", tmp_path):
+        with patch.object(atq_director, "_run", side_effect=fake_run):
+            out = atq_director.atq_spawn_worker("board-x", "Title", "Body", "delegtest")
     assert "t_child1" in out
     dispatch_calls = [c for c in calls if "dispatch" in c]
     assert dispatch_calls, "dispatch must run after create"
@@ -79,10 +80,11 @@ def test_spawn_worker_creates_then_dispatches_with_cap2():
     assert dispatch_calls[0][dispatch_calls[0].index("--max") + 1] == "2"
 
 
-def test_spawn_worker_reports_create_failure():
-    with patch.object(atq_director, "_run", return_value={
-            "exit_code": 1, "stdout": "", "stderr": "bad board"}):
-        out = atq_director.atq_spawn_worker("board-x", "T", "B", "p")
+def test_spawn_worker_reports_create_failure(tmp_path):
+    with patch("ai_kos.atq.STATE_DIR", tmp_path):
+        with patch.object(atq_director, "_run", return_value={
+                "exit_code": 1, "stdout": "", "stderr": "bad board"}):
+            out = atq_director.atq_spawn_worker("board-x", "T", "B", "p")
     assert "create failed" in out
 
 

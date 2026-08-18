@@ -42,7 +42,7 @@ TOOLS = [
     types.Tool(
         name="ai_kos_create",
         description="Create a new knowledge article. After ingesting a file, simplify the content using the appropriate template, then call this to persist it. The linker runs automatically.",
-        input_schema={"type": "object", "properties": {"article_type": {"type": "string", "enum": ["base", "process", "plan", "help", "research-note", "note", "mission"], "description": "Article type — use the suggested_type from ai_kos_ingest"}, "data": {"type": "object", "description": "Full article data matching the template schema. Required: title, slug, keywords (3-8), summary, provenance, + type-specific fields"}}, "required": ["article_type", "data"]},
+        input_schema={"type": "object", "properties": {"article_type": {"type": "string", "enum": ["base", "process", "plan", "help", "research-note", "note", "mission", "procedure"], "description": "Article type — use the suggested_type from ai_kos_ingest"}, "data": {"type": "object", "description": "Full article data matching the template schema. Required: title, slug, keywords (3-8), summary, provenance, + type-specific fields"}}, "required": ["article_type", "data"]},
     ),
     types.Tool(
         name="ai_kos_search",
@@ -63,8 +63,8 @@ TOOLS = [
     ),
     types.Tool(
         name="ai_kos_link",
-        description="Run the auto-linker. Scans all articles and creates typed [[wikilinks]] between any pair sharing >=N keywords. Also reports merge candidates (>80% keyword overlap) and auto-sets lifecycle=superseded on losers.",
-        input_schema={"type": "object", "properties": {"min_overlap": {"type": "integer", "description": "Minimum shared keywords to create a link. Default from config (2). Higher = fewer links (thicker). Lower = more links (weaker)."}}},
+        description="Run the auto-linker. Mode comes from config (linking.mode). similarity mode (v2): tier×IDF cosine + per-article link budgets + mutual top-k, reports budget_stats; min_overlap applies to legacy count mode only (accepted and ignored in similarity mode). Also reports merge candidates and auto-sets lifecycle=superseded on losers.",
+        input_schema={"type": "object", "properties": {"min_overlap": {"type": "integer", "description": "Minimum shared keywords to create a link (count mode only). Default from config (2). Higher = fewer links (thicker). Lower = more links (weaker)."}}},
     ),
     types.Tool(
         name="ai_kos_list",
@@ -119,8 +119,11 @@ TOOLS = [
     ),
     types.Tool(
         name="ai_kos_migrate",
-        description="Run schema migrations on all articles. Use --dry-run to preview changes without writing. v1.7: migrates to typed relations, lifecycle, provenance enum, usage signals, and review cadence.",
-        input_schema={"type": "object", "properties": {"dry_run": {"type": "boolean", "description": "Preview changes without writing", "default": False}}},
+        description="Run schema migrations on all articles. Use dry_run to preview changes without writing. v1.7: migrates to typed relations, lifecycle, provenance enum, usage signals, and review cadence. v2: tiers=true also runs the two-pass keyword-tier migration (splits flat keywords into subject_keywords + article-tier keywords, backfills related_pinned with legacy see-also edges, bumps schema_version to 3).",
+        input_schema={"type": "object", "properties": {
+            "dry_run": {"type": "boolean", "description": "Preview changes without writing", "default": False},
+            "tiers": {"type": "boolean", "description": "Also run the keyword-tier migration (subject_keywords split + related_pinned backfill)", "default": False},
+        }},
     ),
     types.Tool(
         name="ai_kos_citation",
@@ -442,7 +445,10 @@ def _dispatch_tool(name: str, arguments: dict) -> dict:
 
     elif name == "ai_kos_migrate":
         from ai_kos.migrate import run_migrations
-        return run_migrations(dry_run=arguments.get("dry_run", False))
+        return run_migrations(
+            dry_run=arguments.get("dry_run", False),
+            tiers=arguments.get("tiers", False),
+        )
 
     elif name == "ai_kos_citation":
         from ai_kos.citation import extract_citation
@@ -850,6 +856,8 @@ def _dispatch_tool(name: str, arguments: dict) -> dict:
         kws = arguments["keywords"]
 
         result = import_sqlite_db(arguments["filepath"], db_path)
+        if "error" in result:
+            return result
         articles = []
         today = _date.today()
         for table_info in result.get("tables", []):
@@ -973,10 +981,19 @@ if __name__ == "__main__":
 
 
 def _mv(src, dst):
+    """Move src to dst without destroying an existing same-named destination.
+
+    If dst already exists, the file/dir is moved to a `name-1.ext`-style
+    suffixed destination instead of overwriting it. Never rmtree's a
+    non-empty same-named target.
+    """
     import shutil
-    if dst.exists():
-        if dst.is_dir():
-            shutil.rmtree(str(dst))
-        else:
-            dst.unlink()
-    shutil.move(str(src), str(dst))
+    if not dst.exists():
+        shutil.move(str(src), str(dst))
+        return
+    for i in range(1, 10000):
+        candidate = dst.with_name(f"{dst.stem}-{i}{dst.suffix}")
+        if not candidate.exists():
+            shutil.move(str(src), str(candidate))
+            return
+    raise FileExistsError(f"no free destination name for {dst}")

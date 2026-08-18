@@ -26,7 +26,7 @@ def cmd_read(args):
 
 def cmd_link(args):
     from ai_kos.linker import link_all
-    result = link_all(min_overlap=args.min_overlap)
+    result = link_all(min_overlap=args.min_overlap, mode=args.mode)
     print(json.dumps(result, indent=2))
 
 def cmd_list(args):
@@ -101,9 +101,7 @@ def cmd_clean(args):
                 stats["rejected"] += 1
             # Project: directories with source code or git repos
             elif item.is_dir() and (_has_file(item, '.git') or _has_file(item, 'setup.py') or _has_file(item, 'pyproject.toml') or _has_file(item, 'build.gradle') or _has_file(item, 'README.md')):
-                dst = projects_dir / name
-                if dst.exists(): shutil.rmtree(str(dst))
-                shutil.move(str(item), str(dst))
+                _safe_move(item, projects_dir / name)
                 stats["projects"] += 1
             # Archive: markdown/text — assume ingested
             elif ext in ('.md', '.txt', '.rst', '.org'):
@@ -119,11 +117,22 @@ def cmd_clean(args):
     print(f"Inbox cleaned: {stats['archived']} archived, {stats['projects']} projects, {stats['rejected']} rejected, {stats['errors']} errors")
 
 def _safe_move(src, dst):
+    """Move src to dst without destroying an existing same-named destination.
+
+    If dst already exists, the file/dir is moved to a `name-1.ext`-style
+    suffixed destination instead of overwriting it. Never rmtree's a
+    non-empty same-named target.
+    """
     import shutil
-    if dst.exists():
-        if dst.is_dir(): shutil.rmtree(str(dst))
-        else: dst.unlink()
-    shutil.move(str(src), str(dst))
+    if not dst.exists():
+        shutil.move(str(src), str(dst))
+        return
+    for i in range(1, 10000):
+        candidate = dst.with_name(f"{dst.stem}-{i}{dst.suffix}")
+        if not candidate.exists():
+            shutil.move(str(src), str(candidate))
+            return
+    raise FileExistsError(f"no free destination name for {dst}")
 
 def _has_file(directory, filename):
     return (Path(directory) / filename).exists()
@@ -138,7 +147,7 @@ def cmd_research(args):
 def cmd_migrate(args):
     """Run schema migrations on all articles."""
     from ai_kos.migrate import run_migrations
-    result = run_migrations(dry_run=args.dry_run)
+    result = run_migrations(dry_run=args.dry_run, tiers=args.tiers)
     print(json.dumps(result, indent=2, default=str))
 
 
@@ -253,7 +262,8 @@ def main():
     pr.add_argument("slug"); pr.set_defaults(func=cmd_read)
 
     pl = sub.add_parser("link", help="Run auto-linker")
-    pl.add_argument("--min-overlap", type=int, default=None, help="Minimum shared keywords to create a link (default: from config, 2)")
+    pl.add_argument("--min-overlap", type=int, default=None, help="Minimum shared keywords to create a link (count mode only; default: from config, 2)")
+    pl.add_argument("--mode", choices=["similarity", "idf", "count"], default=None, help="Linking mode override (default: from config linking.mode)")
     pl.set_defaults(func=cmd_link)
 
     pls = sub.add_parser("list", help="List articles")
@@ -274,6 +284,7 @@ def main():
 
     pm = sub.add_parser("migrate", help="Run schema migrations on all articles")
     pm.add_argument("--dry-run", action="store_true", help="Preview changes without writing")
+    pm.add_argument("--tiers", action="store_true", help="Also run the two-pass keyword-tier migration (subject_keywords split + related_pinned backfill)")
     pm.set_defaults(func=cmd_migrate)
 
     pt = sub.add_parser("task", help="Manage future tasks")

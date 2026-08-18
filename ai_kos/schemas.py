@@ -1,5 +1,10 @@
-"""AI-KOS schemas v1.7 — 7 article types with typed relations, lifecycle, Diátaxis, and usage signals."""
+"""AI-KOS schemas v1.7 — 7 article types with typed relations, lifecycle, Diátaxis, and usage signals.
 
+v2 linker: optional tiered-keyword fields (subject_keywords, importance,
+link_budget, related_pinned) — all additive with defaults.
+"""
+
+import logging
 from datetime import date, datetime
 from typing import Optional, List
 from enum import Enum
@@ -156,7 +161,11 @@ class _BaseFrontmatter(BaseModel):
     stability: Stability = Stability.MODERATE
     sensitivity_label: SensitivityLabel = SensitivityLabel.INTERNAL
     confidence: float = Field(default=0.8, ge=0.0, le=1.0, description="How certain this knowledge is (0.0-1.0)")
-    keywords: List[str] = Field(default_factory=list, description="3-8 lowercase keywords for auto-linking")
+    keywords: List[str] = Field(default_factory=list, description="3-15 article-specific lowercase keywords (auto-linking precision tier)")
+    subject_keywords: List[str] = Field(default_factory=list, description="2-8 broad domain keywords (auto-linking recall tier)")
+    importance: Optional[int] = Field(default=None, ge=1, le=5, description="Explicit link-budget importance 1-5; None = derive")
+    link_budget: Optional[int] = Field(default=None, ge=0, description="Computed per-article see-also cap — written by linker")
+    related_pinned: List[str] = Field(default_factory=list, description="Human-pinned see-also slugs, preserved by linker")
     summary: str = Field(..., max_length=300, description="1-2 sentence description")
     # v1.7: typed relations
     related: List[RelatedEdge] = Field(default_factory=list, description="Typed wikilinks — managed by linker")
@@ -235,12 +244,40 @@ class _BaseFrontmatter(BaseModel):
                 out.append(kw)
         return out
 
+    @field_validator('subject_keywords', 'related_pinned')
+    @classmethod
+    def tiered_lists_lower(cls, v: List[str]) -> List[str]:
+        """Mirror keywords_lower for subject_keywords and related_pinned (lower/strip/dedupe)."""
+        seen = set()
+        out = []
+        for kw in v:
+            kw = kw.lower().strip()
+            if kw and kw not in seen:
+                seen.add(kw)
+                out.append(kw)
+        return out
+
     @model_validator(mode='after')
     def check_gap(self):
         if self.gap and not self.gap_question:
             raise ValueError('gap_question is required when gap=True')
         if self.gap and self.gap_priority is None:
             raise ValueError('gap_priority is required when gap=True')
+        return self
+
+    @model_validator(mode='after')
+    def check_keyword_tiers(self):
+        """Cross-tier rule (§1.1): a keyword may not appear in both tiers.
+
+        Drop the subject-tier duplicate, keep the article-tier copy, log a warning
+        (the schema never hard-fails on keyword counts, so neither does this).
+        """
+        dup = set(self.keywords) & set(self.subject_keywords)
+        if dup:
+            self.subject_keywords = [k for k in self.subject_keywords if k not in set(self.keywords)]
+            logging.getLogger("ai-kos.schemas").warning(
+                f"Subject keywords dropped as duplicates of article keywords: {sorted(dup)}"
+            )
         return self
 
     @model_validator(mode='after')
@@ -321,56 +358,61 @@ Article = BaseArticle | ProcessArticle | PlanArticle | HelpArticle | ResearchNot
 
 # ── Template definitions (what the AI uses to generate articles) ─
 
-_AI_LAYER_BASE = ["id","title","slug","type","created_at","updated_at","reviewed_at","next_review_at","stability","sensitivity_label","confidence","keywords","summary","related","provenance","ai_notes","retrieval_count","link_count","last_accessed","lifecycle","superseded_by","doc_type","review_interval_days","version","history"]
+_AI_LAYER_BASE = ["id","title","slug","type","created_at","updated_at","reviewed_at","next_review_at","stability","sensitivity_label","confidence","keywords","subject_keywords","importance","summary","related","provenance","ai_notes","retrieval_count","link_count","last_accessed","lifecycle","superseded_by","doc_type","review_interval_days","version","history"]
+
+# Tier-guidance sentence appended to every template prompt (linker v2, §2.1.3).
+_TIER_GUIDANCE = (" Write 2-5 `subject_keywords` (broad domain terms other articles in this "
+                  "domain would share) and 3-10 `keywords` (entities, methods, tools, concepts "
+                  "specific to THIS article).")
 
 TEMPLATES = {
     ArticleType.BASE: {
         "description": "Factoid / Wikipedia-style concept. ~5 paragraphs.",
         "ai_layer_fields": _AI_LAYER_BASE,
         "human_fields": ["content"],
-        "prompt": "Write a concise, factual article (~5 paragraphs). No fluff. Start with a 1-sentence definition, then explain. End with why it matters.",
+        "prompt": "Write a concise, factual article (~5 paragraphs). No fluff. Start with a 1-sentence definition, then explain. End with why it matters." + _TIER_GUIDANCE,
     },
     ArticleType.PROCESS: {
         "description": "Step-by-step procedure. Backup for rarely-used skills.",
         "ai_layer_fields": _AI_LAYER_BASE,
         "human_fields": ["steps","outcome","prerequisites"],
-        "prompt": "Write step-by-step instructions. Each step must be an imperative command. End with an outcome statement. List prerequisites if any.",
+        "prompt": "Write step-by-step instructions. Each step must be an imperative command. End with an outcome statement. List prerequisites if any." + _TIER_GUIDANCE,
     },
     ArticleType.PLAN: {
         "description": "Planning document for a goal.",
         "ai_layer_fields": _AI_LAYER_BASE,
         "human_fields": ["goal","phases","milestones","risks"],
-        "prompt": "Write a planning document. State the goal first. List phases, milestones, and risks. Be specific, not aspirational.",
+        "prompt": "Write a planning document. State the goal first. List phases, milestones, and risks. Be specific, not aspirational." + _TIER_GUIDANCE,
     },
     ArticleType.HELP: {
         "description": "Explains how a part of a project works.",
         "ai_layer_fields": _AI_LAYER_BASE + ["project","component"],
         "human_fields": ["explanation","examples"],
-        "prompt": "Explain how a specific component of a project works. Name the project and component. ~5 paragraphs. Include examples if helpful.",
+        "prompt": "Explain how a specific component of a project works. Name the project and component. ~5 paragraphs. Include examples if helpful." + _TIER_GUIDANCE,
     },
     ArticleType.RESEARCH_NOTE: {
         "description": "Key notes for larger research — feeds into a base article.",
         "ai_layer_fields": _AI_LAYER_BASE + ["topic"],
         "human_fields": ["key_notes","open_questions","sources","target_base_slug"],
-        "prompt": "Extract key research notes. Use bullet points. List open questions and sources. Note if this feeds into an existing base article.",
+        "prompt": "Extract key research notes. Use bullet points. List open questions and sources. Note if this feeds into an existing base article." + _TIER_GUIDANCE,
     },
     ArticleType.NOTE: {
         "description": "Temporary note — may relate to future work.",
         "ai_layer_fields": _AI_LAYER_BASE,
         "human_fields": ["content","related_project","actionable"],
-        "prompt": "Write a brief note. ~5 paragraphs max. Flag if actionable. Note any related project. Keep it simple — this is temporary.",
+        "prompt": "Write a brief note. ~5 paragraphs max. Flag if actionable. Note any related project. Keep it simple — this is temporary." + _TIER_GUIDANCE,
     },
     ArticleType.MISSION: {
         "description": "Project building block — how a project will work.",
         "ai_layer_fields": _AI_LAYER_BASE + ["project"],
         "human_fields": ["purpose","architecture","dependencies","success_criteria"],
-        "prompt": "Describe a project mission. State its purpose. Explain the architecture (~5 paragraphs). List dependencies and success criteria.",
+        "prompt": "Describe a project mission. State its purpose. Explain the architecture (~5 paragraphs). List dependencies and success criteria." + _TIER_GUIDANCE,
     },
     ArticleType.PROCEDURE: {
         "description": "Task-specific implementation guide — the 'how' for a single task.",
         "ai_layer_fields": _AI_LAYER_BASE + ["task_id"],
         "human_fields": ["objective","approach","verification"],
-        "prompt": "Write a task implementation guide. State the objective clearly. Describe the approach step by step. Specify how to verify completion.",
+        "prompt": "Write a task implementation guide. State the objective clearly. Describe the approach step by step. Specify how to verify completion." + _TIER_GUIDANCE,
     },
 }
 
@@ -508,4 +550,12 @@ def _format_body(body: dict, atype: ArticleType) -> str:
                 for item in body[section]:
                     lines.append(f"- {item}")
                 lines.append("")
+    elif atype == ArticleType.PROCEDURE:
+        # Audit fix 2026-08-18: PROCEDURE previously had no branch here, so
+        # article_to_markdown emitted an EMPTY body and every procedure
+        # article (e.g. from tasks.create_with_procedure) lost its content
+        # on write. Serialize the three human fields explicitly.
+        lines.append(f"## Objective\n{body.get('objective','')}\n")
+        lines.append(f"## Approach\n{body.get('approach','')}\n")
+        lines.append(f"## Verification\n{body.get('verification','')}\n")
     return "\n".join(lines).strip()

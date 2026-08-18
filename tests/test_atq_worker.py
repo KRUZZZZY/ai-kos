@@ -114,28 +114,31 @@ def test_claim_returns_false_on_failure(worker):
 
 
 def test_idempotent_retry_skips_repeat_execution(worker):
-    """A retried worker must not re-run an already-applied command."""
-    seen = []
+    """A retried worker must not re-run an already-applied command.
+
+    Counts bash executions across BOTH runs — the audit flagged the earlier
+    snapshot-between-runs version as vacuous (it never observed run 2).
+    """
     with patch("ai_kos.atq_worker._run", side_effect=_fake_run({})) as r:
         with patch.object(worker, "comment", return_value=""):
-            with patch.object(worker, "write_artifact") as wa:
+            with patch.object(worker, "write_artifact"):
                 worker.run(cmd="echo hi")
-                seen.extend(r.call_args_list)
                 worker.run(cmd="echo hi")
-    exec_calls = [c for c in seen if c.args[0][0] == "bash"]
+    exec_calls = [c for c in r.call_args_list if c.args[0][0] == "bash"]
     assert len(exec_calls) == 1, "command executed twice on retry"
 
 
 # ── sub-delegation + aggregation ─────────────────────────────────────────
 
-def test_subdelegate_creates_child_and_dispatches(worker):
+def test_subdelegate_creates_child_and_dispatches(worker, tmp_path):
     """subdelegate() creates a card, parses the id, and dispatches it."""
-    with patch("ai_kos.atq_worker._run", side_effect=_fake_run({
-        "hermes kanban --board test-board create": '{"id": "t_child99"}',
-        "hermes kanban --board test-board dispatch": "spawned 1",
-    })):
-        with patch.object(worker, "comment", return_value=""):
-            cid = worker.subdelegate("Subtask", "do it", "delegtest", parent="t_abc123")
+    with patch("ai_kos.atq.STATE_DIR", tmp_path):
+        with patch("ai_kos.atq_worker._run", side_effect=_fake_run({
+            "hermes kanban --board test-board create": '{"id": "t_child99"}',
+            "hermes kanban --board test-board dispatch": "spawned 1",
+        })):
+            with patch.object(worker, "comment", return_value=""):
+                cid = worker.subdelegate("Subtask", "do it", "delegtest", parent="t_abc123")
     assert cid == "t_child99"
     assert any(e["kind"] == "subdelegate" and e["detail"] == "t_child99"
                for e in worker.side_effect_log)
@@ -179,7 +182,7 @@ def test_aggregate_ignores_blocked_in_body_text(worker):
     assert results[0]["status"] == "done", "body text must not flip status to blocked"
 
 
-def test_run_with_subdelegates_aggregates_and_completes(worker):
+def test_run_with_subdelegates_aggregates_and_completes(worker, tmp_path):
     def fake(cmd, timeout=120):
         key = " ".join(cmd)
         if key.startswith("hermes kanban --board test-board create"):
@@ -190,9 +193,10 @@ def test_run_with_subdelegates_aggregates_and_completes(worker):
             return {"exit_code": 0, "stdout": "COMPLETED", "stderr": ""}
         return {"exit_code": 0, "stdout": "ok", "stderr": ""}
 
-    with patch("ai_kos.atq_worker._run", side_effect=fake):
-        with patch.object(worker, "comment", return_value=""):
-            rc = worker.run(subdelegates=[("Sub", "body", "delegtest")])
+    with patch("ai_kos.atq.STATE_DIR", tmp_path):
+        with patch("ai_kos.atq_worker._run", side_effect=fake):
+            with patch.object(worker, "comment", return_value=""):
+                rc = worker.run(subdelegates=[("Sub", "body", "delegtest")])
     assert rc == 0
     agg = worker.workdir / "t_abc123-aggregation.json"
     assert agg.exists()
@@ -200,7 +204,7 @@ def test_run_with_subdelegates_aggregates_and_completes(worker):
     assert data[0]["status"] == "done"
 
 
-def test_aggregate_blocked_child_blocks_parent(worker):
+def test_aggregate_blocked_child_blocks_parent(worker, tmp_path):
     def fake(cmd, timeout=120):
         key = " ".join(cmd)
         if key.startswith("hermes kanban --board test-board create"):
@@ -209,9 +213,10 @@ def test_aggregate_blocked_child_blocks_parent(worker):
             return {"exit_code": 0, "stdout": "status:    blocked", "stderr": ""}
         return {"exit_code": 0, "stdout": "ok", "stderr": ""}
 
-    with patch("ai_kos.atq_worker._run", side_effect=fake):
-        with patch.object(worker, "comment", return_value=""):
-            with patch.object(worker, "block", return_value="BLOCKED") as block:
-                rc = worker.run(subdelegates=[("Sub", "body", "delegtest")])
+    with patch("ai_kos.atq.STATE_DIR", tmp_path):
+        with patch("ai_kos.atq_worker._run", side_effect=fake):
+            with patch.object(worker, "comment", return_value=""):
+                with patch.object(worker, "block", return_value="BLOCKED") as block:
+                    rc = worker.run(subdelegates=[("Sub", "body", "delegtest")])
     assert rc == 1
     block.assert_called_once()

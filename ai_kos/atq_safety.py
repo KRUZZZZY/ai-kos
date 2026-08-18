@@ -46,7 +46,7 @@ class RiskTier(IntEnum):
 # (conservative for agent work; the runtime still enforces its own gates).
 _PATTERNS: list[tuple[re.Pattern, RiskTier]] = [
     # T3: absolute stops (never allowed, regardless of human)
-    (re.compile(r"\b(sudo\s+rm\s+-rf\s*/\s*$|mkfs\.|dd\s+if=.*\s+of=/dev/|:\(\)\s*\{\s*:\|:&\}\s*;)"), RiskTier.T3_HARD_STOP),
+    (re.compile(r"\b(sudo\s+rm\s+-rf\s*/\s*$|mkfs\.|dd\s+if=.*\s+of=/dev/|:\\(\\)\s*\\{\\s*:\\|:&\\}\\s*;)"), RiskTier.T3_HARD_STOP),
     # T2: irreversible / destructive
     (re.compile(r"\brm\s+-rf\b"), RiskTier.T2_IRREVERSIBLE),
     (re.compile(r"\bDROP\s+(TABLE|DATABASE|SCHEMA)\b", re.I), RiskTier.T2_IRREVERSIBLE),
@@ -60,15 +60,58 @@ _PATTERNS: list[tuple[re.Pattern, RiskTier]] = [
     (re.compile(r"^(?:cat|ls|grep|rg|find|diff|git\s+status|git\s+log|head|tail|wc|ps|stat)\b"), RiskTier.T0_READ_ONLY),
 ]
 
+# Destructive-pattern denylist — audit finding #4 (consensus): the generic
+# rules let `find … -delete` ride the read-only T0 allowlist, and
+# `rm --recursive --force`, `rmdir -p`, `shred -u`, `git push origin main
+# --force` (flag after refspec) fell through to T1 auto-act. Anything that
+# deletes / overwrites / force-pushes must NEVER be T0/T1 — these patterns
+# are checked BEFORE the generic rules and promote to T2 (park-for-review).
+# Deliberately conservative: an over-blocked action parks for a human, an
+# under-blocked destructive action runs unattended.
+_DESTRUCTIVE_PATTERNS: list[tuple[re.Pattern, RiskTier]] = [
+    # find with -delete / -exec / -execdir / -ok / -okdir executes side
+    # effects — must never ride the read-only `find` allowlist.
+    (re.compile(r"(?:^|[;&|\n]\s*)find\b[^\n;|]*\s-(?:delete|exec|execdir|ok|okdir)\b"),
+     RiskTier.T2_IRREVERSIBLE),
+    # rm long-form recursive/force flags (rm --recursive --force, rm -rf
+    # --force, rm --dir …); short-flag forms are caught by the generic rule.
+    (re.compile(r"\brm\b[^\n;|]*\s--(?:recursive|force|dir)\b"),
+     RiskTier.T2_IRREVERSIBLE),
+    # rmdir removes directories (with -p/--parents, parents too).
+    (re.compile(r"\brmdir\b(?:[^\n;|]*\s(?:-p|--parents)\b)?"),
+     RiskTier.T2_IRREVERSIBLE),
+    # shred overwrites file contents irreversibly (even without -u/--remove).
+    (re.compile(r"\bshred\b"), RiskTier.T2_IRREVERSIBLE),
+    # git push with any force flag, anywhere in the command
+    # (git push origin main --force, git push -f, GIT PUSH -F …).
+    (re.compile(r"\bgit\s+push\b[^\n;|]*\s(?:--force(?:-with-lease)?|-f)\b", re.I),
+     RiskTier.T2_IRREVERSIBLE),
+    # python one-liners that delete trees/files.
+    (re.compile(r"\bpython3?\b[\s\S]{0,300}?\bshutil\.rmtree\s*\("),
+     RiskTier.T2_IRREVERSIBLE),
+    (re.compile(r"\bpython3?\b[\s\S]{0,300}?\bos\.(?:remove|unlink|rmdir)\s*\("),
+     RiskTier.T2_IRREVERSIBLE),
+]
+
 
 def classify(action: str, explicit_tier: Optional[RiskTier] = None) -> RiskTier:
     """Classify an action string into a risk tier.
 
     An explicit tier (agent-declared) wins; otherwise the action is matched
-    against known dangerous/read-only patterns and defaults to T1.
+    against known dangerous/read-only patterns and defaults to T1. T3
+    absolute stops are checked first, then the destructive denylist (so a
+    deletes/overwrites/force-push action is promoted to ≥T2 even when a
+    generic read-only allowlist pattern like ``find`` would otherwise match),
+    then the remaining generic rules.
     """
     if explicit_tier is not None:
         return RiskTier(explicit_tier)
+    for pattern, tier in _PATTERNS:
+        if tier == RiskTier.T3_HARD_STOP and pattern.search(action):
+            return tier
+    for pattern, tier in _DESTRUCTIVE_PATTERNS:
+        if pattern.search(action):
+            return tier
     for pattern, tier in _PATTERNS:
         if pattern.search(action):
             return tier

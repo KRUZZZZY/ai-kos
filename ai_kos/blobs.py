@@ -15,12 +15,29 @@ from typing import Optional
 logger = logging.getLogger("ai-kos.blobs")
 
 
+def _validate_slug(slug: str) -> str:
+    """Validate a blob slug, refusing anything that could escape the store.
+
+    Rejects empty slugs and slugs containing path separators or `..`
+    (e.g. `../../escape`) before any path join happens.
+    """
+    if not slug or not slug.strip():
+        raise ValueError("slug must not be empty")
+    if "/" in slug or "\\" in slug or ".." in slug:
+        raise ValueError(
+            f"invalid slug {slug!r}: path separators and '..' are not allowed"
+        )
+    return slug.strip()
+
+
 def store_blob(source_path: str, dest_dir: str = "datasets/blobs",
                slug: Optional[str] = None) -> dict:
     """Copy a binary file to the blob store. Returns BlobRef-compatible dict."""
     src = Path(source_path)
     if not src.exists():
         raise FileNotFoundError(f"Source not found: {source_path}")
+    if slug is not None:
+        slug = _validate_slug(slug)
 
     dest = Path(dest_dir)
     dest.mkdir(parents=True, exist_ok=True)

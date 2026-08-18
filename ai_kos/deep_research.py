@@ -265,9 +265,33 @@ def _smart_truncate(text: str, max_len: int) -> str:
     return cut
 
 
+def _finding_title(f: Dict[str, Any]) -> str:
+    """Normalize a finding's source title across the two caller shapes.
+
+    The research pipeline emits ``source_title`` (SourceFinding dataclass,
+    pipeline.py); the MCP tool emits ``title`` (mcp_server.py input schema).
+    """
+    return f.get("source_title") or f.get("title") or ""
+
+
+def _finding_url(f: Dict[str, Any]) -> str:
+    """Normalize a finding's source URL across the two caller shapes."""
+    return f.get("source_url") or f.get("url") or ""
+
+
 def persist_research(result: ResearchResult, knowledge_dir: str = "knowledge") -> Dict[str, str]:
     """Save research findings as AI-KOS articles: one research-note per sub-question, one base synthesis."""
     from ai_kos.articles import create_article
+
+    # Audit fix 2026-08-18: validation gate. persist_research used to write
+    # garbage research-notes (empty topic, `- C []` bodies) for empty input.
+    # Refuse up-front and never create an article for invalid input.
+    if not (result.question or "").strip():
+        return {"error": "persist_research: question is empty"}
+    if not result.findings:
+        return {"error": "persist_research: no findings to persist"}
+    if not any((f.get("key_claim") or "").strip() for f in result.findings):
+        return {"error": "persist_research: no findings with a non-empty key_claim"}
 
     created = {}
     today = date.today()
@@ -275,7 +299,7 @@ def persist_research(result: ResearchResult, knowledge_dir: str = "knowledge") -
     # Create research-note for overall findings
     key_notes = []
     for f in result.findings[:10]:
-        key_notes.append(f"{f.get('key_claim', '')} [{f.get('title', '')}]")
+        key_notes.append(f"{f.get('key_claim', '')} [{_finding_title(f)}]")
 
     gaps = result.knowledge_gaps if result.knowledge_gaps else ["No significant gaps identified"]
 
@@ -301,13 +325,13 @@ def persist_research(result: ResearchResult, knowledge_dir: str = "knowledge") -
         "slug": f"research-{slug}",
         "keywords": _extract_keywords(result.question)[:8],
         "summary": summary_text[:250],
-        "provenance": [f.get("url", "") for f in result.findings[:5]],
+        "provenance": [_finding_url(f) for f in result.findings[:5]],
         "stability": "volatile",
         "sensitivity_label": "internal",
         "topic": clean_title,
         "key_notes": key_notes,
         "open_questions": gaps,
-        "sources": [f"{f.get('title', '')}: {f.get('url', '')}" for f in result.findings[:10]],
+        "sources": [f"{_finding_title(f)}: {_finding_url(f)}" for f in result.findings[:10]],
     })
     if r.get("status") == "created":
         created["research_note"] = r["slug"]
