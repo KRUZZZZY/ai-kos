@@ -20,6 +20,22 @@ from ai_kos.pipeline import (
 )
 
 
+@pytest.fixture(autouse=True)
+def _isolate_kb(tmp_path, monkeypatch):
+    """Redirect article + DB writes to a tmp KB so ResearchPipeline persist
+    steps never write research-note articles into the live knowledge/ tree.
+    (Audit finding: 'Research: Q?'-style junk articles were re-created on every
+    pytest run because the pipeline persist step resolved the live KB.)"""
+    import ai_kos.articles as articles
+    import ai_kos.db as db
+    kb = tmp_path / "knowledge"
+    kb.mkdir(parents=True, exist_ok=True)
+    monkeypatch.setattr(articles, "KNOWLEDGE_DIR", str(kb))
+    monkeypatch.setattr(db, "_db_path", str(tmp_path / "datasets" / "ai-kos.db"))
+    monkeypatch.setattr(db, "_conn", None)
+    yield
+
+
 class TestStepState:
     def test_default_values(self):
         s = StepState(name="plan", status="pending")
