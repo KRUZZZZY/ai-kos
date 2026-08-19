@@ -2,7 +2,7 @@
 
 **AI Knowledge Operating System** — a self-building knowledge database with automatic wikilink connections, a typed knowledge graph, and deep-research tooling.
 
-Drop files in, get linked articles out. AI-KOS ingests documents, extracts text, creates structured knowledge articles, and automatically links them via IDF-weighted shared keywords. Ships as a Python package with an MCP server (37 tools) for AI agent integration, a Flask dashboard, and a durable research pipeline.
+Drop files in, get linked articles out. AI-KOS ingests documents, extracts text, creates structured knowledge articles, and automatically links them via IDF-weighted shared keywords. Ships as a Python package with an MCP server (39 tools) for AI agent integration, a Flask dashboard, and a durable research pipeline.
 
 ## Install
 
@@ -30,7 +30,7 @@ ai-kos research "question"           # deep research pipeline
 ai-kos task-create "title" --slugs a,b   # task system (v3)
 
 # MCP Server (for AI agent integration)
-ai-kos-mcp                           # starts JSON-RPC server on stdio, 37 tools
+ai-kos-mcp                           # starts JSON-RPC server on stdio, 39 tools
 ```
 
 ## Architecture
@@ -67,7 +67,7 @@ ai_kos/
 ├── bindings.py          Pydantic Settings tool config (config.yaml or AI_KOS_* env)
 ├── graph_data.py        Knowledge graph export (typed nodes + edges)
 ├── server.py            Flask dashboard (articles, graph, datasets, tasks, inbox)
-├── mcp_server.py        MCP JSON-RPC server — 37 tools
+├── mcp_server.py        MCP JSON-RPC server — 39 tools
 ├── cli.py               Command-line interface
 └── vscode_bridge.py     VS Code live-editing bridge
 ```
@@ -123,7 +123,7 @@ Config via `config.yaml` or `AI_KOS_*` env vars. Key paths (overrideable): `kb_p
 ## Tests
 
 ```bash
-pytest            # ~100 tests: linker, search, MCP server, ATQ, datasets, blobs, tasks
+pytest            # 597 tests: linker, search, MCP server, ATQ, datasets, blobs, tasks
 ```
 
 Note: one env-specific test (config defaults) assumes relative `knowledge_dir`; a machine with absolute paths in config.yaml will fail it — expected, not a regression.
