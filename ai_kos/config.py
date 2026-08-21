@@ -69,12 +69,64 @@ _DEFAULT_CONFIG = {
 
 _config: Optional[Dict[str, Any]] = None
 
+_AI_KOS_STRUCTURE_KEYS = ("paths", "linking", "tiers", "article", "knowledge", "datasets")
+
+
+def _looks_like_ai_kos_config(p: Path) -> bool:
+    """True if a config.yaml is an AI-KOS config (has project-structure keys).
+
+    Guards ``_find_config`` against picking up a foreign config.yaml that
+    happens to be in cwd — e.g. Hermes' own ``~/.hermes/config.yaml``, which
+    the gateway spawns ``ai-kos-mcp`` under. That file has no ``paths``/
+    ``linking`` section, so it used to be loaded and silently left the KB at
+    empty cwd-relative defaults (the empty-KB-in-Telegram bug).
+    """
+    try:
+        with open(p) as f:
+            data = yaml.safe_load(f) or {}
+        return isinstance(data, dict) and any(k in data for k in _AI_KOS_STRUCTURE_KEYS)
+    except Exception:
+        return False
+
+
 def _find_config() -> Optional[Path]:
-    for root in [os.getcwd(), str(Path(__file__).parent.parent)]:
+    """Locate the AI-KOS config.yaml.
+
+    Prefer the config co-located with the ai_kos package (the canonical
+    project root) over cwd. cwd is unreliable: the Hermes gateway spawns
+    ai-kos-mcp from a directory holding an unrelated config.yaml, which must
+    not be mistaken for the AI-KOS config.
+    """
+    roots = [Path(__file__).parent.parent, Path(os.getcwd())]
+    seen = set()
+    for root in roots:
+        key = str(root)
+        if key in seen:
+            continue
+        seen.add(key)
         p = Path(root) / "config.yaml"
-        if p.exists():
+        if p.exists() and _looks_like_ai_kos_config(p):
             return p
+    # Last resort: accept the co-located config even if structurally ambiguous.
+    pkg = Path(__file__).parent.parent / "config.yaml"
+    if pkg.exists():
+        return pkg
     return None
+
+
+def _absolutize_paths(cfg: Dict[str, Any], base_dir: Path) -> None:
+    """Resolve relative values in the ``paths`` section against base_dir.
+
+    ``db_path`` (and any relative knowledge/inbox/…) must not depend on cwd:
+    the gateway spawns the MCP server with a different cwd, so a relative
+    ``datasets/ai-kos.db`` previously resolved to the wrong (empty) DB.
+    """
+    paths = cfg.get("paths")
+    if not isinstance(paths, dict):
+        return
+    for k, v in list(paths.items()):
+        if isinstance(v, str) and v and not os.path.isabs(v):
+            paths[k] = str(base_dir / v)
 
 def load() -> Dict[str, Any]:
     global _config
@@ -86,6 +138,7 @@ def load() -> Dict[str, Any]:
         with open(path) as f:
             user = yaml.safe_load(f) or {}
         _deep_merge(cfg, user)
+        _absolutize_paths(cfg, path.parent)
     # Isolation knob (audit finding #8): AI_KOS_KNOWLEDGE_DIR overrides the
     # knowledge dir so tests/embedders never touch the production knowledge/
     # tree. Env wins over config.yaml — it is the most explicit, per-invocation
